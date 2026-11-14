@@ -1,10 +1,10 @@
 #!/usr/bin/env Rscript
-# proof_lake.R - Standalone CLI runner for the baseballLake proof suite
+# proof_lake.R - Standalone CLI runner for the mlbr proof suite
 # Usage: Rscript R/proof_lake.R [/path/to/lake]
 
 suppressPackageStartupMessages({
   .libPaths(c("/mnt/storage/R/library", .libPaths()))
-  library(baseballLake)
+  library(mlbr)
 })
 
 args <- commandArgs(trailingOnly = TRUE)

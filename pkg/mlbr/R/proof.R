@@ -1,4 +1,4 @@
-# proof.R - Comprehensive verification and sanity proof suite for baseballLake
+# proof.R - Comprehensive verification and sanity proof suite for mlbr
 #
 # Tests 5 core dimensions:
 #   1. Historical Benchmarks: checks known sabermetric truth across independent sources
@@ -229,9 +229,9 @@ proof_statcast <- function(lake = NULL, sample_n = 6L) {
     }))
 
     speeds <- sc_data$release_speed[!is.na(sc_data$release_speed)]
-    valid_speeds <- all(speeds >= 40 & speeds <= 107)
+    valid_speeds <- all(speeds >= 35 & speeds <= 107)
     res[[length(res) + 1L]] <- .record_check(
-      "Pitch Velocity Physical Invariants (40-107 mph)", "Statcast", valid_speeds,
+      "Pitch Velocity Physical Invariants (35-107 mph, including eephus pitches)", "Statcast", valid_speeds,
       sprintf("Range: %.1f - %.1f mph across %s pitches", min(speeds), max(speeds), format(length(speeds), big.mark = ","))
     )
 

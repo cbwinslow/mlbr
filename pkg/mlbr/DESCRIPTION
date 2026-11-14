@@ -1,6 +1,6 @@
-Package: baseballLake
+Package: mlbr
 Type: Package
-Title: Build and Validate a Comprehensive Baseball Data Lake
+Title: mlbr: Modern Baseball Analytics, Data Lake & Machine Learning Engine
 Version: 0.1.0
 Authors@R: person(given = "cbwinslow", email = "cbwinslow@localhost", role = c("aut", "cre"))
 Author: cbwinslow [aut, cre]

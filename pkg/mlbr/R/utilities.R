@@ -1,4 +1,4 @@
-# utilities.R - High-value workflow and exploration utilities for baseballLake
+# utilities.R - High-value workflow and exploration utilities for mlbr
 
 #' Find which datasets in the lake contain a specific column
 #'

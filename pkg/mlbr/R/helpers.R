@@ -1,4 +1,4 @@
-# helpers.R - shared plumbing for baseballLake ingest functions
+# helpers.R - shared plumbing for mlbr ingest functions
 #
 # LAKE ROOT: every function takes `lake` (path to the data-lake project root).
 # Raw files land in <lake>/data/raw/<source>/. Atomic writes (tmp + rename).
@@ -85,9 +85,9 @@ write_df <- function(df, path) {
 #' @export
 default_lake <- function(lake = NULL) {
   if (!missing(lake) && !is.null(lake) && nzchar(lake)) return(normalizePath(lake, mustWork = FALSE))
-  env_p <- Sys.getenv("BASEBALL_LAKE_PATH", "")
+  env_p <- Sys.getenv("MLBR_DATA_PATH", "BASEBALL_LAKE_PATH", "")
   if (nzchar(env_p)) return(normalizePath(env_p, mustWork = FALSE))
-  opt_p <- getOption("baseballLake.path", NULL)
+  opt_p <- getOption("mlbr.path", NULL)
   if (!is.null(opt_p) && nzchar(opt_p)) return(normalizePath(opt_p, mustWork = FALSE))
   if (dir.exists("/mnt/storage/Rprojects/mlb")) return("/mnt/storage/Rprojects/mlb")
   getwd()
