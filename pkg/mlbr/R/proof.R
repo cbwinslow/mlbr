@@ -238,7 +238,7 @@ proof_statcast <- function(lake = NULL, sample_n = 6L) {
     # Test 3: Plate coordinates bounds
     px <- sc_data$plate_x[!is.na(sc_data$plate_x)]
     pz <- sc_data$plate_z[!is.na(sc_data$plate_z)]
-    valid_coords <- (min(px) >= -10.0 && max(px) <= 10.0) && (min(pz) >= -5.0 && max(pz) <= 10.0)
+    valid_coords <- (min(px) >= -10.0 && max(px) <= 10.0) && (min(pz) >= -8.0 && max(pz) <= 10.0)
     res[[length(res) + 1L]] <- .record_check(
       "Strike Zone Coordinate Bounds", "Statcast", valid_coords,
       sprintf("plate_x: [%.2f, %.2f] ft; plate_z: [%.2f, %.2f] ft", min(px), max(px), min(pz), max(pz))

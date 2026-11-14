@@ -1,0 +1,118 @@
+---
+title: "Installation & Setup"
+subtitle: "Environment configuration, RStudio Server access, and R package integration"
+format:
+  html:
+    toc: true
+---
+
+## Infrastructure Overview
+
+The `mlbr` data lake is hosted on **cbwdellr720**:
+- **Operating System:** Ubuntu 24.04.5 LTS
+- **Hardware:** 40 Xeon CPU threads, 125 GB RAM, high-throughput NVMe and storage arrays
+- **Internal IP:** `192.168.10.1` (Direct 10GbE / high-speed link)
+- **R Version:** R 4.6.2 (Diversified Portfolio)
+- **RStudio Server:** `http://192.168.10.1:8787`
+
+---
+
+## Accessing RStudio Server
+
+RStudio Server runs continuously on port `8787`. You can navigate directly to:
+
+```
+http://192.168.10.1:8787
+```
+
+Login with your system credentials (`cbwinslow`). The active project file is located at:
+```
+/mnt/storage/Rprojects/mlb/mlbr.Rproj
+```
+
+Opening this project sets your working directory and attaches local libraries automatically.
+
+---
+
+## Installing the `mlbr` Package
+
+The package source is maintained in `pkg/mlbr`. You can build and install it to the shared library path:
+
+### From the R Console
+```r
+# Ensure library paths include the storage volume
+.libPaths(c("/mnt/storage/R/library", .libPaths()))
+
+# Install from source
+devtools::install("/mnt/storage/Rprojects/mlb/pkg/mlbr")
+
+# Load and test
+library(mlbr)
+lake_status()
+```
+
+### From the Terminal
+```bash
+R CMD INSTALL /mnt/storage/Rprojects/mlb/pkg/mlbr --library=/mnt/storage/R/library
+```
+
+---
+
+## Dynamic Path Configuration
+
+`mlbr` functions never require hardcoded paths. All routines resolve the active lake directory using `default_lake()`, which evaluates in order:
+
+1. Explicit `lake` argument passed to functions (e.g., `lake_status(lake = "...")`)
+2. Environment variable `MLBR_DATA_PATH` (set in `~/.Renviron`)
+3. R Option `options(mlbr.path = "...")`
+4. Standard root `/mnt/storage/Rprojects/mlb` if it exists
+5. Current working directory `getwd()`
+
+To configure your personal environment permanently, add the following to `~/.Renviron`:
+
+```bash
+echo "MLBR_DATA_PATH=/mnt/storage/Rprojects/mlb" >> ~/.Renviron
+```
+
+---
+
+## Working with `LakeManager` (R6)
+
+For object-oriented workflows and interactive exploration, `LakeManager` provides a unified stateful interface:
+
+```r
+library(mlbr)
+
+# Instantiate the manager
+mgr <- LakeManager$new()
+
+# Audit lake health
+mgr$status()
+
+# Mount DuckDB views
+con <- mgr$duckdb()
+
+# Search for any column across all tables
+mgr$find("spin_rate")
+mgr$find("wOBA")
+
+# Print complete column schema and types for a dataset
+mgr$describe("statcast")
+
+# Run invariant tests
+mgr$proof()
+```
+
+---
+
+## DuckDB Optimization & Threading
+
+DuckDB is embedded and executes out-of-core operations without requiring a separate database server. For optimal performance on high-core machines like `cbwdellr720`:
+
+```r
+con <- lake_duckdb()
+
+# Configure DuckDB thread allocation and memory limit
+DBI::dbExecute(con, "PRAGMA threads=16;")
+DBI::dbExecute(con, "PRAGMA memory_limit='32GB';")
+```

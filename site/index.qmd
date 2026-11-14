@@ -1,0 +1,127 @@
+---
+title: "mlbr: Production Sabermetrics Data Lake"
+subtitle: "High-performance, zero-copy analytics and machine learning over complete MLB history"
+format:
+  html:
+    toc: true
+---
+
+::: {.hero-banner}
+# mlbr Data Lake & Sabermetrics Platform
+Zero-copy Apache Parquet storage, unified DuckDB querying, and machine learning pipelines across 150+ years of baseball data.
+:::
+
+## Executive Overview
+
+`mlbr` is a production-grade analytical platform and R package designed for large-scale baseball analytics, empirical sabermetrics, and machine learning. Built on top of **cbwdellr720** (40 Xeon cores, 125 GB RAM, high-speed NVMe/HDD storage), `mlbr` unifies:
+
+- **150+ Years of Retrosheet Play-by-Play (1871–2025)**: Every pitch, hit, out, substitution, and umpire event parsed directly via Chadwick C tools.
+- **Complete Statcast Pitch Tracking (2008–2025)**: Per-pitch Hawkeye/PITCHf/x metrics (velocities, spin rates, release coordinates, 3D break profiles).
+- **Comprehensive FanGraphs Historical Records (1901–2025)**: Advanced leaderboards, Stuff+, PitchingBot, Gut constants, and park factors.
+- **Chadwick Bureau Register**: Universal cross-identifier mapping covering >527,000 players across MLB, MiLB, Retrosheet, Baseball-Reference, and Fangraphs.
+- **NCAA & Minor League (MiLB) Data**: Extended feeder systems and collegiate play tracking.
+
+---
+
+## Live Data Lake Inventory
+
+The table below reflects live inventory computed directly from disk via `mlbr::lake_status()`. All datasets are partitioned in Apache Parquet format and maintain a strict **0-drop column invariant**.
+
+```{r}
+#| label: lake-status-table
+#| echo: false
+suppressPackageStartupMessages({
+  .libPaths(c("/mnt/storage/R/library", .libPaths()))
+  library(mlbr)
+  library(dplyr)
+  library(knitr)
+})
+
+st <- mlbr::lake_status()
+knitr::kable(
+  st %>% select(source, files, rows, MB),
+  col.names = c("Data Source", "Parquet Files", "Total Rows", "Size (MB)"),
+  format.args = list(big.mark = ",")
+)
+```
+
+::: {.callout-note}
+### Zero-Drop Column Invariant
+In traditional analytics pipelines, downstream transformations often drop columns considered non-essential at ingestion time. `mlbr` enforces a strict **Zero-Drop Column Invariant**: 100% of available raw columns (e.g., 119 in Statcast, 160 in Retrosheet events, 447+ in FanGraphs) are preserved in parquet partitions.
+:::
+
+---
+
+## Platform Architecture
+
+`mlbr` utilizes a decoupled **Lake-Warehouse** architecture:
+
+```
+[ Data Providers ]
+  ├── MLB Savant (Statcast per-pitch API)
+  ├── Retrosheet / Chadwick Bureau (Git mirror & C tools)
+  ├── FanGraphs (Leaderboards & Sabermetric Constants)
+  └── Lahman / NCAA / MLB Meta
+          │
+          ▼
+[ Ingestion & Adaptive Tier Ladder ] (R/ingest/*.R)
+  - Month -> Week -> Day fallback (eliminates 25,000 row caps)
+  - Exponential backoff & polite rate limiting
+          │
+          ▼
+[ Storage Layer ] (data/raw/*.parquet)
+  - Columnar Apache Parquet partitions
+  - Snappy compression, dictionary encoding
+          │
+          ▼
+[ Zero-Copy Analytical Engine ] (DuckDB + mlbr R package)
+  - Out-of-core streaming execution
+  - Vectorized SIMD query processing
+  - Direct integration with dplyr, tidymodels, and ggplot2
+```
+
+---
+
+## Quickstart
+
+### 1. Zero-Copy DuckDB Query
+
+Mount the entire multi-million row data lake in milliseconds without loading files into RAM:
+
+```r
+library(mlbr)
+library(dplyr)
+
+# Connect to DuckDB with pre-mounted views
+con <- lake_duckdb()
+
+# Query pitch velocity distribution
+top_heat <- tbl(con, "statcast") %>%
+  filter(release_speed > 102) %>%
+  select(pitcher_name = player_name, pitch_type, release_speed, release_spin_rate) %>%
+  arrange(desc(release_speed)) %>%
+  head(10) %>%
+  collect()
+
+print(top_heat)
+```
+
+### 2. Lake Health & Verification
+
+Run the automated 28-point invariant proof suite:
+
+```r
+res <- proof_lake()
+# Output: 28 / 28 passed (100.0%) in ~4.3 seconds
+```
+
+---
+
+## Machine Learning & Sabermetric Analyses
+
+Explore our interactive research gallery:
+
+- [**Unsupervised Pitch Clustering**](analyses/pitch_clustering.html): K-Means & GMM movement classification.
+- [**Pitch Classification with Random Forest**](analyses/pitch_classification.html): Predicting pitch type from flight dynamics using `tidymodels`.
+- [**Non-linear xwOBA & Barrel Landscape**](analyses/xwoba_surface.html): 2D GAM surface across Exit Velocity & Launch Angle.
+- [**Run Expectancy Matrix (RE24)**](analyses/run_expectancy.html): Empirical 24-state transition valuation from 23.8M plays.

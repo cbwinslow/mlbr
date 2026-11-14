@@ -1,0 +1,73 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "mlbr"
+  description: "Production Sabermetrics Data Lake & Machine Learning Platform"
+  site-url: "https://cloudcurio.cc"
+  repo-url: "https://github.com/cbwinslow/mlbr"
+  repo-actions: [issue]
+  navbar:
+    title: "mlbr"
+    left:
+      - href: index.qmd
+        text: "Home"
+      - href: gallery.qmd
+        text: "Analyses Gallery"
+      - href: architecture.qmd
+        text: "Architecture"
+      - href: setup.qmd
+        text: "Setup & API"
+      - href: verification.qmd
+        text: "Data Proofs"
+    right:
+      - icon: github
+        href: "https://github.com/cbwinslow/mlbr"
+  sidebar:
+    - id: main
+      collapse-level: 2
+      style: docked
+      contents:
+        - section: "Getting Started"
+          contents:
+            - text: "Overview & Dashboard"
+              href: index.qmd
+            - text: "Installation & Setup"
+              href: setup.qmd
+            - text: "Architecture & Storage"
+              href: architecture.qmd
+            - text: "Verification & Proofs"
+              href: verification.qmd
+        - section: "Analyses Gallery"
+          contents:
+            - text: "Gallery Overview"
+              href: gallery.qmd
+            - text: "Pitch Clustering (K-Means / GMM)"
+              href: analyses/pitch_clustering.qmd
+            - text: "Pitch Classification (Random Forest)"
+              href: analyses/pitch_classification.qmd
+            - text: "xWOBA / Exit Velocity Surface"
+              href: analyses/xwoba_surface.qmd
+            - text: "Run Expectancy RE24 Matrix"
+              href: analyses/run_expectancy.qmd
+
+format:
+  html:
+    theme:
+      light: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    code-tools: true
+    code-copy: true
+    df-print: paged
+    fig-format: retina
+    fig-width: 8
+    fig-height: 5
+
+execute:
+  freeze: auto
+  warning: false
+  message: false

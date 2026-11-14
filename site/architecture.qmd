@@ -1,0 +1,119 @@
+---
+title: "Architecture & Storage"
+subtitle: "Partitioning design, zero-copy DuckDB views, and rate-limit safe ingestion"
+format:
+  html:
+    toc: true
+---
+
+## Core Design Principles
+
+Traditional sports analytics repositories often suffer from two major anti-patterns:
+1. **Premature Aggregation / Column Dropping:** Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise.
+2. **Monolithic Relational Databases:** Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.
+
+`mlbr` resolves both issues by implementing a **Decoupled Columnar Data Lake** powered by Apache Parquet and DuckDB.
+
+---
+
+## Partitioning & Directory Layout
+
+All raw data resides in `/mnt/storage/Rprojects/mlb/data/raw/` in immutable, partitioned Parquet files:
+
+```
+data/raw/
+├── retrosheet/          # 622 files, 23.8M rows (1871-2025)
+│   ├── plays-1871.parquet ... plays-2025.parquet
+│   ├── games-1871.parquet ... games-2025.parquet
+│   ├── player_games-*.parquet
+│   ├── subs-*.parquet
+│   └── rosters-*.parquet
+├── statcast/            # Partitioned monthly (2008-2025)
+│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet
+├── fangraphs/           # 425 tables (1901-2025)
+│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet
+│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet
+│   ├── fg_fielding_*.parquet, fg_team_*.parquet
+│   └── guts_constants.parquet, park_factors_*.parquet
+├── chadwick/            # Universal crosswalk
+│   └── register.parquet (527,990 player IDs)
+├── lahman/              # 31 historical tables (1871+)
+├── ncaa/                # 8 college baseball tables (848k play rows)
+├── mlbmeta/             # 81 files (draft, parks, advanced metrics)
+└── espn/                # 32 files (schedules, boxscores)
+```
+
+---
+
+## The Zero-Drop Column Invariant
+
+Every data source ingested by `mlbr` retains **100% of its available columns**. 
+
+| Source Table | Preserved Columns | Key Retained Attributes |
+|---|---|---|
+| **Statcast** | **119** | `release_speed`, `release_spin_rate`, `pfx_x`, `pfx_z`, `spin_axis`, `vx0`, `vy0`, `vz0`, `ax`, `ay`, `az`, `sz_top`, `sz_bot`, `bat_speed`, `swing_length` |
+| **Retrosheet Plays** | **160** | Complete base runner states, pitch sequence strings, fielder position codes, count before play, batted ball types, extra-base advance codes |
+| **Retrosheet Games** | **84** | Temperature, wind direction/speed, attendance, home/away plate umpires, day/night, ballpark ID |
+| **FanGraphs Batting** | **447** | wOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, Plate discipline (O-Swing%, Z-Swing%), Stuff+, Location+ |
+| **FanGraphs Pitching**| **520** | FIP, xFIP, SIERA, K-BB%, Pitch mix frequencies, pitch-specific run values (wFB, wSL, wCB, wCH) |
+| **Chadwick Register** | **40** | Crosswalk IDs: `key_mlbam`, `key_retro`, `key_bbref`, `key_fangraphs`, `key_npb` |
+
+---
+
+## Zero-Copy DuckDB Query Engine
+
+Rather than maintaining a persistent database daemon that holds data in proprietary formats, `mlbr` registers **virtual views** directly on the raw Parquet files via `lake_duckdb()`.
+
+```r
+library(mlbr)
+con <- lake_duckdb()
+```
+
+Under the hood, DuckDB executes:
+
+```sql
+CREATE VIEW statcast AS 
+SELECT * FROM read_parquet('data/raw/statcast/*.parquet', union_by_name=true);
+
+CREATE VIEW retro_plays AS 
+SELECT * FROM read_parquet('data/raw/retrosheet/plays-*.parquet', union_by_name=true);
+
+CREATE VIEW chadwick AS 
+SELECT * FROM read_parquet('data/raw/chadwick/register.parquet');
+```
+
+### Benefits:
+- **Zero Ingestion Latency:** When new parquet files arrive, views automatically include them without table rebuilds.
+- **Out-of-Core Execution:** Process 30M+ rows on machines with limited RAM using streaming SIMD operators.
+- **Snappy Compression:** Entire dataset consumes less than 15 GB of disk space.
+
+---
+
+## Ingestion Architecture & Adaptive Tier Ladder
+
+The MLB Baseball Savant Statcast API enforces a hard server-side limit of **25,000 rows per request**. If a query matches 25,001 rows, the server silently truncates results, causing data loss.
+
+To eliminate this vulnerability, `R/ingest/ingest_statcast.R` implements an **Adaptive Tier Ladder**:
+
+```
+           [ Query Month Window ]
+                     │
+         Is result count == 25,000?
+             ├── NO  ──> Save monthly parquet
+             └── YES ──> Step down to Tier 2
+                               │
+                    [ Query 7-Day Week Windows ]
+                               │
+                   Is result count == 25,000?
+                       ├── NO  ──> Save weekly chunks
+                       └── YES ──> Step down to Tier 3
+                                         │
+                             [ Query Single-Day Windows ]
+                                         │
+                             Guaranteed < 25,000 pitches
+```
+
+### Ingestion Safety Rules
+1. **Serialization:** Only one ingest process accesses a source at a time.
+2. **Polite Backoff:** Automatic exponential backoff on HTTP 429/503 errors.
+3. **Idempotence:** Files that already exist on disk are skipped unless explicitly removed.

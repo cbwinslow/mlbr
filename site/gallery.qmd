@@ -1,0 +1,77 @@
+---
+title: "Analyses Gallery"
+subtitle: "Machine learning, statistical modeling, and empirical sabermetrics gallery"
+format:
+  html:
+    toc: true
+---
+
+Inspired by scikit-learn's example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the `mlbr` data lake.
+
+---
+
+## Machine Learning & Classification
+
+<div class="gallery-grid">
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge ml">Unsupervised ML</span>
+    <span class="gallery-badge">Statcast</span>
+    <h4><a href="analyses/pitch_clustering.html">Unsupervised Pitch Clustering</a></h4>
+    <p>K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (<code>pfx_x</code>, <code>pfx_z</code>, velocity, spin). Repertoire discovery without human pitch-tag bias.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge ml">Supervised ML</span>
+    <span class="gallery-badge">tidymodels</span>
+    <h4><a href="analyses/pitch_classification.html">Pitch Type Classification with Random Forest</a></h4>
+    <p>Multi-class classification using <code>ranger</code> and <code>tidymodels</code> to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC</small>
+  </div>
+</div>
+
+</div>
+
+---
+
+## Empirical Sabermetrics & Non-Linear Surfaces
+
+<div class="gallery-grid">
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge sabermetrics">Sabermetrics</span>
+    <span class="gallery-badge">GAM / LOESS</span>
+    <h4><a href="analyses/xwoba_surface.html">Non-Linear xwOBA & Barrel Landscape</a></h4>
+    <p>Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast "Barrels".</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge sabermetrics">Sabermetrics</span>
+    <span class="gallery-badge">Retrosheet</span>
+    <h4><a href="analyses/run_expectancy.html">Run Expectancy RE24 Matrix</a></h4>
+    <p>Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025</small>
+  </div>
+</div>
+
+</div>

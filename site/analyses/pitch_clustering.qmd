@@ -1,0 +1,176 @@
+---
+title: "Unsupervised Pitch Clustering with K-Means"
+subtitle: "Discovering pitch movement profiles from 3D flight dynamics without human tagging bias"
+format:
+  html:
+    toc: true
+    code-fold: show
+---
+
+## Introduction
+
+In Major League Baseball, pitch types are traditionally labeled by human operators or proprietary MLBAM heuristic algorithms (e.g., Four-Seam Fastball `FF`, Slider `SL`, Changeup `CH`, Curveball `CU`). However, pitch design exists on a continuous physical continuum: hybrid pitches like "sweepers", "hard cutters", and "slurves" often defy discrete classification.
+
+In this analysis, we use **unsupervised clustering (K-Means)** over raw Statcast flight physics to discover natural pitch movement profiles directly from empirical data.
+
+---
+
+## Data Extraction via DuckDB
+
+We pull a clean sample of pitches from the `mlbr` data lake, extracting:
+- `release_speed`: Velocity at release point (mph)
+- `pfx_x`: Horizontal break induced by Magnus force (converted to inches: `pfx_x * 12`)
+- `pfx_z`: Induced vertical break (inches: `pfx_z * 12`)
+- `release_spin_rate`: Spin rate (rpm)
+
+```{r}
+#| label: load-data
+suppressPackageStartupMessages({
+  .libPaths(c("/mnt/storage/R/library", .libPaths()))
+  library(mlbr)
+  library(duckdb)
+  library(dplyr)
+  library(ggplot2)
+  library(tidyr)
+  library(scales)
+})
+
+# Connect to zero-copy DuckDB lake
+con <- lake_duckdb()
+
+# Sample 40,000 right-handed pitches with complete tracking metrics
+pitches_raw <- DBI::dbGetQuery(con, "
+  SELECT 
+    pitch_type,
+    player_name,
+    p_throws,
+    release_speed,
+    release_spin_rate,
+    pfx_x * 12.0 AS pfx_x_in,
+    pfx_z * 12.0 AS pfx_z_in
+  FROM statcast
+  WHERE p_throws = 'R'
+    AND release_speed IS NOT NULL
+    AND release_spin_rate IS NOT NULL
+    AND pfx_x IS NOT NULL
+    AND pfx_z IS NOT NULL
+    AND pitch_type IN ('FF', 'FT', 'SI', 'SL', 'CH', 'CU', 'FC')
+  USING SAMPLE 40000 (reservoir);
+")
+
+cat(sprintf("Retrieved %d pitches for unsupervised clustering.\n", nrow(pitches_raw)))
+```
+
+---
+
+## Feature Scaling & Optimal $k$ Selection
+
+Because release speed (~90 mph) and spin rate (~2200 rpm) have much larger numerical scales than break measurements (~10 inches), we standardize features using Z-score scaling ($z = \frac{x - \mu}{\sigma}$).
+
+We then evaluate within-cluster sum of squares (WSS) across $k \in \{2, \dots, 8\}$ using the Elbow Method:
+
+```{r}
+#| label: elbow-method
+# Standardize features
+features <- pitches_raw %>%
+  select(release_speed, release_spin_rate, pfx_x_in, pfx_z_in) %>%
+  scale()
+
+# Compute total within-cluster sum of squares
+set.seed(42)
+k_values <- 2:8
+wss <- numeric(length(k_values))
+
+for (i in seq_along(k_values)) {
+  km_fit <- kmeans(features, centers = k_values[i], nstart = 10, iter.max = 50)
+  wss[i] <- km_fit$tot.withinss
+}
+
+elbow_df <- data.frame(k = k_values, wss = wss)
+
+ggplot(elbow_df, aes(x = k, y = wss)) +
+  geom_line(color = "#2b5c8f", linewidth = 1.2) +
+  geom_point(color = "#f37626", size = 3.5) +
+  geom_vline(xintercept = 4, linetype = "dashed", color = "gray50") +
+  theme_minimal() +
+  labs(
+    title = "K-Means Elbow Method for Optimal Pitch Clusters",
+    subtitle = "Distinct inflection point observed around k = 4 (Fastballs, Breaking Balls, Offspeed, Cutters)",
+    x = "Number of Clusters (k)",
+    y = "Total Within-Cluster Sum of Squares (WSS)"
+  )
+```
+
+---
+
+## Fitting K-Means ($k = 4$)
+
+We fit our final model with $k = 4$ clusters, representing the 4 primary pitch movement archetypes:
+
+```{r}
+#| label: fit-kmeans
+set.seed(42)
+km_final <- kmeans(features, centers = 4, nstart = 25, iter.max = 100)
+pitches_raw$cluster <- as.factor(km_final$cluster)
+
+# Calculate cluster profile means
+cluster_profiles <- pitches_raw %>%
+  group_by(cluster) %>%
+  summarize(
+    count = n(),
+    avg_velocity = mean(release_speed),
+    avg_spin = mean(release_spin_rate),
+    avg_hbreak = mean(pfx_x_in),
+    avg_vbreak = mean(pfx_z_in)
+  )
+
+knitr::kable(
+  cluster_profiles,
+  digits = 1,
+  col.names = c("Cluster", "Count", "Avg Velo (mph)", "Avg Spin (rpm)", "Avg H-Break (in)", "Avg V-Break (in)")
+)
+```
+
+---
+
+## 2D Break Vector Movement Chart
+
+We visualize the discovered clusters in standard pitcher-perspective break coordinates:
+
+```{r}
+#| label: movement-plot
+#| fig-width: 9
+#| fig-height: 6
+ggplot(pitches_raw %>% sample_n(min(n(), 10000)), aes(x = pfx_x_in, y = pfx_z_in, color = cluster)) +
+  geom_point(alpha = 0.35, size = 1.2) +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
+  geom_vline(xintercept = 0, linetype = "dotted", color = "black") +
+  scale_color_brewer(palette = "Set1", name = "Discovered Cluster") +
+  theme_minimal(base_size = 13) +
+  labs(
+    title = "Statcast 2D Pitch Movement Map by Discovered Cluster",
+    subtitle = "Horizontal Break vs. Induced Vertical Break (Right-Handed Pitchers)",
+    x = "Horizontal Break (Inches, Arm Side <--- ---> Glove Side)",
+    y = "Induced Vertical Break (Inches, Rise vs. Drop)"
+  ) +
+  theme(legend.position = "right")
+```
+
+---
+
+## Comparing Discovered Clusters with MLB Tags
+
+How closely do the unsupervised clusters map to human MLB pitch classifications?
+
+```{r}
+#| label: cross-tab
+cross_tab <- table(Cluster = pitches_raw$cluster, Pitch_Type = pitches_raw$pitch_type)
+print(cross_tab)
+```
+
+::: {.callout-note}
+### Key Sabermetric Findings
+1. **Four-Seam Fastballs (`FF`)** cleanly map into high-velocity, high-rise movement clusters.
+2. **Sinkers (`SI` / `FT`)** separate naturally into arm-side run with lower vertical rise.
+3. **Sliders (`SL`) & Curveballs (`CU`)** occupy distinct glove-side and negative-rise territories.
+:::

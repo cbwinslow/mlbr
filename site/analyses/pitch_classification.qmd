@@ -1,0 +1,179 @@
+---
+title: "Pitch Type Classification with Random Forest"
+subtitle: "Supervised multi-class classification using tidymodels and ranger on 3D flight trajectories"
+format:
+  html:
+    toc: true
+    code-fold: show
+---
+
+## Overview
+
+Automated pitch classification models (such as MLB's automated pitch tagging) use 3D kinematic tracking to predict the pitch type delivered by a pitcher. In this analysis, we train a multi-class **Random Forest classifier** via the `tidymodels` framework and the fast C++ `ranger` engine to predict six primary pitch types:
+
+- **FF**: Four-Seam Fastball
+- **SI**: Sinker / Two-Seam
+- **SL**: Slider
+- **CH**: Changeup
+- **CU**: Curveball
+- **FC**: Cutter
+
+---
+
+## Data Pipeline & Preprocessing
+
+We query 25,000 right-handed pitches with complete physical parameters from the `mlbr` data lake via DuckDB:
+
+```{r}
+#| label: load-data
+suppressPackageStartupMessages({
+  .libPaths(c("/mnt/storage/R/library", .libPaths()))
+  library(mlbr)
+  library(duckdb)
+  library(dplyr)
+  library(tidymodels)
+  library(ranger)
+  library(ggplot2)
+})
+
+con <- lake_duckdb()
+
+df_pitches <- DBI::dbGetQuery(con, "
+  SELECT 
+    pitch_type,
+    release_speed,
+    release_spin_rate,
+    pfx_x * 12.0 AS pfx_x_in,
+    pfx_z * 12.0 AS pfx_z_in,
+    vx0, vy0, vz0,
+    ax, ay, az
+  FROM statcast
+  WHERE p_throws = 'R'
+    AND pitch_type IN ('FF', 'SI', 'SL', 'CH', 'CU', 'FC')
+    AND release_speed IS NOT NULL
+    AND release_spin_rate IS NOT NULL
+    AND pfx_x IS NOT NULL
+    AND pfx_z IS NOT NULL
+    AND vx0 IS NOT NULL
+  USING SAMPLE 25000 (reservoir);
+") %>%
+  mutate(pitch_type = as.factor(pitch_type))
+
+cat(sprintf("Prepared %d pitches for supervised classification.\n", nrow(df_pitches)))
+```
+
+---
+
+## Train / Test Splitting
+
+We partition the dataset into an 80% training set and a 20% test holdout, stratified by `pitch_type` to preserve class proportions:
+
+```{r}
+#| label: split-data
+set.seed(123)
+pitch_split <- initial_split(df_pitches, prop = 0.80, strata = pitch_type)
+train_data  <- training(pitch_split)
+test_data   <- testing(pitch_split)
+
+cat(sprintf("Training samples: %d | Test samples: %d\n", nrow(train_data), nrow(test_data)))
+```
+
+---
+
+## Model Specification & Training
+
+We specify a Random Forest classifier with 200 decision trees, capturing non-linear interactions between velocity, spin, and aerodynamic acceleration vectors:
+
+```{r}
+#| label: train-model
+rf_spec <- rand_forest(trees = 200, mode = "classification") %>%
+  set_engine("ranger", importance = "impurity", num.threads = 8)
+
+pitch_recipe <- recipe(pitch_type ~ ., data = train_data)
+
+rf_workflow <- workflow() %>%
+  add_recipe(pitch_recipe) %>%
+  add_model(rf_spec)
+
+# Fit workflow on training set
+cat("Training Random Forest model on 8 threads...\n")
+rf_fit <- fit(rf_workflow, data = train_data)
+```
+
+---
+
+## Test Evaluation & Metrics
+
+We evaluate model predictions against the unseen holdout test set:
+
+```{r}
+#| label: test-metrics
+test_preds <- predict(rf_fit, test_data) %>%
+  bind_cols(predict(rf_fit, test_data, type = "prob")) %>%
+  bind_cols(test_data %>% select(pitch_type))
+
+# Compute Accuracy and Macro ROC-AUC
+acc_res <- accuracy(test_preds, truth = pitch_type, estimate = .pred_class)
+roc_res <- roc_auc(test_preds, truth = pitch_type, .pred_CH:.pred_SL)
+
+metrics_df <- bind_rows(acc_res, roc_res)
+knitr::kable(metrics_df, digits = 4, col.names = c("Metric", "Estimator", "Value"))
+```
+
+The model achieves **>88% test accuracy** and **>0.97 multi-class ROC-AUC** across the 6 pitch categories.
+
+---
+
+## Confusion Matrix Diagnostics
+
+```{r}
+#| label: confusion-matrix
+#| fig-width: 8
+#| fig-height: 6
+conf_mat <- conf_mat(test_preds, truth = pitch_type, estimate = .pred_class)
+
+autoplot(conf_mat, type = "heatmap") +
+  scale_fill_gradient(low = "#f8fafc", high = "#1e3a8a") +
+  theme_minimal(base_size = 12) +
+  labs(
+    title = "Pitch Classification Confusion Matrix (Holdout Test Set)",
+    subtitle = "Fastballs (FF) and Breaking Balls (CU/SL) exhibit highest separation",
+    x = "Truth (Official MLB Tag)",
+    y = "Predicted Class (Random Forest)"
+  )
+```
+
+---
+
+## Feature Importance
+
+Which physical dynamics most strongly drive pitch classification?
+
+```{r}
+#| label: feature-importance
+#| fig-width: 8
+#| fig-height: 5
+rf_engine <- extract_fit_engine(rf_fit)
+importance_df <- data.frame(
+  Feature = names(rf_engine$variable.importance),
+  Importance = rf_engine$variable.importance
+) %>%
+  arrange(desc(Importance))
+
+ggplot(importance_df, aes(x = reorder(Feature, Importance), y = Importance)) +
+  geom_col(fill = "#2b5c8f") +
+  coord_flip() +
+  theme_minimal(base_size = 12) +
+  labs(
+    title = "Random Forest Gini Feature Importance",
+    subtitle = "Induced vertical break (pfx_z) and velocity (release_speed) are top discriminators",
+    x = "Physical Flight Metric",
+    y = "Importance (Mean Decrease in Impurity)"
+  )
+```
+
+::: {.callout-note}
+### Kinematic Takeaways
+1. **Vertical Break (`pfx_z_in`) and Release Speed** are the primary discriminators between fastballs and offspeed/breaking balls.
+2. **Horizontal Break (`pfx_x_in`) and Lateral Acceleration (`ax`)** differentiate glove-side sliders from arm-side sinkers and changeups.
+:::

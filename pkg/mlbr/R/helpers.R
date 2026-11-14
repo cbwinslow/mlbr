@@ -1,82 +1,75 @@
-# helpers.R - shared plumbing for mlbr ingest functions
-#
-# LAKE ROOT: every function takes `lake` (path to the data-lake project root).
-# Raw files land in <lake>/data/raw/<source>/. Atomic writes (tmp + rename).
-#' @importFrom arrow open_dataset write_parquet read_parquet
-#' @importFrom dplyr filter bind_rows mutate select arrange case_when
-#' @importFrom data.table fread rbindlist setnames
-#' @importFrom tibble tibble
-#' @importFrom purrr map map_int map_chr pmap_int
-#' @importFrom utils data
-# Rate limiting: the baseballr fetchers do NOT throttle themselves, so every
-# network touch goes through throttle() with a source-appropriate minimum.
+# Internal helper utilities for mlbr
 
-lake_dir <- function(lake, ...) {
-  d <- file.path(lake, "data", "raw", ...)
-  dir.create(d, recursive = TRUE, showWarnings = FALSE)
-  d
+#' Throttle execution by sleeping
+#' @param seconds Number of seconds to sleep
+#' @keywords internal
+throttle <- function(seconds = 1) {
+  Sys.sleep(seconds)
 }
 
-lake_raw <- function(lake, source, ...) {
-  file.path(lake_dir(lake, source), ...)
-}
-
-.bbl_state <- new.env(parent = emptyenv())
-.bbl_state$last_request_time <- NULL
-
-#' enforce a minimum spacing between HTTP requests
-#'
-#' The upstream fetchers (baseballr) perform no rate limiting of their own.
-#' Every ingest function calls this between requests with a per-source
-#' minimum: FanGraphs 2s, ESPN 2s, MLB Savant 1-5s, Baseball-Reference 12s.
-#'
-#' @param min_seconds minimum seconds since the previous request
-#' @return invisible NULL
-#' @export
-throttle <- function(min_seconds = 2) {
-  if (!is.null(.bbl_state$last_request_time)) {
-    elapsed <- as.numeric(difftime(Sys.time(), .bbl_state$last_request_time,
-                                   units = "secs"))
-    if (elapsed < min_seconds) Sys.sleep(min_seconds - elapsed)
+#' Retry expression on failure
+#' @param expr Expression to evaluate
+#' @param max_attempts Maximum attempts
+#' @param delay Initial delay
+#' @param backoff Exponential multiplier
+#' @keywords internal
+retry <- function(expr, max_attempts = 3, delay = 2, backoff = 2) {
+  attempt <- 1
+  cur_delay <- delay
+  while (attempt <= max_attempts) {
+    res <- tryCatch(
+      list(val = expr, err = NULL),
+      error = function(e) list(val = NULL, err = e)
+    )
+    if (is.null(res$err)) return(res$val)
+    if (attempt == max_attempts) stop(res$err)
+    message(sprintf("Attempt %d failed: %s. Retrying in %.1fs...", attempt, res$err$message, cur_delay))
+    Sys.sleep(cur_delay)
+    cur_delay <- cur_delay * backoff
+    attempt <- attempt + 1
   }
-  .bbl_state$last_request_time <<- Sys.time()
-  invisible()
 }
 
-#' retry an expression with backoff
-#'
-#' @param n number of attempts
-#' @param wait seconds between attempts
-#' @param expr expression to evaluate
-#' @return the value of expr, or errors after the final attempt
-#' @export
-retry <- function(n = 3, wait = 10, expr) {
-  for (i in 1:n) {
-    out <- tryCatch(force(expr), error = function(e) {
-      if (i < n) {
-        message("    attempt ", i, " failed: ",
-                substr(conditionMessage(e), 1, 80), " - retrying in ", wait, "s")
-        Sys.sleep(wait)
-      }
-      NULL
-    })
-    if (!is.null(out)) return(out)
+#' Write a data frame or tibble to parquet or rds safely
+#' @param df Data frame to write
+#' @param path Target path (.parquet or .rds)
+#' @param partition_cols Optional character vector of partition columns
+#' @keywords internal
+write_df <- function(df, path, partition_cols = NULL) {
+  if (is.null(df) || nrow(df) == 0) {
+    warning("write_df received empty data frame; skipping write to ", path)
+    return(invisible(FALSE))
   }
-  stop("all ", n, " attempts failed")
-}
-
-#' atomically write a data frame to parquet
-#' @param df data frame to write
-#' @param path destination parquet path
-#' @return invisible NULL; emits a message with the row count
-#' @export
-write_df <- function(df, path) {
-  tmp <- paste0(path, ".tmp")
-  if (is.data.frame(df)) arrow::write_parquet(df, tmp) else saveRDS(df, tmp)
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  ext <- tolower(tools::file_ext(path))
+  tmp <- paste0(path, ".tmp.", Sys.getpid())
+  on.exit(if (file.exists(tmp)) unlink(tmp, recursive = TRUE), add = TRUE)
+  if (ext == "parquet") {
+    if (!requireNamespace("arrow", quietly = TRUE)) {
+      stop("Package 'arrow' is required to write parquet files.")
+    }
+    if (!is.null(partition_cols) && length(partition_cols) > 0) {
+      arrow::write_dataset(df, tmp, partitioning = partition_cols, format = "parquet")
+    } else {
+      arrow::write_parquet(df, tmp)
+    }
+  } else if (ext == "rds") {
+    saveRDS(df, tmp, compress = "xz")
+  } else {
+    stop("Unsupported extension: ", ext)
+  }
+  if (file.exists(path)) unlink(path, recursive = TRUE)
   file.rename(tmp, path)
-  message(sprintf("  wrote %s (%s)", path,
-                  if (is.data.frame(df)) sprintf("%d rows", nrow(df)) else "list"))
-  invisible()
+  invisible(TRUE)
+}
+
+#' Validate directory structure of baseball data lake
+#' @param lake_path Root path of the data lake
+#' @return Logical TRUE if valid, FALSE otherwise
+#' @export
+validate_lake <- function(lake_path = default_lake()) {
+  expected <- c("data/raw", "data/processed")
+  all(dir.exists(file.path(lake_path, expected)))
 }
 
 #' Determine data lake root path from arguments, options, env, or defaults
@@ -85,8 +78,10 @@ write_df <- function(df, path) {
 #' @export
 default_lake <- function(lake = NULL) {
   if (!missing(lake) && !is.null(lake) && nzchar(lake)) return(normalizePath(lake, mustWork = FALSE))
-  env_p <- Sys.getenv("MLBR_DATA_PATH", "BASEBALL_LAKE_PATH", "")
-  if (nzchar(env_p)) return(normalizePath(env_p, mustWork = FALSE))
+  for (var in c("MLBR_DATA_PATH", "BASEBALL_LAKE_PATH")) {
+    val <- Sys.getenv(var, unset = "")
+    if (nzchar(val)) return(normalizePath(val, mustWork = FALSE))
+  }
   opt_p <- getOption("mlbr.path", NULL)
   if (!is.null(opt_p) && nzchar(opt_p)) return(normalizePath(opt_p, mustWork = FALSE))
   if (dir.exists("/mnt/storage/Rprojects/mlb")) return("/mnt/storage/Rprojects/mlb")

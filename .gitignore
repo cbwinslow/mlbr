@@ -27,3 +27,9 @@ data/
 # Temporary files
 *.tmp
 *.log
+
+# Quarto build cache
+.quarto/
+*/.quarto/
+_freeze/
+*/_freeze/

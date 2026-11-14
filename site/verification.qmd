@@ -1,0 +1,71 @@
+---
+title: "Data Proofs & Invariants"
+subtitle: "Automated 28-point empirical validation suite ensuring 100% data fidelity"
+format:
+  html:
+    toc: true
+---
+
+## Why Proof Data Lakes?
+
+Data lakes often degrade silently over time due to partial network failures, API rate limits, schema drift, or silent truncation. In baseball sabermetrics, a missing game or dropped column can invalidate WAR calculations, run expectancy matrices, and machine learning models.
+
+`mlbr` provides a built-in verification suite (`proof_lake()`) that asserts 28 historical benchmarks, schema invariants, and physics boundaries across all 34+ million records.
+
+---
+
+## The 28 Automated Invariant Tests
+
+The suite executes 5 test categories:
+
+1. **Benchmark Proving (Historical Ground Truth):**
+   - Aaron Judge 2022: Exactly 62 regular season Home Runs.
+   - Barry Bonds 2001: Exactly 73 Home Runs.
+   - Shohei Ohtani 2024: Exactly 54 Home Runs and 59 Stolen Bases (50/50 milestone).
+   - Miguel Cabrera 2012: Triple Crown verification (.330 AVG, 44 HR, 139 RBI).
+   - Pedro Martinez 2000: Historic pitching peak (1.74 ERA, 284 Strikeouts, 0.737 WHIP).
+2. **Crosswalk Integrity:**
+   - Chadwick Bureau cross-mapping between MLBAM, Retrosheet, and Baseball-Reference achieves >99.5% match rate on modern players.
+3. **Statcast Physical & Coordinate Invariants:**
+   - Pitch release velocity strictly between 35 mph (slow eephus) and 107 mph (Aroldis Chapman record).
+   - Release coordinates (`release_pos_x`, `release_pos_z`) within real-world physical pitcher release windows.
+   - Zero requests hitting the silent 25,000 row truncation cap.
+4. **Retrosheet Game & Play Invariants:**
+   - Innings recorded have $\le 3$ outs.
+   - Base runner occupancy state values strictly within $0 \le \text{state} \le 7$.
+   - Score values strictly non-negative.
+5. **Schema Completeness:**
+   - 0 columns dropped across all tables.
+
+---
+
+## Live Invariant Execution
+
+The code below runs `mlbr::proof_lake()` directly against the active data lake:
+
+```{r}
+#| label: run-proof-suite
+#| echo: true
+suppressPackageStartupMessages({
+  .libPaths(c("/mnt/storage/R/library", .libPaths()))
+  library(mlbr)
+  library(dplyr)
+  library(knitr)
+})
+
+proof_results <- proof_lake(verbose = FALSE)
+
+knitr::kable(
+  proof_results %>% select(category, test, status, detail),
+  col.names = c("Category", "Invariant Name", "Status", "Details & Observed Invariants")
+)
+```
+
+::: {.callout-tip}
+### CLI Runner
+You can also execute the proof suite directly from bash or CI/CD pipelines:
+```bash
+Rscript R/proof_lake.R
+```
+The script outputs a green/red terminal report and exits with status 0 on 100% pass, or 1 on any failure.
+:::
