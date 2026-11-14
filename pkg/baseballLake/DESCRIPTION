@@ -23,7 +23,8 @@ Imports:
     tibble,
     purrr,
     baseballr,
-    utils
+    utils,
+    R6
 Suggests:
     Lahman,
     duckdb,

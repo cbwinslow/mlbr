@@ -79,10 +79,18 @@ write_df <- function(df, path) {
   invisible()
 }
 
-#' @noRd
-default_lake <- function(lake) {
-  if (!missing(lake) && !is.null(lake)) return(lake)
-  "/mnt/storage/Rprojects/mlb"
+#' Determine data lake root path from arguments, options, env, or defaults
+#' @param lake explicit path or NULL
+#' @return absolute or normalized directory path
+#' @export
+default_lake <- function(lake = NULL) {
+  if (!missing(lake) && !is.null(lake) && nzchar(lake)) return(normalizePath(lake, mustWork = FALSE))
+  env_p <- Sys.getenv("BASEBALL_LAKE_PATH", "")
+  if (nzchar(env_p)) return(normalizePath(env_p, mustWork = FALSE))
+  opt_p <- getOption("baseballLake.path", NULL)
+  if (!is.null(opt_p) && nzchar(opt_p)) return(normalizePath(opt_p, mustWork = FALSE))
+  if (dir.exists("/mnt/storage/Rprojects/mlb")) return("/mnt/storage/Rprojects/mlb")
+  getwd()
 }
 
 utils::globalVariables(c(
