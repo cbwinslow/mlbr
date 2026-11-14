@@ -26,5 +26,8 @@ Imports:
     utils
 Suggests:
     Lahman,
+    duckdb,
+    DBI,
+    cli,
     testthat (>= 3.0.0)
 Config/roxygen2/version: 8.1.1

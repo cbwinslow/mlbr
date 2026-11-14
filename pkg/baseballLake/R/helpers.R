@@ -87,5 +87,9 @@ default_lake <- function(lake) {
 
 utils::globalVariables(c(
   "GAME_ID", "dates", "flag", "game_date", "game_pk",
-  "gap_days", "maxd", "mind", "month", "ndays", "rows", "year"
+  "gap_days", "maxd", "mind", "month", "ndays", "rows", "year",
+  "playerID", "yearID", "PlayerName", "HR", "SB", "RBI", "SO", "W",
+  "key_person", "key_retro", "key_bbref", "key_mlbam",
+  "release_speed", "plate_x", "plate_z", "balls", "strikes", "outs_when_up",
+  "EVENT_RUNS_CT", "INN_CT", "OUTS_CT"
 ))
