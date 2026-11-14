@@ -27,7 +27,7 @@ http://192.168.10.1:8787
 
 Login with your system credentials (`cbwinslow`). The active project file is located at:
 ```
-/mnt/storage/Rprojects/mlb/mlbr.Rproj
+/mnt/storage/Rprojects/mlbr/mlbr.Rproj
 ```
 
 Opening this project sets your working directory and attaches local libraries automatically.
@@ -44,7 +44,7 @@ The package source is maintained in `pkg/mlbr`. You can build and install it to 
 .libPaths(c("/mnt/storage/R/library", .libPaths()))
 
 # Install from source
-devtools::install("/mnt/storage/Rprojects/mlb/pkg/mlbr")
+devtools::install("/mnt/storage/Rprojects/mlbr/pkg/mlbr")
 
 # Load and test
 library(mlbr)
@@ -53,7 +53,7 @@ lake_status()
 
 ### From the Terminal
 ```bash
-R CMD INSTALL /mnt/storage/Rprojects/mlb/pkg/mlbr --library=/mnt/storage/R/library
+R CMD INSTALL /mnt/storage/Rprojects/mlbr/pkg/mlbr --library=/mnt/storage/R/library
 ```
 
 ---
@@ -65,13 +65,13 @@ R CMD INSTALL /mnt/storage/Rprojects/mlb/pkg/mlbr --library=/mnt/storage/R/libra
 1. Explicit `lake` argument passed to functions (e.g., `lake_status(lake = "...")`)
 2. Environment variable `MLBR_DATA_PATH` (set in `~/.Renviron`)
 3. R Option `options(mlbr.path = "...")`
-4. Standard root `/mnt/storage/Rprojects/mlb` if it exists
+4. Standard root `/mnt/storage/Rprojects/mlbr` if it exists
 5. Current working directory `getwd()`
 
 To configure your personal environment permanently, add the following to `~/.Renviron`:
 
 ```bash
-echo "MLBR_DATA_PATH=/mnt/storage/Rprojects/mlb" >> ~/.Renviron
+echo "MLBR_DATA_PATH=/mnt/storage/Rprojects/mlbr" >> ~/.Renviron
 ```
 
 ---

@@ -18,7 +18,7 @@ Traditional sports analytics repositories often suffer from two major anti-patte
 
 ## Partitioning & Directory Layout
 
-All raw data resides in `/mnt/storage/Rprojects/mlb/data/raw/` in immutable, partitioned Parquet files:
+All raw data resides in `/mnt/storage/Rprojects/mlbr/data/raw/` in immutable, partitioned Parquet files:
 
 ```
 data/raw/

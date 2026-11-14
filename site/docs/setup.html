@@ -312,7 +312,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>RStudio Server runs continuously on port <code>8787</code>. You can navigate directly to:</p>
 <pre><code>http://192.168.10.1:8787</code></pre>
 <p>Login with your system credentials (<code>cbwinslow</code>). The active project file is located at:</p>
-<pre><code>/mnt/storage/Rprojects/mlb/mlbr.Rproj</code></pre>
+<pre><code>/mnt/storage/Rprojects/mlbr/mlbr.Rproj</code></pre>
 <p>Opening this project sets your working directory and attaches local libraries automatically.</p>
 <hr>
 </section>
@@ -325,7 +325,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">.libPaths</span>(<span class="fu">c</span>(<span class="st">"/mnt/storage/R/library"</span>, <span class="fu">.libPaths</span>()))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install from source</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install</span>(<span class="st">"/mnt/storage/Rprojects/mlb/pkg/mlbr"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install</span>(<span class="st">"/mnt/storage/Rprojects/mlbr/pkg/mlbr"</span>)</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and test</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
@@ -333,7 +333,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="from-the-terminal" class="level3">
 <h3 class="anchored" data-anchor-id="from-the-terminal">From the Terminal</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD INSTALL /mnt/storage/Rprojects/mlb/pkg/mlbr <span class="at">--library</span><span class="op">=</span>/mnt/storage/R/library</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD INSTALL /mnt/storage/Rprojects/mlbr/pkg/mlbr <span class="at">--library</span><span class="op">=</span>/mnt/storage/R/library</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 </section>
@@ -344,11 +344,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Explicit <code>lake</code> argument passed to functions (e.g., <code>lake_status(lake = "...")</code>)</li>
 <li>Environment variable <code>MLBR_DATA_PATH</code> (set in <code>~/.Renviron</code>)</li>
 <li>R Option <code>options(mlbr.path = "...")</code></li>
-<li>Standard root <code>/mnt/storage/Rprojects/mlb</code> if it exists</li>
+<li>Standard root <code>/mnt/storage/Rprojects/mlbr</code> if it exists</li>
 <li>Current working directory <code>getwd()</code></li>
 </ol>
 <p>To configure your personal environment permanently, add the following to <code>~/.Renviron</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"MLBR_DATA_PATH=/mnt/storage/Rprojects/mlb"</span> <span class="op">&gt;&gt;</span> ~/.Renviron</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"MLBR_DATA_PATH=/mnt/storage/Rprojects/mlbr"</span> <span class="op">&gt;&gt;</span> ~/.Renviron</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 <section id="working-with-lakemanager-r6" class="level2">
@@ -871,7 +871,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>Login with your system credentials (<span class="in">`cbwinslow`</span>). The active project file is located at:</span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="in">/mnt/storage/Rprojects/mlb/mlbr.Rproj</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="in">/mnt/storage/Rprojects/mlbr/mlbr.Rproj</span></span>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>Opening this project sets your working directory and attaches local libraries automatically.</span>
@@ -888,7 +888,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="fu">.libPaths</span>(<span class="fu">c</span>(<span class="st">"/mnt/storage/R/library"</span>, <span class="fu">.libPaths</span>()))</span>
 <span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Install from source</span></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install</span>(<span class="st">"/mnt/storage/Rprojects/mlb/pkg/mlbr"</span>)</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install</span>(<span class="st">"/mnt/storage/Rprojects/mlbr/pkg/mlbr"</span>)</span>
 <span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and test</span></span>
 <span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
@@ -897,7 +897,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### From the Terminal</span></span>
 <span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD INSTALL /mnt/storage/Rprojects/mlb/pkg/mlbr <span class="at">--library</span><span class="op">=</span>/mnt/storage/R/library</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD INSTALL /mnt/storage/Rprojects/mlbr/pkg/mlbr <span class="at">--library</span><span class="op">=</span>/mnt/storage/R/library</span>
 <span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>---</span>
@@ -909,13 +909,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Explicit <span class="in">`lake`</span> argument passed to functions (e.g., <span class="in">`lake_status(lake = "...")`</span>)</span>
 <span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Environment variable <span class="in">`MLBR_DATA_PATH`</span> (set in <span class="in">`~/.Renviron`</span>)</span>
 <span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>R Option <span class="in">`options(mlbr.path = "...")`</span></span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Standard root <span class="in">`/mnt/storage/Rprojects/mlb`</span> if it exists</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Standard root <span class="in">`/mnt/storage/Rprojects/mlbr`</span> if it exists</span>
 <span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Current working directory <span class="in">`getwd()`</span></span>
 <span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>To configure your personal environment permanently, add the following to <span class="in">`~/.Renviron`</span>:</span>
 <span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"MLBR_DATA_PATH=/mnt/storage/Rprojects/mlb"</span> <span class="op">&gt;&gt;</span> ~/.Renviron</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"MLBR_DATA_PATH=/mnt/storage/Rprojects/mlbr"</span> <span class="op">&gt;&gt;</span> ~/.Renviron</span>
 <span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>---</span>

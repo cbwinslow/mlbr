@@ -78,10 +78,8 @@ validate_lake <- function(lake_path = default_lake()) {
 #' @export
 default_lake <- function(lake = NULL) {
   if (!missing(lake) && !is.null(lake) && nzchar(lake)) return(normalizePath(lake, mustWork = FALSE))
-  for (var in c("MLBR_DATA_PATH", "BASEBALL_LAKE_PATH")) {
-    val <- Sys.getenv(var, unset = "")
-    if (nzchar(val)) return(normalizePath(val, mustWork = FALSE))
-  }
+  env_p <- Sys.getenv("MLBR_DATA_PATH", unset = "")
+  if (nzchar(env_p)) return(normalizePath(env_p, mustWork = FALSE))
   opt_p <- getOption("mlbr.path", NULL)
   if (!is.null(opt_p) && nzchar(opt_p)) return(normalizePath(opt_p, mustWork = FALSE))
   if (dir.exists("/mnt/storage/Rprojects/mlbr")) return("/mnt/storage/Rprojects/mlbr")

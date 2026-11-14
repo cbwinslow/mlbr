@@ -244,7 +244,7 @@
     "href": "setup.html#accessing-rstudio-server",
     "title": "Installation & Setup",
     "section": "Accessing RStudio Server",
-    "text": "Accessing RStudio Server\nRStudio Server runs continuously on port 8787. You can navigate directly to:\nhttp://192.168.10.1:8787\nLogin with your system credentials (cbwinslow). The active project file is located at:\n/mnt/storage/Rprojects/mlb/mlbr.Rproj\nOpening this project sets your working directory and attaches local libraries automatically.",
+    "text": "Accessing RStudio Server\nRStudio Server runs continuously on port 8787. You can navigate directly to:\nhttp://192.168.10.1:8787\nLogin with your system credentials (cbwinslow). The active project file is located at:\n/mnt/storage/Rprojects/mlbr/mlbr.Rproj\nOpening this project sets your working directory and attaches local libraries automatically.",
     "crumbs": [
       "Home",
       "Getting Started",
@@ -256,7 +256,7 @@
     "href": "setup.html#installing-the-mlbr-package",
     "title": "Installation & Setup",
     "section": "Installing the mlbr Package",
-    "text": "Installing the mlbr Package\nThe package source is maintained in pkg/mlbr. You can build and install it to the shared library path:\n\nFrom the R Console\n# Ensure library paths include the storage volume\n.libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n\n# Install from source\ndevtools::install(\"/mnt/storage/Rprojects/mlb/pkg/mlbr\")\n\n# Load and test\nlibrary(mlbr)\nlake_status()\n\n\nFrom the Terminal\nR CMD INSTALL /mnt/storage/Rprojects/mlb/pkg/mlbr --library=/mnt/storage/R/library",
+    "text": "Installing the mlbr Package\nThe package source is maintained in pkg/mlbr. You can build and install it to the shared library path:\n\nFrom the R Console\n# Ensure library paths include the storage volume\n.libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n\n# Install from source\ndevtools::install(\"/mnt/storage/Rprojects/mlbr/pkg/mlbr\")\n\n# Load and test\nlibrary(mlbr)\nlake_status()\n\n\nFrom the Terminal\nR CMD INSTALL /mnt/storage/Rprojects/mlbr/pkg/mlbr --library=/mnt/storage/R/library",
     "crumbs": [
       "Home",
       "Getting Started",
@@ -268,7 +268,7 @@
     "href": "setup.html#dynamic-path-configuration",
     "title": "Installation & Setup",
     "section": "Dynamic Path Configuration",
-    "text": "Dynamic Path Configuration\nmlbr functions never require hardcoded paths. All routines resolve the active lake directory using default_lake(), which evaluates in order:\n\nExplicit lake argument passed to functions (e.g., lake_status(lake = \"...\"))\nEnvironment variable MLBR_DATA_PATH (set in ~/.Renviron)\nR Option options(mlbr.path = \"...\")\nStandard root /mnt/storage/Rprojects/mlb if it exists\nCurrent working directory getwd()\n\nTo configure your personal environment permanently, add the following to ~/.Renviron:\necho \"MLBR_DATA_PATH=/mnt/storage/Rprojects/mlb\" &gt;&gt; ~/.Renviron",
+    "text": "Dynamic Path Configuration\nmlbr functions never require hardcoded paths. All routines resolve the active lake directory using default_lake(), which evaluates in order:\n\nExplicit lake argument passed to functions (e.g., lake_status(lake = \"...\"))\nEnvironment variable MLBR_DATA_PATH (set in ~/.Renviron)\nR Option options(mlbr.path = \"...\")\nStandard root /mnt/storage/Rprojects/mlbr if it exists\nCurrent working directory getwd()\n\nTo configure your personal environment permanently, add the following to ~/.Renviron:\necho \"MLBR_DATA_PATH=/mnt/storage/Rprojects/mlbr\" &gt;&gt; ~/.Renviron",
     "crumbs": [
       "Home",
       "Getting Started",
@@ -364,7 +364,7 @@
     "href": "architecture.html#partitioning-directory-layout",
     "title": "Architecture & Storage",
     "section": "Partitioning & Directory Layout",
-    "text": "Partitioning & Directory Layout\nAll raw data resides in /mnt/storage/Rprojects/mlb/data/raw/ in immutable, partitioned Parquet files:\ndata/raw/\n├── retrosheet/          # 622 files, 23.8M rows (1871-2025)\n│   ├── plays-1871.parquet ... plays-2025.parquet\n│   ├── games-1871.parquet ... games-2025.parquet\n│   ├── player_games-*.parquet\n│   ├── subs-*.parquet\n│   └── rosters-*.parquet\n├── statcast/            # Partitioned monthly (2008-2025)\n│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet\n├── fangraphs/           # 425 tables (1901-2025)\n│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet\n│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet\n│   ├── fg_fielding_*.parquet, fg_team_*.parquet\n│   └── guts_constants.parquet, park_factors_*.parquet\n├── chadwick/            # Universal crosswalk\n│   └── register.parquet (527,990 player IDs)\n├── lahman/              # 31 historical tables (1871+)\n├── ncaa/                # 8 college baseball tables (848k play rows)\n├── mlbmeta/             # 81 files (draft, parks, advanced metrics)\n└── espn/                # 32 files (schedules, boxscores)",
+    "text": "Partitioning & Directory Layout\nAll raw data resides in /mnt/storage/Rprojects/mlbr/data/raw/ in immutable, partitioned Parquet files:\ndata/raw/\n├── retrosheet/          # 622 files, 23.8M rows (1871-2025)\n│   ├── plays-1871.parquet ... plays-2025.parquet\n│   ├── games-1871.parquet ... games-2025.parquet\n│   ├── player_games-*.parquet\n│   ├── subs-*.parquet\n│   └── rosters-*.parquet\n├── statcast/            # Partitioned monthly (2008-2025)\n│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet\n├── fangraphs/           # 425 tables (1901-2025)\n│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet\n│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet\n│   ├── fg_fielding_*.parquet, fg_team_*.parquet\n│   └── guts_constants.parquet, park_factors_*.parquet\n├── chadwick/            # Universal crosswalk\n│   └── register.parquet (527,990 player IDs)\n├── lahman/              # 31 historical tables (1871+)\n├── ncaa/                # 8 college baseball tables (848k play rows)\n├── mlbmeta/             # 81 files (draft, parks, advanced metrics)\n└── espn/                # 32 files (schedules, boxscores)",
     "crumbs": [
       "Home",
       "Getting Started",

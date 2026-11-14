@@ -1,7 +1,7 @@
 # mlb - Baseball Data Lake & Analysis Project (cbwdellr720)
 
 Personal baseball analysis workspace and comprehensive data lake on `cbwdellr720`.
-Data lives on the RAID volume at `/mnt/storage/Rprojects/mlb`.
+Data lives on the RAID volume at `/mnt/storage/Rprojects/mlbr`.
 Open the project from cbwwin's browser via **http://192.168.10.1:8787** -> Files -> navigate here -> open `mlb.Rproj`.
 
 ## Data Sources & Granularity (Raw stays Raw)
@@ -37,16 +37,16 @@ The project contains a standalone, documented, CRAN-compliant R package (`pkg/ba
 library(baseballLake)
 
 # Check lake inventory
-lake_status("/mnt/storage/Rprojects/mlb")
+lake_status("/mnt/storage/Rprojects/mlbr")
 
 # Run integrity validation
-validate_lake("/mnt/storage/Rprojects/mlb")
+validate_lake("/mnt/storage/Rprojects/mlbr")
 
 # Query Statcast or Retrosheet lazily with Arrow
 library(arrow)
 library(dplyr)
-plays <- open_dataset("/mnt/storage/Rprojects/mlb/data/raw/retrosheet")
-pitches <- open_dataset("/mnt/storage/Rprojects/mlb/data/raw/statcast")
+plays <- open_dataset("/mnt/storage/Rprojects/mlbr/data/raw/retrosheet")
+pitches <- open_dataset("/mnt/storage/Rprojects/mlbr/data/raw/statcast")
 ```
 
 ## Running Pipeline & Ingest
