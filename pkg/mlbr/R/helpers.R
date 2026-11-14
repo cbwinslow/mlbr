@@ -84,7 +84,7 @@ default_lake <- function(lake = NULL) {
   }
   opt_p <- getOption("mlbr.path", NULL)
   if (!is.null(opt_p) && nzchar(opt_p)) return(normalizePath(opt_p, mustWork = FALSE))
-  if (dir.exists("/mnt/storage/Rprojects/mlb")) return("/mnt/storage/Rprojects/mlb")
+  if (dir.exists("/mnt/storage/Rprojects/mlbr")) return("/mnt/storage/Rprojects/mlbr")
   getwd()
 }
 

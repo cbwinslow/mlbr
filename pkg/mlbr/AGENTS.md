@@ -6,7 +6,7 @@
 ## Ownership
 - Owned by `cbwinslow`.
 - Maintained as a production-grade R package eligible for CRAN / GitHub publication.
-- Source path: `/mnt/storage/Rprojects/mlb/pkg/mlbr/`.
+- Source path: `/mnt/storage/Rprojects/mlbr/pkg/mlbr/`.
 - Target installation library: `/mnt/storage/R/library/mlbr`.
 
 ## Local Contracts
@@ -15,7 +15,7 @@
   1. Explicit `lake` argument
   2. Environment variable `MLBR_DATA_PATH`
   3. Option `options("mlbr.path")`
-  4. Local project root detection (`/mnt/storage/Rprojects/mlb` or `getwd()`)
+  4. Local project root detection (`/mnt/storage/Rprojects/mlbr` or `getwd()`)
 - **Schema Preservation:** 0 columns dropped. Ingestion and extraction preserve 100% of raw fields.
 - **R CMD Check Cleanliness:** Must pass with 0 ERRORS and 0 WARNINGS.
 - **Documentation:** All exported functions and methods must have complete roxygen2 documentation with `@export`, `@param`, `@return`, and `@examples`.

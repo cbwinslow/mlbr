@@ -1,7 +1,7 @@
 # site — Multi-Page Quarto Documentation & Analysis Gallery (AGENTS.md)
 
 ## Purpose
-`site` contains the Quarto website source code, configuration, visual assets, and machine learning analysis gallery for the `mlbr` platform. It builds into `/mnt/storage/Rprojects/mlb/docs` for publication on `cloudcurio.cc` and GitHub Pages.
+`site` contains the Quarto website source code, configuration, visual assets, and machine learning analysis gallery for the `mlbr` platform. It builds into `/mnt/storage/Rprojects/mlbr/docs` for publication on `cloudcurio.cc` and GitHub Pages.
 
 ## Ownership
 - Owned by `cbwinslow`.
@@ -33,8 +33,8 @@
 - Build command: `quarto render site/` from project root.
 
 ## Verification
-- Test compilation: `cd /mnt/storage/Rprojects/mlb && quarto render site/` must execute with exit code 0.
-- Verify output: Check that `/mnt/storage/Rprojects/mlb/docs/index.html` and analysis HTML files exist and render without markdown/code syntax errors.
+- Test compilation: `cd /mnt/storage/Rprojects/mlbr && quarto render site/` must execute with exit code 0.
+- Verify output: Check that `/mnt/storage/Rprojects/mlbr/docs/index.html` and analysis HTML files exist and render without markdown/code syntax errors.
 
 ## Child DOX Index
 None.

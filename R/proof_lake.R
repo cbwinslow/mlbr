@@ -8,7 +8,7 @@ suppressPackageStartupMessages({
 })
 
 args <- commandArgs(trailingOnly = TRUE)
-lake <- if (length(args) >= 1) args[1] else "/mnt/storage/Rprojects/mlb"
+lake <- if (length(args) >= 1) args[1] else "/mnt/storage/Rprojects/mlbr"
 
 res <- proof_lake(lake, verbose = TRUE)
 failed <- sum(res$status == "FAIL")

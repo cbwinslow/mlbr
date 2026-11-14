@@ -10,8 +10,8 @@ Welcome! This guide is your home base for learning how the `mlbr` data lake, R p
 |---|---|---|
 | **RStudio Server** | [http://192.168.10.1:8787](http://192.168.10.1:8787) | Your primary interactive coding environment. Open `mlbr.Rproj`. |
 | **Documentation & Analysis Site** | [http://192.168.10.1:8088](http://192.168.10.1:8088) | Live local preview of your Quarto site with all charts & tables. |
-| **Active Project Path** | `/mnt/storage/Rprojects/mlb` | Root workspace directory on `cbwdellr720`. |
-| **Data Lake Storage** | `/mnt/storage/Rprojects/mlb/data/raw/` | Partitioned Apache Parquet datasets (34M+ rows). |
+| **Active Project Path** | `/mnt/storage/Rprojects/mlbr` | Root workspace directory on `cbwdellr720`. |
+| **Data Lake Storage** | `/mnt/storage/Rprojects/mlbr/data/raw/` | Partitioned Apache Parquet datasets (34M+ rows). |
 
 ---
 
@@ -83,7 +83,7 @@ Welcome! This guide is your home base for learning how the `mlbr` data lake, R p
 1. Create a new file: `site/analyses/my_study.qmd`.
 2. Write a question (e.g. "Do left-handed batters perform better against right-handed sinkers?").
 3. Write the DuckDB query + ggplot2 chart.
-4. Run `cd /mnt/storage/Rprojects/mlb/site && quarto render my_study.qmd`.
+4. Run `cd /mnt/storage/Rprojects/mlbr/site && quarto render my_study.qmd`.
 5. View it live in your browser at `http://192.168.10.1:8088/analyses/my_study.html`!
 
 ### Milestone 4: Expanding the `mlbr` Package
@@ -106,5 +106,5 @@ Welcome! This guide is your home base for learning how the `mlbr` data lake, R p
   ```
 - **Recompile the Documentation Site:**
   ```bash
-  cd /mnt/storage/Rprojects/mlb/site && quarto render
+  cd /mnt/storage/Rprojects/mlbr/site && quarto render
   ```
