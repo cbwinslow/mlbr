@@ -1,0 +1,30 @@
+Package: baseballLake
+Type: Package
+Title: Build and Validate a Comprehensive Baseball Data Lake
+Version: 0.1.0
+Authors@R: person(given = "cbwinslow", email = "cbwinslow@localhost", role = c("aut", "cre"))
+Author: cbwinslow [aut, cre]
+Maintainer: cbwinslow <cbwinslow@localhost>
+Description: Idempotent, rate-limit-aware ingestion of every public baseball
+    data source (Statcast per-pitch, Retrosheet per-play via the Chadwick
+    GitHub mirror, FanGraphs, Lahman, Chadwick register, NCAA, MiLB Statcast,
+    Baseball-Reference dailies, ESPN, MLB metadata) into a partitioned
+    parquet data lake, plus validation utilities. Raw files are always kept
+    at the finest available granularity; aggregation happens downstream in R.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.2)
+Imports:
+    arrow,
+    dplyr,
+    data.table,
+    tibble,
+    purrr,
+    baseballr,
+    utils
+Suggests:
+    Lahman,
+    testthat (>= 3.0.0)
+Config/roxygen2/version: 8.1.1
