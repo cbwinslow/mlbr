@@ -1,0 +1,115 @@
+---
+title: "Unsupervised Pitch Arsenal Clustering"
+subtitle: "Translating scikit-learn clustering workflows into R with Statcast"
+author: "cbwinslow"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Unsupervised Pitch Arsenal Clustering}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 6,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+## Overview
+
+In machine learning tutorials (such as [scikit-learn's Clustering Gallery](https://scikit-learn.org/stable/auto_examples/cluster/index.html)), unsupervised algorithms are frequently benchmarked on synthetic datasets. In modern sabermetrics, clustering is used to discover a pitcher's true pitch repertoire from raw flight trajectory vectors, revealing hidden variants like "Sweepers" versus traditional "Sliders".
+
+In this tutorial, we use `baseballLake` and `duckdb` to query Statcast pitches, fit a **K-Means clustering model** on velocity and break vectors, and visualize the discovered arsenals.
+
+## 1. Connecting to the Data Lake
+
+Using `LakeManager`, we mount a zero-copy DuckDB connection over our partitioned Parquet lake:
+
+```{r connect}
+suppressPackageStartupMessages({
+  library(baseballLake)
+  library(arrow)
+  library(dplyr)
+  library(ggplot2)
+  library(DBI)
+})
+
+lake <- LakeManager$new()
+con <- lake$duckdb()
+```
+
+## 2. Extracting Pitch Trajectory Features
+
+We pull a sample of right-handed pitches with valid velocity (`release_speed`), horizontal break (`pfx_x`), and vertical break (`pfx_z`):
+
+```{r query}
+pitches <- dbGetQuery(con, "
+  SELECT 
+    pitch_type,
+    release_speed,
+    pfx_x * 12.0 AS pfx_x_in,
+    pfx_z * 12.0 AS pfx_z_in
+  FROM v_statcast
+  WHERE pitch_type IN ('FF', 'SL', 'CH', 'CU', 'SI')
+    AND release_speed IS NOT NULL
+    AND pfx_x IS NOT NULL
+    AND pfx_z IS NOT NULL
+  LIMIT 15000
+")
+
+head(pitches)
+```
+
+## 3. Fitting K-Means Clustering
+
+We scale the feature matrix (velocity, horizontal movement, vertical movement) and apply K-Means with $K=5$ clusters:
+
+```{r kmeans}
+features <- pitches |>
+  select(release_speed, pfx_x_in, pfx_z_in) |>
+  scale()
+
+set.seed(42)
+km_fit <- kmeans(features, centers = 5, nstart = 25)
+
+pitches$cluster <- as.factor(km_fit$cluster)
+```
+
+## 4. Visualizing Discovered Pitch Clusters
+
+We plot the pitch movement profile (Horizontal Break vs. Vertical Break) colored by the unsupervised cluster:
+
+```{r plot, fig.cap="Statcast Pitch Movement Clusters (Inches)"}
+ggplot(pitches, aes(x = pfx_x_in, y = pfx_z_in, color = cluster)) +
+  geom_point(alpha = 0.35, size = 1.2) +
+  stat_ellipse(level = 0.85, linewidth = 1) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray50") +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Discovered Pitch Families via Unsupervised Clustering",
+    subtitle = "K-Means (K=5) on Statcast velocity and 2D trajectory break vectors",
+    x = "Horizontal Break (inches from catcher perspective)",
+    y = "Induced Vertical Break (inches)",
+    color = "Cluster"
+  ) +
+  scale_color_brewer(palette = "Set1")
+```
+
+## 5. Cluster vs. Labeled Pitch Type Confusion
+
+Let's cross-tabulate how the unsupervised clusters map to official MLB pitch classifications:
+
+```{r crosstab}
+table(Discovered_Cluster = pitches$cluster, MLB_Pitch_Type = pitches$pitch_type)
+```
+
+```{r cleanup, include=FALSE}
+dbDisconnect(con, shutdown = TRUE)
+```

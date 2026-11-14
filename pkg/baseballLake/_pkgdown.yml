@@ -1,0 +1,66 @@
+url: https://cloudcurio.cc/baseballLake
+template:
+  bootstrap: 5
+  bootswatch: flatly
+
+home:
+  title: baseballLake - Portable Baseball Data Lake & Analytics
+  description: Partitioned Parquet data lake, zero-copy DuckDB analytics, 28-check proofing suite, and scikit-learn-style machine learning examples in R.
+
+navbar:
+  structure:
+    left: [reference, articles]
+    right: [github]
+  components:
+    articles:
+      text: ML Examples Gallery
+      menu:
+        - text: "Unsupervised Pitch Clustering (K-Means)"
+          href: articles/pitch_clustering.html
+        - text: "Pitch Classification (Tidymodels & Random Forest)"
+          href: articles/pitch_classification.html
+        - text: "xwOBA Hit Probability Surface (2D GAM & LOESS)"
+          href: articles/xwoba_surface.html
+        - text: "24-State Run Expectancy Matrix (Retrosheet)"
+          href: articles/run_expectancy.html
+    github:
+      icon: fab fa-github
+      href: https://github.com/cbwinslow/baseballLake
+
+reference:
+  - title: "Data Lake Management"
+    desc: "Object-oriented and functional interfaces to the partitioned Parquet lake."
+    contents:
+      - LakeManager
+      - lake_status
+      - default_lake
+  - title: "Verification & Integrity Proofs"
+    desc: "The 28-check automated proof suite."
+    contents:
+      - proof_lake
+      - proof_benchmarks
+      - proof_crosswalk
+      - proof_statcast
+      - proof_retrosheet
+      - proof_completeness
+      - validate_lake
+  - title: "SQL & Discovery Utilities"
+    desc: "Zero-copy DuckDB mounting and column discovery."
+    contents:
+      - lake_duckdb
+      - lake_find_column
+      - lake_describe
+  - title: "Modular Ingestion Engines"
+    desc: "Rate-limit-safe fetchers for each individual data source."
+    contents:
+      - statcast_ingest
+      - retrosheet_github_ingest
+      - fangraphs_ingest
+      - lahman_ingest
+      - chadwick_ingest
+      - ncaa_ingest
+      - mlb_meta_ingest
+      - milb_ingest
+      - espn_ingest
+      - bbref_ingest
+      - lake_ingest
