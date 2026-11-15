@@ -1,0 +1,134 @@
+---
+title: "Data Dictionary & Schema Catalog"
+subtitle: "Authoritative column definitions, physical coordinate conventions, and sabermetric metrics across all datasets"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    df-print: paged
+    code-fold: show
+---
+
+## 1. Overview & Data Architecture
+
+The `mlbr` data lake maintains **100% column fidelity** from raw upstream providers (MLB Baseball Savant, Retrosheet, FanGraphs, Chadwick, Lahman, NCAA). No fields are dropped or downcast.
+
+All tables are mounted as zero-copy views in DuckDB (`con <- mlbr::lake_duckdb()`). This dictionary outlines the physical coordinate standards, outcome taxonomies, and cross-dataset join keys.
+
+---
+
+## 2. Statcast Telemetry Dictionary (`v_statcast`)
+
+Statcast captures optical/radar tracking metrics for every pitch thrown in Major League Baseball from **March 25, 2008 through the 2026 season** (14,643,543 pitches).
+
+### Physical Coordinates & Release Geometry
+
+| Column Name | Type | Unit | Description & Sabermetric Interpretation |
+|:---|:---|:---|:---|
+| `release_speed` | Double | mph | Out-of-hand pitch velocity measured at release point (~50-55 ft from plate). |
+| `release_spin_rate` | Double | rpm | Total spin rate of the ball upon release. |
+| `release_pos_x` | Double | ft | Horizontal release position (catcher's perspective: negative = third-base side / RHP; positive = first-base side / LHP). |
+| `release_pos_z` | Double | ft | Vertical release height above the ground. |
+| `release_extension` | Double | ft | Distance pitcher extends towards home plate from the rubber at release (~5.5 to 7.5 ft). |
+| `pfx_x` | Double | ft | Horizontal break from 40 ft to home plate due to Magnus and non-Magnus aerodynamic forces. |
+| `pfx_z` | Double | ft | Induced vertical break (IVB) above gravity drop. Multiply by 12 for inches. High IVB (>17") creates "ride" / "rise". |
+| `plate_x` | Double | ft | Horizontal coordinate of the ball as it crosses the front edge of home plate (0 = center of plate, +-0.83 ft = edges). |
+| `plate_z` | Double | ft | Vertical coordinate of the ball as it crosses home plate (typically 1.5 to 3.5 ft for standard rulebook zone). |
+| `vx0`, `vy0`, `vz0` | Double | ft/s | Initial 3D velocity vectors at $y = 50$ ft. |
+| `ax`, `ay`, `az` | Double | $\text{ft/s}^2$ | 3D acceleration vectors acting on the pitch due to gravity and drag/lift. |
+
+### Batted Ball & Bat Tracking Metrics
+
+| Column Name | Type | Unit | Description |
+|:---|:---|:---|:---|
+| `launch_speed` | Double | mph | Exit velocity of the ball immediately coming off the bat. |
+| `launch_angle` | Double | deg | Vertical launch angle relative to the ground (positive = fly ball/line drive; negative = ground ball). |
+| `hit_distance_sc` | Double | ft | Projected total distance of the batted ball. |
+| `launch_speed_angle`| Integer | 1–6 | Statcast hit classification: `1`=Weak, `2`=Topped, `3`=Under, `4`=Flare/Burner, `5`=Solid Contact, `6`=**Barrel**. |
+| `bat_speed` | Double | mph | Bat sweet-spot velocity at impact. *(Available 2024–2026 only; NULL prior).* |
+| `swing_length` | Double | ft | Total distance traveled by the head of the bat prior to contact. *(Available 2024–2026 only).* |
+
+### Ground Truth Events & Game State
+
+| Column Name | Type | Example Values | Description |
+|:---|:---|:---|:---|
+| `description` | String | `swinging_strike`, `ball`, `called_strike`, `hit_into_play` | The immediate physical outcome of the pitch event. |
+| `events` | String | `strikeout`, `walk`, `single`, `double`, `home_run`, `field_out` | The plate appearance outcome (populated on terminal pitch). |
+| `pitch_type` | String | `FF`, `SL`, `SI`, `ST`, `CH`, `CU`, `FC`, `FS`, `SV`, `KN` | Pitch classification tag (Fastball, Slider, Sinker, Sweeper, etc.). |
+| `balls`, `strikes` | Integer | `0-3`, `0-2` | Count prior to the pitch being delivered. |
+| `outs_when_up` | Integer | `0, 1, 2` | Number of outs recorded in the half-inning. |
+| `on_1b`, `on_2b`, `on_3b` | BigInt | `660271` (MLBAM ID) | Player ID of baserunners occupying base paths (NULL if empty). |
+
+---
+
+## 3. Retrosheet Play-by-Play Dictionary (`v_retrosheet_plays`)
+
+Retrosheet provides 160 fields of official scorebook data covering **1900 through 2025** (23,818,512 plays).
+
+| Column Name | Type | Description |
+|:---|:---|:---|
+| `GAME_ID` | String | Unique 12-character Retrosheet game identifier (e.g. `BOS202304150`: Team, Year, Month, Day, Game#). |
+| `BAT_ID` | String | Retrosheet batter player ID (e.g. `willt103`, `ohtas001`). Crosswalks via `v_chadwick_register.key_retro`. |
+| `PIT_ID` | String | Retrosheet pitcher player ID. |
+| `INN_CT` | Integer | Inning number ($1, 2, \dots$). |
+| `BAT_HOME_ID` | Integer | `0` = Visiting team batting (top of inning); `1` = Home team batting (bottom of inning). |
+| `OUTS_CT` | String/Int | Number of outs prior to play start (`0`, `1`, `2`). |
+| `BALLS_CT`, `STRIKES_CT` | Integer | Ball and strike count at play start. |
+| `PITCH_SEQ_TX` | String | Character string recording every pitch of the at-bat (e.g. `B`=Ball, `C`=Called Strike, `S`=Swinging, `F`=Foul). |
+| `EVENT_TX` | String | Scorebook text shorthand of the play (e.g. `S8`=Single to center, `K`=Strikeout, `HR/7/F`=Home run to left). |
+| `EVENT_CD` | Integer | Numeric event category code (`2`=Generic out, `3`=Strikeout, `14`=Walk, `20`=Single, `21`=Double, `22`=Triple, `23`=Home Run). |
+| `BASE1_RUN_ID` | String | Player ID of runner on first base before play. |
+| `RUN1_DEST_ID` | Integer | Destination base of runner on first (`0`=Out, `1`=Stayed, `2`=Advanced to 2B, `3`=Advanced to 3B, `4`=Scored). |
+
+---
+
+## 4. Universal Chadwick Crosswalk Dictionary (`v_chadwick_register`)
+
+The master identifier nexus mapping 527,990 persons across all baseball systems.
+
+| Column Name | Type | Target System | Description |
+|:---|:---|:---|:---|
+| `key_person` | String | Internal / Chadwick | Canonical unique person UUID. |
+| `key_mlbam` | Integer | MLB / Statcast | Official MLB Advanced Media ID (maps to Statcast `pitcher`, `batter`). |
+| `key_retro` | String | Retrosheet | Retrosheet player ID (maps to `BAT_ID`, `PIT_ID`). |
+| `key_bbref` | String | Baseball Reference | Baseball-Reference URL slug and database key. |
+| `key_fangraphs` | Integer | FanGraphs | FanGraphs player leaderboard identifier. |
+| `name_first`, `name_last` | String | Biographical | Legal first and last names. |
+| `birth_year` | Integer | Biographical | Year of birth. |
+| `mlb_played_first` | Integer | Career | First year active in Major League Baseball. |
+| `mlb_played_last` | Integer | Career | Last year active in Major League Baseball. |
+
+---
+
+## 5. Live Interactive Schema Browser
+
+Below is the live column-by-column schema generated dynamically from [`data/manifest/lake_manifest.json`](file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json):
+
+```{r}
+#| label: live-schema-explorer
+#| echo: false
+suppressPackageStartupMessages({
+  .libPaths(c("/mnt/storage/R/library", .libPaths()))
+  library(jsonlite)
+  library(dplyr)
+  library(knitr)
+})
+
+manifest_file <- "/mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json"
+if (file.exists(manifest_file)) {
+  m <- jsonlite::read_json(manifest_file)
+  
+  views_summary <- do.call(rbind, lapply(names(m$schema_catalog), function(vn) {
+    v <- m$schema_catalog[[vn]]
+    data.frame(
+      View_Name = vn,
+      Total_Columns = v$column_count,
+      stringsAsFactors = FALSE
+    )
+  }))
+  
+  knitr::kable(views_summary, col.names = c("DuckDB View Name", "Audited Column Count"))
+} else {
+  cat("Manifest not found. Run `Rscript R/generate_agent_manifest.R` to build.")
+}
+```

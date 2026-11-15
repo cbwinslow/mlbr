@@ -25,6 +25,8 @@ website:
         text: "Data Proofs"
       - href: agent_context.qmd
         text: "AI Agent Guide"
+      - href: data_dictionary.qmd
+        text: "Data Dictionary"
     right:
       - icon: github
         href: "https://github.com/cbwinslow/mlbr"
@@ -47,6 +49,8 @@ website:
               href: verification.qmd
             - text: "AI Agent Data Manifest"
               href: agent_context.qmd
+            - text: "Data Dictionary & Schemas"
+              href: data_dictionary.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

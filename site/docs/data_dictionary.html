@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Dictionary &amp; Schema Catalog – mlbr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-3bada27e51f0fcf3893f7f4586f53ad1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">mlbr</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./gallery.html"> 
+<span class="menu-text">Analyses Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./architecture.html"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./setup.html"> 
+<span class="menu-text">Setup &amp; API</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./crosswalk.html"> 
+<span class="menu-text">ID Crosswalk</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./verification.html"> 
+<span class="menu-text">Data Proofs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./agent_context.html"> 
+<span class="menu-text">AI Agent Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./data_dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/cbwinslow/mlbr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./data_dictionary.html">Data Dictionary &amp; Schemas</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview &amp; Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation &amp; Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./crosswalk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universal ID Crosswalk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Architecture &amp; Storage</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./verification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Verification &amp; Proofs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./agent_context.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Agent Data Manifest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data_dictionary.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Data Dictionary &amp; Schemas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyses Gallery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analyses/pitch_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Clustering (K-Means / GMM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analyses/pitch_classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Classification (Random Forest)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analyses/xwoba_surface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xWOBA / Exit Velocity Surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analyses/run_expectancy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Run Expectancy RE24 Matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview-data-architecture" id="toc-overview-data-architecture" class="nav-link active" data-scroll-target="#overview-data-architecture">1. Overview &amp; Data Architecture</a></li>
+  <li><a href="#statcast-telemetry-dictionary-v_statcast" id="toc-statcast-telemetry-dictionary-v_statcast" class="nav-link" data-scroll-target="#statcast-telemetry-dictionary-v_statcast">2. Statcast Telemetry Dictionary (<code>v_statcast</code>)</a>
+  <ul class="collapse">
+  <li><a href="#physical-coordinates-release-geometry" id="toc-physical-coordinates-release-geometry" class="nav-link" data-scroll-target="#physical-coordinates-release-geometry">Physical Coordinates &amp; Release Geometry</a></li>
+  <li><a href="#batted-ball-bat-tracking-metrics" id="toc-batted-ball-bat-tracking-metrics" class="nav-link" data-scroll-target="#batted-ball-bat-tracking-metrics">Batted Ball &amp; Bat Tracking Metrics</a></li>
+  <li><a href="#ground-truth-events-game-state" id="toc-ground-truth-events-game-state" class="nav-link" data-scroll-target="#ground-truth-events-game-state">Ground Truth Events &amp; Game State</a></li>
+  </ul></li>
+  <li><a href="#retrosheet-play-by-play-dictionary-v_retrosheet_plays" id="toc-retrosheet-play-by-play-dictionary-v_retrosheet_plays" class="nav-link" data-scroll-target="#retrosheet-play-by-play-dictionary-v_retrosheet_plays">3. Retrosheet Play-by-Play Dictionary (<code>v_retrosheet_plays</code>)</a></li>
+  <li><a href="#universal-chadwick-crosswalk-dictionary-v_chadwick_register" id="toc-universal-chadwick-crosswalk-dictionary-v_chadwick_register" class="nav-link" data-scroll-target="#universal-chadwick-crosswalk-dictionary-v_chadwick_register">4. Universal Chadwick Crosswalk Dictionary (<code>v_chadwick_register</code>)</a></li>
+  <li><a href="#live-interactive-schema-browser" id="toc-live-interactive-schema-browser" class="nav-link" data-scroll-target="#live-interactive-schema-browser">5. Live Interactive Schema Browser</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./data_dictionary.html">Data Dictionary &amp; Schemas</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Data Dictionary &amp; Schema Catalog</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Authoritative column definitions, physical coordinate conventions, and sabermetric metrics across all datasets</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview-data-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="overview-data-architecture">1. Overview &amp; Data Architecture</h2>
+<p>The <code>mlbr</code> data lake maintains <strong>100% column fidelity</strong> from raw upstream providers (MLB Baseball Savant, Retrosheet, FanGraphs, Chadwick, Lahman, NCAA). No fields are dropped or downcast.</p>
+<p>All tables are mounted as zero-copy views in DuckDB (<code>con &lt;- mlbr::lake_duckdb()</code>). This dictionary outlines the physical coordinate standards, outcome taxonomies, and cross-dataset join keys.</p>
+<hr>
+</section>
+<section id="statcast-telemetry-dictionary-v_statcast" class="level2">
+<h2 class="anchored" data-anchor-id="statcast-telemetry-dictionary-v_statcast">2. Statcast Telemetry Dictionary (<code>v_statcast</code>)</h2>
+<p>Statcast captures optical/radar tracking metrics for every pitch thrown in Major League Baseball from <strong>March 25, 2008 through the 2026 season</strong> (14,643,543 pitches).</p>
+<section id="physical-coordinates-release-geometry" class="level3">
+<h3 class="anchored" data-anchor-id="physical-coordinates-release-geometry">Physical Coordinates &amp; Release Geometry</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Unit</th>
+<th style="text-align: left;">Description &amp; Sabermetric Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>release_speed</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">mph</td>
+<td style="text-align: left;">Out-of-hand pitch velocity measured at release point (~50-55 ft from plate).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>release_spin_rate</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">rpm</td>
+<td style="text-align: left;">Total spin rate of the ball upon release.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>release_pos_x</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Horizontal release position (catcher’s perspective: negative = third-base side / RHP; positive = first-base side / LHP).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>release_pos_z</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Vertical release height above the ground.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>release_extension</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Distance pitcher extends towards home plate from the rubber at release (~5.5 to 7.5 ft).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pfx_x</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Horizontal break from 40 ft to home plate due to Magnus and non-Magnus aerodynamic forces.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pfx_z</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Induced vertical break (IVB) above gravity drop. Multiply by 12 for inches. High IVB (&gt;17”) creates “ride” / “rise”.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>plate_x</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Horizontal coordinate of the ball as it crosses the front edge of home plate (0 = center of plate, +-0.83 ft = edges).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>plate_z</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Vertical coordinate of the ball as it crosses home plate (typically 1.5 to 3.5 ft for standard rulebook zone).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>vx0</code>, <code>vy0</code>, <code>vz0</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft/s</td>
+<td style="text-align: left;">Initial 3D velocity vectors at <span class="math inline">\(y = 50\)</span> ft.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>ax</code>, <code>ay</code>, <code>az</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;"><span class="math inline">\(\text{ft/s}^2\)</span></td>
+<td style="text-align: left;">3D acceleration vectors acting on the pitch due to gravity and drag/lift.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="batted-ball-bat-tracking-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="batted-ball-bat-tracking-metrics">Batted Ball &amp; Bat Tracking Metrics</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Unit</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>launch_speed</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">mph</td>
+<td style="text-align: left;">Exit velocity of the ball immediately coming off the bat.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>launch_angle</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;">Vertical launch angle relative to the ground (positive = fly ball/line drive; negative = ground ball).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>hit_distance_sc</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Projected total distance of the batted ball.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>launch_speed_angle</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">1–6</td>
+<td style="text-align: left;">Statcast hit classification: <code>1</code>=Weak, <code>2</code>=Topped, <code>3</code>=Under, <code>4</code>=Flare/Burner, <code>5</code>=Solid Contact, <code>6</code>=<strong>Barrel</strong>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>bat_speed</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">mph</td>
+<td style="text-align: left;">Bat sweet-spot velocity at impact. <em>(Available 2024–2026 only; NULL prior).</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>swing_length</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">ft</td>
+<td style="text-align: left;">Total distance traveled by the head of the bat prior to contact. <em>(Available 2024–2026 only).</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ground-truth-events-game-state" class="level3">
+<h3 class="anchored" data-anchor-id="ground-truth-events-game-state">Ground Truth Events &amp; Game State</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Example Values</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>description</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;"><code>swinging_strike</code>, <code>ball</code>, <code>called_strike</code>, <code>hit_into_play</code></td>
+<td style="text-align: left;">The immediate physical outcome of the pitch event.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>events</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;"><code>strikeout</code>, <code>walk</code>, <code>single</code>, <code>double</code>, <code>home_run</code>, <code>field_out</code></td>
+<td style="text-align: left;">The plate appearance outcome (populated on terminal pitch).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pitch_type</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;"><code>FF</code>, <code>SL</code>, <code>SI</code>, <code>ST</code>, <code>CH</code>, <code>CU</code>, <code>FC</code>, <code>FS</code>, <code>SV</code>, <code>KN</code></td>
+<td style="text-align: left;">Pitch classification tag (Fastball, Slider, Sinker, Sweeper, etc.).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>balls</code>, <code>strikes</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;"><code>0-3</code>, <code>0-2</code></td>
+<td style="text-align: left;">Count prior to the pitch being delivered.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>outs_when_up</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;"><code>0, 1, 2</code></td>
+<td style="text-align: left;">Number of outs recorded in the half-inning.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>on_1b</code>, <code>on_2b</code>, <code>on_3b</code></td>
+<td style="text-align: left;">BigInt</td>
+<td style="text-align: left;"><code>660271</code> (MLBAM ID)</td>
+<td style="text-align: left;">Player ID of baserunners occupying base paths (NULL if empty).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="retrosheet-play-by-play-dictionary-v_retrosheet_plays" class="level2">
+<h2 class="anchored" data-anchor-id="retrosheet-play-by-play-dictionary-v_retrosheet_plays">3. Retrosheet Play-by-Play Dictionary (<code>v_retrosheet_plays</code>)</h2>
+<p>Retrosheet provides 160 fields of official scorebook data covering <strong>1900 through 2025</strong> (23,818,512 plays).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>GAME_ID</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Unique 12-character Retrosheet game identifier (e.g.&nbsp;<code>BOS202304150</code>: Team, Year, Month, Day, Game#).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>BAT_ID</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Retrosheet batter player ID (e.g.&nbsp;<code>willt103</code>, <code>ohtas001</code>). Crosswalks via <code>v_chadwick_register.key_retro</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>PIT_ID</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Retrosheet pitcher player ID.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>INN_CT</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Inning number (<span class="math inline">\(1, 2, \dots\)</span>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>BAT_HOME_ID</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;"><code>0</code> = Visiting team batting (top of inning); <code>1</code> = Home team batting (bottom of inning).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>OUTS_CT</code></td>
+<td style="text-align: left;">String/Int</td>
+<td style="text-align: left;">Number of outs prior to play start (<code>0</code>, <code>1</code>, <code>2</code>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>BALLS_CT</code>, <code>STRIKES_CT</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Ball and strike count at play start.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>PITCH_SEQ_TX</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Character string recording every pitch of the at-bat (e.g.&nbsp;<code>B</code>=Ball, <code>C</code>=Called Strike, <code>S</code>=Swinging, <code>F</code>=Foul).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>EVENT_TX</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Scorebook text shorthand of the play (e.g.&nbsp;<code>S8</code>=Single to center, <code>K</code>=Strikeout, <code>HR/7/F</code>=Home run to left).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>EVENT_CD</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Numeric event category code (<code>2</code>=Generic out, <code>3</code>=Strikeout, <code>14</code>=Walk, <code>20</code>=Single, <code>21</code>=Double, <code>22</code>=Triple, <code>23</code>=Home Run).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>BASE1_RUN_ID</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Player ID of runner on first base before play.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>RUN1_DEST_ID</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Destination base of runner on first (<code>0</code>=Out, <code>1</code>=Stayed, <code>2</code>=Advanced to 2B, <code>3</code>=Advanced to 3B, <code>4</code>=Scored).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="universal-chadwick-crosswalk-dictionary-v_chadwick_register" class="level2">
+<h2 class="anchored" data-anchor-id="universal-chadwick-crosswalk-dictionary-v_chadwick_register">4. Universal Chadwick Crosswalk Dictionary (<code>v_chadwick_register</code>)</h2>
+<p>The master identifier nexus mapping 527,990 persons across all baseball systems.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Target System</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>key_person</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Internal / Chadwick</td>
+<td style="text-align: left;">Canonical unique person UUID.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>key_mlbam</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">MLB / Statcast</td>
+<td style="text-align: left;">Official MLB Advanced Media ID (maps to Statcast <code>pitcher</code>, <code>batter</code>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>key_retro</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Retrosheet</td>
+<td style="text-align: left;">Retrosheet player ID (maps to <code>BAT_ID</code>, <code>PIT_ID</code>).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>key_bbref</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Baseball Reference</td>
+<td style="text-align: left;">Baseball-Reference URL slug and database key.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>key_fangraphs</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">FanGraphs</td>
+<td style="text-align: left;">FanGraphs player leaderboard identifier.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>name_first</code>, <code>name_last</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Biographical</td>
+<td style="text-align: left;">Legal first and last names.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>birth_year</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Biographical</td>
+<td style="text-align: left;">Year of birth.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>mlb_played_first</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Career</td>
+<td style="text-align: left;">First year active in Major League Baseball.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>mlb_played_last</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Career</td>
+<td style="text-align: left;">Last year active in Major League Baseball.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="live-interactive-schema-browser" class="level2">
+<h2 class="anchored" data-anchor-id="live-interactive-schema-browser">5. Live Interactive Schema Browser</h2>
+<p>Below is the live column-by-column schema generated dynamically from <a href="file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json"><code>data/manifest/lake_manifest.json</code></a>:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">DuckDB View Name</th>
+<th style="text-align: right;">Audited Column Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">v_statcast</td>
+<td style="text-align: right;">119</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">v_retrosheet_plays</td>
+<td style="text-align: right;">160</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">v_retrosheet_games</td>
+<td style="text-align: right;">84</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">v_fangraphs_bat</td>
+<td style="text-align: right;">448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">v_fangraphs_pitch</td>
+<td style="text-align: right;">521</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">v_chadwick_register</td>
+<td style="text-align: right;">40</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">v_lahman_people</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">v_mlbmeta_schedule</td>
+<td style="text-align: right;">73</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/cloudcurio\.cc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Data Dictionary &amp; Schema Catalog"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Authoritative column definitions, physical coordinate conventions, and sabermetric metrics across all datasets"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: paged</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Overview &amp; Data Architecture</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>The <span class="in">`mlbr`</span> data lake maintains **100% column fidelity** from raw upstream providers (MLB Baseball Savant, Retrosheet, FanGraphs, Chadwick, Lahman, NCAA). No fields are dropped or downcast.</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>All tables are mounted as zero-copy views in DuckDB (<span class="in">`con &lt;- mlbr::lake_duckdb()`</span>). This dictionary outlines the physical coordinate standards, outcome taxonomies, and cross-dataset join keys.</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Statcast Telemetry Dictionary (`v_statcast`)</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>Statcast captures optical/radar tracking metrics for every pitch thrown in Major League Baseball from **March 25, 2008 through the 2026 season** (14,643,543 pitches).</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">### Physical Coordinates &amp; Release Geometry</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column Name <span class="pp">|</span> Type <span class="pp">|</span> Unit <span class="pp">|</span> Description &amp; Sabermetric Interpretation <span class="pp">|</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|:---|</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`release_speed`</span> <span class="pp">|</span> Double <span class="pp">|</span> mph <span class="pp">|</span> Out-of-hand pitch velocity measured at release point (~50-55 ft from plate). <span class="pp">|</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`release_spin_rate`</span> <span class="pp">|</span> Double <span class="pp">|</span> rpm <span class="pp">|</span> Total spin rate of the ball upon release. <span class="pp">|</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`release_pos_x`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Horizontal release position (catcher's perspective: negative = third-base side / RHP; positive = first-base side / LHP). <span class="pp">|</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`release_pos_z`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Vertical release height above the ground. <span class="pp">|</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`release_extension`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Distance pitcher extends towards home plate from the rubber at release (~5.5 to 7.5 ft). <span class="pp">|</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pfx_x`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Horizontal break from 40 ft to home plate due to Magnus and non-Magnus aerodynamic forces. <span class="pp">|</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pfx_z`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Induced vertical break (IVB) above gravity drop. Multiply by 12 for inches. High IVB (&gt;17") creates "ride" / "rise". <span class="pp">|</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`plate_x`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Horizontal coordinate of the ball as it crosses the front edge of home plate (0 = center of plate, +-0.83 ft = edges). <span class="pp">|</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`plate_z`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Vertical coordinate of the ball as it crosses home plate (typically 1.5 to 3.5 ft for standard rulebook zone). <span class="pp">|</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vx0`</span>, <span class="in">`vy0`</span>, <span class="in">`vz0`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft/s <span class="pp">|</span> Initial 3D velocity vectors at $y = 50$ ft. <span class="pp">|</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ax`</span>, <span class="in">`ay`</span>, <span class="in">`az`</span> <span class="pp">|</span> Double <span class="pp">|</span> $\text{ft/s}^2$ <span class="pp">|</span> 3D acceleration vectors acting on the pitch due to gravity and drag/lift. <span class="pp">|</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### Batted Ball &amp; Bat Tracking Metrics</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column Name <span class="pp">|</span> Type <span class="pp">|</span> Unit <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|:---|</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`launch_speed`</span> <span class="pp">|</span> Double <span class="pp">|</span> mph <span class="pp">|</span> Exit velocity of the ball immediately coming off the bat. <span class="pp">|</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`launch_angle`</span> <span class="pp">|</span> Double <span class="pp">|</span> deg <span class="pp">|</span> Vertical launch angle relative to the ground (positive = fly ball/line drive; negative = ground ball). <span class="pp">|</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`hit_distance_sc`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Projected total distance of the batted ball. <span class="pp">|</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`launch_speed_angle`</span><span class="pp">|</span> Integer <span class="pp">|</span> 1–6 <span class="pp">|</span> Statcast hit classification: <span class="in">`1`</span>=Weak, <span class="in">`2`</span>=Topped, <span class="in">`3`</span>=Under, <span class="in">`4`</span>=Flare/Burner, <span class="in">`5`</span>=Solid Contact, <span class="in">`6`</span>=**Barrel**. <span class="pp">|</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`bat_speed`</span> <span class="pp">|</span> Double <span class="pp">|</span> mph <span class="pp">|</span> Bat sweet-spot velocity at impact. *(Available 2024–2026 only; NULL prior).* <span class="pp">|</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`swing_length`</span> <span class="pp">|</span> Double <span class="pp">|</span> ft <span class="pp">|</span> Total distance traveled by the head of the bat prior to contact. *(Available 2024–2026 only).* <span class="pp">|</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ground Truth Events &amp; Game State</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column Name <span class="pp">|</span> Type <span class="pp">|</span> Example Values <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|:---|</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`description`</span> <span class="pp">|</span> String <span class="pp">|</span> <span class="in">`swinging_strike`</span>, <span class="in">`ball`</span>, <span class="in">`called_strike`</span>, <span class="in">`hit_into_play`</span> <span class="pp">|</span> The immediate physical outcome of the pitch event. <span class="pp">|</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`events`</span> <span class="pp">|</span> String <span class="pp">|</span> <span class="in">`strikeout`</span>, <span class="in">`walk`</span>, <span class="in">`single`</span>, <span class="in">`double`</span>, <span class="in">`home_run`</span>, <span class="in">`field_out`</span> <span class="pp">|</span> The plate appearance outcome (populated on terminal pitch). <span class="pp">|</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pitch_type`</span> <span class="pp">|</span> String <span class="pp">|</span> <span class="in">`FF`</span>, <span class="in">`SL`</span>, <span class="in">`SI`</span>, <span class="in">`ST`</span>, <span class="in">`CH`</span>, <span class="in">`CU`</span>, <span class="in">`FC`</span>, <span class="in">`FS`</span>, <span class="in">`SV`</span>, <span class="in">`KN`</span> <span class="pp">|</span> Pitch classification tag (Fastball, Slider, Sinker, Sweeper, etc.). <span class="pp">|</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`balls`</span>, <span class="in">`strikes`</span> <span class="pp">|</span> Integer <span class="pp">|</span> <span class="in">`0-3`</span>, <span class="in">`0-2`</span> <span class="pp">|</span> Count prior to the pitch being delivered. <span class="pp">|</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`outs_when_up`</span> <span class="pp">|</span> Integer <span class="pp">|</span> <span class="in">`0, 1, 2`</span> <span class="pp">|</span> Number of outs recorded in the half-inning. <span class="pp">|</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`on_1b`</span>, <span class="in">`on_2b`</span>, <span class="in">`on_3b`</span> <span class="pp">|</span> BigInt <span class="pp">|</span> <span class="in">`660271`</span> (MLBAM ID) <span class="pp">|</span> Player ID of baserunners occupying base paths (NULL if empty). <span class="pp">|</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Retrosheet Play-by-Play Dictionary (`v_retrosheet_plays`)</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>Retrosheet provides 160 fields of official scorebook data covering **1900 through 2025** (23,818,512 plays).</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column Name <span class="pp">|</span> Type <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`GAME_ID`</span> <span class="pp">|</span> String <span class="pp">|</span> Unique 12-character Retrosheet game identifier (e.g. <span class="in">`BOS202304150`</span>: Team, Year, Month, Day, Game#). <span class="pp">|</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`BAT_ID`</span> <span class="pp">|</span> String <span class="pp">|</span> Retrosheet batter player ID (e.g. <span class="in">`willt103`</span>, <span class="in">`ohtas001`</span>). Crosswalks via <span class="in">`v_chadwick_register.key_retro`</span>. <span class="pp">|</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`PIT_ID`</span> <span class="pp">|</span> String <span class="pp">|</span> Retrosheet pitcher player ID. <span class="pp">|</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`INN_CT`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Inning number ($1, 2, \dots$). <span class="pp">|</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`BAT_HOME_ID`</span> <span class="pp">|</span> Integer <span class="pp">|</span> <span class="in">`0`</span> = Visiting team batting (top of inning); <span class="in">`1`</span> = Home team batting (bottom of inning). <span class="pp">|</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`OUTS_CT`</span> <span class="pp">|</span> String/Int <span class="pp">|</span> Number of outs prior to play start (<span class="in">`0`</span>, <span class="in">`1`</span>, <span class="in">`2`</span>). <span class="pp">|</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`BALLS_CT`</span>, <span class="in">`STRIKES_CT`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Ball and strike count at play start. <span class="pp">|</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`PITCH_SEQ_TX`</span> <span class="pp">|</span> String <span class="pp">|</span> Character string recording every pitch of the at-bat (e.g. <span class="in">`B`</span>=Ball, <span class="in">`C`</span>=Called Strike, <span class="in">`S`</span>=Swinging, <span class="in">`F`</span>=Foul). <span class="pp">|</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`EVENT_TX`</span> <span class="pp">|</span> String <span class="pp">|</span> Scorebook text shorthand of the play (e.g. <span class="in">`S8`</span>=Single to center, <span class="in">`K`</span>=Strikeout, <span class="in">`HR/7/F`</span>=Home run to left). <span class="pp">|</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`EVENT_CD`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Numeric event category code (<span class="in">`2`</span>=Generic out, <span class="in">`3`</span>=Strikeout, <span class="in">`14`</span>=Walk, <span class="in">`20`</span>=Single, <span class="in">`21`</span>=Double, <span class="in">`22`</span>=Triple, <span class="in">`23`</span>=Home Run). <span class="pp">|</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`BASE1_RUN_ID`</span> <span class="pp">|</span> String <span class="pp">|</span> Player ID of runner on first base before play. <span class="pp">|</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RUN1_DEST_ID`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Destination base of runner on first (<span class="in">`0`</span>=Out, <span class="in">`1`</span>=Stayed, <span class="in">`2`</span>=Advanced to 2B, <span class="in">`3`</span>=Advanced to 3B, <span class="in">`4`</span>=Scored). <span class="pp">|</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Universal Chadwick Crosswalk Dictionary (`v_chadwick_register`)</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>The master identifier nexus mapping 527,990 persons across all baseball systems.</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column Name <span class="pp">|</span> Type <span class="pp">|</span> Target System <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|:---|</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`key_person`</span> <span class="pp">|</span> String <span class="pp">|</span> Internal / Chadwick <span class="pp">|</span> Canonical unique person UUID. <span class="pp">|</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`key_mlbam`</span> <span class="pp">|</span> Integer <span class="pp">|</span> MLB / Statcast <span class="pp">|</span> Official MLB Advanced Media ID (maps to Statcast <span class="in">`pitcher`</span>, <span class="in">`batter`</span>). <span class="pp">|</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`key_retro`</span> <span class="pp">|</span> String <span class="pp">|</span> Retrosheet <span class="pp">|</span> Retrosheet player ID (maps to <span class="in">`BAT_ID`</span>, <span class="in">`PIT_ID`</span>). <span class="pp">|</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`key_bbref`</span> <span class="pp">|</span> String <span class="pp">|</span> Baseball Reference <span class="pp">|</span> Baseball-Reference URL slug and database key. <span class="pp">|</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`key_fangraphs`</span> <span class="pp">|</span> Integer <span class="pp">|</span> FanGraphs <span class="pp">|</span> FanGraphs player leaderboard identifier. <span class="pp">|</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`name_first`</span>, <span class="in">`name_last`</span> <span class="pp">|</span> String <span class="pp">|</span> Biographical <span class="pp">|</span> Legal first and last names. <span class="pp">|</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`birth_year`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Biographical <span class="pp">|</span> Year of birth. <span class="pp">|</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mlb_played_first`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Career <span class="pp">|</span> First year active in Major League Baseball. <span class="pp">|</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mlb_played_last`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Career <span class="pp">|</span> Last year active in Major League Baseball. <span class="pp">|</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Live Interactive Schema Browser</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>Below is the live column-by-column schema generated dynamically from <span class="co">[</span><span class="ot">`data/manifest/lake_manifest.json`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json)</span>:</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: live-schema-explorer</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.libPaths</span>(<span class="fu">c</span>(<span class="st">"/mnt/storage/R/library"</span>, <span class="fu">.libPaths</span>()))</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(jsonlite)</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(knitr)</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>manifest_file <span class="ot">&lt;-</span> <span class="st">"/mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json"</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(manifest_file)) {</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">read_json</span>(manifest_file)</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>  views_summary <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">names</span>(m<span class="sc">$</span>schema_catalog), <span class="cf">function</span>(vn) {</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>    v <span class="ot">&lt;-</span> m<span class="sc">$</span>schema_catalog[[vn]]</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>      <span class="at">View_Name =</span> vn,</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>      <span class="at">Total_Columns =</span> v<span class="sc">$</span>column_count,</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(views_summary, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"DuckDB View Name"</span>, <span class="st">"Audited Column Count"</span>))</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Manifest not found. Run `Rscript R/generate_agent_manifest.R` to build."</span>)</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
