@@ -85,7 +85,7 @@ fg <- tibble(file = list.files("data/raw/fangraphs", pattern = "-\\d{4}\\.parque
 print(fg, n = 20)
 cat("one-off ancillary files:\n")
 print(setdiff(list.files("data/raw/fangraphs"),
-              basename(fg$file)))
+              list.files("data/raw/fangraphs", pattern = "-\\d{4}\\.parquet$")))
 
 ## ---- espn / ncaa / mlbmeta / milb / bbref inventory ------------------------
 for (src in c("espn", "ncaa", "mlbmeta", "milb", "bbref", "chadwick", "lahman")) {
@@ -104,9 +104,11 @@ cat("\n== LAHMAN detail ==\n")
 for (t in c("Batting", "Pitching", "People", "Fielding", "Teams", "Salaries")) {
   p <- sprintf("data/raw/lahman/%s.parquet", t)
   if (file.exists(p)) {
-    d <- read_parquet(p, col_select = if (t == "People") c(playerID) else c(playerID, yearID))
-    cat(sprintf("  %-10s %8d rows  years %s-%s\n", t, nrow(d),
-                min(d$yearID), max(d$yearID)))
+    cols <- if (t == "People") "playerID" else if (t == "Teams") c("teamID", "yearID") else c("playerID", "yearID")
+    d <- read_parquet(p, col_select = any_of(cols))
+    y_min <- if ("yearID" %in% names(d)) min(d$yearID, na.rm = TRUE) else "N/A"
+    y_max <- if ("yearID" %in% names(d)) max(d$yearID, na.rm = TRUE) else "N/A"
+    cat(sprintf("  %-10s %8d rows  years %s-%s\n", t, nrow(d), y_min, y_max))
   } else cat("  ", t, "MISSING\n")
 }
 cat("\n== CHADWICK ==\n")
