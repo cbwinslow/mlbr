@@ -9,16 +9,35 @@
 # Verifies each month file covers every calendar day before writing it.
 #
 # Usage: Rscript R/ingest/ingest_statcast.R <from_year> <to_year>
-suppressPackageStartupMessages({ source("R/ingest/00_common.R"); library(arrow); library(dplyr) })
+suppressPackageStartupMessages({ 
+  source("R/ingest/00_common.R")
+  library(arrow)
+  library(dplyr)
+})
+
 args <- commandArgs(trailingOnly = TRUE)
-from <- if (length(args) >= 1) as.integer(args[1]) else as.integer(format(Sys.Date(), "%Y")) - 1
-to   <- if (length(args) >= 2) as.integer(args[2]) else as.integer(format(Sys.Date(), "%Y"))
+from <- if (length(args) >= 1) as.integer(args[1]) else 2008L
+to   <- if (length(args) >= 2) as.integer(args[2]) else 2026L
 SAVANT_CAP <- 25000L
 
+harmonize_types <- function(df) {
+  if (is.null(df) || nrow(df) == 0) return(df)
+  # Coerce all-NA logical columns to character to prevent bind_rows type clash
+  for (col in names(df)) {
+    if (is.logical(df[[col]]) && all(is.na(df[[col]]))) {
+      df[[col]] <- as.character(df[[col]])
+    }
+  }
+  if ("bat_speed" %in% names(df)) df$bat_speed <- suppressWarnings(as.numeric(df$bat_speed))
+  if ("swing_length" %in% names(df)) df$swing_length <- suppressWarnings(as.numeric(df$swing_length))
+  df
+}
+
 fetch <- function(start, end) {
-  d <- retry(3, 15, baseballr::scrape_statcast_savant(start_date = start, end_date = end))
+  d <- retry(3, 10, baseballr::scrape_statcast_savant(start_date = start, end_date = end))
+  if (is.null(d) || nrow(d) == 0) return(tibble())
   d <- d |> filter(game_date >= start, game_date <= end)   # enforce exact window
-  d
+  harmonize_types(d)
 }
 
 # tier ladder: try progressively finer windows until each one is uncapped
@@ -38,8 +57,9 @@ fetch_range <- function(start, end, depth = "month") {
       parts[[length(parts) + 1L]] <- fetch(cur, wend)   # day level: always < cap
     }
     cur <- wend + 1L
-    throttle(2)                                        # politeness between requests
+    throttle(0.8)                                      # optimized polite rate limit (800ms)
   }
+  parts <- lapply(parts, harmonize_types)
   bind_rows(parts)
 }
 
@@ -49,15 +69,11 @@ for (yr in from:to) for (m in 3:11) {   # Mar (spring training) - Nov (WS window
   p <- file.path(raw_dir("statcast"), sprintf("statcast-%d-%02d.parquet", yr, m))
   if (end < start || file.exists(p)) next
   tryCatch({
-    throttle(1)
+    throttle(0.5)
     d <- fetch_range(start, end)
     if (nrow(d) > 0) {
-      # completeness gate: every calendar day of the month must have pitched
       got <- sort(unique(d$game_date))
       days <- seq(start, end, by = "day")
-      no_game <- days[!(days %in% got)]   # off-days (All-Star break etc.) are fine,
-                                          # only a gap AFTER a covered day with a
-                                          # later covered day is suspicious
       if (length(got)) {
         holes <- got[which(c(0, diff(as.integer(got))) > 1)[-1] - 1]
         holes <- holes[holes > min(got) & holes < max(got)]
@@ -71,6 +87,6 @@ for (yr in from:to) for (m in 3:11) {   # Mar (spring training) - Nov (WS window
     } else message("  empty ", yr, "-", m)
   }, error = function(e) message("statcast: FAILED ", yr, "-", m, " - ",
                                  substr(conditionMessage(e), 1, 90)))
-  throttle(5)
+  throttle(1.5)
 }
 message("statcast: done (", from, "-", to, ")")
