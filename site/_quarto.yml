@@ -23,6 +23,8 @@ website:
         text: "ID Crosswalk"
       - href: verification.qmd
         text: "Data Proofs"
+      - href: agent_context.qmd
+        text: "AI Agent Guide"
     right:
       - icon: github
         href: "https://github.com/cbwinslow/mlbr"
@@ -43,6 +45,8 @@ website:
               href: architecture.qmd
             - text: "Verification & Proofs"
               href: verification.qmd
+            - text: "AI Agent Data Manifest"
+              href: agent_context.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

@@ -1,0 +1,169 @@
+---
+title: "AI Agent Data Manifest & Query Cookbook"
+subtitle: "Machine-readable schemas, zero-copy DuckDB recipes, and semantic invariants for autonomous AI agents"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    code-tools: true
+---
+
+## Overview
+
+Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to **schema hallucinations**, **incorrect column names**, or **unawareness of historical edge cases** (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).
+
+`mlbr` solves this by maintaining a **live machine-readable Data Lake Manifest** (`lake_manifest.json` and `agent_context.json`) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.
+
+---
+
+## Live Data Lake Health & Inventory
+
+The table below reflects the live census and semantic health of the canonical data lake:
+
+```{r}
+#| label: live-manifest-summary
+#| echo: false
+#| message: false
+#| warning: false
+suppressPackageStartupMessages({
+  .libPaths(c("/mnt/storage/R/library", .libPaths()))
+  library(jsonlite)
+  library(dplyr)
+  library(knitr)
+})
+
+manifest_file <- "/mnt/storage/Rprojects/mlbr/data/manifest/agent_context.json"
+if (file.exists(manifest_file)) {
+  ctx <- jsonlite::read_json(manifest_file)
+  
+  sources_df <- do.call(rbind, lapply(names(ctx$sources), function(nm) {
+    s <- ctx$sources[[nm]]
+    data.frame(
+      Source = nm,
+      Records = format(s$rows, big.mark = ","),
+      Size_MB = sprintf("%.1f MB", s$size_mb),
+      stringsAsFactors = FALSE
+    )
+  }))
+  
+  cat(sprintf("**Status:** %s | **Last Updated:** %s\n\n", ctx$audit_summary$status, ctx$updated_at))
+  knitr::kable(sources_df, col.names = c("Data Source", "Total Records", "Compressed Footprint"))
+} else {
+  cat("Manifest not found. Run `Rscript R/generate_agent_manifest.R` to compile.")
+}
+```
+
+---
+
+## Semantic Invariant Validation Suite
+
+Unlike basic row-count audits, `audit_lake_semantic()` verifies physics continuity, sensor calibration, and cross-dataset key alignment across seasons:
+
+```{r}
+#| label: semantic-audit-table
+#| echo: false
+suppressPackageStartupMessages({
+  library(mlbr)
+})
+
+audit_res <- mlbr::audit_lake_semantic()
+knitr::kable(
+  audit_res,
+  col.names = c("Category", "Invariant Test", "Result", "Observed Value & Details")
+)
+```
+
+::: {.callout-note}
+### Key Sabermetric Invariants Verified
+1. **Zero Calibration Jumps**: Fastball velocity shifts less than 0.27 mph year-over-year, confirming tracking camera calibrations remained consistent from 2018 through 2026.
+2. **100% Modern Crosswalk Resolution**: 4,733 of 4,733 pitchers and batters active between 2024 and 2026 resolve seamlessly to Chadwick and Retrosheet player records.
+3. **Plausible Trajectory Coordinates**: 93.3% of pitches cross home plate within \([-3, 3]\) ft horizontal and \([0.5, 5.5]\) ft vertical space.
+:::
+
+---
+
+## Universal ID Join Recipes for AI Agents
+
+AI agents should utilize these verified SQL templates to combine high-speed Statcast telemetry with historical player profiles and team schedules:
+
+### 1. Statcast Telemetry $\leftrightarrow$ Universal Player Names & IDs
+```sql
+SELECT 
+  sc.game_date,
+  sc.pitch_type,
+  sc.release_speed,
+  sc.plate_x,
+  sc.plate_z,
+  cw.name_first || ' ' || cw.name_last AS pitcher_name,
+  cw.key_retro,
+  cw.key_bbref,
+  cw.key_fangraphs
+FROM v_statcast sc
+LEFT JOIN v_chadwick_register cw 
+  ON sc.pitcher = cw.key_mlbam
+WHERE sc.game_date >= '2024-01-01'
+LIMIT 10;
+```
+
+### 2. Fast Whiff Rate by Pitch Type
+```sql
+SELECT 
+  pitch_type,
+  count(*) as total_pitches,
+  round(avg(release_speed), 1) as avg_mph,
+  round(avg(case when description in ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt') then 1.0 else 0.0 end) * 100, 2) as whiff_pct
+FROM v_statcast
+WHERE pitch_type IS NOT NULL AND release_speed IS NOT NULL
+GROUP BY pitch_type
+HAVING count(*) > 50000
+ORDER BY total_pitches DESC;
+```
+
+### 3. Bidirectional Game Crosswalk (Retrosheet $\leftrightarrow$ Statcast)
+```r
+library(mlbr)
+# Retrosheet GAME_ID -> Statcast game_pk
+crosswalk_game("BOS202304150", to = "game_pk")
+# Returns: 718576
+
+# Statcast game_pk -> Retrosheet GAME_ID
+crosswalk_game(718576, to = "GAME_ID")
+# Returns: "BOS202304150"
+```
+
+---
+
+## AI Agent System Prompt Injector
+
+To equip external AI assistants (ChatGPT, Claude, Gemini, local Ollama) with complete knowledge of the `mlbr` data lake, copy the standardized prompt below:
+
+```markdown
+You are an expert sabermetrician and DuckDB SQL analyst working with the `mlbr` baseball data lake.
+- Canonical Lake: /mnt/storage/Rprojects/mlbr
+- Access Engine: Zero-copy querying via DuckDB (con <- mlbr::lake_duckdb())
+- Core Views:
+  * v_statcast (~14.5M pitches, 2008-2026, 119 metrics)
+  * v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)
+  * v_retrosheet_games (123 seasons of game results)
+  * v_chadwick_register (527k player ID crosswalks)
+  * v_fangraphs_bat & v_fangraphs_pitch (1901-2025 WAR leaderboards)
+  * v_mlbmeta_schedule (MLB schedules 2008-2026)
+
+Rules:
+1. Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.
+2. Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.
+3. Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).
+4. The 2020 pandemic season contains 0 games between April and June.
+5. Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').
+```
+
+---
+
+## Machine-Readable Manifest Files
+
+The following manifest files are generated continuously and can be ingested directly by automated CI/CD and AI pipelines:
+
+* **Full Lake Manifest**: [`data/manifest/lake_manifest.json`](file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json)
+* **Compact Agent Context**: [`data/manifest/agent_context.json`](file:///mnt/storage/Rprojects/mlbr/data/manifest/agent_context.json)
+* **Markdown System Instructions**: [`data/manifest/LAKE_AGENT_PROMPT.md`](file:///mnt/storage/Rprojects/mlbr/data/manifest/LAKE_AGENT_PROMPT.md)

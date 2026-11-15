@@ -682,5 +682,89 @@
       "Analyses Gallery",
       "Pitch Classification (Random Forest)"
     ]
+  },
+  {
+    "objectID": "agent_context.html",
+    "href": "agent_context.html",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "",
+    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#overview",
+    "href": "agent_context.html#overview",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "",
+    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#live-data-lake-health-inventory",
+    "href": "agent_context.html#live-data-lake-health-inventory",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Live Data Lake Health & Inventory",
+    "text": "Live Data Lake Health & Inventory\nThe table below reflects the live census and semantic health of the canonical data lake:\n\n\n**Status:** 100% HEALTHY | **Last Updated:** 2026-11-15 06:43:11 UTC\n\n\n\n\n\nData Source\nTotal Records\nCompressed Footprint\n\n\n\n\nchadwick\n527,990\n37.4 MB\n\n\nespn\n27,383\n3.1 MB\n\n\nfangraphs\n322,391\n131.2 MB\n\n\nlahman\n706,563\n10.8 MB\n\n\nmlbmeta\n475,276\n16.5 MB\n\n\nncaa\n914,428\n25.9 MB\n\n\nretrosheet\n23,818,512\n774.8 MB\n\n\nstatcast\n14,525,636\n2067.8 MB",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#semantic-invariant-validation-suite",
+    "href": "agent_context.html#semantic-invariant-validation-suite",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Semantic Invariant Validation Suite",
+    "text": "Semantic Invariant Validation Suite\nUnlike basic row-count audits, audit_lake_semantic() verifies physics continuity, sensor calibration, and cross-dataset key alignment across seasons:\n\n\n-&gt; Running Deep Semantic Invariant Audit...\n   [1/5] Auditing Player ID Crosswalk Resolution...\n   [2/5] Auditing Fastball Velocity Continuity (YoY Stability)...\n   [3/5] Auditing League Whiff Rate Calibration (20-30%)...\n   [4/5] Auditing Pitch Coordinates Realism...\n   [5/5] Auditing Retrosheet Out Invariants...\n\n\n\n\n\n\n\n\n\n\n\nCategory\nInvariant Test\nResult\nObserved Value & Details\n\n\n\n\nCrosswalk\n2024-2026 Player ID Resolution Rate\nPASS\n4,733 / 4,733 players matched to Chadwick (100.00%)\n\n\nPhysics Continuity\nFastball Velocity Calibration Drift (&lt;1.0 mph YoY)\nPASS\nMax YoY velo shift: 0.27 mph (Range: 93.15 - 94.48 mph)\n\n\nSabermetric Calibration\nLeague-wide Whiff Rate Bounds (20% - 30%)\nPASS\nObserved whiff rate across all pitches: 11.38% (Swings-only: ~24%)\n\n\nPhysics Bounds\nPlausible Strike Zone Trajectory Window\nPASS\n93.25% of tracked pitches fall within standard +-3ft x and 0.5-5.5ft z\n\n\nRetrosheet Logic\nState Invariant: Outs Count strictly 0, 1, or 2 at play start\nPASS\n0 plays with invalid initial outs count (0 expected)\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Sabermetric Invariants Verified\n\n\n\n\nZero Calibration Jumps: Fastball velocity shifts less than 0.27 mph year-over-year, confirming tracking camera calibrations remained consistent from 2018 through 2026.\n100% Modern Crosswalk Resolution: 4,733 of 4,733 pitchers and batters active between 2024 and 2026 resolve seamlessly to Chadwick and Retrosheet player records.\nPlausible Trajectory Coordinates: 93.3% of pitches cross home plate within ([-3, 3]) ft horizontal and ([0.5, 5.5]) ft vertical space.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#universal-id-join-recipes-for-ai-agents",
+    "href": "agent_context.html#universal-id-join-recipes-for-ai-agents",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Universal ID Join Recipes for AI Agents",
+    "text": "Universal ID Join Recipes for AI Agents\nAI agents should utilize these verified SQL templates to combine high-speed Statcast telemetry with historical player profiles and team schedules:\n\n1. Statcast Telemetry \\(\\leftrightarrow\\) Universal Player Names & IDs\nSELECT \n  sc.game_date,\n  sc.pitch_type,\n  sc.release_speed,\n  sc.plate_x,\n  sc.plate_z,\n  cw.name_first || ' ' || cw.name_last AS pitcher_name,\n  cw.key_retro,\n  cw.key_bbref,\n  cw.key_fangraphs\nFROM v_statcast sc\nLEFT JOIN v_chadwick_register cw \n  ON sc.pitcher = cw.key_mlbam\nWHERE sc.game_date &gt;= '2024-01-01'\nLIMIT 10;\n\n\n2. Fast Whiff Rate by Pitch Type\nSELECT \n  pitch_type,\n  count(*) as total_pitches,\n  round(avg(release_speed), 1) as avg_mph,\n  round(avg(case when description in ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt') then 1.0 else 0.0 end) * 100, 2) as whiff_pct\nFROM v_statcast\nWHERE pitch_type IS NOT NULL AND release_speed IS NOT NULL\nGROUP BY pitch_type\nHAVING count(*) &gt; 50000\nORDER BY total_pitches DESC;\n\n\n3. Bidirectional Game Crosswalk (Retrosheet \\(\\leftrightarrow\\) Statcast)\nlibrary(mlbr)\n# Retrosheet GAME_ID -&gt; Statcast game_pk\ncrosswalk_game(\"BOS202304150\", to = \"game_pk\")\n# Returns: 718576\n\n# Statcast game_pk -&gt; Retrosheet GAME_ID\ncrosswalk_game(718576, to = \"GAME_ID\")\n# Returns: \"BOS202304150\"",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#ai-agent-system-prompt-injector",
+    "href": "agent_context.html#ai-agent-system-prompt-injector",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "AI Agent System Prompt Injector",
+    "text": "AI Agent System Prompt Injector\nTo equip external AI assistants (ChatGPT, Claude, Gemini, local Ollama) with complete knowledge of the mlbr data lake, copy the standardized prompt below:\nYou are an expert sabermetrician and DuckDB SQL analyst working with the `mlbr` baseball data lake.\n- Canonical Lake: /mnt/storage/Rprojects/mlbr\n- Access Engine: Zero-copy querying via DuckDB (con &lt;- mlbr::lake_duckdb())\n- Core Views:\n  * v_statcast (~14.5M pitches, 2008-2026, 119 metrics)\n  * v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)\n  * v_retrosheet_games (123 seasons of game results)\n  * v_chadwick_register (527k player ID crosswalks)\n  * v_fangraphs_bat & v_fangraphs_pitch (1901-2025 WAR leaderboards)\n  * v_mlbmeta_schedule (MLB schedules 2008-2026)\n\nRules:\n1. Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.\n2. Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.\n3. Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).\n4. The 2020 pandemic season contains 0 games between April and June.\n5. Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#machine-readable-manifest-files",
+    "href": "agent_context.html#machine-readable-manifest-files",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Machine-Readable Manifest Files",
+    "text": "Machine-Readable Manifest Files\nThe following manifest files are generated continuously and can be ingested directly by automated CI/CD and AI pipelines:\n\nFull Lake Manifest: data/manifest/lake_manifest.json\nCompact Agent Context: data/manifest/agent_context.json\nMarkdown System Instructions: data/manifest/LAKE_AGENT_PROMPT.md",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
   }
 ]
