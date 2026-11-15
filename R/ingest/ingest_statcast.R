@@ -40,6 +40,35 @@ fetch <- function(start, end) {
   harmonize_types(d)
 }
 
+robust_bind <- function(parts) {
+  if (length(parts) == 0) return(tibble())
+  if (length(parts) == 1) return(parts[[1]])
+  
+  all_cols <- unique(unlist(lapply(parts, names)))
+  for (col in all_cols) {
+    types <- unique(vapply(parts, function(p) {
+      if (col %in% names(p)) class(p[[col]])[1] else NA_character_
+    }, character(1)))
+    types <- setdiff(types, NA_character_)
+    if (length(types) > 1) {
+      if (any(types %in% c("numeric", "double", "integer"))) {
+        for (i in seq_along(parts)) {
+          if (col %in% names(parts[[i]])) {
+            parts[[i]][[col]] <- suppressWarnings(as.numeric(parts[[i]][[col]]))
+          }
+        }
+      } else {
+        for (i in seq_along(parts)) {
+          if (col %in% names(parts[[i]])) {
+            parts[[i]][[col]] <- as.character(parts[[i]][[col]])
+          }
+        }
+      }
+    }
+  }
+  dplyr::bind_rows(parts)
+}
+
 # tier ladder: try progressively finer windows until each one is uncapped
 fetch_range <- function(start, end, depth = "month") {
   d <- tryCatch(fetch(start, end), error = function(e) NULL)
@@ -60,7 +89,7 @@ fetch_range <- function(start, end, depth = "month") {
     throttle(0.8)                                      # optimized polite rate limit (800ms)
   }
   parts <- lapply(parts, harmonize_types)
-  bind_rows(parts)
+  robust_bind(parts)
 }
 
 for (yr in from:to) for (m in 3:11) {   # Mar (spring training) - Nov (WS window)
