@@ -19,6 +19,8 @@ website:
         text: "Architecture"
       - href: setup.qmd
         text: "Setup & API"
+      - href: crosswalk.qmd
+        text: "ID Crosswalk"
       - href: verification.qmd
         text: "Data Proofs"
     right:
@@ -35,6 +37,8 @@ website:
               href: index.qmd
             - text: "Installation & Setup"
               href: setup.qmd
+            - text: "Universal ID Crosswalk"
+              href: crosswalk.qmd
             - text: "Architecture & Storage"
               href: architecture.qmd
             - text: "Verification & Proofs"

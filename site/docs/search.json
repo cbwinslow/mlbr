@@ -216,6 +216,150 @@
     ]
   },
   {
+    "objectID": "crosswalk.html",
+    "href": "crosswalk.html",
+    "title": "Universal Crosswalk Engine",
+    "section": "",
+    "text": "The mlbr crosswalk engine provides bidirectional resolution across all major baseball entity identifier systems. It is grounded directly in the Chadwick Bureau Register (527,000+ historical persons) and official MLB schedule metadata (55,000+ games).\ngraph LR\n    subgraph Input [\"Query Input\"]\n        Q1[\"Player Name&lt;br/&gt;'Aaron Judge'\"]\n        Q2[\"MLBAM ID&lt;br/&gt;592450\"]\n        Q3[\"Retro ID&lt;br/&gt;'judga001'\"]\n        Q4[\"BBRef ID&lt;br/&gt;'judgeaa01'\"]\n        Q5[\"Game ID&lt;br/&gt;'BOS202304150'\"]\n    end\n    \n    subgraph Engine [\"mlbr Crosswalk Engine\"]\n        CW1[\"crosswalk_player()\"]\n        CW2[\"crosswalk_game()\"]\n        CW3[\"team_crosswalk()\"]\n        CW4[\"crosswalk_join()\"]\n    end\n    \n    subgraph Data [\"Zero-Copy DuckDB Views\"]\n        V1[(\"v_chadwick_register\")]\n        V2[(\"v_mlbmeta_schedule\")]\n        V3[(\"v_retrosheet_games\")]\n        V4[(\"v_statcast\")]\n    end\n    \n    Q1 --&gt; CW1\n    Q2 --&gt; CW1\n    Q3 --&gt; CW1\n    Q4 --&gt; CW1\n    Q5 --&gt; CW2\n    \n    CW1 --&gt; V1\n    CW2 --&gt; V2\n    CW2 --&gt; V3\n    CW2 --&gt; V4",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Universal ID Crosswalk"
+    ]
+  },
+  {
+    "objectID": "crosswalk.html#overview",
+    "href": "crosswalk.html#overview",
+    "title": "Universal Crosswalk Engine",
+    "section": "",
+    "text": "The mlbr crosswalk engine provides bidirectional resolution across all major baseball entity identifier systems. It is grounded directly in the Chadwick Bureau Register (527,000+ historical persons) and official MLB schedule metadata (55,000+ games).\ngraph LR\n    subgraph Input [\"Query Input\"]\n        Q1[\"Player Name&lt;br/&gt;'Aaron Judge'\"]\n        Q2[\"MLBAM ID&lt;br/&gt;592450\"]\n        Q3[\"Retro ID&lt;br/&gt;'judga001'\"]\n        Q4[\"BBRef ID&lt;br/&gt;'judgeaa01'\"]\n        Q5[\"Game ID&lt;br/&gt;'BOS202304150'\"]\n    end\n    \n    subgraph Engine [\"mlbr Crosswalk Engine\"]\n        CW1[\"crosswalk_player()\"]\n        CW2[\"crosswalk_game()\"]\n        CW3[\"team_crosswalk()\"]\n        CW4[\"crosswalk_join()\"]\n    end\n    \n    subgraph Data [\"Zero-Copy DuckDB Views\"]\n        V1[(\"v_chadwick_register\")]\n        V2[(\"v_mlbmeta_schedule\")]\n        V3[(\"v_retrosheet_games\")]\n        V4[(\"v_statcast\")]\n    end\n    \n    Q1 --&gt; CW1\n    Q2 --&gt; CW1\n    Q3 --&gt; CW1\n    Q4 --&gt; CW1\n    Q5 --&gt; CW2\n    \n    CW1 --&gt; V1\n    CW2 --&gt; V2\n    CW2 --&gt; V3\n    CW2 --&gt; V4",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Universal ID Crosswalk"
+    ]
+  },
+  {
+    "objectID": "crosswalk.html#quick-start",
+    "href": "crosswalk.html#quick-start",
+    "title": "Universal Crosswalk Engine",
+    "section": "Quick Start",
+    "text": "Quick Start\n\n\nCode\nlibrary(mlbr)\nlibrary(dplyr)\nlibrary(gt)\n\n\n\n1. Player Resolution (crosswalk_player)\nLook up any player by fuzzy name, exact name, or system ID. Results prioritize Major League careers:\n\n\nCode\n# Lookup by name\njudge &lt;- crosswalk_player(\"Aaron Judge\")\njudge |&gt; \n  select(key_mlbam, key_retro, key_bbref, key_fangraphs, full_name, mlb_played_first, mlb_played_last) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Player Crosswalk: Aaron Judge\")\n\n\n\n\n\n\n\n\nPlayer Crosswalk: Aaron Judge\n\n\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nfull_name\nmlb_played_first\nmlb_played_last\n\n\n\n\n592450\njudga001\njudgeaa01\n15640\nAaron Judge\n2016\n2026\n\n\n\n\n\n\n\n\n\nCode\n# Lookup Shohei Ohtani\nohtani &lt;- crosswalk_player(\"Ohtani\")\nohtani |&gt; \n  select(key_mlbam, key_retro, key_bbref, key_fangraphs, full_name, mlb_played_first, mlb_played_last) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Player Crosswalk: Shohei Ohtani\")\n\n\n\n\n\n\n\n\nPlayer Crosswalk: Shohei Ohtani\n\n\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nfull_name\nmlb_played_first\nmlb_played_last\n\n\n\n\n660271\nohtas001\nohtansh01\n19755\nShohei Ohtani\n2018\n2026\n\n\n829344\n\n\nNA\nHikaru Ohtani\nNA\nNA\n\n\nNA\n\n\nNA\nTomohisa Ohtani\nNA\nNA\n\n\n\n\n\n\n\n\n\n2. Team Code Translation (team_crosswalk)\nBridges the 3-letter discrepancies between Retrosheet (e.g. CHA, CHN, NYA, LAN), Statcast (e.g. CWS, CHC, NYY, LAD), and Baseball-Reference:\n\n\nCode\nteams &lt;- team_crosswalk()\nhead(teams, 10) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Team Crosswalk Reference Table\")\n\n\n\n\n\n\n\n\nTeam Crosswalk Reference Table\n\n\nteam_retro\nteam_statcast\nteam_bbref\nfranchise_name\nleague\ndivision\n\n\n\n\nARI\nAZ\nARI\nArizona Diamondbacks\nNL\nWest\n\n\nATL\nATL\nATL\nAtlanta Braves\nNL\nEast\n\n\nBAL\nBAL\nBAL\nBaltimore Orioles\nAL\nEast\n\n\nBOS\nBOS\nBOS\nBoston Red Sox\nAL\nEast\n\n\nCHA\nCWS\nCHW\nChicago White Sox\nAL\nCentral\n\n\nCHN\nCHC\nCHC\nChicago Cubs\nNL\nCentral\n\n\nCIN\nCIN\nCIN\nCincinnati Reds\nNL\nCentral\n\n\nCLE\nCLE\nCLE\nCleveland Guardians\nAL\nCentral\n\n\nCOL\nCOL\nCOL\nColorado Rockies\nNL\nWest\n\n\nDET\nDET\nDET\nDetroit Tigers\nAL\nCentral\n\n\n\n\n\n\n\n\n\n3. Game ID Bridging (crosswalk_game)\nResolve Retrosheet GAME_ID \\(\\leftrightarrow\\) Statcast MLBAM game_pk:\n\n\nCode\n# Resolve Retrosheet GAME_ID to Statcast game_pk\ncrosswalk_game(\"BOS202304150\") |&gt;\n  gt() |&gt;\n  tab_header(title = \"Game Crosswalk: BOS202304150 -&gt; game_pk\")\n\n\n\n\n\n\n\n\nGame Crosswalk: BOS202304150 -&gt; game_pk\n\n\ngame_pk\nretrosheet_game_id\ngame_date\nhome_team_statcast\naway_team_statcast\nhome_team_retro\naway_team_retro\ngame_number\n\n\n\n\n718576\nBOS202304150\n2023-04-15\nBOS\nLAA\nBOS\nNA\n1\n\n\n\n\n\n\n\n\n\nCode\n# Resolve Statcast game_pk to Retrosheet GAME_ID\ncrosswalk_game(718576) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Game Crosswalk: game_pk 718576 -&gt; Retrosheet\")\n\n\n\n\n\n\n\n\nGame Crosswalk: game_pk 718576 -&gt; Retrosheet\n\n\ngame_pk\nretrosheet_game_id\ngame_date\nhome_team_statcast\naway_team_statcast\nhome_team_retro\naway_team_retro\ngame_number\n\n\n\n\n718576\nBOS202304150\n2023-04-15\nBOS\nLAA\nBOS\nANA\n1\n\n\n\n\n\n\n\n\n\n4. Automatic Data Frame Enrichment (crosswalk_join)\nPipe any arbitrary baseball dataframe with an ID column (pitcher, batter, playerID, retro_id, etc.) directly into crosswalk_join():\n\n\nCode\nsample_statcast &lt;- tibble(\n  pitcher = c(592450, 660271, 545361),\n  pitch_count = c(102, 98, 115)\n)\n\nenriched &lt;- crosswalk_join(sample_statcast)\nenriched |&gt; \n  gt() |&gt;\n  tab_header(title = \"Automated Data Frame Enrichment via crosswalk_join()\")\n\n\n\n\n\n\n\n\nAutomated Data Frame Enrichment via crosswalk_join()\n\n\npitcher\npitch_count\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nname_first\nname_last\n\n\n\n\n592450\n102\n592450\njudga001\njudgeaa01\n15640\nAaron\nJudge\n\n\n660271\n98\n660271\nohtas001\nohtansh01\n19755\nShohei\nOhtani\n\n\n545361\n115\n545361\ntroum001\ntroutmi01\n10155\nMike\nTrout\n\n\n\n\n\n\n\n\n\n5. Invariant Validation Suite (proof_crosswalks)\nEvery build runs a 5-stage invariant verification suite:\n\n\nCode\nproofs &lt;- proof_crosswalks()\n\n\n\n=== mlbr Crosswalk Validation Report ===\n                          test status\n        chadwick_register_keys   PASS\n          superstar_resolution   PASS\n historical_legends_resolution   PASS\n  team_crosswalk_bidirectional   PASS\n      game_crosswalk_roundtrip   PASS\n                                                  detail\n Total: 527990 | MLBAM keys: 137320 | Retro keys: 527990\n                      Judge: OK | Ohtani: OK | Trout: OK\n  Babe Ruth: ruthb101 (OK) | Ted Williams: willt103 (OK)\n          33 franchise mappings defined across 4 systems\n        BOS202304150 -&gt; game_pk 718576 (expected 718576)\n\nPassed 5 / 5 checks (100.0%)\n\n\nCode\nproofs |&gt;\n  gt() |&gt;\n  tab_header(title = \"Crosswalk Invariant Verification Suite\")\n\n\n\n\n\n\n\n\nCrosswalk Invariant Verification Suite\n\n\ntest\nstatus\ndetail\n\n\n\n\nchadwick_register_keys\nPASS\nTotal: 527990 | MLBAM keys: 137320 | Retro keys: 527990\n\n\nsuperstar_resolution\nPASS\nJudge: OK | Ohtani: OK | Trout: OK\n\n\nhistorical_legends_resolution\nPASS\nBabe Ruth: ruthb101 (OK) | Ted Williams: willt103 (OK)\n\n\nteam_crosswalk_bidirectional\nPASS\n33 franchise mappings defined across 4 systems\n\n\ngame_crosswalk_roundtrip\nPASS\nBOS202304150 -&gt; game_pk 718576 (expected 718576)",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Universal ID Crosswalk"
+    ]
+  },
+  {
+    "objectID": "architecture.html",
+    "href": "architecture.html",
+    "title": "Architecture & Storage",
+    "section": "",
+    "text": "Traditional sports analytics repositories often suffer from two major anti-patterns: 1. Premature Aggregation / Column Dropping: Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. Monolithic Relational Databases: Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.\nmlbr resolves both issues by implementing a Decoupled Columnar Data Lake powered by Apache Parquet and DuckDB.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#core-design-principles",
+    "href": "architecture.html#core-design-principles",
+    "title": "Architecture & Storage",
+    "section": "",
+    "text": "Traditional sports analytics repositories often suffer from two major anti-patterns: 1. Premature Aggregation / Column Dropping: Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. Monolithic Relational Databases: Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.\nmlbr resolves both issues by implementing a Decoupled Columnar Data Lake powered by Apache Parquet and DuckDB.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#partitioning-directory-layout",
+    "href": "architecture.html#partitioning-directory-layout",
+    "title": "Architecture & Storage",
+    "section": "Partitioning & Directory Layout",
+    "text": "Partitioning & Directory Layout\nAll raw data resides in /mnt/storage/Rprojects/mlbr/data/raw/ in immutable, partitioned Parquet files:\ndata/raw/\n├── retrosheet/          # 622 files, 23.8M rows (1871-2025)\n│   ├── plays-1871.parquet ... plays-2025.parquet\n│   ├── games-1871.parquet ... games-2025.parquet\n│   ├── player_games-*.parquet\n│   ├── subs-*.parquet\n│   └── rosters-*.parquet\n├── statcast/            # Partitioned monthly (2008-2025)\n│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet\n├── fangraphs/           # 425 tables (1901-2025)\n│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet\n│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet\n│   ├── fg_fielding_*.parquet, fg_team_*.parquet\n│   └── guts_constants.parquet, park_factors_*.parquet\n├── chadwick/            # Universal crosswalk\n│   └── register.parquet (527,990 player IDs)\n├── lahman/              # 31 historical tables (1871+)\n├── ncaa/                # 8 college baseball tables (848k play rows)\n├── mlbmeta/             # 81 files (draft, parks, advanced metrics)\n└── espn/                # 32 files (schedules, boxscores)",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#the-zero-drop-column-invariant",
+    "href": "architecture.html#the-zero-drop-column-invariant",
+    "title": "Architecture & Storage",
+    "section": "The Zero-Drop Column Invariant",
+    "text": "The Zero-Drop Column Invariant\nEvery data source ingested by mlbr retains 100% of its available columns.\n\n\n\n\n\n\n\n\nSource Table\nPreserved Columns\nKey Retained Attributes\n\n\n\n\nStatcast\n119\nrelease_speed, release_spin_rate, pfx_x, pfx_z, spin_axis, vx0, vy0, vz0, ax, ay, az, sz_top, sz_bot, bat_speed, swing_length\n\n\nRetrosheet Plays\n160\nComplete base runner states, pitch sequence strings, fielder position codes, count before play, batted ball types, extra-base advance codes\n\n\nRetrosheet Games\n84\nTemperature, wind direction/speed, attendance, home/away plate umpires, day/night, ballpark ID\n\n\nFanGraphs Batting\n447\nwOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, Plate discipline (O-Swing%, Z-Swing%), Stuff+, Location+\n\n\nFanGraphs Pitching\n520\nFIP, xFIP, SIERA, K-BB%, Pitch mix frequencies, pitch-specific run values (wFB, wSL, wCB, wCH)\n\n\nChadwick Register\n40\nCrosswalk IDs: key_mlbam, key_retro, key_bbref, key_fangraphs, key_npb",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#zero-copy-duckdb-query-engine",
+    "href": "architecture.html#zero-copy-duckdb-query-engine",
+    "title": "Architecture & Storage",
+    "section": "Zero-Copy DuckDB Query Engine",
+    "text": "Zero-Copy DuckDB Query Engine\nRather than maintaining a persistent database daemon that holds data in proprietary formats, mlbr registers virtual views directly on the raw Parquet files via lake_duckdb().\nlibrary(mlbr)\ncon &lt;- lake_duckdb()\nUnder the hood, DuckDB executes:\nCREATE VIEW statcast AS \nSELECT * FROM read_parquet('data/raw/statcast/*.parquet', union_by_name=true);\n\nCREATE VIEW retro_plays AS \nSELECT * FROM read_parquet('data/raw/retrosheet/plays-*.parquet', union_by_name=true);\n\nCREATE VIEW chadwick AS \nSELECT * FROM read_parquet('data/raw/chadwick/register.parquet');\n\nBenefits:\n\nZero Ingestion Latency: When new parquet files arrive, views automatically include them without table rebuilds.\nOut-of-Core Execution: Process 30M+ rows on machines with limited RAM using streaming SIMD operators.\nSnappy Compression: Entire dataset consumes less than 15 GB of disk space.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#ingestion-architecture-adaptive-tier-ladder",
+    "href": "architecture.html#ingestion-architecture-adaptive-tier-ladder",
+    "title": "Architecture & Storage",
+    "section": "Ingestion Architecture & Adaptive Tier Ladder",
+    "text": "Ingestion Architecture & Adaptive Tier Ladder\nThe MLB Baseball Savant Statcast API enforces a hard server-side limit of 25,000 rows per request. If a query matches 25,001 rows, the server silently truncates results, causing data loss.\nTo eliminate this vulnerability, R/ingest/ingest_statcast.R implements an Adaptive Tier Ladder:\n           [ Query Month Window ]\n                     │\n         Is result count == 25,000?\n             ├── NO  ──&gt; Save monthly parquet\n             └── YES ──&gt; Step down to Tier 2\n                               │\n                    [ Query 7-Day Week Windows ]\n                               │\n                   Is result count == 25,000?\n                       ├── NO  ──&gt; Save weekly chunks\n                       └── YES ──&gt; Step down to Tier 3\n                                         │\n                             [ Query Single-Day Windows ]\n                                         │\n                             Guaranteed &lt; 25,000 pitches\n\nIngestion Safety Rules\n\nSerialization: Only one ingest process accesses a source at a time.\nPolite Backoff: Automatic exponential backoff on HTTP 429/503 errors.\nIdempotence: Files that already exist on disk are skipped unless explicitly removed.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "gallery.html",
+    "href": "gallery.html",
+    "title": "Analyses Gallery",
+    "section": "",
+    "text": "Inspired by scikit-learn’s example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the mlbr data lake.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Gallery Overview"
+    ]
+  },
+  {
+    "objectID": "gallery.html#machine-learning-classification",
+    "href": "gallery.html#machine-learning-classification",
+    "title": "Analyses Gallery",
+    "section": "Machine Learning & Classification",
+    "text": "Machine Learning & Classification\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Unsupervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Statcast&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_clustering.html\"&gt;Unsupervised Pitch Clustering&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (&lt;code&gt;pfx_x&lt;/code&gt;, &lt;code&gt;pfx_z&lt;/code&gt;, velocity, spin). Repertoire discovery without human pitch-tag bias.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Supervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;tidymodels&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_classification.html\"&gt;Pitch Type Classification with Random Forest&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Multi-class classification using &lt;code&gt;ranger&lt;/code&gt; and &lt;code&gt;tidymodels&lt;/code&gt; to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC&lt;/small&gt;",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Gallery Overview"
+    ]
+  },
+  {
+    "objectID": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
+    "href": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
+    "title": "Analyses Gallery",
+    "section": "Empirical Sabermetrics & Non-Linear Surfaces",
+    "text": "Empirical Sabermetrics & Non-Linear Surfaces\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;GAM / LOESS&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/xwoba_surface.html\"&gt;Non-Linear xwOBA & Barrel Landscape&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast \"Barrels\".&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Retrosheet&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/run_expectancy.html\"&gt;Run Expectancy RE24 Matrix&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025&lt;/small&gt;",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Gallery Overview"
+    ]
+  },
+  {
     "objectID": "setup.html",
     "href": "setup.html",
     "title": "Installation & Setup",
@@ -297,114 +441,6 @@
       "Home",
       "Getting Started",
       "Installation & Setup"
-    ]
-  },
-  {
-    "objectID": "gallery.html",
-    "href": "gallery.html",
-    "title": "Analyses Gallery",
-    "section": "",
-    "text": "Inspired by scikit-learn’s example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the mlbr data lake.",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Gallery Overview"
-    ]
-  },
-  {
-    "objectID": "gallery.html#machine-learning-classification",
-    "href": "gallery.html#machine-learning-classification",
-    "title": "Analyses Gallery",
-    "section": "Machine Learning & Classification",
-    "text": "Machine Learning & Classification\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Unsupervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Statcast&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_clustering.html\"&gt;Unsupervised Pitch Clustering&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (&lt;code&gt;pfx_x&lt;/code&gt;, &lt;code&gt;pfx_z&lt;/code&gt;, velocity, spin). Repertoire discovery without human pitch-tag bias.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Supervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;tidymodels&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_classification.html\"&gt;Pitch Type Classification with Random Forest&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Multi-class classification using &lt;code&gt;ranger&lt;/code&gt; and &lt;code&gt;tidymodels&lt;/code&gt; to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC&lt;/small&gt;",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Gallery Overview"
-    ]
-  },
-  {
-    "objectID": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
-    "href": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
-    "title": "Analyses Gallery",
-    "section": "Empirical Sabermetrics & Non-Linear Surfaces",
-    "text": "Empirical Sabermetrics & Non-Linear Surfaces\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;GAM / LOESS&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/xwoba_surface.html\"&gt;Non-Linear xwOBA & Barrel Landscape&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast \"Barrels\".&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Retrosheet&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/run_expectancy.html\"&gt;Run Expectancy RE24 Matrix&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025&lt;/small&gt;",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Gallery Overview"
-    ]
-  },
-  {
-    "objectID": "architecture.html",
-    "href": "architecture.html",
-    "title": "Architecture & Storage",
-    "section": "",
-    "text": "Traditional sports analytics repositories often suffer from two major anti-patterns: 1. Premature Aggregation / Column Dropping: Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. Monolithic Relational Databases: Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.\nmlbr resolves both issues by implementing a Decoupled Columnar Data Lake powered by Apache Parquet and DuckDB.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#core-design-principles",
-    "href": "architecture.html#core-design-principles",
-    "title": "Architecture & Storage",
-    "section": "",
-    "text": "Traditional sports analytics repositories often suffer from two major anti-patterns: 1. Premature Aggregation / Column Dropping: Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. Monolithic Relational Databases: Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.\nmlbr resolves both issues by implementing a Decoupled Columnar Data Lake powered by Apache Parquet and DuckDB.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#partitioning-directory-layout",
-    "href": "architecture.html#partitioning-directory-layout",
-    "title": "Architecture & Storage",
-    "section": "Partitioning & Directory Layout",
-    "text": "Partitioning & Directory Layout\nAll raw data resides in /mnt/storage/Rprojects/mlbr/data/raw/ in immutable, partitioned Parquet files:\ndata/raw/\n├── retrosheet/          # 622 files, 23.8M rows (1871-2025)\n│   ├── plays-1871.parquet ... plays-2025.parquet\n│   ├── games-1871.parquet ... games-2025.parquet\n│   ├── player_games-*.parquet\n│   ├── subs-*.parquet\n│   └── rosters-*.parquet\n├── statcast/            # Partitioned monthly (2008-2025)\n│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet\n├── fangraphs/           # 425 tables (1901-2025)\n│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet\n│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet\n│   ├── fg_fielding_*.parquet, fg_team_*.parquet\n│   └── guts_constants.parquet, park_factors_*.parquet\n├── chadwick/            # Universal crosswalk\n│   └── register.parquet (527,990 player IDs)\n├── lahman/              # 31 historical tables (1871+)\n├── ncaa/                # 8 college baseball tables (848k play rows)\n├── mlbmeta/             # 81 files (draft, parks, advanced metrics)\n└── espn/                # 32 files (schedules, boxscores)",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#the-zero-drop-column-invariant",
-    "href": "architecture.html#the-zero-drop-column-invariant",
-    "title": "Architecture & Storage",
-    "section": "The Zero-Drop Column Invariant",
-    "text": "The Zero-Drop Column Invariant\nEvery data source ingested by mlbr retains 100% of its available columns.\n\n\n\n\n\n\n\n\nSource Table\nPreserved Columns\nKey Retained Attributes\n\n\n\n\nStatcast\n119\nrelease_speed, release_spin_rate, pfx_x, pfx_z, spin_axis, vx0, vy0, vz0, ax, ay, az, sz_top, sz_bot, bat_speed, swing_length\n\n\nRetrosheet Plays\n160\nComplete base runner states, pitch sequence strings, fielder position codes, count before play, batted ball types, extra-base advance codes\n\n\nRetrosheet Games\n84\nTemperature, wind direction/speed, attendance, home/away plate umpires, day/night, ballpark ID\n\n\nFanGraphs Batting\n447\nwOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, Plate discipline (O-Swing%, Z-Swing%), Stuff+, Location+\n\n\nFanGraphs Pitching\n520\nFIP, xFIP, SIERA, K-BB%, Pitch mix frequencies, pitch-specific run values (wFB, wSL, wCB, wCH)\n\n\nChadwick Register\n40\nCrosswalk IDs: key_mlbam, key_retro, key_bbref, key_fangraphs, key_npb",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#zero-copy-duckdb-query-engine",
-    "href": "architecture.html#zero-copy-duckdb-query-engine",
-    "title": "Architecture & Storage",
-    "section": "Zero-Copy DuckDB Query Engine",
-    "text": "Zero-Copy DuckDB Query Engine\nRather than maintaining a persistent database daemon that holds data in proprietary formats, mlbr registers virtual views directly on the raw Parquet files via lake_duckdb().\nlibrary(mlbr)\ncon &lt;- lake_duckdb()\nUnder the hood, DuckDB executes:\nCREATE VIEW statcast AS \nSELECT * FROM read_parquet('data/raw/statcast/*.parquet', union_by_name=true);\n\nCREATE VIEW retro_plays AS \nSELECT * FROM read_parquet('data/raw/retrosheet/plays-*.parquet', union_by_name=true);\n\nCREATE VIEW chadwick AS \nSELECT * FROM read_parquet('data/raw/chadwick/register.parquet');\n\nBenefits:\n\nZero Ingestion Latency: When new parquet files arrive, views automatically include them without table rebuilds.\nOut-of-Core Execution: Process 30M+ rows on machines with limited RAM using streaming SIMD operators.\nSnappy Compression: Entire dataset consumes less than 15 GB of disk space.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#ingestion-architecture-adaptive-tier-ladder",
-    "href": "architecture.html#ingestion-architecture-adaptive-tier-ladder",
-    "title": "Architecture & Storage",
-    "section": "Ingestion Architecture & Adaptive Tier Ladder",
-    "text": "Ingestion Architecture & Adaptive Tier Ladder\nThe MLB Baseball Savant Statcast API enforces a hard server-side limit of 25,000 rows per request. If a query matches 25,001 rows, the server silently truncates results, causing data loss.\nTo eliminate this vulnerability, R/ingest/ingest_statcast.R implements an Adaptive Tier Ladder:\n           [ Query Month Window ]\n                     │\n         Is result count == 25,000?\n             ├── NO  ──&gt; Save monthly parquet\n             └── YES ──&gt; Step down to Tier 2\n                               │\n                    [ Query 7-Day Week Windows ]\n                               │\n                   Is result count == 25,000?\n                       ├── NO  ──&gt; Save weekly chunks\n                       └── YES ──&gt; Step down to Tier 3\n                                         │\n                             [ Query Single-Day Windows ]\n                                         │\n                             Guaranteed &lt; 25,000 pitches\n\nIngestion Safety Rules\n\nSerialization: Only one ingest process accesses a source at a time.\nPolite Backoff: Automatic exponential backoff on HTTP 429/503 errors.\nIdempotence: Files that already exist on disk are skipped unless explicitly removed.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
     ]
   },
   {
