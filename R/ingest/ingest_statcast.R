@@ -94,6 +94,7 @@ fetch_range <- function(start, end, depth = "month") {
 
 for (yr in from:to) for (m in 3:11) {   # Mar (spring training) - Nov (WS window)
   start <- as.Date(sprintf("%d-%02d-01", yr, m))
+  if (yr == 2008L && m == 3L) start <- as.Date("2008-03-25")
   end   <- as.Date(sprintf("%d-%02d-01", yr, m + 1L)) - 1L   # last day OF the month
   p <- file.path(raw_dir("statcast"), sprintf("statcast-%d-%02d.parquet", yr, m))
   if (end < start || file.exists(p)) next
