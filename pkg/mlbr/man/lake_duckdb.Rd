@@ -2,22 +2,20 @@
 % Please edit documentation in R/utilities.R
 \name{lake_duckdb}
 \alias{lake_duckdb}
-\title{Connect DuckDB and register zero-copy views over the baseball data lake}
+\title{Connect to DuckDB and register zero-copy views over the data lake}
 \usage{
 lake_duckdb(lake = NULL, dbdir = ":memory:", read_only = TRUE)
 }
 \arguments{
 \item{lake}{project root of the data lake}
 
-\item{dbdir}{DuckDB database directory or ":memory:" (default)}
+\item{dbdir}{duckdb database location (default: ":memory:")}
 
-\item{read_only}{whether the DuckDB connection is read-only (default TRUE)}
+\item{read_only}{logical, whether connection should be read only}
 }
 \value{
-a DuckDB DBI connection object with registered views
+a DBIConnection to DuckDB with pre-registered views
 }
 \description{
-Instantly mounts SQL views over the entire Parquet data lake using DuckDB.
-Allows direct, sub-second analytical SQL queries across Statcast, Retrosheet,
-FanGraphs, and Lahman without copying data.
+Connect to DuckDB and register zero-copy views over the data lake
 }

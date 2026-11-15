@@ -2,20 +2,20 @@
 % Please edit documentation in R/helpers.R
 \name{retry}
 \alias{retry}
-\title{retry an expression with backoff}
+\title{Retry expression on failure}
 \usage{
-retry(n = 3, wait = 10, expr)
+retry(expr, max_attempts = 3, delay = 2, backoff = 2)
 }
 \arguments{
-\item{n}{number of attempts}
+\item{expr}{Expression to evaluate}
 
-\item{wait}{seconds between attempts}
+\item{max_attempts}{Maximum attempts}
 
-\item{expr}{expression to evaluate}
-}
-\value{
-the value of expr, or errors after the final attempt
+\item{delay}{Initial delay}
+
+\item{backoff}{Exponential multiplier}
 }
 \description{
-retry an expression with backoff
+Retry expression on failure
 }
+\keyword{internal}

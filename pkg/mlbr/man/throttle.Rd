@@ -2,18 +2,14 @@
 % Please edit documentation in R/helpers.R
 \name{throttle}
 \alias{throttle}
-\title{enforce a minimum spacing between HTTP requests}
+\title{Throttle execution by sleeping}
 \usage{
-throttle(min_seconds = 2)
+throttle(seconds = 1)
 }
 \arguments{
-\item{min_seconds}{minimum seconds since the previous request}
-}
-\value{
-invisible NULL
+\item{seconds}{Number of seconds to sleep}
 }
 \description{
-The upstream fetchers (baseballr) perform no rate limiting of their own.
-Every ingest function calls this between requests with a per-source
-minimum: FanGraphs 2s, ESPN 2s, MLB Savant 1-5s, Baseball-Reference 12s.
+Throttle execution by sleeping
 }
+\keyword{internal}

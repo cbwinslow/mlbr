@@ -3,6 +3,9 @@
 export(LakeManager)
 export(bbref_ingest)
 export(chadwick_ingest)
+export(crosswalk_game)
+export(crosswalk_join)
+export(crosswalk_player)
 export(default_lake)
 export(espn_ingest)
 export(fangraphs_ingest)
@@ -18,39 +21,12 @@ export(ncaa_ingest)
 export(proof_benchmarks)
 export(proof_completeness)
 export(proof_crosswalk)
+export(proof_crosswalks)
 export(proof_lake)
 export(proof_retrosheet)
 export(proof_statcast)
 export(retrosheet_github_ingest)
-export(retry)
 export(statcast_ingest)
-export(throttle)
+export(team_crosswalk)
 export(validate_lake)
-export(write_df)
 importFrom(R6,R6Class)
-importFrom(arrow,
-  open_dataset,
-  read_parquet,
-  write_parquet
-)
-importFrom(data.table,
-  fread,
-  rbindlist,
-  setnames
-)
-importFrom(dplyr,
-  arrange,
-  bind_rows,
-  case_when,
-  filter,
-  mutate,
-  select
-)
-importFrom(purrr,
-  map,
-  map_chr,
-  map_int,
-  pmap_int
-)
-importFrom(tibble,tibble)
-importFrom(utils,data)

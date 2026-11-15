@@ -2,18 +2,18 @@
 % Please edit documentation in R/helpers.R
 \name{write_df}
 \alias{write_df}
-\title{atomically write a data frame to parquet}
+\title{Write a data frame or tibble to parquet or rds safely}
 \usage{
-write_df(df, path)
+write_df(df, path, partition_cols = NULL)
 }
 \arguments{
-\item{df}{data frame to write}
+\item{df}{Data frame to write}
 
-\item{path}{destination parquet path}
-}
-\value{
-invisible NULL; emits a message with the row count
+\item{path}{Target path (.parquet or .rds)}
+
+\item{partition_cols}{Optional character vector of partition columns}
 }
 \description{
-atomically write a data frame to parquet
+Write a data frame or tibble to parquet or rds safely
 }
+\keyword{internal}

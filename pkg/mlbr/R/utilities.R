@@ -80,7 +80,8 @@ lake_duckdb <- function(lake = NULL, dbdir = ":memory:", read_only = TRUE) {
     v_lahman_batting      = file.path(lake, "data/raw/lahman/Batting.parquet"),
     v_lahman_pitching     = file.path(lake, "data/raw/lahman/Pitching.parquet"),
     v_lahman_people       = file.path(lake, "data/raw/lahman/People.parquet"),
-    v_ncaa_pbp            = file.path(lake, "data/raw/ncaa/play_by_play.parquet")
+    v_ncaa_pbp            = file.path(lake, "data/raw/ncaa/play_by_play.parquet"),
+    v_mlbmeta_schedule    = file.path(lake, "data/raw/mlbmeta/schedule-*.parquet")
   )
   
   registered <- 0L
@@ -88,7 +89,7 @@ lake_duckdb <- function(lake = NULL, dbdir = ":memory:", read_only = TRUE) {
     p <- views[[vname]]
     matching <- Sys.glob(p)
     if (length(matching) > 0) {
-      sql <- sprintf("CREATE OR REPLACE VIEW %s AS SELECT * FROM read_parquet('%s');", vname, p)
+      sql <- sprintf("CREATE OR REPLACE VIEW %s AS SELECT * FROM read_parquet('%s', union_by_name = true);", vname, p)
       DBI::dbExecute(con, sql)
       registered <- registered + 1L
     }

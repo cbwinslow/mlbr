@@ -2,19 +2,18 @@
 % Please edit documentation in R/utilities.R
 \name{lake_find_column}
 \alias{lake_find_column}
-\title{Find which datasets in the lake contain a specific column}
+\title{Find column names across all parquet tables in the lake}
 \usage{
 lake_find_column(pattern, lake = NULL)
 }
 \arguments{
-\item{pattern}{regex pattern for column name (e.g. "attack_angle", "wOBA", "fld")}
+\item{pattern}{regular expression pattern to match column names}
 
 \item{lake}{project root of the data lake}
 }
 \value{
-a tibble of matching sources, sample files, and exact column names
+a tibble of matching tables, column names, and types
 }
 \description{
-Searches across all Parquet schema metadata across all sources in the data lake
-without loading the data into memory.
+Find column names across all parquet tables in the lake
 }
