@@ -1,42 +1,44 @@
-# mlbr Data Lake & Sabermetrics Platform (AGENTS.md)
+# mlbr Data Lake, Sabermetrics & Quantitative Prediction Platform (AGENTS.md)
 
 - DOX is a performant AGENTS.md hierarchy installed across this workspace.
 - Agents must follow DOX instructions across all edits.
 
-## Core Contract
-- AGENTS.md files are binding work contracts for their subtrees.
-- Work products, source materials, instructions, records, assets, and durable docs must stay understandable from the nearest applicable AGENTS.md plus every parent AGENTS.md above it.
-- **Project Name:** `mlbr` (formerly `baseballLake`). Update references accordingly.
+## Core Contract & Behavioral Mandates
+- **Project Name:** `mlbr` (Production Sabermetrics Data Lake & Machine Learning Engine).
+- **Core Mission:** A 5-tier hierarchical quantitative baseball prediction platform (Atomic Pitch Telemetry -> Player Projections [Marcel/ZiPS/PECOTA] -> Team BaseRuns -> Game Simulation -> Prediction Market Valuation [Polymarket/Kalshi]).
+- **Instructional & Mentoring Protocol:** Work collaboratively with the user as an expert tutor and quantitative mentor. Explain mathematical foundations, sabermetric historical context, and architectural choices.
+- **Mandatory Output Structure:** Every response MUST include:
+  1. Concrete Recommendations
+  2. Pros & Cons of decisions and approaches
+  3. Ways to improve current implementations and next steps
 - **Zero-Drop Column Invariant:** Raw datasets MUST preserve 100% of available columns. Never drop fields during ingestion or raw storage.
-- **Dynamic Path Resolution:** Never hardcode absolute paths in library or analysis code; always resolve via `mlbr::default_lake()`.
+- **Spec-Driven Development (SDD):** Complex modeling features and estimators must be specified in `specs/` with defined loss functions, temporal validation splits, and mathematical invariants.
+- **Dynamic Path Resolution:** Never hardcode absolute paths; always resolve via `mlbr::default_lake()`.
 
 ## Purpose
-The `mlbr` workspace on `cbwdellr720` is a comprehensive, production-grade Sabermetrics data lake and machine learning platform. It stores raw baseball data at pitch-level and play-level granularity (Statcast, Retrosheet, FanGraphs, Chadwick, Lahman, NCAA, MLB Meta) in partitioned Apache Parquet format, mounted via zero-copy DuckDB views, with an R package (`mlbr`) and a Quarto analytics gallery published to `cloudcurio.cc`.
+The `mlbr` workspace on `cbwdellr720` is a comprehensive, production-grade Sabermetrics data lake and machine learning platform. It stores raw baseball data at pitch-level and play-level granularity (Statcast 2008-2026, Retrosheet 1900-2025, FanGraphs 1901-2025, Chadwick, Lahman, NCAA, MLB Meta) in partitioned Apache Parquet format, mounted via zero-copy DuckDB views, with an R package (`mlbr`) and a Quarto analytics gallery published to `cloudcurio.cc` (served locally at `http://192.168.10.1:8088`).
 
 ## Conventions & Rules
-- `data/raw/`: Machine-managed by `R/ingest/*`, partitioned Parquet, append-by-replacement only per file. Deleting a raw file is the trigger to re-download only that file.
-- `data/processed/`: Derived tables and analytical features, safe to regenerate.
+- `data/raw/`: Machine-managed, partitioned Parquet, 100% schema fidelity.
+- `data/processed/`: Derived tables and analytical features.
+- `data/manifest/`: Continuous machine-readable AI agent manifests (`lake_manifest.json`, `agent_context.json`, `LAKE_AGENT_PROMPT.md`).
+- `specs/`: Engineering and sabermetric model specifications following SDD principles.
+- `models/`: Self-contained, reproducible model training and evaluation scripts in R.
 - `pkg/mlbr/`: The core R package. Must pass `R CMD check` with 0 ERRORS and 0 WARNINGS.
-- `site/`: Quarto multi-page documentation and analysis gallery website, outputting to `docs/`.
-- `site/analyses/`: Individual machine learning and empirical sabermetric research studies.
-- Serialization: Multi-hour ingest runs log to `/tmp/baseball-ingest.log`; verify `ps aux | grep ingest` before starting runs.
+- `site/`: Quarto multi-page documentation, interactive data dictionary, and analysis gallery website, outputting to `docs/`.
+- Temporal Leakage Rule: NEVER train on future game dates to predict the past. Validation splits must be strictly chronological.
 
 ## Closeout & Verification
 1. Re-check changed paths against the DOX chain.
 2. Run data proof suite: `Rscript R/proof_lake.R` (all 28 invariant checks must pass).
-3. If R package modified: `R CMD check pkg/mlbr --no-manual`.
-4. If site modified: `quarto render site/` (verify exit code 0 and output in `docs/`).
-5. Update nearest owning `AGENTS.md` and refresh Child DOX Index.
-
-## User Preferences
-- Name is `mlbr`.
-- Data sets must retain all available columns.
-- Reusable, expandable verification with human-readable report card (`proof_lake()`).
-- High download performance with rate-limit respect and adaptive tier ladder (`month -> week -> day`).
-- Multi-page documentation website with left sidebar, search, sitemap, and scikit-learn style gallery.
-- Target domain is `cloudcurio.cc` and GitHub Pages.
+3. Run crosswalk proof suite: `Rscript -e "mlbr::proof_crosswalks()"`.
+4. Run semantic agent manifest audit: `Rscript R/generate_agent_manifest.R`.
+5. If R package modified: `R CMD check pkg/mlbr --no-manual`.
+6. If site modified: `quarto render site/` (verify exit code 0 and output in `docs/`).
+7. Update nearest owning `AGENTS.md` and refresh Child DOX Index.
 
 ## Child DOX Index
 - [pkg/mlbr/AGENTS.md](pkg/mlbr/AGENTS.md): R package source code, R6 `LakeManager`, DuckDB views, data access, and test suite.
 - [R/ingest/AGENTS.md](R/ingest/AGENTS.md): Standalone acquisition scripts, API limits, and rate-limiting policies for raw data sources.
 - [site/AGENTS.md](site/AGENTS.md): Quarto multi-page website, layout, scikit-learn inspired analysis gallery, and publication to `cloudcurio.cc`.
+- [specs/AGENTS.md](specs/AGENTS.md): Model specifications, loss functions, and architectural design contracts.
