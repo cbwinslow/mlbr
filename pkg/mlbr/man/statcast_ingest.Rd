@@ -4,17 +4,12 @@
 \alias{statcast_ingest}
 \title{Ingest MLB Statcast per-pitch}
 \usage{
-statcast_ingest(
-  lake,
-  from = as.integer(format(Sys.Date(), "\%Y")) - 1L,
-  to = as.integer(format(Sys.Date(), "\%Y")),
-  months = 3:11
-)
+statcast_ingest(lake = NULL, from = 2008L, to = 2026L, months = 3:11)
 }
 \arguments{
 \item{lake}{project root of the data lake}
 
-\item{from, to}{year range (inclusive)}
+\item{from, to}{year range (inclusive, default: 2008 to 2026)}
 
 \item{months}{integer months to walk each year (default Mar-Nov)}
 }

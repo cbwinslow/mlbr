@@ -5,7 +5,7 @@
 \title{R6 Class Representing a Baseball Data Lake}
 \description{
 Provides an object-oriented, chained interface for inspecting, validating,
-querying, and monitoring the baseball data lake.
+querying, ingesting, and monitoring the baseball data lake.
 }
 \section{Public fields}{
   \if{html}{\out{<div class="r6-fields">}}
@@ -23,6 +23,7 @@ querying, and monitoring the baseball data lake.
     \item \href{#method-LakeManager-duckdb}{\code{LakeManager$duckdb()}}
     \item \href{#method-LakeManager-find}{\code{LakeManager$find()}}
     \item \href{#method-LakeManager-describe}{\code{LakeManager$describe()}}
+    \item \href{#method-LakeManager-ingest}{\code{LakeManager$ingest()}}
     \item \href{#method-LakeManager-monitor}{\code{LakeManager$monitor()}}
     \item \href{#method-LakeManager-clone}{\code{LakeManager$clone()}}
   }
@@ -151,6 +152,29 @@ querying, and monitoring the baseball data lake.
   }
   \subsection{Returns}{
     A tibble of column metadata.
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-LakeManager-ingest"></a>}}
+\if{latex}{\out{\hypertarget{method-LakeManager-ingest}{}}}
+\subsection{\code{LakeManager$ingest()}}{
+  Ingest or update data sources into the lake.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LakeManager$ingest(source = "all", ...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{source}}{dataset name: "statcast", "retrosheet", "fangraphs", "lahman", "chadwick", "mlbmeta", "milb", "espn", "bbref", "ncaa", or "all".}
+      \item{\code{...}}{arguments passed to underlying source ingestion functions (e.g. from = 2008, to = 2026).}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    Invisibly TRUE on success.
   }
 }
 

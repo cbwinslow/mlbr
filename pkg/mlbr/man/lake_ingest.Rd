@@ -2,16 +2,16 @@
 % Please edit documentation in R/lake_ingest.R
 \name{lake_ingest}
 \alias{lake_ingest}
-\title{ingest everything (all sources, all history)}
+\title{Ingest Everything (All Sources, All History)}
 \usage{
 lake_ingest(
-  lake,
+  lake = NULL,
   sources = c("lahman", "chadwick", "retrosheet", "ncaa", "mlbmeta", "fangraphs",
     "statcast", "milb", "espn", "bbref"),
-  statcast_years = c(2008L, 2025L),
-  milb_years = c(2021L, 2025L),
-  fg_years = c(1901L, 2025L),
-  bbref_years = c(2015L, 2025L),
+  statcast_years = c(2008L, 2026L),
+  milb_years = c(2021L, 2026L),
+  fg_years = c(1901L, 2026L),
+  bbref_years = c(2015L, 2026L),
   espn_years = c(2002L, 2026L),
   meta_years = c(2008L, 2026L)
 )
@@ -27,5 +27,5 @@ lake_ingest(
 invisible TRUE
 }
 \description{
-ingest everything (all sources, all history)
+Ingest Everything (All Sources, All History)
 }

@@ -3,7 +3,7 @@
 #' R6 Class Representing a Baseball Data Lake
 #'
 #' Provides an object-oriented, chained interface for inspecting, validating,
-#' querying, and monitoring the baseball data lake.
+#' querying, ingesting, and monitoring the baseball data lake.
 #'
 #' @importFrom R6 R6Class
 #' @export
@@ -61,6 +61,39 @@ LakeManager <- R6::R6Class(
     #' @return A tibble of column metadata.
     describe = function(source, pattern = NULL) {
       lake_describe(source, file_pattern = pattern, lake = self$path)
+    },
+
+    #' @description
+    #' Ingest or update data sources into the lake.
+    #' @param source dataset name: "statcast", "retrosheet", "fangraphs", "lahman", "chadwick", "mlbmeta", "milb", "espn", "bbref", "ncaa", or "all".
+    #' @param ... arguments passed to underlying source ingestion functions (e.g. from = 2008, to = 2026).
+    #' @return Invisibly TRUE on success.
+    ingest = function(source = "all", ...) {
+      if (source == "all") {
+        lake_ingest(self$path, ...)
+      } else if (source == "statcast") {
+        statcast_ingest(self$path, ...)
+      } else if (source == "retrosheet") {
+        retrosheet_github_ingest(self$path, ...)
+      } else if (source == "fangraphs") {
+        fangraphs_ingest(self$path, ...)
+      } else if (source == "lahman") {
+        lahman_ingest(self$path)
+      } else if (source == "chadwick") {
+        chadwick_ingest(self$path)
+      } else if (source == "mlbmeta") {
+        mlb_meta_ingest(self$path, ...)
+      } else if (source == "milb") {
+        milb_ingest(self$path, ...)
+      } else if (source == "espn") {
+        espn_ingest(self$path, ...)
+      } else if (source == "bbref") {
+        bbref_ingest(self$path, ...)
+      } else if (source == "ncaa") {
+        ncaa_ingest(self$path)
+      } else {
+        stop(sprintf("Unknown source: '%s'. Valid options: statcast, retrosheet, fangraphs, lahman, chadwick, mlbmeta, milb, espn, bbref, ncaa, all", source))
+      }
     },
 
     #' @description

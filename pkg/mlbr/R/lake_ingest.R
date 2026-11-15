@@ -7,7 +7,7 @@
 # All steps are idempotent: existing files are skipped, so re-running only
 # fills in what is missing.
 
-#' ingest everything (all sources, all history)
+#' Ingest Everything (All Sources, All History)
 #'
 #' @param lake project root of the data lake
 #' @param sources character vector subset to run (default: all)
@@ -15,20 +15,20 @@
 #'   year ranges per source
 #' @return invisible TRUE
 #' @export
-lake_ingest <- function(lake,
+lake_ingest <- function(lake = NULL,
                         sources = c("lahman", "chadwick", "retrosheet",
                                     "ncaa", "mlbmeta", "fangraphs",
                                     "statcast", "milb", "espn", "bbref"),
-                        statcast_years = c(2008L, 2025L),
-                        milb_years = c(2021L, 2025L),
-                        fg_years = c(1901L, 2025L),
-                        bbref_years = c(2015L, 2025L),
+                        statcast_years = c(2008L, 2026L),
+                        milb_years = c(2021L, 2026L),
+                        fg_years = c(1901L, 2026L),
+                        bbref_years = c(2015L, 2026L),
                         espn_years = c(2002L, 2026L),
                         meta_years = c(2008L, 2026L)) {
   lake <- default_lake(lake)
   if ("lahman" %in% sources)      lahman_ingest(lake)
   if ("chadwick" %in% sources)    chadwick_ingest(lake)
-  if ("retrosheet" %in% sources)  retrosheet_github_ingest(lake, 1871, 2025)
+  if ("retrosheet" %in% sources)  retrosheet_github_ingest(lake, 1871, 2026)
   if ("ncaa" %in% sources)        ncaa_ingest(lake)
   if ("mlbmeta" %in% sources)     mlb_meta_ingest(lake, meta_years[1], meta_years[2])
   if ("fangraphs" %in% sources)   fangraphs_ingest(lake, fg_years[1], fg_years[2])
