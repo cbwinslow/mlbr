@@ -13,6 +13,8 @@ website:
     left:
       - href: index.qmd
         text: "Home"
+      - href: analyses/01_pitch_quality_eda.qmd
+        text: "Q-CRISP Research"
       - href: gallery.qmd
         text: "Analyses Gallery"
       - href: architecture.qmd
@@ -51,6 +53,10 @@ website:
               href: agent_context.qmd
             - text: "Data Dictionary & Schemas"
               href: data_dictionary.qmd
+        - section: "Q-CRISP Research Series"
+          contents:
+            - text: "Study 01: Aerodynamics & Approach Angles"
+              href: analyses/01_pitch_quality_eda.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

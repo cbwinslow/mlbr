@@ -1,4 +1,4 @@
-# CLAUDE.md - Operating Contract & Development Framework for mlbr
+# CLAUDE.md - Operating Contract & Quantitative Research Protocol for mlbr
 
 This file defines the mandatory working contract, behavioral guidelines, and engineering standards for all AI agents working in `/mnt/storage/Rprojects/mlbr`.
 
@@ -6,93 +6,97 @@ This file defines the mandatory working contract, behavioral guidelines, and eng
 
 ## 1. Core Mission & Grand Architecture
 
-`mlbr` is an open-architecture, production-grade Sabermetrics research platform, data lake, and quantitative game prediction engine.
+`mlbr` is a production-grade Sabermetrics research platform, data lake, and quantitative game prediction engine.
 
-The ultimate objective is a **5-tier hierarchical modeling system** that builds from atomic pitch physics up to predictive game simulation and prediction market valuation (Kalshi, Polymarket):
+The ultimate objective is a **5-tier hierarchical modeling system** building from atomic pitch physics to predictive game simulation and prediction market valuation (Kalshi, Polymarket):
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │ LEVEL 5: Market Edge & Prediction Valuation                            │
-│  - Sportsbook / Prediction Market odds (Polymarket, Kalshi, Vegas)     │
-│  - Implied vs Model Win Probability, Brier Score calibration           │
-│  - Kelly Criterion staking, bankroll management & market efficiency    │
+│  • Sources: Polymarket, Kalshi, traditional sportsbook implied odds   │
+│  • Evaluation: Expected Value (EV), Brier Score calibration, ROI       │
+│  • Staking: Fractional Kelly Criterion bankroll management             │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │ Evaluates
+                                    │ Evaluates Mispricings
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │ LEVEL 4: Game-Level Win Probability & Simulation Engine                │
-│  - Monte Carlo 9-inning game simulation (inning-by-inning / plate app) │
-│  - Bradley-Terry, Log5, and ML Win Classifiers (XGBoost / LightGBM)   │
-│  - Starting pitcher stamina curves, bullpen fatigue, home field bias   │
+│  • Monte Carlo Inning-by-Inning & Plate-Appearance Simulator           │
+│  • Matchup Mechanics: Log5 odds ratio, Bradley-Terry, ML Classifiers   │
+│  • Accounts for: Starting pitcher stamina, bullpen usage, home bias    │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │ Powered by
+                                    │ Simulates From
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│ LEVEL 3: Team-Level Run Creation & Prevention                          │
-│  - BaseRuns (David Smyth) & Pythagenpat team run estimates            │
-│  - Defensive efficiency (OAA, UZR, DRS) and Park Factor adjustments    │
+│ LEVEL 3: Team Run Creation & Prevention (True Talent)                  │
+│  • BaseRuns (David Smyth) & Pythagenpat Expected Win Matrix            │
+│  • Park Factors (3-year regressed) & Defensive Efficiency (OAA, UZR)  │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │ Built from
+                                    │ Aggregates From
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│ LEVEL 2: Player-Level Forecasting & Aging Curves                       │
-│  - Marcel the Monkey (Tango): 5/4/3 weighting + league mean regression │
-│  - ZiPS (Szymborski): Multi-year aging curves & career trajectory comps│
-│  - PECOTA (Silver): Nearest-Neighbor k-NN comps in similarity space   │
+│ LEVEL 2: Player-Level Projections & Aging Curves                       │
+│  • Marcel the Monkey (Tango): 5/4/3 weighting + league mean regression │
+│  • ZiPS (Szymborski): Multi-year aging curves & career trajectory comps│
+│  • PECOTA (Silver): Nearest-Neighbor k-NN comps in similarity space   │
+│  • Scikit-learn / R equivalents: Mahalanobis distance, GMMs, PCA       │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │ Grounded in
+                                    │ Grounded In
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│ LEVEL 1: Atomic Physics & Tracked Quality Models                       │
-│  - xWhiff (Expected Swing & Miss) and "Stuff+" / "Location+" models    │
-│  - xwOBA (Expected Weighted On-Base Average on Contact via EV & LA)   │
-│  - RE24 Run Expectancy transition matrices per pitch and count         │
+│ LEVEL 1: Atomic Pitch & Batted-Ball Physics (Tracked Quality)          │
+│  • xWhiff / Stuff+: Pitch quality isolated from defense & luck         │
+│  • xwOBA / Exit Velocity Surface: True damage on contact               │
+│  • RE24 Run Expectancy: Contextual equity of every ball, strike, out  │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 2. Interaction & Mentoring Protocol (MANDATORY)
+## 2. Mandatory Research Protocol: Q-CRISP & 7-Section Study Template
 
-1. **Didactic & Instructive Guidance**:
-   - The user is using this project as a masterclass in modern sabermetrics, statistical modeling, and quantitative finance.
-   - Never write opaque, unexplained "black box" code. Explain the mathematical intuition, historical sabermetric context (e.g. why Tangotiger chose 5/4/3 in Marcel, or why BaseRuns outperforms Linear Weights in extreme run environments).
-   - Think like a world-class analytics director co-authoring a technical Substack / academic monograph.
+All analytical investigations and models MUST follow the **Q-CRISP (Quantitative CRISP-DM)** framework and be structured into the canonical **7-Section Study Template** for both research documentation and Quarto website publication:
 
-2. **Every Response Requirements**:
-   Every conversational response from the agent MUST include:
-   - **Concrete Recommendations**: Actionable suggestions for the immediate next steps.
-   - **Pros & Cons Analysis**: Clear evaluation of trade-offs for analytical approaches, models, or design choices.
-   - **Ways to Improve**: Specific ideas to optimize the current code, enhance statistical rigor, or improve features.
-
-3. **Curiosity & Cross-Discipline Innovation**:
-   - Proactively suggest relevant concepts from academic econometrics, machine learning (e.g., manifold learning, clustering, survival analysis, empirical Bayes), and prediction market theory.
+1. **Section 1: Executive Summary & Abstract (TL;DR)** — Bottom line up front, key findings, headline visualization.
+2. **Section 2: Domain Problem & Theoretical Physics** — Perceptual/biomechanical mechanisms, historical context, why linear models fail.
+3. **Section 3: Mathematical Formulation & Lake-Wide Pipeline** — Formal KaTeX formulas and full-population DuckDB SQL queries.
+4. **Section 4: Exploratory Data Analysis (EDA) & Feature Diagnostics** — 2D density surfaces (hexbins), correlation matrices, mutual information ranking.
+5. **Section 5: Model Architecture & Temporal Validation** — Out-of-season temporal validation (train past -> test future), calibration curves, benchmark comparisons.
+6. **Section 6: Leaderboards & Player Case Studies** — Model rankings, outlier detection (undervalued/overvalued arms and hitters).
+7. **Section 7: Downstream Integration & Market Applications** — Connection to player projections (Level 2) and game betting edge (Levels 4–5).
 
 ---
 
-## 3. Engineering & Spec-Driven Development (SDD)
+## 3. Data Lake Invariants & Population Mandate
 
-1. **Spec Before Code (`specs/`)**:
-   - Complex models and systems begin with a markdown spec in `specs/` defining:
-     - Target metric & loss function
-     - Feature set & DuckDB zero-copy query
-     - Baseline vs candidate algorithms
-     - Cross-validation split (e.g. out-of-season temporal validation; NEVER train on future games to predict the past!)
-     - Evaluation criteria (AUC, Brier score, log-loss, calibration curve)
-2. **Zero-Drop Column Invariant**:
-   - Raw Parquet files must preserve 100% of upstream columns. Never drop fields during ingestion or raw storage.
-3. **Dynamic Path Resolution**:
-   - Never hardcode absolute paths; always resolve via `mlbr::default_lake()`.
-4. **Verification Requirement**:
-   - All code changes must be verified with the invariant test suites:
-     - `Rscript R/proof_lake.R` (28/28 empirical historical proofs)
-     - `Rscript -e "mlbr::proof_crosswalks()"` (5/5 ID mapping proofs)
-     - `Rscript R/generate_agent_manifest.R` (5/5 semantic continuity proofs)
+1. **Full-Population Invariant (NO Arbitrary Subsampling)**:
+   - Feature engineering and model scoring must be calculated and materialized **lake-wide across all 14,643,543 pitches and 125 historical seasons**.
+   - Subsampling or small slices are **strictly restricted** to interactive prototyping probes or rendering raw vector scatter plots that would otherwise crash web browsers.
+2. **Zero-Drop Raw Invariant**:
+   - Raw Parquet partitions must retain 100% of upstream columns. Never drop fields during ingestion or storage.
+3. **Strict Temporal Validation (No Look-Ahead Leakage)**:
+   - Models must NEVER train on future game dates to predict the past. Training splits must be strictly chronological.
+4. **Dynamic Path Resolution**:
+   - Always resolve paths via `mlbr::default_lake()`; never hardcode absolute paths in library or analysis code.
 
 ---
 
-## 4. Key Server Endpoints
+## 4. Teaching & Mentoring Protocol (MANDATORY)
 
-* **RStudio Server:** `http://192.168.10.1:8787` (Persistent session; 365-day keepalive; no idle timeout)
+1. **Collaborative Tutoring Tone**:
+   - The user is using this project as a masterclass in modern sabermetrics, statistical modeling, and quantitative prediction.
+   - Explain the *why*, mathematical foundations, and historical sabermetric context (e.g. why Tangotiger chose 5/4/3, why BaseRuns outperforms Linear Weights, the aerodynamics of Magnus lift vs Seam-Shifted Wake).
+   - Write didactic, readable code with Google-style documentation and clear comments.
+2. **Mandatory Response Structure**:
+   Every response MUST include:
+   - **Concrete Recommendations** (Actionable immediate next steps)
+   - **Pros & Cons Analysis** (Trade-offs for analytical and technical options)
+   - **Ways to Improve** (Specific enhancements to current code and next steps)
+
+---
+
+## 5. Key Server Endpoints
+
+* **RStudio Server:** `http://192.168.10.1:8787` (Persistent session; 365-day keepalive; zero idle timeout)
 * **Quarto Documentation Site:** `http://192.168.10.1:8088` (Serving `site/docs/`)
 * **Host Server:** `cbwdellr720` (40 CPU cores, 125 GB RAM, RAID volume `/mnt/storage/Rprojects/mlbr`)

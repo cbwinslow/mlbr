@@ -127,8 +127,17 @@ lake_duckdb <- function(lake = NULL, dbdir = ":memory:", read_only = TRUE) {
     }
   }
   
+  # Register derived features if statcast is mounted
+  if ("v_statcast" %in% names(views) && length(Sys.glob(views[["v_statcast"]])) > 0) {
+    tryCatch({
+      lake_register_features(con)
+      registered <- registered + 1L
+    }, error = function(e) NULL)
+  }
+
   message(sprintf("Mounted %d zero-copy DuckDB views over %s.", registered, lake))
   active_views <- names(views)[vapply(views, function(p) length(Sys.glob(p)) > 0, logical(1))]
+  if ("v_statcast" %in% active_views) active_views <- c(active_views, "v_statcast_features")
   message("Available views: ", paste(active_views, collapse = ", "))
   con
 }

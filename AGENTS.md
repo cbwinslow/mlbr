@@ -4,8 +4,10 @@
 - Agents must follow DOX instructions across all edits.
 
 ## Core Contract & Behavioral Mandates
-- **Project Name:** `mlbr` (Production Sabermetrics Data Lake & Machine Learning Engine).
-- **Core Mission:** A 5-tier hierarchical quantitative baseball prediction platform (Atomic Pitch Telemetry -> Player Projections [Marcel/ZiPS/PECOTA] -> Team BaseRuns -> Game Simulation -> Prediction Market Valuation [Polymarket/Kalshi]).
+- **Project Name:** `mlbr` (Production Sabermetrics Data Lake & Quantitative Machine Learning Engine).
+- **Core Mission:** A 5-tier hierarchical prediction platform (Atomic Pitch Telemetry -> Player Projections [Marcel/ZiPS/PECOTA] -> Team BaseRuns -> Game Simulation -> Prediction Market Valuation [Polymarket/Kalshi]).
+- **Research Framework (Q-CRISP):** All modeling investigations must follow the Quantitative CRISP-DM lifecycle and publish studies following the **7-Section Study Template** to the Quarto site.
+- **Full-Population Invariant:** Feature engineering and model scoring must apply across the entire data lake (all 14.64 million pitches and 125 historical seasons). Subsampling is restricted to interactive sandbox probing and browser canvas safety.
 - **Instructional & Mentoring Protocol:** Work collaboratively with the user as an expert tutor and quantitative mentor. Explain mathematical foundations, sabermetric historical context, and architectural choices.
 - **Mandatory Output Structure:** Every response MUST include:
   1. Concrete Recommendations
@@ -20,10 +22,10 @@ The `mlbr` workspace on `cbwdellr720` is a comprehensive, production-grade Saber
 
 ## Conventions & Rules
 - `data/raw/`: Machine-managed, partitioned Parquet, 100% schema fidelity.
-- `data/processed/`: Derived tables and analytical features.
+- `data/processed/`: Derived tables and lake-wide engineered features.
 - `data/manifest/`: Continuous machine-readable AI agent manifests (`lake_manifest.json`, `agent_context.json`, `LAKE_AGENT_PROMPT.md`).
-- `specs/`: Engineering and sabermetric model specifications following SDD principles.
-- `models/`: Self-contained, reproducible model training and evaluation scripts in R.
+- `specs/`: Engineering and sabermetric model specifications following SDD principles and Q-CRISP.
+- `models/`: Self-contained, reproducible model training and exploratory scripts in R.
 - `pkg/mlbr/`: The core R package. Must pass `R CMD check` with 0 ERRORS and 0 WARNINGS.
 - `site/`: Quarto multi-page documentation, interactive data dictionary, and analysis gallery website, outputting to `docs/`.
 - Temporal Leakage Rule: NEVER train on future game dates to predict the past. Validation splits must be strictly chronological.
