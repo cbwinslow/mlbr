@@ -13,6 +13,8 @@ website:
     left:
       - href: index.qmd
         text: "Home"
+      - href: analyses/experiment_registry.qmd
+        text: "Knowledge Base"
       - href: analyses/01_pitch_quality_eda.qmd
         text: "Q-CRISP Research"
       - href: workbooks/lab01_aerodynamics_workbook.qmd
@@ -61,6 +63,8 @@ website:
               href: workbooks/lab01_aerodynamics_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
+            - text: "Knowledge Base & Registry"
+              href: analyses/experiment_registry.qmd
             - text: "Study 01: Aerodynamics & Approach Angles"
               href: analyses/01_pitch_quality_eda.qmd
         - section: "Analyses Gallery"

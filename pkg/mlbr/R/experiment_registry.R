@@ -17,6 +17,10 @@ VALID_STATUSES <- c("PROPOSED", "IN_PROGRESS", "VALIDATED", "REJECTED", "DEPRECA
 
 #' Register or Update a Quantitative Experiment in the Knowledge Base
 #'
+#' Records validated formulas, tested hypotheses, empirical invariants, and
+#' negative results. Automatically synchronizes `experiments/registry.json`,
+#' `experiments/README.md`, and `data/manifest/agent_context.json`.
+#'
 #' @param id Character string unique identifier (e.g. "EXP-001-AERODYNAMICS")
 #' @param title Descriptive title
 #' @param tier Integer 1 through 5 representing the predictive modeling tier
@@ -27,6 +31,7 @@ VALID_STATUSES <- c("PROPOSED", "IN_PROGRESS", "VALIDATED", "REJECTED", "DEPRECA
 #' @param metrics Named list of empirical findings and validation scores
 #' @param features Character vector of engineered feature names
 #' @param artifacts Named list of associated files (script, spec, study)
+#' @param sync_manifest Logical, whether to auto-sync agent_context.json (default: TRUE)
 #' @param lake Project root directory (default: mlbr default_lake)
 #' @return Invisibly returns the updated registry list
 #' @export
@@ -40,6 +45,7 @@ lake_log_experiment <- function(id,
                                 metrics = list(),
                                 features = character(),
                                 artifacts = list(),
+                                sync_manifest = TRUE,
                                 lake = NULL) {
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
     stop("Package 'jsonlite' is required for lake_log_experiment().")
@@ -72,7 +78,7 @@ lake_log_experiment <- function(id,
     tier = as.integer(tier),
     tier_name = TIER_NAMES[[tier_str]],
     status = status,
-    updated_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"),
+    updated_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S UTC"),
     summary = summary,
     hypotheses = as.list(hypotheses),
     formulas = formulas,
@@ -81,7 +87,7 @@ lake_log_experiment <- function(id,
     artifacts = artifacts
   )
   
-  # Upsert into registry
+  # Upsert into registry (idempotent in-place update)
   existing_ids <- vapply(registry, function(x) x$id, character(1))
   match_idx <- which(existing_ids == id)
   
@@ -100,19 +106,32 @@ lake_log_experiment <- function(id,
   # Write clean, formatted JSON
   jsonlite::write_json(registry, reg_file, pretty = TRUE, auto_unbox = TRUE)
   
+  # Auto-synchronize agent_context.json for immediate AI agent context inheritance
+  if (sync_manifest) {
+    agent_context_file <- file.path(lake, "data", "manifest", "agent_context.json")
+    if (file.exists(agent_context_file)) {
+      tryCatch({
+        ac <- jsonlite::fromJSON(agent_context_file, simplifyVector = FALSE)
+        ac$experiments <- registry
+        ac$updated_at <- format(Sys.time(), "%Y-%m-%d %H:%M:%S UTC")
+        jsonlite::write_json(ac, agent_context_file, pretty = TRUE, auto_unbox = TRUE)
+        message("-> Auto-synchronized agent_context.json with updated registry.")
+      }, error = function(e) NULL)
+    }
+  }
+  
   # Automatically generate clean markdown README
   readme_file <- file.path(exp_dir, "README.md")
   md_lines <- c(
     "# Quantitative Experiment & Knowledge Base Registry",
     "",
-    "This curated registry catalogs all verified mathematical models, empirical formulas, and features across the 5-tier predictive architecture.",
+    "This curated registry catalogs all verified mathematical models, empirical formulas, invariants, and rejected hypotheses across the 5-tier predictive architecture.",
     "",
     "| Experiment ID | Tier | Title | Status | Key Formula / Metric | Updated |",
     "|:---|:---:|:---|:---:|:---|:---|"
   )
   
   for (item in registry) {
-    # Extract first formula or first metric for summary column
     key_info <- if (length(item$formulas) > 0) {
       paste0("`", names(item$formulas)[1], "`: ", item$formulas[[1]])
     } else if (length(item$metrics) > 0) {
@@ -120,7 +139,6 @@ lake_log_experiment <- function(id,
     } else {
       item$summary
     }
-    # Truncate if long
     if (nchar(key_info) > 60) key_info <- paste0(substr(key_info, 1, 57), "...")
     
     md_lines <- c(md_lines, sprintf(
@@ -135,19 +153,31 @@ lake_log_experiment <- function(id,
   invisible(registry)
 }
 
-#' Retrieve the Experiments Registry
+#' Retrieve the Experiments Registry with Filtering
 #'
+#' @param status Filter by status (e.g. "VALIDATED", "REJECTED", "PROPOSED", or NULL for all)
+#' @param tier Filter by tier (1 to 5, or NULL for all)
 #' @param lake Project root directory
-#' @return A list of registered experiments
+#' @return A list of matching experiment records
 #' @export
-lake_get_experiments <- function(lake = NULL) {
+lake_get_experiments <- function(status = NULL, tier = NULL, lake = NULL) {
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
     stop("Package 'jsonlite' is required.")
   }
   lake <- default_lake(lake)
   reg_file <- file.path(lake, "experiments", "registry.json")
   if (!file.exists(reg_file)) return(list())
-  jsonlite::fromJSON(reg_file, simplifyVector = FALSE)
+  reg <- jsonlite::fromJSON(reg_file, simplifyVector = FALSE)
+  
+  if (!is.null(status)) {
+    status <- toupper(status)
+    reg <- Filter(function(x) identical(toupper(x$status), status), reg)
+  }
+  if (!is.null(tier)) {
+    tier <- as.integer(tier)
+    reg <- Filter(function(x) identical(as.integer(x$tier), tier), reg)
+  }
+  reg
 }
 
 #' Retrieve a Single Experiment by ID
@@ -157,7 +187,7 @@ lake_get_experiments <- function(lake = NULL) {
 #' @return A list representing the experiment or NULL if not found
 #' @export
 lake_get_experiment <- function(id, lake = NULL) {
-  reg <- lake_get_experiments(lake)
+  reg <- lake_get_experiments(lake = lake)
   for (item in reg) {
     if (identical(item$id, id)) return(item)
   }

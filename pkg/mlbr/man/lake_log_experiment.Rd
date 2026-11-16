@@ -15,6 +15,7 @@ lake_log_experiment(
   metrics = list(),
   features = character(),
   artifacts = list(),
+  sync_manifest = TRUE,
   lake = NULL
 )
 }
@@ -39,11 +40,15 @@ lake_log_experiment(
 
 \item{artifacts}{Named list of associated files (script, spec, study)}
 
+\item{sync_manifest}{Logical, whether to auto-sync agent_context.json (default: TRUE)}
+
 \item{lake}{Project root directory (default: mlbr default_lake)}
 }
 \value{
 Invisibly returns the updated registry list
 }
 \description{
-Register or Update a Quantitative Experiment in the Knowledge Base
+Records validated formulas, tested hypotheses, empirical invariants, and
+negative results. Automatically synchronizes \code{experiments/registry.json},
+\code{experiments/README.md}, and \code{data/manifest/agent_context.json}.
 }

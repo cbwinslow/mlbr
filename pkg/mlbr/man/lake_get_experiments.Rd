@@ -2,16 +2,20 @@
 % Please edit documentation in R/experiment_registry.R
 \name{lake_get_experiments}
 \alias{lake_get_experiments}
-\title{Retrieve the Experiments Registry}
+\title{Retrieve the Experiments Registry with Filtering}
 \usage{
-lake_get_experiments(lake = NULL)
+lake_get_experiments(status = NULL, tier = NULL, lake = NULL)
 }
 \arguments{
+\item{status}{Filter by status (e.g. "VALIDATED", "REJECTED", "PROPOSED", or NULL for all)}
+
+\item{tier}{Filter by tier (1 to 5, or NULL for all)}
+
 \item{lake}{Project root directory}
 }
 \value{
-A list of registered experiments
+A list of matching experiment records
 }
 \description{
-Retrieve the Experiments Registry
+Retrieve the Experiments Registry with Filtering
 }

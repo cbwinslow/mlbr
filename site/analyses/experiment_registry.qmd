@@ -1,0 +1,155 @@
+---
+title: "The mlbr Experiment Registry & Quantitative Knowledge Base"
+subtitle: "Curated Repository of Verified Models, Mathematical Formulas, Invariants & Negative Results"
+author: "mlbr Quantitative Research Group"
+date: "2026-11-16"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    code-tools: true
+---
+
+::: {.callout-note}
+### Research Philosophy: Curated Signal, Zero Clutter
+This registry is machine-readable and human-navigable. It records verified mathematical invariants, empirical effect sizes, and crucially, **rejected hypotheses**. Recording what *failed* prevents future research cycles and autonomous AI agents from repeating dead ends.
+:::
+
+## 1. Predictive Architecture Tiers
+
+Every experiment maps directly to one of the five tiers in the `mlbr` hierarchical forecasting stack:
+
+| Tier | Name | Target Outcome | Primary Models |
+|:---:|:---|:---|:---|
+| **Level 1** | **Pitch Physics & Quality** | $\Pr(\text{Whiff} \mid \text{Swing})$, Run Value / 100 | XGBoost, Random Forest, GAM |
+| **Level 2** | **Player Projections** | True Talent Rates (wOBA, K%, BB%) | PECOTA Comps, ZiPS Aging Curves, Marcel |
+| **Level 3** | **Team BaseRuns** | Expected Runs Scored & Allowed | BaseRuns Equation, Pythagenpat Exponents |
+| **Level 4** | **Game Simulation** | Win Probability $\Pr(\text{Home Win})$ | Monte Carlo Markov Chain (10k rollouts) |
+| **Level 5** | **Betting Markets** | Market Edge & Expected Value | Fractional Kelly Staking (Polymarket / Kalshi) |
+
+---
+
+## 2. Status Definitions
+
+* <span class="badge bg-success" style="color:white; padding:4px 8px; border-radius:4px;">VALIDATED</span>: Tested on historical data ($\le 2023$) and confirmed out-of-time ($2024–2026$). Active in production feature views.
+* <span class="badge bg-warning text-dark" style="padding:4px 8px; border-radius:4px;">IN_PROGRESS</span>: In active exploratory data analysis or hyperparameter tuning.
+* <span class="badge bg-danger" style="color:white; padding:4px 8px; border-radius:4px;">REJECTED</span>: Hypothesis tested and proven non-predictive or redundant (signals dead ends).
+* <span class="badge bg-secondary" style="color:white; padding:4px 8px; border-radius:4px;">DEPRECATED</span>: Previously validated model superseded by a superior architecture.
+
+---
+
+## 3. Active Experiment Ledger
+
+```{r}
+#| label: load-registry
+#| echo: false
+#| message: false
+#| warning: false
+
+suppressPackageStartupMessages({
+  .libPaths(c("/mnt/storage/R/library", .libPaths()))
+  library(jsonlite)
+  library(dplyr)
+  library(knitr)
+})
+
+reg_path <- "/mnt/storage/Rprojects/mlbr/experiments/registry.json"
+experiments <- if (file.exists(reg_path)) {
+  jsonlite::fromJSON(reg_path, simplifyVector = FALSE)
+} else {
+  list()
+}
+```
+
+```{r}
+#| label: render-experiments
+#| echo: false
+#| results: asis
+
+if (length(experiments) == 0) {
+  cat("*No experiments registered yet.*")
+} else {
+  for (exp in experiments) {
+    status_color <- switch(
+      exp$status,
+      "VALIDATED" = "success",
+      "IN_PROGRESS" = "warning text-dark",
+      "REJECTED" = "danger",
+      "secondary"
+    )
+    
+    cat(sprintf("### %s: %s\n\n", exp$id, exp$title))
+    cat(sprintf("**Tier:** %s | **Status:** <span class='badge bg-%s' style='padding:3px 6px; border-radius:3px;'>%s</span> | **Updated:** `%s`\n\n",
+                exp$tier_name, status_color, exp$status, substr(exp$updated_at, 1, 10)))
+    
+    cat(sprintf("> %s\n\n", exp$summary))
+    
+    # Formulas table
+    if (length(exp$formulas) > 0) {
+      cat("#### Verified Formulas\n")
+      cat("```\n")
+      for (fname in names(exp$formulas)) {
+        cat(sprintf("%s: %s\n", fname, exp$formulas[[fname]]))
+      }
+      cat("```\n\n")
+    }
+    
+    # Key Metrics
+    if (length(exp$metrics) > 0) {
+      cat("#### Empirical Validation Metrics\n")
+      cat("| Metric | Value |\n|:---|:---|\n")
+      for (mname in names(exp$metrics)) {
+        val <- exp$metrics[[mname]]
+        if (is.numeric(val)) {
+          val_str <- if (val >= 1000) format(val, big.mark = ",") else as.character(val)
+        } else {
+          val_str <- as.character(val)
+        }
+        cat(sprintf("| `%s` | **%s** |\n", mname, val_str))
+      }
+      cat("\n")
+    }
+    
+    # Artifacts & Links
+    if (length(exp$artifacts) > 0) {
+      cat("#### Artifacts & Research Links\n")
+      for (aname in names(exp$artifacts)) {
+        target <- exp$artifacts[[aname]]
+        if (grepl("^http", target)) {
+          cat(sprintf("- **%s**: [%s](%s)\n", aname, target, target))
+        } else {
+          cat(sprintf("- **%s**: `%s`\n", aname, target))
+        }
+      }
+      cat("\n")
+    }
+    cat("---\n\n")
+  }
+}
+```
+
+---
+
+## 4. How to Register an Experiment
+
+To log an experiment from an R script or console:
+
+```r
+library(mlbr)
+
+mlbr::lake_log_experiment(
+  id         = "EXP-002-FASTBALL-DELTAS",
+  title      = "Fastball-Relative Velocity Delta (ΔV) and Offspeed Deception",
+  tier       = 1,
+  status     = "IN_PROGRESS",
+  summary    = "Evaluates offspeed swing-and-miss lift conditioned on velocity separation from primary fastball.",
+  hypotheses = c("Changeups with ΔV > 10 mph generate +25% higher whiff rates than changeups with ΔV < 6 mph."),
+  features   = c("delta_v", "delta_ivb", "delta_hb")
+)
+```
+
+The function automatically updates:
+1. `experiments/registry.json` (Machine-readable database)
+2. `experiments/README.md` (Human-readable table)
+3. `data/manifest/agent_context.json` (AI agent context)
