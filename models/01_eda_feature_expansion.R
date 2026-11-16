@@ -128,17 +128,37 @@ pitch_summary <- pitches |>
   arrange(desc(count))
 print(as.data.frame(pitch_summary), digits = 3)
 
-# Step 6: Visualizations (Publication Grade)
-cat("\nGenerating diagnostic plots...\n")
+# Step 6: Visualizations (Dark Cyber / Hacker Aesthetic)
+cat("\nGenerating diagnostic plots in Dark Cyber Theme...\n")
+
+theme_cyber_dark <- function(base_size = 12) {
+  theme_minimal(base_size = base_size) %+replace%
+    theme(
+      plot.background = element_rect(fill = "#090d16", color = NA),
+      panel.background = element_rect(fill = "#111827", color = "#1e293b", linewidth = 0.6),
+      panel.grid.major = element_line(color = "#1e293b", linewidth = 0.4),
+      panel.grid.minor = element_line(color = "#162032", linewidth = 0.2),
+      text = element_text(color = "#e2e8f0"),
+      plot.title = element_text(color = "#f1f5f9", face = "bold", size = rel(1.15), hjust = 0),
+      plot.subtitle = element_text(color = "#94a3b8", size = rel(0.9), hjust = 0, margin = margin(b = 10)),
+      axis.title = element_text(color = "#e2e8f0", face = "bold"),
+      axis.text = element_text(color = "#94a3b8"),
+      legend.background = element_rect(fill = "#090d16", color = NA),
+      legend.text = element_text(color = "#e2e8f0"),
+      legend.title = element_text(color = "#e2e8f0", face = "bold"),
+      strip.background = element_rect(fill = "#162032", color = "#1e293b"),
+      strip.text = element_text(color = "#38bdf8", face = "bold")
+    )
+}
 
 # Plot 1: Hexbin Distribution of VAA vs Plate Height
 p1 <- ggplot(pitches |> filter(pitch_type %in% c("FF", "SL", "CU", "CH")), 
              aes(x = plate_z, y = vaa)) +
   geom_hex(bins = 45) +
-  geom_smooth(method = "lm", color = "red", linetype = "dashed", se = FALSE) +
+  geom_smooth(method = "lm", color = "#00f2fe", linetype = "dashed", se = FALSE, linewidth = 0.9) +
   scale_fill_viridis_c(trans = "log10", option = "magma") +
   facet_wrap(~ pitch_type, nrow = 2) +
-  theme_minimal(base_size = 12) +
+  theme_cyber_dark(base_size = 12) +
   labs(
     title = "Vertical Approach Angle (VAA) vs. Plate Height",
     subtitle = "Fastballs (FF) exhibit flatter entry angles (-3° to -6°); Curveballs (CU) plunge steeply (-7° to -11°)",
@@ -153,10 +173,10 @@ cat("-> Saved: models/fig1_vaa_by_pitch_type.png\n")
 # Plot 2: Whiff Rate by Attack Zone and VAA Diff
 swings <- pitches |> filter(is_swing == 1, pitch_type == "FF")
 p2 <- ggplot(swings, aes(x = vaa_diff, y = is_whiff)) +
-  stat_summary_bin(bins = 20, geom = "point", size = 2.5, color = "#2b5c8f") +
-  stat_summary_bin(bins = 20, geom = "line", color = "#2b5c8f", linewidth = 1) +
+  stat_summary_bin(bins = 20, geom = "point", size = 3, color = "#00f2fe") +
+  stat_summary_bin(bins = 20, geom = "line", color = "#00e676", linewidth = 1.2) +
   scale_y_continuous(labels = scales::percent) +
-  theme_minimal(base_size = 12) +
+  theme_cyber_dark(base_size = 12) +
   labs(
     title = "Four-Seam Fastball Whiff Rate vs. VAA Above Expected (VAA_diff)",
     subtitle = "Positive VAA_diff (flatter than expected angle) directly drives higher swing-and-miss rates",
