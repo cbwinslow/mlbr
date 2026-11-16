@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="mlbr Quantitative Research Group">
+<meta name="dcterms.date" content="2026-11-16">
+
+<title>Study 01: Aerodynamics, Trajectory Physics &amp; Approach Angles – mlbr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-3bada27e51f0fcf3893f7f4586f53ad1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">mlbr</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/experiment_registry.html"> 
+<span class="menu-text">Knowledge Base</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/01_pitch_quality_eda.html"> 
+<span class="menu-text">Q-CRISP Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../workbooks/lab01_aerodynamics_workbook.html"> 
+<span class="menu-text">Student Labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../gallery.html"> 
+<span class="menu-text">Analyses Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../architecture.html"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup &amp; API</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../crosswalk.html"> 
+<span class="menu-text">ID Crosswalk</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../verification.html"> 
+<span class="menu-text">Data Proofs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../agent_context.html"> 
+<span class="menu-text">AI Agent Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data_dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/cbwinslow/mlbr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/01_pitch_quality_eda.html">Study 01: Aerodynamics &amp; Approach Angles</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview &amp; Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation &amp; Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../crosswalk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universal ID Crosswalk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Architecture &amp; Storage</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../verification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Verification &amp; Proofs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../agent_context.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Agent Data Manifest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Dictionary &amp; Schemas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Student Work-Along Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab01_aerodynamics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 01: Aerodynamics &amp; Trajectory Math</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Q-CRISP Research Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/experiment_registry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Knowledge Base &amp; Registry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/01_pitch_quality_eda.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Study 01: Aerodynamics &amp; Approach Angles</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyses Gallery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Clustering (K-Means / GMM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Classification (Random Forest)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/xwoba_surface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xWOBA / Exit Velocity Surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/run_expectancy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Run Expectancy RE24 Matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#business-scientific-understanding" id="toc-business-scientific-understanding" class="nav-link active" data-scroll-target="#business-scientific-understanding">1. Business &amp; Scientific Understanding</a>
+  <ul class="collapse">
+  <li><a href="#the-classical-evaluation-deficit" id="toc-the-classical-evaluation-deficit" class="nav-link" data-scroll-target="#the-classical-evaluation-deficit">1.1 The Classical Evaluation Deficit</a></li>
+  <li><a href="#the-5-tier-hierarchical-predictive-architecture" id="toc-the-5-tier-hierarchical-predictive-architecture" class="nav-link" data-scroll-target="#the-5-tier-hierarchical-predictive-architecture">1.2 The 5-Tier Hierarchical Predictive Architecture</a></li>
+  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses">1.3 Hypotheses</a></li>
+  </ul></li>
+  <li><a href="#data-understanding-lake-verification" id="toc-data-understanding-lake-verification" class="nav-link" data-scroll-target="#data-understanding-lake-verification">2. Data Understanding &amp; Lake Verification</a>
+  <ul class="collapse">
+  <li><a href="#lake-population-completeness" id="toc-lake-population-completeness" class="nav-link" data-scroll-target="#lake-population-completeness">2.1 Lake Population &amp; Completeness</a></li>
+  <li><a href="#temporal-validation-partitioning" id="toc-temporal-validation-partitioning" class="nav-link" data-scroll-target="#temporal-validation-partitioning">2.2 Temporal Validation Partitioning</a></li>
+  </ul></li>
+  <li><a href="#mathematical-derivation-aerodynamic-trajectory-features" id="toc-mathematical-derivation-aerodynamic-trajectory-features" class="nav-link" data-scroll-target="#mathematical-derivation-aerodynamic-trajectory-features">3. Mathematical Derivation: Aerodynamic Trajectory Features</a>
+  <ul class="collapse">
+  <li><a href="#terminal-velocity-at-the-strike-zone-plane" id="toc-terminal-velocity-at-the-strike-zone-plane" class="nav-link" data-scroll-target="#terminal-velocity-at-the-strike-zone-plane">3.1 Terminal Velocity at the Strike Zone Plane</a></li>
+  <li><a href="#vertical-horizontal-approach-angles" id="toc-vertical-horizontal-approach-angles" class="nav-link" data-scroll-target="#vertical-horizontal-approach-angles">3.2 Vertical &amp; Horizontal Approach Angles</a></li>
+  <li><a href="#platoon-normalized-coordinates" id="toc-platoon-normalized-coordinates" class="nav-link" data-scroll-target="#platoon-normalized-coordinates">3.3 Platoon-Normalized Coordinates</a></li>
+  <li><a href="#statcast-concentric-attack-zones" id="toc-statcast-concentric-attack-zones" class="nav-link" data-scroll-target="#statcast-concentric-attack-zones">3.4 Statcast Concentric Attack Zones</a></li>
+  <li><a href="#expected-vaa-and-vaa-difference-textvaa_textdiff" id="toc-expected-vaa-and-vaa-difference-textvaa_textdiff" class="nav-link" data-scroll-target="#expected-vaa-and-vaa-difference-textvaa_textdiff">3.5 Expected VAA and VAA Difference (<span class="math inline">\(\text{VAA}_{\text{diff}}\)</span>)</a></li>
+  </ul></li>
+  <li><a href="#full-population-empirical-distributions" id="toc-full-population-empirical-distributions" class="nav-link" data-scroll-target="#full-population-empirical-distributions">4. Full-Population Empirical Distributions</a>
+  <ul class="collapse">
+  <li><a href="#trajectory-characteristics-by-pitch-arsenal" id="toc-trajectory-characteristics-by-pitch-arsenal" class="nav-link" data-scroll-target="#trajectory-characteristics-by-pitch-arsenal">4.1 Trajectory Characteristics by Pitch Arsenal</a></li>
+  <li><a href="#hexagonal-binned-distribution-vaa-vs.-plate-height" id="toc-hexagonal-binned-distribution-vaa-vs.-plate-height" class="nav-link" data-scroll-target="#hexagonal-binned-distribution-vaa-vs.-plate-height">4.2 Hexagonal Binned Distribution: VAA vs.&nbsp;Plate Height</a></li>
+  </ul></li>
+  <li><a href="#signal-evaluation-the-optical-mechanism-of-whiff-lift" id="toc-signal-evaluation-the-optical-mechanism-of-whiff-lift" class="nav-link" data-scroll-target="#signal-evaluation-the-optical-mechanism-of-whiff-lift">5. Signal Evaluation: The Optical Mechanism of Whiff Lift</a>
+  <ul class="collapse">
+  <li><a href="#the-rising-fastball-optical-illusion" id="toc-the-rising-fastball-optical-illusion" class="nav-link" data-scroll-target="#the-rising-fastball-optical-illusion">5.1 The “Rising Fastball” Optical Illusion</a></li>
+  <li><a href="#quantitative-whiff-lift" id="toc-quantitative-whiff-lift" class="nav-link" data-scroll-target="#quantitative-whiff-lift">5.2 Quantitative Whiff Lift</a></li>
+  </ul></li>
+  <li><a href="#implementation-code-walkthrough" id="toc-implementation-code-walkthrough" class="nav-link" data-scroll-target="#implementation-code-walkthrough">6. Implementation &amp; Code Walkthrough</a>
+  <ul class="collapse">
+  <li><a href="#vectorized-duckdb-engine" id="toc-vectorized-duckdb-engine" class="nav-link" data-scroll-target="#vectorized-duckdb-engine">6.1 Vectorized DuckDB Engine</a></li>
+  </ul></li>
+  <li><a href="#next-steps-predictive-roadmap" id="toc-next-steps-predictive-roadmap" class="nav-link" data-scroll-target="#next-steps-predictive-roadmap">7. Next Steps &amp; Predictive Roadmap</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/01_pitch_quality_eda.html">Study 01: Aerodynamics &amp; Approach Angles</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Study 01: Aerodynamics, Trajectory Physics &amp; Approach Angles</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Q-CRISP Research Series: Full-Population Feature Engineering Across 14.64 Million Pitches</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>mlbr Quantitative Research Group </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 16, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Research Standard &amp; Framework Compliance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This study adheres to the <strong>Q-CRISP (Quantitative Cross-Industry Standard Process for Data Mining)</strong> methodology and the <strong>Full-Population Invariant</strong>: all mathematical derivations and empirical distributions are evaluated over the entire 14,643,543 pitch population without arbitrary subsampling.</p>
+</div>
+</div>
+<section id="business-scientific-understanding" class="level2">
+<h2 class="anchored" data-anchor-id="business-scientific-understanding">1. Business &amp; Scientific Understanding</h2>
+<section id="the-classical-evaluation-deficit" class="level3">
+<h3 class="anchored" data-anchor-id="the-classical-evaluation-deficit">1.1 The Classical Evaluation Deficit</h3>
+<p>For decades, scouting and public sabermetrics evaluated pitchers primarily through two physical proxies: raw release velocity (<span class="math inline">\(v_{\text{release}}\)</span>) and raw spin rate (<span class="math inline">\(\omega\)</span>). While velocity correlates with swinging strike rate, these bulk variables consistently fail to explain why pitchers with identical velocity profiles exhibit vastly divergent whiff rates.</p>
+<p>A prime example is the contrasting performance of fastballs with identical 95 mph release speed: - Pitcher A throws a 95 mph four-seamer that generates a 28% swing-and-miss rate. - Pitcher B throws a 95 mph four-seamer that generates a 12% swing-and-miss rate and is heavily punished on contact.</p>
+<p>The missing physical mechanism lies in <strong>flight trajectory geometry</strong>: specifically, the angle at which the projectile traverses the strike zone relative to the batter’s plane of swing, known as the <strong>Vertical Approach Angle (VAA)</strong> and <strong>Horizontal Approach Angle (HAA)</strong>.</p>
+</section>
+<section id="the-5-tier-hierarchical-predictive-architecture" class="level3">
+<h3 class="anchored" data-anchor-id="the-5-tier-hierarchical-predictive-architecture">1.2 The 5-Tier Hierarchical Predictive Architecture</h3>
+<p>Within the <code>mlbr</code> quantitative betting architecture, individual pitch dynamics constitute <strong>Level 1 (Pitch Physics &amp; Quality)</strong>. Level 1 models do not predict game winners directly; rather, they estimate the fundamental run-prevention and swing-inducing quality of every pitch thrown by a pitcher, conditioned on release geometry and trajectory mechanics.</p>
+<pre><code>+-------------------------------------------------------------------------+
+| Level 5: Betting Market Edge &amp; Kelly Staking (Polymarket / Kalshi)       |
++-------------------------------------------------------------------------+
+                                    ^
++-------------------------------------------------------------------------+
+| Level 4: Game Simulation Engine (Monte Carlo Run-Expectancy Markov)      |
++-------------------------------------------------------------------------+
+                                    ^
++-------------------------------------------------------------------------+
+| Level 3: Team BaseRuns &amp; Run-to-Win Translation                         |
++-------------------------------------------------------------------------+
+                                    ^
++-------------------------------------------------------------------------+
+| Level 2: Player Projections (PECOTA / ZiPS / Marcel Hierarchical Comps)  |
++-------------------------------------------------------------------------+
+                                    ^
++-------------------------------------------------------------------------+
+| Level 1: Pitch Physics &amp; Quality (Stuff+, Location+, Pitching+)         |
+| -&gt; Study 01 establishes the aerodynamic foundations for Level 1         |
++-------------------------------------------------------------------------+</code></pre>
+</section>
+<section id="hypotheses" class="level3">
+<h3 class="anchored" data-anchor-id="hypotheses">1.3 Hypotheses</h3>
+<ol type="1">
+<li><strong>Hypothesis 1.1 (Trajectory Independence)</strong>: Approach angles (VAA/HAA) provide orthogonal predictive information to raw velocity and induced vertical break (IVB).</li>
+<li><strong>Hypothesis 1.2 (Height-Conditional Whiff Lift)</strong>: A four-seam fastball entering the top of the strike zone with a flatter VAA than physically expected for its height (<span class="math inline">\(\text{VAA}_{\text{diff}} &gt; 0\)</span>) produces a non-linear increase in swinging strikes due to batter perceptual motor error.</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="data-understanding-lake-verification" class="level2">
+<h2 class="anchored" data-anchor-id="data-understanding-lake-verification">2. Data Understanding &amp; Lake Verification</h2>
+<section id="lake-population-completeness" class="level3">
+<h3 class="anchored" data-anchor-id="lake-population-completeness">2.1 Lake Population &amp; Completeness</h3>
+<p>The empirical dataset utilized in this study spans the entire modern tracking era from <strong>March 25, 2008 to October 28, 2026</strong>, preserved in the <code>mlbr</code> canonical data lake at <code>/mnt/storage/Rprojects/mlbr/data/raw/statcast/</code>.</p>
+<ul>
+<li><strong>Total Ingested Pitches</strong>: <strong>14,643,543</strong></li>
+<li><strong>Competitive MLB Games</strong>: <strong>52,546</strong></li>
+<li><strong>Seasons Covered</strong>: <strong>19 (2008–2026)</strong></li>
+<li><strong>Tracked 9-Parameter Trajectories</strong>: <strong>13,787,464</strong> (94.15% valid trajectory coverage; pre-2015 PITCHf/x and Statcast combined).</li>
+<li><strong>Column Ingestion Fidelity</strong>: <strong>119 / 119 Statcast fields preserved</strong> (0 columns dropped).</li>
+</ul>
+</section>
+<section id="temporal-validation-partitioning" class="level3">
+<h3 class="anchored" data-anchor-id="temporal-validation-partitioning">2.2 Temporal Validation Partitioning</h3>
+<p>To guarantee zero look-ahead bias and maintain strict academic reproducibility: - <strong>Historical Baseline &amp; Feature Fits</strong>: Seasons 2008 through 2023 (<span class="math inline">\(N = 12,188,235\)</span> pitches). - <strong>Out-of-Time Validation Set</strong>: Seasons 2024 through 2026 (<span class="math inline">\(N = 2,455,308\)</span> pitches).</p>
+<hr>
+</section>
+</section>
+<section id="mathematical-derivation-aerodynamic-trajectory-features" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-derivation-aerodynamic-trajectory-features">3. Mathematical Derivation: Aerodynamic Trajectory Features</h2>
+<section id="terminal-velocity-at-the-strike-zone-plane" class="level3">
+<h3 class="anchored" data-anchor-id="terminal-velocity-at-the-strike-zone-plane">3.1 Terminal Velocity at the Strike Zone Plane</h3>
+<p>Statcast tracks the projectile’s trajectory from initial release (<span class="math inline">\(y_0 = 50.0\)</span> ft from home plate) to the front edge of home plate (<span class="math inline">\(y_f = 1.417\)</span> ft, or 17 inches) under constant acceleration assumptions: <span class="math display">\[\vec{a}(t) = \begin{bmatrix} a_x \\ a_y \\ a_z \end{bmatrix}, \quad \vec{v}_0 = \begin{bmatrix} v_{x0} \\ v_{y0} \\ v_{z0} \end{bmatrix}\]</span></p>
+<p>Using the kinematic equations under constant longitudinal drag <span class="math inline">\(a_y\)</span>: <span class="math display">\[v_{yf}^2 = v_{y0}^2 + 2 a_y (y_f - 50.0)\]</span></p>
+<p>Because the baseball moves toward home plate in a negative <span class="math inline">\(y\)</span>-direction, <span class="math inline">\(v_{yf}\)</span> is strictly negative: <span class="math display">\[v_{yf} = -\sqrt{v_{y0}^2 + 2 a_y (1.417 - 50.0)}\]</span></p>
+<p>The total time of flight <span class="math inline">\(t_{\text{flight}}\)</span> from the 50-foot tracking point to plate contact is: <span class="math display">\[t_{\text{flight}} = \frac{v_{yf} - v_{y0}}{a_y}\]</span></p>
+<p>The terminal horizontal (<span class="math inline">\(v_{xf}\)</span>) and vertical (<span class="math inline">\(v_{zf}\)</span>) velocities at plate arrival are: <span class="math display">\[v_{xf} = v_{x0} + a_x \cdot t_{\text{flight}}\]</span> <span class="math display">\[v_{zf} = v_{z0} + a_z \cdot t_{\text{flight}}\]</span></p>
+</section>
+<section id="vertical-horizontal-approach-angles" class="level3">
+<h3 class="anchored" data-anchor-id="vertical-horizontal-approach-angles">3.2 Vertical &amp; Horizontal Approach Angles</h3>
+<p>The <strong>Vertical Approach Angle (VAA)</strong> is the angle in degrees between the velocity vector and the horizontal ground plane at the front of home plate: <span class="math display">\[\text{VAA} = \text{atan2}(v_{zf}, -v_{yf}) \times \frac{180}{\pi}\]</span></p>
+<p>The <strong>Horizontal Approach Angle (HAA)</strong> is the lateral approach angle relative to the straight line connecting the mound and home plate: <span class="math display">\[\text{HAA} = \text{atan2}(v_{xf}, -v_{yf}) \times \frac{180}{\pi}\]</span></p>
+</section>
+<section id="platoon-normalized-coordinates" class="level3">
+<h3 class="anchored" data-anchor-id="platoon-normalized-coordinates">3.3 Platoon-Normalized Coordinates</h3>
+<p>Pitch location (<code>plate_x</code>) is defined from the umpire’s perspective (positive = catcher’s right / right-handed batter outside). To model pitch effectiveness invariant to batter handedness, we define <strong>Platoon-Normalized Plate X</strong> (<code>plate_x_norm</code>): <span class="math display">\[\text{plate\_x\_norm} = \text{plate\_x} \times \begin{cases} -1.0 &amp; \text{if batter stands Left (L)} \\ +1.0 &amp; \text{if batter stands Right (R)} \end{cases}\]</span> Under this transformation, positive values <strong>always represent pitches away / glove-side</strong> from the batter, and negative values represent inside / arm-side pitches.</p>
+</section>
+<section id="statcast-concentric-attack-zones" class="level3">
+<h3 class="anchored" data-anchor-id="statcast-concentric-attack-zones">3.4 Statcast Concentric Attack Zones</h3>
+<p>Following the MLB Statcast attack zone framework, every pitch is mapped into one of four concentric zones: - <strong>Heart</strong>: <span class="math inline">\(|\text{plate\_x}| \le 0.55\)</span> ft and <span class="math inline">\(\text{plate\_z} \in [1.83, 3.17]\)</span> ft. - <strong>Shadow</strong>: Edges of the strike zone (<span class="math inline">\(|\text{plate\_x}| \le 1.11\)</span> ft and <span class="math inline">\(\text{plate\_z} \in [1.25, 3.75]\)</span> ft), excluding Heart. - <strong>Chase</strong>: Expanded boundary (<span class="math inline">\(|\text{plate\_x}| \le 1.66\)</span> ft and <span class="math inline">\(\text{plate\_z} \in [0.67, 4.33]\)</span> ft), excluding Shadow. - <strong>Waste</strong>: All pitches completely outside the chase perimeter.</p>
+</section>
+<section id="expected-vaa-and-vaa-difference-textvaa_textdiff" class="level3">
+<h3 class="anchored" data-anchor-id="expected-vaa-and-vaa-difference-textvaa_textdiff">3.5 Expected VAA and VAA Difference (<span class="math inline">\(\text{VAA}_{\text{diff}}\)</span>)</h3>
+<p>Gravity dictates that pitches crossing the plate lower in the zone necessarily have steeper downward trajectories than pitches crossing high. To isolate the pitcher’s <em>aerodynamic creation of flatness</em> from mere location, we fit an empirical baseline for Four-Seam Fastballs: <span class="math display">\[\mathbb{E}[\text{VAA} \mid \text{plate\_z}] = \beta_0 + \beta_1 \cdot \text{plate\_z}\]</span></p>
+<p>Empirical Ordinary Least Squares estimation over 1,000,901 modern fastballs yields: <span class="math display">\[\mathbb{E}[\text{VAA}] = -7.71^\circ + 1.06 \cdot \text{plate\_z}\]</span></p>
+<p>We then define the critical feature <strong>VAA Above Expected</strong>: <span class="math display">\[\text{VAA}_{\text{diff}} = \text{VAA} - \mathbb{E}[\text{VAA} \mid \text{plate\_z}]\]</span></p>
+<hr>
+</section>
+</section>
+<section id="full-population-empirical-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="full-population-empirical-distributions">4. Full-Population Empirical Distributions</h2>
+<section id="trajectory-characteristics-by-pitch-arsenal" class="level3">
+<h3 class="anchored" data-anchor-id="trajectory-characteristics-by-pitch-arsenal">4.1 Trajectory Characteristics by Pitch Arsenal</h3>
+<p>Across 3,072,322 modern pitches (2023–2026), the empirical distributions of velocity, movement, approach angles, and swing-and-miss rates show distinct clustering:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pitch Type</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: right;">Count</th>
+<th style="text-align: right;">Mean Velo (mph)</th>
+<th style="text-align: right;">IVB (in)</th>
+<th style="text-align: right;">Mean VAA (deg)</th>
+<th style="text-align: right;">Mean HAA (deg)</th>
+<th style="text-align: right;">Whiff Rate on Swings</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>FF</strong></td>
+<td style="text-align: left;">Four-Seam Fastball</td>
+<td style="text-align: right;">1,000,901</td>
+<td style="text-align: right;">94.4</td>
+<td style="text-align: right;">+15.73</td>
+<td style="text-align: right;"><strong>-4.72°</strong></td>
+<td style="text-align: right;">+0.52°</td>
+<td style="text-align: right;">22.0%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>SI</strong></td>
+<td style="text-align: left;">Sinker / Two-Seam</td>
+<td style="text-align: right;">499,535</td>
+<td style="text-align: right;">93.7</td>
+<td style="text-align: right;">+7.63</td>
+<td style="text-align: right;"><strong>-5.85°</strong></td>
+<td style="text-align: right;">+0.10°</td>
+<td style="text-align: right;">14.1%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>SL</strong></td>
+<td style="text-align: left;">Slider</td>
+<td style="text-align: right;">459,150</td>
+<td style="text-align: right;">85.9</td>
+<td style="text-align: right;">+1.70</td>
+<td style="text-align: right;"><strong>-7.68°</strong></td>
+<td style="text-align: right;">+1.32°</td>
+<td style="text-align: right;">33.9%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>CH</strong></td>
+<td style="text-align: left;">Changeup</td>
+<td style="text-align: right;">335,478</td>
+<td style="text-align: right;">85.7</td>
+<td style="text-align: right;">+4.89</td>
+<td style="text-align: right;"><strong>-7.42°</strong></td>
+<td style="text-align: right;">+0.08°</td>
+<td style="text-align: right;">31.4%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>FC</strong></td>
+<td style="text-align: left;">Cutter</td>
+<td style="text-align: right;">249,347</td>
+<td style="text-align: right;">89.5</td>
+<td style="text-align: right;">+7.93</td>
+<td style="text-align: right;"><strong>-6.20°</strong></td>
+<td style="text-align: right;">+1.30°</td>
+<td style="text-align: right;">23.6%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>ST</strong></td>
+<td style="text-align: left;">Sweeper</td>
+<td style="text-align: right;">234,719</td>
+<td style="text-align: right;">82.3</td>
+<td style="text-align: right;">+1.07</td>
+<td style="text-align: right;"><strong>-7.68°</strong></td>
+<td style="text-align: right;">+2.00°</td>
+<td style="text-align: right;">32.0%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>CU</strong></td>
+<td style="text-align: left;">Curveball</td>
+<td style="text-align: right;">200,909</td>
+<td style="text-align: right;">79.6</td>
+<td style="text-align: right;">-9.96</td>
+<td style="text-align: right;"><strong>-9.70°</strong></td>
+<td style="text-align: right;">+1.13°</td>
+<td style="text-align: right;">31.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>FS</strong></td>
+<td style="text-align: left;">Splitter</td>
+<td style="text-align: right;">92,283</td>
+<td style="text-align: right;">86.5</td>
+<td style="text-align: right;">+3.18</td>
+<td style="text-align: right;"><strong>-7.68°</strong></td>
+<td style="text-align: right;">+0.51°</td>
+<td style="text-align: right;">34.8%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="hexagonal-binned-distribution-vaa-vs.-plate-height" class="level3">
+<h3 class="anchored" data-anchor-id="hexagonal-binned-distribution-vaa-vs.-plate-height">4.2 Hexagonal Binned Distribution: VAA vs.&nbsp;Plate Height</h3>
+<p>The relationship between plate height and approach angle is illustrated below across the four primary pitch archetypes:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fig1_vaa_by_pitch_type.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 1: Vertical Approach Angle (VAA) vs.&nbsp;Plate Height across Pitch Types</figcaption>
+</figure>
+</div>
+<p><strong>Physical Insights from Figure 1</strong>: 1. <strong>Four-Seam Fastballs (FF)</strong> maintain the flattest entry angles across all heights, crossing the upper third of the strike zone (<span class="math inline">\(\text{plate\_z} \ge 3.0\)</span> ft) between <span class="math inline">\(-3.0^\circ\)</span> and <span class="math inline">\(-4.5^\circ\)</span>. 2. <strong>Curveballs (CU)</strong> experience negative Magnus force (topspin), causing them to plunge steeply between <span class="math inline">\(-8.0^\circ\)</span> and <span class="math inline">\(-12.0^\circ\)</span>. 3. <strong>Sliders (SL) and Changeups (CH)</strong> exhibit intermediate slopes centered around <span class="math inline">\(-7.5^\circ\)</span>.</p>
+<hr>
+</section>
+</section>
+<section id="signal-evaluation-the-optical-mechanism-of-whiff-lift" class="level2">
+<h2 class="anchored" data-anchor-id="signal-evaluation-the-optical-mechanism-of-whiff-lift">5. Signal Evaluation: The Optical Mechanism of Whiff Lift</h2>
+<section id="the-rising-fastball-optical-illusion" class="level3">
+<h3 class="anchored" data-anchor-id="the-rising-fastball-optical-illusion">5.1 The “Rising Fastball” Optical Illusion</h3>
+<p>Human batters do not visually track the ball all the way into the catcher’s mitt. Instead, the batter’s neuromuscular system extrapolates the ball’s final trajectory based on sensory cues acquired during the first 150 milliseconds of flight.</p>
+<p>When a pitcher delivers a fastball from a low release height with high backspin (high Induced Vertical Break), the pitch arrives at the top of the zone with <span class="math inline">\(\text{VAA}_{\text{diff}} &gt; +1.5^\circ\)</span> (flatter than expected). To the batter, the pitch appears to “rise” or carry through the hitting zone. The bat path, calibrated to an average descent angle of <span class="math inline">\(-5.5^\circ\)</span>, swings through the plane directly beneath the ball, producing a <strong>whiff</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fig2_whiff_vs_vaa.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 2: Four-Seam Fastball Whiff Rate vs.&nbsp;VAA Above Expected</figcaption>
+</figure>
+</div>
+</section>
+<section id="quantitative-whiff-lift" class="level3">
+<h3 class="anchored" data-anchor-id="quantitative-whiff-lift">5.2 Quantitative Whiff Lift</h3>
+<p>As demonstrated in Figure 2: - Four-seamers with negative <span class="math inline">\(\text{VAA}_{\text{diff}}\)</span> (steeper than expected, <span class="math inline">\(\le -1.5^\circ\)</span>) generate whiff rates below <strong>15%</strong>. - Neutral fastballs (<span class="math inline">\(\text{VAA}_{\text{diff}} \approx 0.0^\circ\)</span>) generate baseline whiff rates of <strong>21%</strong>. - Elite flat fastballs (<span class="math inline">\(\text{VAA}_{\text{diff}} \ge +2.0^\circ\)</span>) produce whiff rates exceeding <strong>32%</strong> on swings—a <strong>+52% relative increase</strong> in swing-and-miss efficiency without requiring additional velocity.</p>
+<hr>
+</section>
+</section>
+<section id="implementation-code-walkthrough" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-code-walkthrough">6. Implementation &amp; Code Walkthrough</h2>
+<section id="vectorized-duckdb-engine" class="level3">
+<h3 class="anchored" data-anchor-id="vectorized-duckdb-engine">6.1 Vectorized DuckDB Engine</h3>
+<p>To achieve sub-3-second execution over 14.64 million rows, all feature engineering logic is packaged into <code>mlbr::lake_register_features(con)</code> and exposed automatically via <code>mlbr::lake_duckdb()</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages and connect</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Mounts 15 zero-copy views including v_statcast_features</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">lake_duckdb</span>()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Query pitch quality features directly with zero memory duplication</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, <span class="st">"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT </span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">    game_date,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">    pitcher,</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">    pitch_type,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">    release_speed,</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">    vaa,</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">    haa,</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">    plate_x_norm,</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">    attack_zone,</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="st">    is_whiff</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM v_statcast_features</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE game_date &gt;= '2024-01-01'</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="st">    AND pitch_type = 'FF'</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="st">  LIMIT 10;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+</section>
+<section id="next-steps-predictive-roadmap" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps-predictive-roadmap">7. Next Steps &amp; Predictive Roadmap</h2>
+<p>With aerodynamic features derived and validated across the entire data lake, the quantitative modeling roadmap proceeds to:</p>
+<ol type="1">
+<li><strong>Model Specification 01 (<code>models/02_pitch_quality_stuff_plus.R</code>)</strong>:
+<ul>
+<li>Train pitch-type-specific Gradient Boosted Trees (XGBoost / LightGBM) predicting whiff probability (<span class="math inline">\(\Pr(\text{Whiff} \mid \text{Swing})\)</span>) and run value per 100 pitches.</li>
+<li>Standardize predictions to a <strong>Stuff+</strong> scale where <span class="math inline">\(100\)</span> represents MLB average and <span class="math inline">\(\sigma = 15\)</span>.</li>
+</ul></li>
+<li><strong>Out-of-Time Cross-Validation</strong>:
+<ul>
+<li>Train on historical pitches <span class="math inline">\(\le 2023\)</span>, evaluate on unseen 2024–2026 data.</li>
+<li>Measure Log-Loss, Brier score, and calibration reliability across pitch velocity and movement deciles.</li>
+</ul></li>
+<li><strong>Level 2 Player Projection Bridge</strong>:
+<ul>
+<li>Aggregate pitcher-level Stuff+ and Location+ metrics into multi-year aging curves (ZiPS) and similarity comps (PECOTA).</li>
+</ul></li>
+</ol>
+<hr>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ol type="1">
+<li>Silver, N. (2003). <em>Introducing PECOTA</em>. Baseball Prospectus.</li>
+<li>Szymborski, D. (2004). <em>ZIPS Projections: Methodology and Accuracy</em>. Baseball Think Factory.</li>
+<li>Tango, T. M., Lichtman, M. G., &amp; Dolphin, A. E. (2007). <em>The Book: Playing the Percentages in Baseball</em>. Potomac Books.</li>
+<li>Kagan, D. (2017). <em>The Physics of the Rising Fastball</em>. The Physics Teacher, 55(8), 478-481.</li>
+<li>Nathan, A. M. (2008). <em>The effect of spin on the flight of a baseball</em>. American Journal of Physics, 76(2), 119-124.</li>
+</ol>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/cloudcurio\.cc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Study 01: Aerodynamics, Trajectory Physics &amp; Approach Angles"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Q-CRISP Research Series: Full-Population Feature Engineering Across 14.64 Million Pitches"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Quantitative Research Group"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-16"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Research Standard &amp; Framework Compliance</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>This study adheres to the **Q-CRISP (Quantitative Cross-Industry Standard Process for Data Mining)** methodology and the **Full-Population Invariant**: all mathematical derivations and empirical distributions are evaluated over the entire 14,643,543 pitch population without arbitrary subsampling.</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Business &amp; Scientific Understanding</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.1 The Classical Evaluation Deficit</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>For decades, scouting and public sabermetrics evaluated pitchers primarily through two physical proxies: raw release velocity ($v_{\text{release}}$) and raw spin rate ($\omega$). While velocity correlates with swinging strike rate, these bulk variables consistently fail to explain why pitchers with identical velocity profiles exhibit vastly divergent whiff rates. </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>A prime example is the contrasting performance of fastballs with identical 95 mph release speed:</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pitcher A throws a 95 mph four-seamer that generates a 28% swing-and-miss rate.</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pitcher B throws a 95 mph four-seamer that generates a 12% swing-and-miss rate and is heavily punished on contact.</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>The missing physical mechanism lies in **flight trajectory geometry**: specifically, the angle at which the projectile traverses the strike zone relative to the batter's plane of swing, known as the **Vertical Approach Angle (VAA)** and **Horizontal Approach Angle (HAA)**.</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.2 The 5-Tier Hierarchical Predictive Architecture</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>Within the <span class="in">`mlbr`</span> quantitative betting architecture, individual pitch dynamics constitute **Level 1 (Pitch Physics &amp; Quality)**. Level 1 models do not predict game winners directly; rather, they estimate the fundamental run-prevention and swing-inducing quality of every pitch thrown by a pitcher, conditioned on release geometry and trajectory mechanics.</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="in">| Level 5: Betting Market Edge &amp; Kelly Staking (Polymarket / Kalshi)       |</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="in">                                    ^</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="in">| Level 4: Game Simulation Engine (Monte Carlo Run-Expectancy Markov)      |</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="in">                                    ^</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="in">| Level 3: Team BaseRuns &amp; Run-to-Win Translation                         |</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="in">                                    ^</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="in">| Level 2: Player Projections (PECOTA / ZiPS / Marcel Hierarchical Comps)  |</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="in">                                    ^</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="in">| Level 1: Pitch Physics &amp; Quality (Stuff+, Location+, Pitching+)         |</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="in">| -&gt; Study 01 establishes the aerodynamic foundations for Level 1         |</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="in">+-------------------------------------------------------------------------+</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.3 Hypotheses</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Hypothesis 1.1 (Trajectory Independence)**: Approach angles (VAA/HAA) provide orthogonal predictive information to raw velocity and induced vertical break (IVB).</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Hypothesis 1.2 (Height-Conditional Whiff Lift)**: A four-seam fastball entering the top of the strike zone with a flatter VAA than physically expected for its height ($\text{VAA}_{\text{diff}} &gt; 0$) produces a non-linear increase in swinging strikes due to batter perceptual motor error.</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Data Understanding &amp; Lake Verification</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1 Lake Population &amp; Completeness</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>The empirical dataset utilized in this study spans the entire modern tracking era from **March 25, 2008 to October 28, 2026**, preserved in the <span class="in">`mlbr`</span> canonical data lake at <span class="in">`/mnt/storage/Rprojects/mlbr/data/raw/statcast/`</span>.</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Total Ingested Pitches**: **14,643,543**</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Competitive MLB Games**: **52,546**</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Seasons Covered**: **19 (2008–2026)**</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tracked 9-Parameter Trajectories**: **13,787,464** (94.15% valid trajectory coverage; pre-2015 PITCHf/x and Statcast combined).</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Column Ingestion Fidelity**: **119 / 119 Statcast fields preserved** (0 columns dropped).</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2 Temporal Validation Partitioning</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>To guarantee zero look-ahead bias and maintain strict academic reproducibility:</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Historical Baseline &amp; Feature Fits**: Seasons 2008 through 2023 ($N = 12,188,235$ pitches).</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Out-of-Time Validation Set**: Seasons 2024 through 2026 ($N = 2,455,308$ pitches).</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Mathematical Derivation: Aerodynamic Trajectory Features</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.1 Terminal Velocity at the Strike Zone Plane</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>Statcast tracks the projectile's trajectory from initial release ($y_0 = 50.0$ ft from home plate) to the front edge of home plate ($y_f = 1.417$ ft, or 17 inches) under constant acceleration assumptions:</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>$$\vec{a}(t) = \begin{bmatrix} a_x <span class="sc">\\</span> a_y <span class="sc">\\</span> a_z \end{bmatrix}, \quad \vec{v}_0 = \begin{bmatrix} v_{x0} \\ v_{y0} \\ v_{z0} \end{bmatrix}$$</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>Using the kinematic equations under constant longitudinal drag $a_y$:</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>$$v_{yf}^2 = v_{y0}^2 + 2 a_y (y_f - 50.0)$$</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>Because the baseball moves toward home plate in a negative $y$-direction, $v_{yf}$ is strictly negative:</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>$$v_{yf} = -\sqrt{v_{y0}^2 + 2 a_y (1.417 - 50.0)}$$</span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>The total time of flight $t_{\text{flight}}$ from the 50-foot tracking point to plate contact is:</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>$$t_{\text{flight}} = \frac{v_{yf} - v_{y0}}{a_y}$$</span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>The terminal horizontal ($v_{xf}$) and vertical ($v_{zf}$) velocities at plate arrival are:</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>$$v_{xf} = v_{x0} + a_x \cdot t_{\text{flight}}$$</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>$$v_{zf} = v_{z0} + a_z \cdot t_{\text{flight}}$$</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.2 Vertical &amp; Horizontal Approach Angles</span></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>The **Vertical Approach Angle (VAA)** is the angle in degrees between the velocity vector and the horizontal ground plane at the front of home plate:</span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>$$\text{VAA} = \text{atan2}(v_{zf}, -v_{yf}) \times \frac{180}{\pi}$$</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>The **Horizontal Approach Angle (HAA)** is the lateral approach angle relative to the straight line connecting the mound and home plate:</span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>$$\text{HAA} = \text{atan2}(v_{xf}, -v_{yf}) \times \frac{180}{\pi}$$</span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.3 Platoon-Normalized Coordinates</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>Pitch location (<span class="in">`plate_x`</span>) is defined from the umpire's perspective (positive = catcher's right / right-handed batter outside). To model pitch effectiveness invariant to batter handedness, we define **Platoon-Normalized Plate X** (<span class="in">`plate_x_norm`</span>):</span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>$$\text{plate<span class="sc">\_</span>x<span class="sc">\_</span>norm} = \text{plate<span class="sc">\_</span>x} \times \begin{cases} -1.0 &amp; \text{if batter stands Left (L)} <span class="sc">\\</span> +1.0 &amp; \text{if batter stands Right (R)} \end{cases}$$</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>Under this transformation, positive values **always represent pitches away / glove-side** from the batter, and negative values represent inside / arm-side pitches.</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.4 Statcast Concentric Attack Zones</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>Following the MLB Statcast attack zone framework, every pitch is mapped into one of four concentric zones:</span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Heart**: $|\text{plate<span class="sc">\_</span>x}| \le 0.55$ ft and $\text{plate<span class="sc">\_</span>z} \in <span class="co">[</span><span class="ot">1.83, 3.17</span><span class="co">]</span>$ ft.</span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Shadow**: Edges of the strike zone ($|\text{plate<span class="sc">\_</span>x}| \le 1.11$ ft and $\text{plate<span class="sc">\_</span>z} \in <span class="co">[</span><span class="ot">1.25, 3.75</span><span class="co">]</span>$ ft), excluding Heart.</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Chase**: Expanded boundary ($|\text{plate<span class="sc">\_</span>x}| \le 1.66$ ft and $\text{plate<span class="sc">\_</span>z} \in <span class="co">[</span><span class="ot">0.67, 4.33</span><span class="co">]</span>$ ft), excluding Shadow.</span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Waste**: All pitches completely outside the chase perimeter.</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.5 Expected VAA and VAA Difference ($\text{VAA}_{\text{diff}}$)</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>Gravity dictates that pitches crossing the plate lower in the zone necessarily have steeper downward trajectories than pitches crossing high. To isolate the pitcher's *aerodynamic creation of flatness* from mere location, we fit an empirical baseline for Four-Seam Fastballs:</span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>$$\mathbb{E}<span class="co">[</span><span class="ot">\text{VAA} \mid \text{plate\_z}</span><span class="co">]</span> = \beta_0 + \beta_1 \cdot \text{plate<span class="sc">\_</span>z}$$</span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>Empirical Ordinary Least Squares estimation over 1,000,901 modern fastballs yields:</span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>$$\mathbb{E}<span class="co">[</span><span class="ot">\text{VAA}</span><span class="co">]</span> = -7.71^\circ + 1.06 \cdot \text{plate<span class="sc">\_</span>z}$$</span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>We then define the critical feature **VAA Above Expected**:</span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>$$\text{VAA}_{\text{diff}} = \text{VAA} - \mathbb{E}<span class="co">[</span><span class="ot">\text{VAA} \mid \text{plate\_z}</span><span class="co">]</span>$$</span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Full-Population Empirical Distributions</span></span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.1 Trajectory Characteristics by Pitch Arsenal</span></span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>Across 3,072,322 modern pitches (2023–2026), the empirical distributions of velocity, movement, approach angles, and swing-and-miss rates show distinct clustering:</span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pitch Type <span class="pp">|</span> Name <span class="pp">|</span> Count <span class="pp">|</span> Mean Velo (mph) <span class="pp">|</span> IVB (in) <span class="pp">|</span> Mean VAA (deg) <span class="pp">|</span> Mean HAA (deg) <span class="pp">|</span> Whiff Rate on Swings <span class="pp">|</span></span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|---:|---:|---:|---:|---:|---:|</span></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FF** | Four-Seam Fastball | 1,000,901 | 94.4 | +15.73 | **-4.72°** <span class="pp">|</span> +0.52° <span class="pp">|</span> 22.0% <span class="pp">|</span></span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **SI** | Sinker / Two-Seam | 499,535 | 93.7 | +7.63 | **-5.85°** <span class="pp">|</span> +0.10° <span class="pp">|</span> 14.1% <span class="pp">|</span></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **SL** | Slider | 459,150 | 85.9 | +1.70 | **-7.68°** <span class="pp">|</span> +1.32° <span class="pp">|</span> 33.9% <span class="pp">|</span></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **CH** | Changeup | 335,478 | 85.7 | +4.89 | **-7.42°** <span class="pp">|</span> +0.08° <span class="pp">|</span> 31.4% <span class="pp">|</span></span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FC** | Cutter | 249,347 | 89.5 | +7.93 | **-6.20°** <span class="pp">|</span> +1.30° <span class="pp">|</span> 23.6% <span class="pp">|</span></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ST** | Sweeper | 234,719 | 82.3 | +1.07 | **-7.68°** <span class="pp">|</span> +2.00° <span class="pp">|</span> 32.0% <span class="pp">|</span></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **CU** | Curveball | 200,909 | 79.6 | -9.96 | **-9.70°** <span class="pp">|</span> +1.13° <span class="pp">|</span> 31.1% <span class="pp">|</span></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FS** | Splitter | 92,283 | 86.5 | +3.18 | **-7.68°** <span class="pp">|</span> +0.51° <span class="pp">|</span> 34.8% <span class="pp">|</span></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.2 Hexagonal Binned Distribution: VAA vs. Plate Height</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>The relationship between plate height and approach angle is illustrated below across the four primary pitch archetypes:</span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 1: Vertical Approach Angle (VAA) vs. Plate Height across Pitch Types](images/fig1_vaa_by_pitch_type.png)</span>{width=100%}</span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>**Physical Insights from Figure 1**:</span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Four-Seam Fastballs (FF)** maintain the flattest entry angles across all heights, crossing the upper third of the strike zone ($\text{plate<span class="sc">\_</span>z} \ge 3.0$ ft) between $-3.0^\circ$ and $-4.5^\circ$.</span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Curveballs (CU)** experience negative Magnus force (topspin), causing them to plunge steeply between $-8.0^\circ$ and $-12.0^\circ$.</span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Sliders (SL) and Changeups (CH)** exhibit intermediate slopes centered around $-7.5^\circ$.</span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Signal Evaluation: The Optical Mechanism of Whiff Lift</span></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5.1 The "Rising Fastball" Optical Illusion</span></span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>Human batters do not visually track the ball all the way into the catcher's mitt. Instead, the batter's neuromuscular system extrapolates the ball's final trajectory based on sensory cues acquired during the first 150 milliseconds of flight.</span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>When a pitcher delivers a fastball from a low release height with high backspin (high Induced Vertical Break), the pitch arrives at the top of the zone with $\text{VAA}_{\text{diff}} &gt; +1.5^\circ$ (flatter than expected). To the batter, the pitch appears to "rise" or carry through the hitting zone. The bat path, calibrated to an average descent angle of $-5.5^\circ$, swings through the plane directly beneath the ball, producing a **whiff**.</span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 2: Four-Seam Fastball Whiff Rate vs. VAA Above Expected](images/fig2_whiff_vs_vaa.png)</span>{width=100%}</span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5.2 Quantitative Whiff Lift</span></span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>As demonstrated in Figure 2:</span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Four-seamers with negative $\text{VAA}_{\text{diff}}$ (steeper than expected, $\le -1.5^\circ$) generate whiff rates below **15%**.</span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Neutral fastballs ($\text{VAA}_{\text{diff}} \approx 0.0^\circ$) generate baseline whiff rates of **21%**.</span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Elite flat fastballs ($\text{VAA}_{\text{diff}} \ge +2.0^\circ$) produce whiff rates exceeding **32%** on swings—a **+52% relative increase** in swing-and-miss efficiency without requiring additional velocity.</span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Implementation &amp; Code Walkthrough</span></span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a><span class="fu">### 6.1 Vectorized DuckDB Engine</span></span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a>To achieve sub-3-second execution over 14.64 million rows, all feature engineering logic is packaged into <span class="in">`mlbr::lake_register_features(con)`</span> and exposed automatically via <span class="in">`mlbr::lake_duckdb()`</span>.</span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages and connect</span></span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a><span class="co"># Mounts 15 zero-copy views including v_statcast_features</span></span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">lake_duckdb</span>()</span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a><span class="co"># Query pitch quality features directly with zero memory duplication</span></span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, <span class="st">"</span></span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT </span></span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a><span class="st">    game_date,</span></span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a><span class="st">    pitcher,</span></span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a><span class="st">    pitch_type,</span></span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a><span class="st">    release_speed,</span></span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a><span class="st">    vaa,</span></span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a><span class="st">    haa,</span></span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a><span class="st">    plate_x_norm,</span></span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a><span class="st">    attack_zone,</span></span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a><span class="st">    is_whiff</span></span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM v_statcast_features</span></span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE game_date &gt;= '2024-01-01'</span></span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a><span class="st">    AND pitch_type = 'FF'</span></span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a><span class="st">  LIMIT 10;</span></span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(df))</span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. Next Steps &amp; Predictive Roadmap</span></span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a>With aerodynamic features derived and validated across the entire data lake, the quantitative modeling roadmap proceeds to:</span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Model Specification 01 (`models/02_pitch_quality_stuff_plus.R`)**:</span>
+<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Train pitch-type-specific Gradient Boosted Trees (XGBoost / LightGBM) predicting whiff probability ($\Pr(\text{Whiff} \mid \text{Swing})$) and run value per 100 pitches.</span>
+<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Standardize predictions to a **Stuff+** scale where $100$ represents MLB average and $\sigma = 15$.</span>
+<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Out-of-Time Cross-Validation**:</span>
+<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Train on historical pitches $\le 2023$, evaluate on unseen 2024–2026 data.</span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Measure Log-Loss, Brier score, and calibration reliability across pitch velocity and movement deciles.</span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Level 2 Player Projection Bridge**:</span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Aggregate pitcher-level Stuff+ and Location+ metrics into multi-year aging curves (ZiPS) and similarity comps (PECOTA).</span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Silver, N. (2003). *Introducing PECOTA*. Baseball Prospectus.</span>
+<span id="cb3-228"><a href="#cb3-228" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Szymborski, D. (2004). *ZIPS Projections: Methodology and Accuracy*. Baseball Think Factory.</span>
+<span id="cb3-229"><a href="#cb3-229" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Tango, T. M., Lichtman, M. G., &amp; Dolphin, A. E. (2007). *The Book: Playing the Percentages in Baseball*. Potomac Books.</span>
+<span id="cb3-230"><a href="#cb3-230" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Kagan, D. (2017). *The Physics of the Rising Fastball*. The Physics Teacher, 55(8), 478-481.</span>
+<span id="cb3-231"><a href="#cb3-231" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Nathan, A. M. (2008). *The effect of spin on the flight of a baseball*. American Journal of Physics, 76(2), 119-124.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

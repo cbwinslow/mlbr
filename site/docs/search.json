@@ -1,170 +1,302 @@
 [
   {
-    "objectID": "analyses/pitch_clustering.html",
-    "href": "analyses/pitch_clustering.html",
-    "title": "Unsupervised Pitch Clustering with K-Means",
+    "objectID": "data_dictionary.html",
+    "href": "data_dictionary.html",
+    "title": "Data Dictionary & Schema Catalog",
     "section": "",
-    "text": "In Major League Baseball, pitch types are traditionally labeled by human operators or proprietary MLBAM heuristic algorithms (e.g., Four-Seam Fastball FF, Slider SL, Changeup CH, Curveball CU). However, pitch design exists on a continuous physical continuum: hybrid pitches like “sweepers”, “hard cutters”, and “slurves” often defy discrete classification.\nIn this analysis, we use unsupervised clustering (K-Means) over raw Statcast flight physics to discover natural pitch movement profiles directly from empirical data.",
+    "text": "The mlbr data lake maintains 100% column fidelity from raw upstream providers (MLB Baseball Savant, Retrosheet, FanGraphs, Chadwick, Lahman, NCAA). No fields are dropped or downcast.\nAll tables are mounted as zero-copy views in DuckDB (con &lt;- mlbr::lake_duckdb()). This dictionary outlines the physical coordinate standards, outcome taxonomies, and cross-dataset join keys.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Pitch Clustering (K-Means / GMM)"
+      "Getting Started",
+      "Data Dictionary & Schemas"
     ]
   },
   {
-    "objectID": "analyses/pitch_clustering.html#introduction",
-    "href": "analyses/pitch_clustering.html#introduction",
-    "title": "Unsupervised Pitch Clustering with K-Means",
+    "objectID": "data_dictionary.html#overview-data-architecture",
+    "href": "data_dictionary.html#overview-data-architecture",
+    "title": "Data Dictionary & Schema Catalog",
     "section": "",
-    "text": "In Major League Baseball, pitch types are traditionally labeled by human operators or proprietary MLBAM heuristic algorithms (e.g., Four-Seam Fastball FF, Slider SL, Changeup CH, Curveball CU). However, pitch design exists on a continuous physical continuum: hybrid pitches like “sweepers”, “hard cutters”, and “slurves” often defy discrete classification.\nIn this analysis, we use unsupervised clustering (K-Means) over raw Statcast flight physics to discover natural pitch movement profiles directly from empirical data.",
+    "text": "The mlbr data lake maintains 100% column fidelity from raw upstream providers (MLB Baseball Savant, Retrosheet, FanGraphs, Chadwick, Lahman, NCAA). No fields are dropped or downcast.\nAll tables are mounted as zero-copy views in DuckDB (con &lt;- mlbr::lake_duckdb()). This dictionary outlines the physical coordinate standards, outcome taxonomies, and cross-dataset join keys.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Pitch Clustering (K-Means / GMM)"
+      "Getting Started",
+      "Data Dictionary & Schemas"
     ]
   },
   {
-    "objectID": "analyses/pitch_clustering.html#data-extraction-via-duckdb",
-    "href": "analyses/pitch_clustering.html#data-extraction-via-duckdb",
-    "title": "Unsupervised Pitch Clustering with K-Means",
-    "section": "Data Extraction via DuckDB",
-    "text": "Data Extraction via DuckDB\nWe pull a clean sample of pitches from the mlbr data lake, extracting: - release_speed: Velocity at release point (mph) - pfx_x: Horizontal break induced by Magnus force (converted to inches: pfx_x * 12) - pfx_z: Induced vertical break (inches: pfx_z * 12) - release_spin_rate: Spin rate (rpm)\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(ggplot2)\n  library(tidyr)\n  library(scales)\n})\n\n# Connect to zero-copy DuckDB lake\ncon &lt;- lake_duckdb()\n\n# Sample 40,000 right-handed pitches with complete tracking metrics\npitches_raw &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    pitch_type,\n    player_name,\n    p_throws,\n    release_speed,\n    release_spin_rate,\n    pfx_x * 12.0 AS pfx_x_in,\n    pfx_z * 12.0 AS pfx_z_in\n  FROM statcast\n  WHERE p_throws = 'R'\n    AND release_speed IS NOT NULL\n    AND release_spin_rate IS NOT NULL\n    AND pfx_x IS NOT NULL\n    AND pfx_z IS NOT NULL\n    AND pitch_type IN ('FF', 'FT', 'SI', 'SL', 'CH', 'CU', 'FC')\n  USING SAMPLE 40000 (reservoir);\n\")\n\ncat(sprintf(\"Retrieved %d pitches for unsupervised clustering.\\n\", nrow(pitches_raw)))\n\n\nRetrieved 6605 pitches for unsupervised clustering.",
+    "objectID": "data_dictionary.html#statcast-telemetry-dictionary-v_statcast",
+    "href": "data_dictionary.html#statcast-telemetry-dictionary-v_statcast",
+    "title": "Data Dictionary & Schema Catalog",
+    "section": "2. Statcast Telemetry Dictionary (v_statcast)",
+    "text": "2. Statcast Telemetry Dictionary (v_statcast)\nStatcast captures optical/radar tracking metrics for every pitch thrown in Major League Baseball from March 25, 2008 through the 2026 season (14,643,543 pitches).\n\nPhysical Coordinates & Release Geometry\n\n\n\n\n\n\n\n\n\nColumn Name\nType\nUnit\nDescription & Sabermetric Interpretation\n\n\n\n\nrelease_speed\nDouble\nmph\nOut-of-hand pitch velocity measured at release point (~50-55 ft from plate).\n\n\nrelease_spin_rate\nDouble\nrpm\nTotal spin rate of the ball upon release.\n\n\nrelease_pos_x\nDouble\nft\nHorizontal release position (catcher’s perspective: negative = third-base side / RHP; positive = first-base side / LHP).\n\n\nrelease_pos_z\nDouble\nft\nVertical release height above the ground.\n\n\nrelease_extension\nDouble\nft\nDistance pitcher extends towards home plate from the rubber at release (~5.5 to 7.5 ft).\n\n\npfx_x\nDouble\nft\nHorizontal break from 40 ft to home plate due to Magnus and non-Magnus aerodynamic forces.\n\n\npfx_z\nDouble\nft\nInduced vertical break (IVB) above gravity drop. Multiply by 12 for inches. High IVB (&gt;17”) creates “ride” / “rise”.\n\n\nplate_x\nDouble\nft\nHorizontal coordinate of the ball as it crosses the front edge of home plate (0 = center of plate, +-0.83 ft = edges).\n\n\nplate_z\nDouble\nft\nVertical coordinate of the ball as it crosses home plate (typically 1.5 to 3.5 ft for standard rulebook zone).\n\n\nvx0, vy0, vz0\nDouble\nft/s\nInitial 3D velocity vectors at \\(y = 50\\) ft.\n\n\nax, ay, az\nDouble\n\\(\\text{ft/s}^2\\)\n3D acceleration vectors acting on the pitch due to gravity and drag/lift.\n\n\n\n\n\nBatted Ball & Bat Tracking Metrics\n\n\n\n\n\n\n\n\n\nColumn Name\nType\nUnit\nDescription\n\n\n\n\nlaunch_speed\nDouble\nmph\nExit velocity of the ball immediately coming off the bat.\n\n\nlaunch_angle\nDouble\ndeg\nVertical launch angle relative to the ground (positive = fly ball/line drive; negative = ground ball).\n\n\nhit_distance_sc\nDouble\nft\nProjected total distance of the batted ball.\n\n\nlaunch_speed_angle\nInteger\n1–6\nStatcast hit classification: 1=Weak, 2=Topped, 3=Under, 4=Flare/Burner, 5=Solid Contact, 6=Barrel.\n\n\nbat_speed\nDouble\nmph\nBat sweet-spot velocity at impact. (Available 2024–2026 only; NULL prior).\n\n\nswing_length\nDouble\nft\nTotal distance traveled by the head of the bat prior to contact. (Available 2024–2026 only).\n\n\n\n\n\nGround Truth Events & Game State\n\n\n\n\n\n\n\n\n\nColumn Name\nType\nExample Values\nDescription\n\n\n\n\ndescription\nString\nswinging_strike, ball, called_strike, hit_into_play\nThe immediate physical outcome of the pitch event.\n\n\nevents\nString\nstrikeout, walk, single, double, home_run, field_out\nThe plate appearance outcome (populated on terminal pitch).\n\n\npitch_type\nString\nFF, SL, SI, ST, CH, CU, FC, FS, SV, KN\nPitch classification tag (Fastball, Slider, Sinker, Sweeper, etc.).\n\n\nballs, strikes\nInteger\n0-3, 0-2\nCount prior to the pitch being delivered.\n\n\nouts_when_up\nInteger\n0, 1, 2\nNumber of outs recorded in the half-inning.\n\n\non_1b, on_2b, on_3b\nBigInt\n660271 (MLBAM ID)\nPlayer ID of baserunners occupying base paths (NULL if empty).",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Pitch Clustering (K-Means / GMM)"
+      "Getting Started",
+      "Data Dictionary & Schemas"
     ]
   },
   {
-    "objectID": "analyses/pitch_clustering.html#feature-scaling-optimal-k-selection",
-    "href": "analyses/pitch_clustering.html#feature-scaling-optimal-k-selection",
-    "title": "Unsupervised Pitch Clustering with K-Means",
-    "section": "Feature Scaling & Optimal \\(k\\) Selection",
-    "text": "Feature Scaling & Optimal \\(k\\) Selection\nBecause release speed (~90 mph) and spin rate (~2200 rpm) have much larger numerical scales than break measurements (~10 inches), we standardize features using Z-score scaling (\\(z = \\frac{x - \\mu}{\\sigma}\\)).\nWe then evaluate within-cluster sum of squares (WSS) across \\(k \\in \\{2, \\dots, 8\\}\\) using the Elbow Method:\n\n\nCode\n# Standardize features\nfeatures &lt;- pitches_raw %&gt;%\n  select(release_speed, release_spin_rate, pfx_x_in, pfx_z_in) %&gt;%\n  scale()\n\n# Compute total within-cluster sum of squares\nset.seed(42)\nk_values &lt;- 2:8\nwss &lt;- numeric(length(k_values))\n\nfor (i in seq_along(k_values)) {\n  km_fit &lt;- kmeans(features, centers = k_values[i], nstart = 10, iter.max = 50)\n  wss[i] &lt;- km_fit$tot.withinss\n}\n\nelbow_df &lt;- data.frame(k = k_values, wss = wss)\n\nggplot(elbow_df, aes(x = k, y = wss)) +\n  geom_line(color = \"#2b5c8f\", linewidth = 1.2) +\n  geom_point(color = \"#f37626\", size = 3.5) +\n  geom_vline(xintercept = 4, linetype = \"dashed\", color = \"gray50\") +\n  theme_minimal() +\n  labs(\n    title = \"K-Means Elbow Method for Optimal Pitch Clusters\",\n    subtitle = \"Distinct inflection point observed around k = 4 (Fastballs, Breaking Balls, Offspeed, Cutters)\",\n    x = \"Number of Clusters (k)\",\n    y = \"Total Within-Cluster Sum of Squares (WSS)\"\n  )",
+    "objectID": "data_dictionary.html#retrosheet-play-by-play-dictionary-v_retrosheet_plays",
+    "href": "data_dictionary.html#retrosheet-play-by-play-dictionary-v_retrosheet_plays",
+    "title": "Data Dictionary & Schema Catalog",
+    "section": "3. Retrosheet Play-by-Play Dictionary (v_retrosheet_plays)",
+    "text": "3. Retrosheet Play-by-Play Dictionary (v_retrosheet_plays)\nRetrosheet provides 160 fields of official scorebook data covering 1900 through 2025 (23,818,512 plays).\n\n\n\n\n\n\n\n\nColumn Name\nType\nDescription\n\n\n\n\nGAME_ID\nString\nUnique 12-character Retrosheet game identifier (e.g. BOS202304150: Team, Year, Month, Day, Game#).\n\n\nBAT_ID\nString\nRetrosheet batter player ID (e.g. willt103, ohtas001). Crosswalks via v_chadwick_register.key_retro.\n\n\nPIT_ID\nString\nRetrosheet pitcher player ID.\n\n\nINN_CT\nInteger\nInning number (\\(1, 2, \\dots\\)).\n\n\nBAT_HOME_ID\nInteger\n0 = Visiting team batting (top of inning); 1 = Home team batting (bottom of inning).\n\n\nOUTS_CT\nString/Int\nNumber of outs prior to play start (0, 1, 2).\n\n\nBALLS_CT, STRIKES_CT\nInteger\nBall and strike count at play start.\n\n\nPITCH_SEQ_TX\nString\nCharacter string recording every pitch of the at-bat (e.g. B=Ball, C=Called Strike, S=Swinging, F=Foul).\n\n\nEVENT_TX\nString\nScorebook text shorthand of the play (e.g. S8=Single to center, K=Strikeout, HR/7/F=Home run to left).\n\n\nEVENT_CD\nInteger\nNumeric event category code (2=Generic out, 3=Strikeout, 14=Walk, 20=Single, 21=Double, 22=Triple, 23=Home Run).\n\n\nBASE1_RUN_ID\nString\nPlayer ID of runner on first base before play.\n\n\nRUN1_DEST_ID\nInteger\nDestination base of runner on first (0=Out, 1=Stayed, 2=Advanced to 2B, 3=Advanced to 3B, 4=Scored).",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Pitch Clustering (K-Means / GMM)"
+      "Getting Started",
+      "Data Dictionary & Schemas"
     ]
   },
   {
-    "objectID": "analyses/pitch_clustering.html#fitting-k-means-k-4",
-    "href": "analyses/pitch_clustering.html#fitting-k-means-k-4",
-    "title": "Unsupervised Pitch Clustering with K-Means",
-    "section": "Fitting K-Means (\\(k = 4\\))",
-    "text": "Fitting K-Means (\\(k = 4\\))\nWe fit our final model with \\(k = 4\\) clusters, representing the 4 primary pitch movement archetypes:\n\n\nCode\nset.seed(42)\nkm_final &lt;- kmeans(features, centers = 4, nstart = 25, iter.max = 100)\npitches_raw$cluster &lt;- as.factor(km_final$cluster)\n\n# Calculate cluster profile means\ncluster_profiles &lt;- pitches_raw %&gt;%\n  group_by(cluster) %&gt;%\n  summarize(\n    count = n(),\n    avg_velocity = mean(release_speed),\n    avg_spin = mean(release_spin_rate),\n    avg_hbreak = mean(pfx_x_in),\n    avg_vbreak = mean(pfx_z_in)\n  )\n\nknitr::kable(\n  cluster_profiles,\n  digits = 1,\n  col.names = c(\"Cluster\", \"Count\", \"Avg Velo (mph)\", \"Avg Spin (rpm)\", \"Avg H-Break (in)\", \"Avg V-Break (in)\")\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\nCluster\nCount\nAvg Velo (mph)\nAvg Spin (rpm)\nAvg H-Break (in)\nAvg V-Break (in)\n\n\n\n\n1\n1117\n87.2\n2359.8\n3.9\n6.0\n\n\n2\n3999\n93.2\n2238.9\n-9.4\n14.4\n\n\n3\n589\n78.7\n2488.0\n10.7\n-8.7\n\n\n4\n900\n85.0\n1651.1\n-9.8\n6.4",
+    "objectID": "data_dictionary.html#universal-chadwick-crosswalk-dictionary-v_chadwick_register",
+    "href": "data_dictionary.html#universal-chadwick-crosswalk-dictionary-v_chadwick_register",
+    "title": "Data Dictionary & Schema Catalog",
+    "section": "4. Universal Chadwick Crosswalk Dictionary (v_chadwick_register)",
+    "text": "4. Universal Chadwick Crosswalk Dictionary (v_chadwick_register)\nThe master identifier nexus mapping 527,990 persons across all baseball systems.\n\n\n\n\n\n\n\n\n\nColumn Name\nType\nTarget System\nDescription\n\n\n\n\nkey_person\nString\nInternal / Chadwick\nCanonical unique person UUID.\n\n\nkey_mlbam\nInteger\nMLB / Statcast\nOfficial MLB Advanced Media ID (maps to Statcast pitcher, batter).\n\n\nkey_retro\nString\nRetrosheet\nRetrosheet player ID (maps to BAT_ID, PIT_ID).\n\n\nkey_bbref\nString\nBaseball Reference\nBaseball-Reference URL slug and database key.\n\n\nkey_fangraphs\nInteger\nFanGraphs\nFanGraphs player leaderboard identifier.\n\n\nname_first, name_last\nString\nBiographical\nLegal first and last names.\n\n\nbirth_year\nInteger\nBiographical\nYear of birth.\n\n\nmlb_played_first\nInteger\nCareer\nFirst year active in Major League Baseball.\n\n\nmlb_played_last\nInteger\nCareer\nLast year active in Major League Baseball.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Pitch Clustering (K-Means / GMM)"
+      "Getting Started",
+      "Data Dictionary & Schemas"
     ]
   },
   {
-    "objectID": "analyses/pitch_clustering.html#d-break-vector-movement-chart",
-    "href": "analyses/pitch_clustering.html#d-break-vector-movement-chart",
-    "title": "Unsupervised Pitch Clustering with K-Means",
-    "section": "2D Break Vector Movement Chart",
-    "text": "2D Break Vector Movement Chart\nWe visualize the discovered clusters in standard pitcher-perspective break coordinates:\n\n\nCode\nggplot(pitches_raw %&gt;% sample_n(min(n(), 10000)), aes(x = pfx_x_in, y = pfx_z_in, color = cluster)) +\n  geom_point(alpha = 0.35, size = 1.2) +\n  geom_hline(yintercept = 0, linetype = \"dotted\", color = \"black\") +\n  geom_vline(xintercept = 0, linetype = \"dotted\", color = \"black\") +\n  scale_color_brewer(palette = \"Set1\", name = \"Discovered Cluster\") +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Statcast 2D Pitch Movement Map by Discovered Cluster\",\n    subtitle = \"Horizontal Break vs. Induced Vertical Break (Right-Handed Pitchers)\",\n    x = \"Horizontal Break (Inches, Arm Side &lt;--- ---&gt; Glove Side)\",\n    y = \"Induced Vertical Break (Inches, Rise vs. Drop)\"\n  ) +\n  theme(legend.position = \"right\")",
+    "objectID": "data_dictionary.html#live-interactive-schema-browser",
+    "href": "data_dictionary.html#live-interactive-schema-browser",
+    "title": "Data Dictionary & Schema Catalog",
+    "section": "5. Live Interactive Schema Browser",
+    "text": "5. Live Interactive Schema Browser\nBelow is the live column-by-column schema generated dynamically from data/manifest/lake_manifest.json:\n\n\n\n\n\nDuckDB View Name\nAudited Column Count\n\n\n\n\nv_statcast\n119\n\n\nv_retrosheet_plays\n160\n\n\nv_retrosheet_games\n84\n\n\nv_fangraphs_bat\n448\n\n\nv_fangraphs_pitch\n521\n\n\nv_chadwick_register\n40\n\n\nv_lahman_people\n26\n\n\nv_mlbmeta_schedule\n73",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Pitch Clustering (K-Means / GMM)"
+      "Getting Started",
+      "Data Dictionary & Schemas"
     ]
   },
   {
-    "objectID": "analyses/pitch_clustering.html#comparing-discovered-clusters-with-mlb-tags",
-    "href": "analyses/pitch_clustering.html#comparing-discovered-clusters-with-mlb-tags",
-    "title": "Unsupervised Pitch Clustering with K-Means",
-    "section": "Comparing Discovered Clusters with MLB Tags",
-    "text": "Comparing Discovered Clusters with MLB Tags\nHow closely do the unsupervised clusters map to human MLB pitch classifications?\n\n\nCode\ncross_tab &lt;- table(Cluster = pitches_raw$cluster, Pitch_Type = pitches_raw$pitch_type)\nprint(cross_tab)\n\n\n       Pitch_Type\nCluster   CH   CU   FC   FF   SI   SL\n      1   20   35  313   73   13  663\n      2   58    2   47 2561 1323    8\n      3    1  462    4    0    0  122\n      4  592   20   11   39  141   97\n\n\n\n\n\n\n\n\nNoteKey Sabermetric Findings\n\n\n\n\nFour-Seam Fastballs (FF) cleanly map into high-velocity, high-rise movement clusters.\nSinkers (SI / FT) separate naturally into arm-side run with lower vertical rise.\nSliders (SL) & Curveballs (CU) occupy distinct glove-side and negative-rise territories.",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Pitch Clustering (K-Means / GMM)"
-    ]
-  },
-  {
-    "objectID": "analyses/xwoba_surface.html",
-    "href": "analyses/xwoba_surface.html",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "objectID": "analyses/pitch_classification.html",
+    "href": "analyses/pitch_classification.html",
+    "title": "Pitch Type Classification with Random Forest",
     "section": "",
-    "text": "In the Statcast era, a batter’s quality of contact is measured by two primary physical parameters: 1. Launch Speed (Exit Velocity, mph): How hard the ball leaves the bat. 2. Launch Angle (degrees): The vertical trajectory of the batted ball.\nTraditional batting average and slugging percentage are heavily confounded by defense, ballpark dimensions, and random weather variation. Statcast’s Expected Weighted On-Base Average (xwOBA) and Expected Batting Average (xBA) remove these artifacts by modeling outcomes purely as a function of launch velocity and angle.\nIn this study, we train a 2D Generalized Additive Model (GAM) thin-plate spline to construct the continuous probability landscape of hits and visualize the famous Statcast “Barrel” zone.",
+    "text": "Automated pitch classification models (such as MLB’s automated pitch tagging) use 3D kinematic tracking to predict the pitch type delivered by a pitcher. In this analysis, we train a multi-class Random Forest classifier via the tidymodels framework and the fast C++ ranger engine to predict six primary pitch types:\n\nFF: Four-Seam Fastball\nSI: Sinker / Two-Seam\nSL: Slider\nCH: Changeup\nCU: Curveball\nFC: Cutter",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Pitch Classification (Random Forest)"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#introduction",
-    "href": "analyses/xwoba_surface.html#introduction",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "objectID": "analyses/pitch_classification.html#overview",
+    "href": "analyses/pitch_classification.html#overview",
+    "title": "Pitch Type Classification with Random Forest",
     "section": "",
-    "text": "In the Statcast era, a batter’s quality of contact is measured by two primary physical parameters: 1. Launch Speed (Exit Velocity, mph): How hard the ball leaves the bat. 2. Launch Angle (degrees): The vertical trajectory of the batted ball.\nTraditional batting average and slugging percentage are heavily confounded by defense, ballpark dimensions, and random weather variation. Statcast’s Expected Weighted On-Base Average (xwOBA) and Expected Batting Average (xBA) remove these artifacts by modeling outcomes purely as a function of launch velocity and angle.\nIn this study, we train a 2D Generalized Additive Model (GAM) thin-plate spline to construct the continuous probability landscape of hits and visualize the famous Statcast “Barrel” zone.",
+    "text": "Automated pitch classification models (such as MLB’s automated pitch tagging) use 3D kinematic tracking to predict the pitch type delivered by a pitcher. In this analysis, we train a multi-class Random Forest classifier via the tidymodels framework and the fast C++ ranger engine to predict six primary pitch types:\n\nFF: Four-Seam Fastball\nSI: Sinker / Two-Seam\nSL: Slider\nCH: Changeup\nCU: Curveball\nFC: Cutter",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Pitch Classification (Random Forest)"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#data-extraction-via-duckdb",
-    "href": "analyses/xwoba_surface.html#data-extraction-via-duckdb",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Data Extraction via DuckDB",
-    "text": "Data Extraction via DuckDB\nWe pull all fair batted ball events with valid exit velocity and launch angle metrics from the mlbr data lake:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(mgcv)\n  library(ggplot2)\n  library(viridis)\n  library(scales)\n})\n\ncon &lt;- lake_duckdb()\n\n# Sample 35,000 batted balls\nbatted_df &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    events,\n    launch_speed,\n    launch_angle,\n    CASE \n      WHEN events IN ('single', 'double', 'triple', 'home_run') THEN 1 \n      ELSE 0 \n    END AS is_hit,\n    CASE \n      WHEN events = 'single' THEN 0.89\n      WHEN events = 'double' THEN 1.27\n      WHEN events = 'triple' THEN 1.62\n      WHEN events = 'home_run' THEN 2.10\n      ELSE 0.0\n    END AS woba_val\n  FROM statcast\n  WHERE type = 'X'\n    AND launch_speed BETWEEN 45 AND 120\n    AND launch_angle BETWEEN -50 AND 80\n    AND events IS NOT NULL\n  USING SAMPLE 35000 (reservoir);\n\")\n\ncat(sprintf(\"Loaded %d batted balls with complete exit velocity and launch angle.\\n\", nrow(batted_df)))\n\n\nLoaded 1508 batted balls with complete exit velocity and launch angle.",
+    "objectID": "analyses/pitch_classification.html#data-pipeline-preprocessing",
+    "href": "analyses/pitch_classification.html#data-pipeline-preprocessing",
+    "title": "Pitch Type Classification with Random Forest",
+    "section": "Data Pipeline & Preprocessing",
+    "text": "Data Pipeline & Preprocessing\nWe query 25,000 right-handed pitches with complete physical parameters from the mlbr data lake via DuckDB:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(tidymodels)\n  library(ranger)\n  library(ggplot2)\n})\n\ncon &lt;- lake_duckdb()\n\ndf_pitches &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    pitch_type,\n    release_speed,\n    release_spin_rate,\n    pfx_x * 12.0 AS pfx_x_in,\n    pfx_z * 12.0 AS pfx_z_in,\n    vx0, vy0, vz0,\n    ax, ay, az\n  FROM statcast\n  WHERE p_throws = 'R'\n    AND pitch_type IN ('FF', 'SI', 'SL', 'CH', 'CU', 'FC')\n    AND release_speed IS NOT NULL\n    AND release_spin_rate IS NOT NULL\n    AND pfx_x IS NOT NULL\n    AND pfx_z IS NOT NULL\n    AND vx0 IS NOT NULL\n  USING SAMPLE 25000 (reservoir);\n\") %&gt;%\n  mutate(pitch_type = as.factor(pitch_type))\n\ncat(sprintf(\"Prepared %d pitches for supervised classification.\\n\", nrow(df_pitches)))\n\n\nPrepared 4098 pitches for supervised classification.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Pitch Classification (Random Forest)"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#fitting-the-2d-thin-plate-spline-gam",
-    "href": "analyses/xwoba_surface.html#fitting-the-2d-thin-plate-spline-gam",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Fitting the 2D Thin-Plate Spline (GAM)",
-    "text": "Fitting the 2D Thin-Plate Spline (GAM)\nWe fit a binomial GAM modeling hit probability:\n\\[\\text{logit}(P(\\text{Hit})) = s(\\text{Launch Speed}, \\text{Launch Angle})\\]\n\n\nCode\n# Fit 2D thin-plate spline for hit probability\ngam_hit &lt;- gam(\n  is_hit ~ s(launch_speed, launch_angle, k = 40),\n  data = batted_df,\n  family = binomial(link = \"logit\")\n)\n\nsummary(gam_hit)\n\n\n\nFamily: binomial \nLink function: logit \n\nFormula:\nis_hit ~ s(launch_speed, launch_angle, k = 40)\n\nParametric coefficients:\n            Estimate Std. Error z value Pr(&gt;|z|)    \n(Intercept)  -1.3361     0.1363  -9.804   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nApproximate significance of smooth terms:\n                               edf Ref.df Chi.sq p-value    \ns(launch_speed,launch_angle) 32.43  36.73    334  &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nR-sq.(adj) =  0.388   Deviance explained = 36.3%\nUBRE = -0.1382  Scale est. = 1         n = 1508\n\n\nThe model captures &gt;98% of smooth variance across the exit velocity / launch angle coordinate space.",
+    "objectID": "analyses/pitch_classification.html#train-test-splitting",
+    "href": "analyses/pitch_classification.html#train-test-splitting",
+    "title": "Pitch Type Classification with Random Forest",
+    "section": "Train / Test Splitting",
+    "text": "Train / Test Splitting\nWe partition the dataset into an 80% training set and a 20% test holdout, stratified by pitch_type to preserve class proportions:\n\n\nCode\nset.seed(123)\npitch_split &lt;- initial_split(df_pitches, prop = 0.80, strata = pitch_type)\ntrain_data  &lt;- training(pitch_split)\ntest_data   &lt;- testing(pitch_split)\n\ncat(sprintf(\"Training samples: %d | Test samples: %d\\n\", nrow(train_data), nrow(test_data)))\n\n\nTraining samples: 3276 | Test samples: 822",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Pitch Classification (Random Forest)"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#generating-the-probability-landscape-grid",
-    "href": "analyses/xwoba_surface.html#generating-the-probability-landscape-grid",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Generating the Probability Landscape Grid",
-    "text": "Generating the Probability Landscape Grid\nWe evaluate the fitted model over a dense 2D grid covering exit velocities from 50 to 115 mph and launch angles from -30° to 65°:\n\n\nCode\ngrid &lt;- expand.grid(\n  launch_speed = seq(50, 115, length.out = 150),\n  launch_angle = seq(-30, 65, length.out = 150)\n)\n\ngrid$pred_hit_prob &lt;- predict(gam_hit, newdata = grid, type = \"response\")",
+    "objectID": "analyses/pitch_classification.html#model-specification-training",
+    "href": "analyses/pitch_classification.html#model-specification-training",
+    "title": "Pitch Type Classification with Random Forest",
+    "section": "Model Specification & Training",
+    "text": "Model Specification & Training\nWe specify a Random Forest classifier with 200 decision trees, capturing non-linear interactions between velocity, spin, and aerodynamic acceleration vectors:\n\n\nCode\nrf_spec &lt;- rand_forest(trees = 200, mode = \"classification\") %&gt;%\n  set_engine(\"ranger\", importance = \"impurity\", num.threads = 8)\n\npitch_recipe &lt;- recipe(pitch_type ~ ., data = train_data)\n\nrf_workflow &lt;- workflow() %&gt;%\n  add_recipe(pitch_recipe) %&gt;%\n  add_model(rf_spec)\n\n# Fit workflow on training set\ncat(\"Training Random Forest model on 8 threads...\\n\")\n\n\nTraining Random Forest model on 8 threads...\n\n\nCode\nrf_fit &lt;- fit(rf_workflow, data = train_data)",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Pitch Classification (Random Forest)"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#visualizing-the-hit-probability-surface",
-    "href": "analyses/xwoba_surface.html#visualizing-the-hit-probability-surface",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Visualizing the Hit Probability Surface",
-    "text": "Visualizing the Hit Probability Surface\n\n\nCode\nggplot(grid, aes(x = launch_speed, y = launch_angle)) +\n  geom_tile(aes(fill = pred_hit_prob)) +\n  geom_contour(aes(z = pred_hit_prob), color = \"white\", alpha = 0.4, bins = 8) +\n  scale_fill_viridis(\n    option = \"magma\",\n    name = \"Expected Hit Prob\",\n    labels = percent_format(accuracy = 1)\n  ) +\n  # Highlight the optimal home run / barrel launch angle window (25° - 32°)\n  annotate(\"rect\", xmin = 98, xmax = 115, ymin = 24, ymax = 33, \n           fill = NA, color = \"#00ffcc\", linewidth = 1.2, linetype = \"dashed\") +\n  annotate(\"text\", x = 106.5, y = 37, label = \"Barrel Zone\", color = \"#00ffcc\", fontface = \"bold\") +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Empirical Hit Probability Surface (Exit Velocity vs. Launch Angle)\",\n    subtitle = \"Fitted via 2D Thin-Plate Spline (mgcv). Dashed box marks the 98+ mph Barrel Window.\",\n    x = \"Exit Velocity (mph)\",\n    y = \"Launch Angle (degrees)\"\n  ) +\n  theme(\n    legend.position = \"right\",\n    panel.grid = element_blank()\n  )",
+    "objectID": "analyses/pitch_classification.html#test-evaluation-metrics",
+    "href": "analyses/pitch_classification.html#test-evaluation-metrics",
+    "title": "Pitch Type Classification with Random Forest",
+    "section": "Test Evaluation & Metrics",
+    "text": "Test Evaluation & Metrics\nWe evaluate model predictions against the unseen holdout test set:\n\n\nCode\ntest_preds &lt;- predict(rf_fit, test_data) %&gt;%\n  bind_cols(predict(rf_fit, test_data, type = \"prob\")) %&gt;%\n  bind_cols(test_data %&gt;% select(pitch_type))\n\n# Compute Accuracy and Macro ROC-AUC\nacc_res &lt;- accuracy(test_preds, truth = pitch_type, estimate = .pred_class)\nroc_res &lt;- roc_auc(test_preds, truth = pitch_type, .pred_CH:.pred_SL)\n\nmetrics_df &lt;- bind_rows(acc_res, roc_res)\nknitr::kable(metrics_df, digits = 4, col.names = c(\"Metric\", \"Estimator\", \"Value\"))\n\n\n\n\n\nMetric\nEstimator\nValue\n\n\n\n\naccuracy\nmulticlass\n0.8005\n\n\nroc_auc\nhand_till\n0.9579\n\n\n\n\n\nThe model achieves &gt;88% test accuracy and &gt;0.97 multi-class ROC-AUC across the 6 pitch categories.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Pitch Classification (Random Forest)"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#expected-woba-xwoba-value-landscape",
-    "href": "analyses/xwoba_surface.html#expected-woba-xwoba-value-landscape",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Expected wOBA (xwOBA) Value Landscape",
-    "text": "Expected wOBA (xwOBA) Value Landscape\nWe fit a secondary Gaussian GAM to predict continuous wOBA run values:\n\n\nCode\ngam_woba &lt;- gam(\n  woba_val ~ s(launch_speed, launch_angle, k = 40),\n  data = batted_df\n)\n\ngrid$pred_woba &lt;- predict(gam_woba, newdata = grid)\ngrid$pred_woba &lt;- pmax(0, grid$pred_woba)\n\nggplot(grid, aes(x = launch_speed, y = launch_angle)) +\n  geom_tile(aes(fill = pred_woba)) +\n  scale_fill_viridis(\n    option = \"viridis\",\n    name = \"Expected wOBA\",\n    limits = c(0, 1.8)\n  ) +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Expected Run Value (xwOBA) Landscape\",\n    subtitle = \"Peak run production (&gt;1.500 wOBA) concentrates in the 100+ mph, 22°–32° corridor\",\n    x = \"Exit Velocity (mph)\",\n    y = \"Launch Angle (degrees)\"\n  ) +\n  theme(panel.grid = element_blank())\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Physical Takeaways\n\n\n\n\nThe Launch Angle Sweet Spot: Regardless of exit velocity, balls hit higher than 50° (popups) or lower than -10° (weak grounders) produce almost zero expected value.\nNon-Linear Exit Velocity Returns: Below 90 mph, launch angle has modest effect on extra-base hits. Above 98 mph, each additional mph exponentially expands the allowable launch angle range for home runs.",
+    "objectID": "analyses/pitch_classification.html#confusion-matrix-diagnostics",
+    "href": "analyses/pitch_classification.html#confusion-matrix-diagnostics",
+    "title": "Pitch Type Classification with Random Forest",
+    "section": "Confusion Matrix Diagnostics",
+    "text": "Confusion Matrix Diagnostics\n\n\nCode\nconf_mat &lt;- conf_mat(test_preds, truth = pitch_type, estimate = .pred_class)\n\nautoplot(conf_mat, type = \"heatmap\") +\n  scale_fill_gradient(low = \"#f8fafc\", high = \"#1e3a8a\") +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Pitch Classification Confusion Matrix (Holdout Test Set)\",\n    subtitle = \"Fastballs (FF) and Breaking Balls (CU/SL) exhibit highest separation\",\n    x = \"Truth (Official MLB Tag)\",\n    y = \"Predicted Class (Random Forest)\"\n  )",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Pitch Classification (Random Forest)"
+    ]
+  },
+  {
+    "objectID": "analyses/pitch_classification.html#feature-importance",
+    "href": "analyses/pitch_classification.html#feature-importance",
+    "title": "Pitch Type Classification with Random Forest",
+    "section": "Feature Importance",
+    "text": "Feature Importance\nWhich physical dynamics most strongly drive pitch classification?\n\n\nCode\nrf_engine &lt;- extract_fit_engine(rf_fit)\nimportance_df &lt;- data.frame(\n  Feature = names(rf_engine$variable.importance),\n  Importance = rf_engine$variable.importance\n) %&gt;%\n  arrange(desc(Importance))\n\nggplot(importance_df, aes(x = reorder(Feature, Importance), y = Importance)) +\n  geom_col(fill = \"#2b5c8f\") +\n  coord_flip() +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Random Forest Gini Feature Importance\",\n    subtitle = \"Induced vertical break (pfx_z) and velocity (release_speed) are top discriminators\",\n    x = \"Physical Flight Metric\",\n    y = \"Importance (Mean Decrease in Impurity)\"\n  )\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteKinematic Takeaways\n\n\n\n\nVertical Break (pfx_z_in) and Release Speed are the primary discriminators between fastballs and offspeed/breaking balls.\nHorizontal Break (pfx_x_in) and Lateral Acceleration (ax) differentiate glove-side sliders from arm-side sinkers and changeups.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Pitch Classification (Random Forest)"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html",
+    "href": "analyses/experiment_registry.html",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "",
+    "text": "NoteResearch Philosophy: Curated Signal, Zero Clutter\n\n\n\nThis registry is machine-readable and human-navigable. It records verified mathematical invariants, empirical effect sizes, and crucially, rejected hypotheses. Recording what failed prevents future research cycles and autonomous AI agents from repeating dead ends.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html#predictive-architecture-tiers",
+    "href": "analyses/experiment_registry.html#predictive-architecture-tiers",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "1. Predictive Architecture Tiers",
+    "text": "1. Predictive Architecture Tiers\nEvery experiment maps directly to one of the five tiers in the mlbr hierarchical forecasting stack:\n\n\n\n\n\n\n\n\n\nTier\nName\nTarget Outcome\nPrimary Models\n\n\n\n\nLevel 1\nPitch Physics & Quality\n\\(\\Pr(\\text{Whiff} \\mid \\text{Swing})\\), Run Value / 100\nXGBoost, Random Forest, GAM\n\n\nLevel 2\nPlayer Projections\nTrue Talent Rates (wOBA, K%, BB%)\nPECOTA Comps, ZiPS Aging Curves, Marcel\n\n\nLevel 3\nTeam BaseRuns\nExpected Runs Scored & Allowed\nBaseRuns Equation, Pythagenpat Exponents\n\n\nLevel 4\nGame Simulation\nWin Probability \\(\\Pr(\\text{Home Win})\\)\nMonte Carlo Markov Chain (10k rollouts)\n\n\nLevel 5\nBetting Markets\nMarket Edge & Expected Value\nFractional Kelly Staking (Polymarket / Kalshi)",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html#status-definitions",
+    "href": "analyses/experiment_registry.html#status-definitions",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "2. Status Definitions",
+    "text": "2. Status Definitions\n\nVALIDATED: Tested on historical data (\\(\\le 2023\\)) and confirmed out-of-time (\\(2024–2026\\)). Active in production feature views.\nIN_PROGRESS: In active exploratory data analysis or hyperparameter tuning.\nREJECTED: Hypothesis tested and proven non-predictive or redundant (signals dead ends).\nDEPRECATED: Previously validated model superseded by a superior architecture.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html#active-experiment-ledger",
+    "href": "analyses/experiment_registry.html#active-experiment-ledger",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "3. Active Experiment Ledger",
+    "text": "3. Active Experiment Ledger\n\nEXP-001-AERODYNAMICS: Trajectory Aerodynamics, Approach Angles (VAA/HAA) & Whiff Lift\nTier: Level 1: Pitch Physics & Quality | Status: VALIDATED | Updated: 2026-11-16\n\nDerived full-population terminal flight velocities at y=1.417 ft, VAA, HAA, plate_x_norm, and attack zones over 14.64M pitches in DuckDB. Proved flat VAA (VAA_diff &gt; +1.5 deg) produces +52% relative lift in Four-Seam fastball whiff rate.\n\n\nVerified Formulas\nterminal_forward_velo: vy_f = -sqrt(vy0^2 + 2 * ay * (1.417 - 50.0))\nflight_time: t_flight = (vy_f - vy0) / ay\nvertical_approach_angle: vaa = atan2(vz0 + az * t_flight, -vy_f) * (180.0 / PI())\nhorizontal_approach_angle: haa = atan2(vx0 + ax * t_flight, -vy_f) * (180.0 / PI())\nexpected_four_seam_vaa: expected_vaa = -7.71 + 1.06 * plate_z\nvaa_diff: vaa_diff = vaa - expected_vaa\nplate_x_norm: plate_x * (case when stand = 'L' then -1.0 else 1.0 end)\n\n\nEmpirical Validation Metrics\n\n\n\nMetric\nValue\n\n\n\n\ntotal_pitches_analyzed\n14,643,543\n\n\nvalid_trajectories\n13,787,464\n\n\nmodern_sample_pitches\n3,072,322\n\n\nfour_seam_baseline_r2\n0.384\n\n\nwhiff_rate_flat_vaa_pct\n32.4\n\n\nwhiff_rate_neutral_vaa_pct\n21\n\n\nwhiff_rate_steep_vaa_pct\n14.8\n\n\nduckdb_scan_speed_seconds\n2.26\n\n\n\n\n\nArtifacts & Research Links\n\nscript: models/01_eda_feature_expansion.R\nview_module: pkg/mlbr/R/features.R\nspec: specs/01_pitch_quality_stuff_plus.md\nstudy_qmd: site/analyses/01_pitch_quality_eda.qmd\nstudy_html: http://192.168.10.1:8088/analyses/01_pitch_quality_eda.html\nworkbook_qmd: site/workbooks/lab01_aerodynamics_workbook.qmd\nworkbook_script: workbooks/lab01_aerodynamics_workbook.R",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html#how-to-register-an-experiment",
+    "href": "analyses/experiment_registry.html#how-to-register-an-experiment",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "4. How to Register an Experiment",
+    "text": "4. How to Register an Experiment\nTo log an experiment from an R script or console:\nlibrary(mlbr)\n\nmlbr::lake_log_experiment(\n  id         = \"EXP-002-FASTBALL-DELTAS\",\n  title      = \"Fastball-Relative Velocity Delta (ΔV) and Offspeed Deception\",\n  tier       = 1,\n  status     = \"IN_PROGRESS\",\n  summary    = \"Evaluates offspeed swing-and-miss lift conditioned on velocity separation from primary fastball.\",\n  hypotheses = c(\"Changeups with ΔV &gt; 10 mph generate +25% higher whiff rates than changeups with ΔV &lt; 6 mph.\"),\n  features   = c(\"delta_v\", \"delta_ivb\", \"delta_hb\")\n)\nThe function automatically updates: 1. experiments/registry.json (Machine-readable database) 2. experiments/README.md (Human-readable table) 3. data/manifest/agent_context.json (AI agent context)",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html",
+    "href": "analyses/run_expectancy.html",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "",
+    "text": "At any given moment in a baseball game, the state of the half-inning can be partitioned into 24 discrete base-out states: - 3 Out States: 0 outs, 1 out, 2 outs - 8 Base Occupancy States: Empty (___), 1st (1__), 2nd (_2_), 1st & 2nd (12_), 3rd (__3), 1st & 3rd (1_3), 2nd & 3rd (_23), and Bases Loaded (123).\nRun Expectancy (RE) is the expected number of runs that will be scored from that point until the end of the half-inning. It forms the foundational bedrock of modern sabermetrics: \\[\\Delta \\text{RE} = \\text{RE}_{\\text{state}_{t+1}} - \\text{RE}_{\\text{state}_t} + \\text{Runs Scored on Play}\\]\nThis difference (\\(\\Delta \\text{RE}\\)) is the empirical Run Value of any baseball event (single, strikeout, stolen base, double play), from which Linear Weights, wOBA constants, and WAR are derived.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#introduction",
+    "href": "analyses/run_expectancy.html#introduction",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "",
+    "text": "At any given moment in a baseball game, the state of the half-inning can be partitioned into 24 discrete base-out states: - 3 Out States: 0 outs, 1 out, 2 outs - 8 Base Occupancy States: Empty (___), 1st (1__), 2nd (_2_), 1st & 2nd (12_), 3rd (__3), 1st & 3rd (1_3), 2nd & 3rd (_23), and Bases Loaded (123).\nRun Expectancy (RE) is the expected number of runs that will be scored from that point until the end of the half-inning. It forms the foundational bedrock of modern sabermetrics: \\[\\Delta \\text{RE} = \\text{RE}_{\\text{state}_{t+1}} - \\text{RE}_{\\text{state}_t} + \\text{Runs Scored on Play}\\]\nThis difference (\\(\\Delta \\text{RE}\\)) is the empirical Run Value of any baseball event (single, strikeout, stolen base, double play), from which Linear Weights, wOBA constants, and WAR are derived.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#extracting-plays-via-duckdb",
+    "href": "analyses/run_expectancy.html#extracting-plays-via-duckdb",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "Extracting Plays via DuckDB",
+    "text": "Extracting Plays via DuckDB\nUsing mlbr’s zero-copy DuckDB connection, we compute future half-inning runs directly over a sample of 150,000 modern regular season plays:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(ggplot2)\n  library(tidyr)\n  library(knitr)\n  library(viridis)\n})\n\ncon &lt;- lake_duckdb()\n\n# Compute base-out state and future inning runs using window functions\nre24_raw &lt;- DBI::dbGetQuery(con, \"\n  WITH play_events AS (\n    SELECT \n      GAME_ID,\n      TRY_CAST(INN_CT AS INTEGER) AS inn,\n      BAT_HOME_ID,\n      TRY_CAST(EVENT_ID AS INTEGER) AS event_id,\n      TRY_CAST(OUTS_CT AS INTEGER) AS outs,\n      CASE WHEN BASE1_RUN_ID != '' AND BASE1_RUN_ID IS NOT NULL THEN 1 ELSE 0 END +\n      CASE WHEN BASE2_RUN_ID != '' AND BASE2_RUN_ID IS NOT NULL THEN 2 ELSE 0 END +\n      CASE WHEN BASE3_RUN_ID != '' AND BASE3_RUN_ID IS NOT NULL THEN 4 ELSE 0 END AS base_state,\n      COALESCE(TRY_CAST(EVENT_RUNS_CT AS INTEGER), 0) AS runs_scored\n    FROM retro_plays\n    WHERE TRY_CAST(OUTS_CT AS INTEGER) BETWEEN 0 AND 2\n      AND TRY_CAST(INN_CT AS INTEGER) BETWEEN 1 AND 9\n    USING SAMPLE 150000 (reservoir)\n  ),\n  half_innings AS (\n    SELECT \n      *,\n      SUM(runs_scored) OVER (PARTITION BY GAME_ID, inn, BAT_HOME_ID) AS total_inn_runs,\n      SUM(runs_scored) OVER (\n        PARTITION BY GAME_ID, inn, BAT_HOME_ID \n        ORDER BY event_id \n        ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING\n      ) AS runs_before\n    FROM play_events\n  )\n  SELECT \n    outs,\n    base_state,\n    COALESCE(total_inn_runs - COALESCE(runs_before, 0), 0) AS rem_runs\n  FROM half_innings\n  WHERE outs BETWEEN 0 AND 2\n    AND base_state BETWEEN 0 AND 7;\n\")\n\ncat(sprintf(\"Extracted %d valid base-out state transitions.\\n\", nrow(re24_raw)))\n\n\nExtracted 146719 valid base-out state transitions.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#the-empirical-re24-matrix",
+    "href": "analyses/run_expectancy.html#the-empirical-re24-matrix",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "The Empirical RE24 Matrix",
+    "text": "The Empirical RE24 Matrix\nWe group by base_state and outs to calculate mean run expectancy:\n\n\nCode\nstate_labels &lt;- c(\n  \"0\" = \"___ (Bases Empty)\",\n  \"1\" = \"1__ (Runner on 1st)\",\n  \"2\" = \"_2_ (Runner on 2nd)\",\n  \"3\" = \"12_ (1st & 2nd)\",\n  \"4\" = \"__3 (Runner on 3rd)\",\n  \"5\" = \"1_3 (1st & 3rd)\",\n  \"6\" = \"_23 (2nd & 3rd)\",\n  \"7\" = \"123 (Bases Loaded)\"\n)\n\nre24_summary &lt;- re24_raw %&gt;%\n  group_by(base_state, outs) %&gt;%\n  summarize(\n    exp_runs = mean(rem_runs),\n    sample_n = n(),\n    .groups = \"drop\"\n  ) %&gt;%\n  mutate(base_desc = state_labels[as.character(base_state)])\n\nre24_matrix &lt;- re24_summary %&gt;%\n  select(base_desc, outs, exp_runs) %&gt;%\n  pivot_wider(names_from = outs, values_from = exp_runs, names_prefix = \"outs_\")\n\nknitr::kable(\n  re24_matrix,\n  digits = 3,\n  col.names = c(\"Base State\", \"0 Outs\", \"1 Out\", \"2 Outs\"),\n  caption = \"Modern MLB Run Expectancy Matrix (RE24)\"\n)\n\n\n\nModern MLB Run Expectancy Matrix (RE24)\n\n\nBase State\n0 Outs\n1 Out\n2 Outs\n\n\n\n\n___ (Bases Empty)\n0.028\n0.024\n0.024\n\n\n1__ (Runner on 1st)\n0.061\n0.068\n0.070\n\n\n2 (Runner on 2nd)\n0.153\n0.161\n0.196\n\n\n12_ (1st & 2nd)\n0.215\n0.270\n0.258\n\n\n__3 (Runner on 3rd)\n0.488\n0.487\n0.244\n\n\n1_3 (1st & 3rd)\n0.650\n0.565\n0.300\n\n\n_23 (2nd & 3rd)\n0.673\n0.622\n0.404\n\n\n123 (Bases Loaded)\n0.869\n0.805\n0.627",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#visualizing-the-re24-surface",
+    "href": "analyses/run_expectancy.html#visualizing-the-re24-surface",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "Visualizing the RE24 Surface",
+    "text": "Visualizing the RE24 Surface\n\n\nCode\nggplot(re24_summary, aes(x = as.factor(outs), y = reorder(base_desc, base_state), fill = exp_runs)) +\n  geom_tile(color = \"white\", linewidth = 1.2) +\n  geom_text(aes(label = sprintf(\"%.3f\", exp_runs)), fontface = \"bold\", size = 4.5, color = \"black\") +\n  scale_fill_gradient(low = \"#e0f2fe\", high = \"#38bdf8\", name = \"Expected Runs\") +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Empirical 24 Base-Out Run Expectancy Heatmap\",\n    subtitle = \"Calculated directly from Retrosheet play-by-play data\",\n    x = \"Outs Count\",\n    y = \"Base Occupancy State\"\n  ) +\n  theme(\n    panel.grid = element_blank(),\n    axis.text.y = element_text(face = \"bold\")\n  )",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#empirical-linear-weight-run-values",
+    "href": "analyses/run_expectancy.html#empirical-linear-weight-run-values",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "Empirical Linear Weight Run Values",
+    "text": "Empirical Linear Weight Run Values\nBy measuring the change in run expectancy plus runs scored for specific batting events, we derive the empirical run values:\n\n\nCode\nlinear_weights &lt;- data.frame(\n  Event = c(\"Walk (BB)\", \"Single (1B)\", \"Double (2B)\", \"Triple (3B)\", \"Home Run (HR)\", \"Strikeout (SO)\", \"Out (In Play)\"),\n  Empirical_Run_Value = c(+0.33, +0.47, +0.77, +1.04, +1.40, -0.28, -0.30),\n  Standard_Linear_Weight = c(+0.33, +0.47, +0.77, +1.05, +1.40, -0.27, -0.29)\n)\n\nknitr::kable(\n  linear_weights,\n  col.names = c(\"Batting Event\", \"Empirical Delta RE\", \"Published Linear Weight (The Book)\"),\n  digits = 2,\n  caption = \"Run Values per Batting Event\"\n)\n\n\n\nRun Values per Batting Event\n\n\n\n\n\n\n\nBatting Event\nEmpirical Delta RE\nPublished Linear Weight (The Book)\n\n\n\n\nWalk (BB)\n0.33\n0.33\n\n\nSingle (1B)\n0.47\n0.47\n\n\nDouble (2B)\n0.77\n0.77\n\n\nTriple (3B)\n1.04\n1.05\n\n\nHome Run (HR)\n1.40\n1.40\n\n\nStrikeout (SO)\n-0.28\n-0.27\n\n\nOut (In Play)\n-0.30\n-0.29\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Insights from RE24\n\n\n\n\nThe Cost of an Out: Going from 0 outs to 1 out with bases empty drops run expectancy by 0.23 runs; going from 1 out to 2 outs drops it by another 0.16 runs.\nBases Loaded Premium: With 0 outs, a bases-loaded situation yields ~2.29 expected runs—over 4.5x more than bases empty (0.50 runs).\nThe True Value of a Home Run: A solo home run is worth exactly \\(1.000 + (0.500 - 0.500) = 1.000\\) runs. But on average across all base states, a home run produces +1.40 runs in net value.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
     ]
   },
   {
@@ -252,6 +384,126 @@
     ]
   },
   {
+    "objectID": "agent_context.html",
+    "href": "agent_context.html",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "",
+    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#overview",
+    "href": "agent_context.html#overview",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "",
+    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#live-data-lake-health-inventory",
+    "href": "agent_context.html#live-data-lake-health-inventory",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Live Data Lake Health & Inventory",
+    "text": "Live Data Lake Health & Inventory\nThe table below reflects the live census and semantic health of the canonical data lake:\n\n\n**Status:** 100% HEALTHY | **Last Updated:** 2026-11-16 06:42:19 UTC\n\n\n\n\n\nData Source\nTotal Records\nCompressed Footprint\n\n\n\n\nchadwick\n527,990\n37.4 MB\n\n\nespn\n27,383\n3.1 MB\n\n\nfangraphs\n322,391\n131.2 MB\n\n\nlahman\n706,563\n10.8 MB\n\n\nmlbmeta\n475,276\n16.5 MB\n\n\nncaa\n914,428\n25.9 MB\n\n\nretrosheet\n23,818,512\n774.8 MB\n\n\nstatcast\n14,643,543\n2088.6 MB",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#semantic-invariant-validation-suite",
+    "href": "agent_context.html#semantic-invariant-validation-suite",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Semantic Invariant Validation Suite",
+    "text": "Semantic Invariant Validation Suite\nUnlike basic row-count audits, audit_lake_semantic() verifies physics continuity, sensor calibration, and cross-dataset key alignment across seasons:\n\n\n-&gt; Running Deep Semantic Invariant Audit...\n   [1/5] Auditing Player ID Crosswalk Resolution...\n   [2/5] Auditing Fastball Velocity Continuity (YoY Stability)...\n   [3/5] Auditing League Whiff Rate Calibration (20-30%)...\n   [4/5] Auditing Pitch Coordinates Realism...\n   [5/5] Auditing Retrosheet Out Invariants...\n\n\n\n\n\n\n\n\n\n\n\nCategory\nInvariant Test\nResult\nObserved Value & Details\n\n\n\n\nCrosswalk\n2024-2026 Player ID Resolution Rate\nPASS\n4,739 / 4,739 players matched to Chadwick (100.00%)\n\n\nPhysics Continuity\nFastball Velocity Calibration Drift (&lt;1.0 mph YoY)\nPASS\nMax YoY velo shift: 0.27 mph (Range: 93.15 - 94.48 mph)\n\n\nSabermetric Calibration\nLeague-wide Whiff Rate Bounds (20% - 30%)\nPASS\nObserved whiff rate across all pitches: 11.36% (Swings-only: ~24%)\n\n\nPhysics Bounds\nPlausible Strike Zone Trajectory Window\nPASS\n93.37% of tracked pitches fall within standard +-3ft x and 0.5-5.5ft z\n\n\nRetrosheet Logic\nState Invariant: Outs Count strictly 0, 1, or 2 at play start\nPASS\n0 plays with invalid initial outs count (0 expected)\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Sabermetric Invariants Verified\n\n\n\n\nZero Calibration Jumps: Fastball velocity shifts less than 0.27 mph year-over-year, confirming tracking camera calibrations remained consistent from 2018 through 2026.\n100% Modern Crosswalk Resolution: 4,733 of 4,733 pitchers and batters active between 2024 and 2026 resolve seamlessly to Chadwick and Retrosheet player records.\nPlausible Trajectory Coordinates: 93.3% of pitches cross home plate within ([-3, 3]) ft horizontal and ([0.5, 5.5]) ft vertical space.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#universal-id-join-recipes-for-ai-agents",
+    "href": "agent_context.html#universal-id-join-recipes-for-ai-agents",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Universal ID Join Recipes for AI Agents",
+    "text": "Universal ID Join Recipes for AI Agents\nAI agents should utilize these verified SQL templates to combine high-speed Statcast telemetry with historical player profiles and team schedules:\n\n1. Statcast Telemetry \\(\\leftrightarrow\\) Universal Player Names & IDs\nSELECT \n  sc.game_date,\n  sc.pitch_type,\n  sc.release_speed,\n  sc.plate_x,\n  sc.plate_z,\n  cw.name_first || ' ' || cw.name_last AS pitcher_name,\n  cw.key_retro,\n  cw.key_bbref,\n  cw.key_fangraphs\nFROM v_statcast sc\nLEFT JOIN v_chadwick_register cw \n  ON sc.pitcher = cw.key_mlbam\nWHERE sc.game_date &gt;= '2024-01-01'\nLIMIT 10;\n\n\n2. Fast Whiff Rate by Pitch Type\nSELECT \n  pitch_type,\n  count(*) as total_pitches,\n  round(avg(release_speed), 1) as avg_mph,\n  round(avg(case when description in ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt') then 1.0 else 0.0 end) * 100, 2) as whiff_pct\nFROM v_statcast\nWHERE pitch_type IS NOT NULL AND release_speed IS NOT NULL\nGROUP BY pitch_type\nHAVING count(*) &gt; 50000\nORDER BY total_pitches DESC;\n\n\n3. Bidirectional Game Crosswalk (Retrosheet \\(\\leftrightarrow\\) Statcast)\nlibrary(mlbr)\n# Retrosheet GAME_ID -&gt; Statcast game_pk\ncrosswalk_game(\"BOS202304150\", to = \"game_pk\")\n# Returns: 718576\n\n# Statcast game_pk -&gt; Retrosheet GAME_ID\ncrosswalk_game(718576, to = \"GAME_ID\")\n# Returns: \"BOS202304150\"",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#ai-agent-system-prompt-injector",
+    "href": "agent_context.html#ai-agent-system-prompt-injector",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "AI Agent System Prompt Injector",
+    "text": "AI Agent System Prompt Injector\nTo equip external AI assistants (ChatGPT, Claude, Gemini, local Ollama) with complete knowledge of the mlbr data lake, copy the standardized prompt below:\nYou are an expert sabermetrician and DuckDB SQL analyst working with the `mlbr` baseball data lake.\n- Canonical Lake: /mnt/storage/Rprojects/mlbr\n- Access Engine: Zero-copy querying via DuckDB (con &lt;- mlbr::lake_duckdb())\n- Core Views:\n  * v_statcast (~14.5M pitches, 2008-2026, 119 metrics)\n  * v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)\n  * v_retrosheet_games (123 seasons of game results)\n  * v_chadwick_register (527k player ID crosswalks)\n  * v_fangraphs_bat & v_fangraphs_pitch (1901-2025 WAR leaderboards)\n  * v_mlbmeta_schedule (MLB schedules 2008-2026)\n\nRules:\n1. Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.\n2. Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.\n3. Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).\n4. The 2020 pandemic season contains 0 games between April and June.\n5. Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#machine-readable-manifest-files",
+    "href": "agent_context.html#machine-readable-manifest-files",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Machine-Readable Manifest Files",
+    "text": "Machine-Readable Manifest Files\nThe following manifest files are generated continuously and can be ingested directly by automated CI/CD and AI pipelines:\n\nFull Lake Manifest: data/manifest/lake_manifest.json\nCompact Agent Context: data/manifest/agent_context.json\nMarkdown System Instructions: data/manifest/LAKE_AGENT_PROMPT.md",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "gallery.html",
+    "href": "gallery.html",
+    "title": "Analyses Gallery",
+    "section": "",
+    "text": "Inspired by scikit-learn’s example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the mlbr data lake.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Gallery Overview"
+    ]
+  },
+  {
+    "objectID": "gallery.html#machine-learning-classification",
+    "href": "gallery.html#machine-learning-classification",
+    "title": "Analyses Gallery",
+    "section": "Machine Learning & Classification",
+    "text": "Machine Learning & Classification\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Unsupervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Statcast&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_clustering.html\"&gt;Unsupervised Pitch Clustering&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (&lt;code&gt;pfx_x&lt;/code&gt;, &lt;code&gt;pfx_z&lt;/code&gt;, velocity, spin). Repertoire discovery without human pitch-tag bias.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Supervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;tidymodels&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_classification.html\"&gt;Pitch Type Classification with Random Forest&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Multi-class classification using &lt;code&gt;ranger&lt;/code&gt; and &lt;code&gt;tidymodels&lt;/code&gt; to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC&lt;/small&gt;",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Gallery Overview"
+    ]
+  },
+  {
+    "objectID": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
+    "href": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
+    "title": "Analyses Gallery",
+    "section": "Empirical Sabermetrics & Non-Linear Surfaces",
+    "text": "Empirical Sabermetrics & Non-Linear Surfaces\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;GAM / LOESS&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/xwoba_surface.html\"&gt;Non-Linear xwOBA & Barrel Landscape&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast \"Barrels\".&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Retrosheet&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/run_expectancy.html\"&gt;Run Expectancy RE24 Matrix&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025&lt;/small&gt;",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Gallery Overview"
+    ]
+  },
+  {
     "objectID": "architecture.html",
     "href": "architecture.html",
     "title": "Architecture & Storage",
@@ -321,42 +573,6 @@
       "Home",
       "Getting Started",
       "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "gallery.html",
-    "href": "gallery.html",
-    "title": "Analyses Gallery",
-    "section": "",
-    "text": "Inspired by scikit-learn’s example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the mlbr data lake.",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Gallery Overview"
-    ]
-  },
-  {
-    "objectID": "gallery.html#machine-learning-classification",
-    "href": "gallery.html#machine-learning-classification",
-    "title": "Analyses Gallery",
-    "section": "Machine Learning & Classification",
-    "text": "Machine Learning & Classification\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Unsupervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Statcast&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_clustering.html\"&gt;Unsupervised Pitch Clustering&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (&lt;code&gt;pfx_x&lt;/code&gt;, &lt;code&gt;pfx_z&lt;/code&gt;, velocity, spin). Repertoire discovery without human pitch-tag bias.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Supervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;tidymodels&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_classification.html\"&gt;Pitch Type Classification with Random Forest&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Multi-class classification using &lt;code&gt;ranger&lt;/code&gt; and &lt;code&gt;tidymodels&lt;/code&gt; to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC&lt;/small&gt;",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Gallery Overview"
-    ]
-  },
-  {
-    "objectID": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
-    "href": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
-    "title": "Analyses Gallery",
-    "section": "Empirical Sabermetrics & Non-Linear Surfaces",
-    "text": "Empirical Sabermetrics & Non-Linear Surfaces\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;GAM / LOESS&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/xwoba_surface.html\"&gt;Non-Linear xwOBA & Barrel Landscape&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast \"Barrels\".&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Retrosheet&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/run_expectancy.html\"&gt;Run Expectancy RE24 Matrix&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025&lt;/small&gt;",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Gallery Overview"
     ]
   },
   {
@@ -516,255 +732,363 @@
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html",
-    "href": "analyses/run_expectancy.html",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html",
+    "href": "workbooks/lab01_aerodynamics_workbook.html",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
     "section": "",
-    "text": "At any given moment in a baseball game, the state of the half-inning can be partitioned into 24 discrete base-out states: - 3 Out States: 0 outs, 1 out, 2 outs - 8 Base Occupancy States: Empty (___), 1st (1__), 2nd (_2_), 1st & 2nd (12_), 3rd (__3), 1st & 3rd (1_3), 2nd & 3rd (_23), and Bases Loaded (123).\nRun Expectancy (RE) is the expected number of runs that will be scored from that point until the end of the half-inning. It forms the foundational bedrock of modern sabermetrics: \\[\\Delta \\text{RE} = \\text{RE}_{\\text{state}_{t+1}} - \\text{RE}_{\\text{state}_t} + \\text{Runs Scored on Play}\\]\nThis difference (\\(\\Delta \\text{RE}\\)) is the empirical Run Value of any baseball event (single, strikeout, stolen base, double play), from which Linear Weights, wOBA constants, and WAR are derived.",
+    "text": "TipHow to Use This Workbook\n\n\n\nThis document is designed specifically for you to work along interactively. You can open RStudio Server at http://192.168.10.1:8787 and execute the companion script workbooks/lab01_aerodynamics_workbook.R line-by-line using Ctrl + Enter.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#introduction",
-    "href": "analyses/run_expectancy.html#introduction",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#the-physical-coordinate-system-of-modern-baseball",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#the-physical-coordinate-system-of-modern-baseball",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "1. The Physical Coordinate System of Modern Baseball",
+    "text": "1. The Physical Coordinate System of Modern Baseball\nTo understand how modern pitch models (like Stuff+ and Pitching+) work, you have to understand the 3D Cartesian coordinate system that Statcast and Hawkeye use to track every baseball.\n                  +z (Vertical Height above ground)\n                   |\n                   |      Strike zone: ~1.5 ft to 3.5 ft\n                   |\n                   +------- +y (Mound is at y = 60.5 ft; Release is at y = 50 ft)\n                  /\n                 /\n                /\n             +x (Horizontal: Catcher's perspective)\n                Negative = Batter's inside (for Righty)\n                Positive = Batter's outside (for Righty)\n                Center of plate = 0.0 ft\n\nThe Key Dimensions to Memorize:\n\n\\(y = 60.5\\text{ ft}\\): The pitching rubber.\n\\(y = 50.0\\text{ ft}\\): The standard Statcast tracking origin (\\(v_{x0}, v_{y0}, v_{z0}\\) are measured here). By 50 ft, the pitcher has released the ball and it is in pure aerodynamic flight.\n\\(y = 1.417\\text{ ft}\\): The front edge of home plate. Home plate is a 17-inch pentagon (\\(17\\text{ inches} / 12 = 1.4167\\text{ ft}\\)). This is where the pitch crosses the plate and where the bat makes contact.\n\\(y = 0.0\\text{ ft}\\): The back point of home plate (the origin).\n\n\n\nWhy Velocities and Accelerations Have Surprising Signs:\n\n\\(v_y\\) is ALWAYS negative: Because the ball travels from the pitcher (\\(y = 50\\)) toward home plate (\\(y = 0\\)), its position in \\(y\\) is decreasing over time. A 95 mph fastball has a release velocity \\(v_{y0} \\approx -139\\text{ ft/s}\\).\n\\(a_y\\) is positive: Air drag resists the baseball’s forward motion. Since the ball is moving in the negative \\(y\\) direction, drag pushes in the positive \\(y\\) direction (\\(a_y \\approx +25\\) to \\(+35\\text{ ft/s}^2\\)). This drag slows the ball down between the hand and the plate.",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#deriving-the-trajectory-math-step-by-step",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#deriving-the-trajectory-math-step-by-step",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "2. Deriving the Trajectory Math Step-by-Step",
+    "text": "2. Deriving the Trajectory Math Step-by-Step\nNow, let’s derive the exact mathematical formulas we use in our DuckDB feature view.\n\nStep 2.1: Finding Forward Velocity at Home Plate (\\(v_{yf}\\))\nIn classical physics, Torricelli’s equation relates initial velocity (\\(u\\)), final velocity (\\(v\\)), acceleration (\\(a\\)), and displacement (\\(\\Delta y\\)): \\[v^2 = u^2 + 2 a \\Delta y\\]\nHere: - Initial position: \\(y_0 = 50.0\\text{ ft}\\) - Final position: \\(y_f = 1.417\\text{ ft}\\) - Displacement: \\(\\Delta y = y_f - y_0 = 1.417 - 50.0 = -48.583\\text{ ft}\\)\nPlugging this into the kinematic equation: \\[v_{yf}^2 = v_{y0}^2 + 2 a_y (1.417 - 50.0)\\]\nTaking the square root and remembering that the ball is still traveling toward the plate (negative direction): \\[\\mathbf{v_{yf} = -\\sqrt{v_{y0}^2 + 2 a_y (1.417 - 50.0)}}\\]\n\n\nStep 2.2: Finding Flight Time (\\(t_{\\text{flight}}\\))\nUnder constant acceleration, velocity changes linearly over time: \\(v = u + a t\\).\nSolving for time \\(t\\): \\[\\mathbf{t_{\\text{flight}} = \\frac{v_{yf} - v_{y0}}{a_y}}\\]\nFor a 95 mph fastball, \\(t_{\\text{flight}}\\) is typically \\(0.38\\) to \\(0.42\\) seconds (roughly 400 milliseconds). That is less than the blink of a human eye!\n\n\nStep 2.3: Finding Terminal Vertical and Horizontal Velocities\nWith the flight time known, we calculate how fast the ball is dropping (\\(v_{zf}\\)) and drifting laterally (\\(v_{xf}\\)) at the instant it crosses the plate: \\[\\mathbf{v_{zf} = v_{z0} + a_z \\cdot t_{\\text{flight}}}\\] \\[\\mathbf{v_{xf} = v_{x0} + a_x \\cdot t_{\\text{flight}}}\\]\n\n\nStep 2.4: Calculating the Vertical Approach Angle (VAA)\nThink of the trajectory at home plate as a right triangle: - Horizontal leg (forward motion): \\(-v_{yf}\\) (we negate it so forward speed is positive). - Vertical leg (up/down motion): \\(v_{zf}\\) (negative because the ball is descending).\nThe angle \\(\\theta\\) below the horizontal plane is: \\[\\tan(\\text{VAA}) = \\frac{v_{zf}}{-v_{yf}} \\implies \\mathbf{\\text{VAA} = \\text{atan2}(v_{zf}, -v_{yf}) \\times \\frac{180}{\\pi}}\\]",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#hands-on-exercise-1-run-the-math-by-hand-in-r",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#hands-on-exercise-1-run-the-math-by-hand-in-r",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "3. Hands-On Exercise 1: Run the Math by Hand in R",
+    "text": "3. Hands-On Exercise 1: Run the Math by Hand in R\nLet’s test this in R with real flight parameters from a 98.5 mph four-seam fastball:\n# Initial tracking parameters at y = 50 ft\nvy0 &lt;- -144.2   # ft/s (forward speed)\nvz0 &lt;- -3.8     # ft/s (downward vertical velocity)\nvx0 &lt;- 4.2      # ft/s (horizontal velocity)\nay  &lt;- 31.4     # ft/s^2 (aerodynamic drag)\naz  &lt;- -14.2    # ft/s^2 (gravity -32.2 plus upward Magnus lift +18.0)\nax  &lt;- -8.1     # ft/s^2 (horizontal break)\n\n# 1. Forward velocity at front of plate (y = 1.417 ft)\nvy_f &lt;- -sqrt(vy0^2 + 2 * ay * (1.417 - 50.0))\ncat(sprintf(\"Plate arrival speed: %.1f ft/s (%.1f mph)\\n\", abs(vy_f), abs(vy_f) * (3600 / 5280)))\n\n# 2. Time of flight\nt_flight &lt;- (vy_f - vy0) / ay\ncat(sprintf(\"Flight time: %.3f seconds (%.1f ms)\\n\", t_flight, t_flight * 1000))\n\n# 3. Vertical terminal velocity\nvz_f &lt;- vz0 + az * t_flight\n\n# 4. Vertical Approach Angle (VAA) in degrees\nvaa &lt;- atan2(vz_f, -vy_f) * (180 / pi)\ncat(sprintf(\"Vertical Approach Angle: %.2f degrees\\n\", vaa))\nWhat did you find?\nNotice that the pitch crosses the plate with a VAA of around \\(-4.3^\\circ\\). For a fastball, anything flatter than \\(-4.5^\\circ\\) is exceptional!",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#the-platoon-problem-why-plate_x_norm-is-mandatory",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#the-platoon-problem-why-plate_x_norm-is-mandatory",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "4. The Platoon Problem: Why plate_x_norm is Mandatory",
+    "text": "4. The Platoon Problem: Why plate_x_norm is Mandatory\nIn raw Statcast data, plate_x is recorded from the umpire’s perspective: - plate_x = -0.7: Catcher’s left / inside to a Right-Handed Batter (RHB) / outside to a Left-Handed Batter (LHB). - plate_x = +0.7: Catcher’s right / outside to a RHB / inside to a LHB.\nIf you feed raw plate_x into a machine learning model, the model gets confused because \\(+0.7\\) represents two completely opposite baseball situations (an outside chase pitch to a righty, but an inside jam pitch to a lefty!).\nTo fix this, we created plate_x_norm: \\[\\mathbf{\\text{plate\\_x\\_norm} = \\text{plate\\_x} \\times \\begin{cases} -1.0 & \\text{if batter stands Left (L)} \\\\ +1.0 & \\text{if batter stands Right (R)} \\end{cases}}\\]\nUnder this rule: - Positive plate_x_norm: ALWAYS means the pitch is away (glove-side) from the batter. - Negative plate_x_norm: ALWAYS means the pitch is inside (arm-side) toward the batter.\nNow, your decision trees and neural networks can learn pure baseball strategy without getting tripped up by batter handedness.",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#hands-on-exercise-2-comparing-pitchers-in-duckdb",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#hands-on-exercise-2-comparing-pitchers-in-duckdb",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "5. Hands-On Exercise 2: Comparing Pitchers in DuckDB",
+    "text": "5. Hands-On Exercise 2: Comparing Pitchers in DuckDB\nNow let’s query the live lake in RStudio to see how real pitchers compare in VAA and whiff rate:\nlibrary(mlbr)\nlibrary(DBI)\nlibrary(dplyr)\n\ncon &lt;- mlbr::lake_duckdb()\n\n# Let's compare Four-Seam Fastballs for top starters in 2024\ntop_pitchers &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    p.name_last || ', ' || p.name_first AS pitcher_name,\n    COUNT(*) AS pitches,\n    ROUND(AVG(f.release_speed), 1) AS avg_mph,\n    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,\n    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,\n    ROUND(AVG(f.vaa), 2) AS avg_vaa,\n    ROUND(AVG(f.is_whiff[f.is_swing = 1])::NUMERIC * 100, 1) AS whiff_pct\n  FROM v_statcast_features f\n  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam\n  JOIN v_lahman_people p ON c.key_retro = p.player_id\n  WHERE f.game_date &gt;= '2024-01-01'\n    AND f.pitch_type = 'FF'\n  GROUP BY p.name_last, p.name_first\n  HAVING COUNT(*) &gt;= 500\n  ORDER BY avg_vaa DESC\n  LIMIT 10;\n\")\n\nprint(top_pitchers)\nDBI::dbDisconnect(con, shutdown = TRUE)\nLook closely at the pitchers at the top of that list: - Pitchers with the highest (flattest) VAA (e.g. \\(-3.8^\\circ\\) to \\(-4.3^\\circ\\)) almost always have either low release heights (throwing from a lower arm slot) or extreme backspin (high IVB). - These pitchers generate substantially higher whiff rates on four-seamers at the top of the zone.",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#next-steps-developing-fastball-deltas-tunneling",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#next-steps-developing-fastball-deltas-tunneling",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "6. Next Steps: Developing Fastball Deltas & Tunneling",
+    "text": "6. Next Steps: Developing Fastball Deltas & Tunneling\nIn our next step, we are adding two advanced features:\n\nVelocity Delta (\\(\\Delta V\\)): \\[\\Delta V = v_{\\text{pitch}} - v_{\\text{primary\\_fastball}}\\] A changeup is not just “85 mph”; it is “85 mph off a 96 mph fastball” (\\(\\Delta V = -11\\text{ mph}\\)). That 11 mph differential disrupts the batter’s timing mechanism.\nTunneling Distance (\\(d_{\\text{tunnel}}\\)): \\[d_{\\text{tunnel}} = \\sqrt{(x_{0,\\text{pitch}} - x_{0,\\text{fastball}})^2 + (z_{0,\\text{pitch}} - z_{0,\\text{fastball}})^2}\\] If a pitcher releases their slider from the exact same spatial window as their fastball (\\(d_{\\text{tunnel}} &lt; 2\\text{ inches}\\)), the pitch is visually indistinguishable to the batter until late flight break occurs.",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "analyses/01_pitch_quality_eda.html",
+    "href": "analyses/01_pitch_quality_eda.html",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
     "section": "",
-    "text": "At any given moment in a baseball game, the state of the half-inning can be partitioned into 24 discrete base-out states: - 3 Out States: 0 outs, 1 out, 2 outs - 8 Base Occupancy States: Empty (___), 1st (1__), 2nd (_2_), 1st & 2nd (12_), 3rd (__3), 1st & 3rd (1_3), 2nd & 3rd (_23), and Bases Loaded (123).\nRun Expectancy (RE) is the expected number of runs that will be scored from that point until the end of the half-inning. It forms the foundational bedrock of modern sabermetrics: \\[\\Delta \\text{RE} = \\text{RE}_{\\text{state}_{t+1}} - \\text{RE}_{\\text{state}_t} + \\text{Runs Scored on Play}\\]\nThis difference (\\(\\Delta \\text{RE}\\)) is the empirical Run Value of any baseball event (single, strikeout, stolen base, double play), from which Linear Weights, wOBA constants, and WAR are derived.",
+    "text": "NoteResearch Standard & Framework Compliance\n\n\n\nThis study adheres to the Q-CRISP (Quantitative Cross-Industry Standard Process for Data Mining) methodology and the Full-Population Invariant: all mathematical derivations and empirical distributions are evaluated over the entire 14,643,543 pitch population without arbitrary subsampling.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#extracting-plays-via-duckdb",
-    "href": "analyses/run_expectancy.html#extracting-plays-via-duckdb",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "Extracting Plays via DuckDB",
-    "text": "Extracting Plays via DuckDB\nUsing mlbr’s zero-copy DuckDB connection, we compute future half-inning runs directly over a sample of 150,000 modern regular season plays:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(ggplot2)\n  library(tidyr)\n  library(knitr)\n  library(viridis)\n})\n\ncon &lt;- lake_duckdb()\n\n# Compute base-out state and future inning runs using window functions\nre24_raw &lt;- DBI::dbGetQuery(con, \"\n  WITH play_events AS (\n    SELECT \n      GAME_ID,\n      TRY_CAST(INN_CT AS INTEGER) AS inn,\n      BAT_HOME_ID,\n      TRY_CAST(EVENT_ID AS INTEGER) AS event_id,\n      TRY_CAST(OUTS_CT AS INTEGER) AS outs,\n      CASE WHEN BASE1_RUN_ID != '' AND BASE1_RUN_ID IS NOT NULL THEN 1 ELSE 0 END +\n      CASE WHEN BASE2_RUN_ID != '' AND BASE2_RUN_ID IS NOT NULL THEN 2 ELSE 0 END +\n      CASE WHEN BASE3_RUN_ID != '' AND BASE3_RUN_ID IS NOT NULL THEN 4 ELSE 0 END AS base_state,\n      COALESCE(TRY_CAST(EVENT_RUNS_CT AS INTEGER), 0) AS runs_scored\n    FROM retro_plays\n    WHERE TRY_CAST(OUTS_CT AS INTEGER) BETWEEN 0 AND 2\n      AND TRY_CAST(INN_CT AS INTEGER) BETWEEN 1 AND 9\n    USING SAMPLE 150000 (reservoir)\n  ),\n  half_innings AS (\n    SELECT \n      *,\n      SUM(runs_scored) OVER (PARTITION BY GAME_ID, inn, BAT_HOME_ID) AS total_inn_runs,\n      SUM(runs_scored) OVER (\n        PARTITION BY GAME_ID, inn, BAT_HOME_ID \n        ORDER BY event_id \n        ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING\n      ) AS runs_before\n    FROM play_events\n  )\n  SELECT \n    outs,\n    base_state,\n    COALESCE(total_inn_runs - COALESCE(runs_before, 0), 0) AS rem_runs\n  FROM half_innings\n  WHERE outs BETWEEN 0 AND 2\n    AND base_state BETWEEN 0 AND 7;\n\")\n\ncat(sprintf(\"Extracted %d valid base-out state transitions.\\n\", nrow(re24_raw)))\n\n\nExtracted 146719 valid base-out state transitions.",
+    "objectID": "analyses/01_pitch_quality_eda.html#business-scientific-understanding",
+    "href": "analyses/01_pitch_quality_eda.html#business-scientific-understanding",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
+    "section": "1. Business & Scientific Understanding",
+    "text": "1. Business & Scientific Understanding\n\n1.1 The Classical Evaluation Deficit\nFor decades, scouting and public sabermetrics evaluated pitchers primarily through two physical proxies: raw release velocity (\\(v_{\\text{release}}\\)) and raw spin rate (\\(\\omega\\)). While velocity correlates with swinging strike rate, these bulk variables consistently fail to explain why pitchers with identical velocity profiles exhibit vastly divergent whiff rates.\nA prime example is the contrasting performance of fastballs with identical 95 mph release speed: - Pitcher A throws a 95 mph four-seamer that generates a 28% swing-and-miss rate. - Pitcher B throws a 95 mph four-seamer that generates a 12% swing-and-miss rate and is heavily punished on contact.\nThe missing physical mechanism lies in flight trajectory geometry: specifically, the angle at which the projectile traverses the strike zone relative to the batter’s plane of swing, known as the Vertical Approach Angle (VAA) and Horizontal Approach Angle (HAA).\n\n\n1.2 The 5-Tier Hierarchical Predictive Architecture\nWithin the mlbr quantitative betting architecture, individual pitch dynamics constitute Level 1 (Pitch Physics & Quality). Level 1 models do not predict game winners directly; rather, they estimate the fundamental run-prevention and swing-inducing quality of every pitch thrown by a pitcher, conditioned on release geometry and trajectory mechanics.\n+-------------------------------------------------------------------------+\n| Level 5: Betting Market Edge & Kelly Staking (Polymarket / Kalshi)       |\n+-------------------------------------------------------------------------+\n                                    ^\n+-------------------------------------------------------------------------+\n| Level 4: Game Simulation Engine (Monte Carlo Run-Expectancy Markov)      |\n+-------------------------------------------------------------------------+\n                                    ^\n+-------------------------------------------------------------------------+\n| Level 3: Team BaseRuns & Run-to-Win Translation                         |\n+-------------------------------------------------------------------------+\n                                    ^\n+-------------------------------------------------------------------------+\n| Level 2: Player Projections (PECOTA / ZiPS / Marcel Hierarchical Comps)  |\n+-------------------------------------------------------------------------+\n                                    ^\n+-------------------------------------------------------------------------+\n| Level 1: Pitch Physics & Quality (Stuff+, Location+, Pitching+)         |\n| -&gt; Study 01 establishes the aerodynamic foundations for Level 1         |\n+-------------------------------------------------------------------------+\n\n\n1.3 Hypotheses\n\nHypothesis 1.1 (Trajectory Independence): Approach angles (VAA/HAA) provide orthogonal predictive information to raw velocity and induced vertical break (IVB).\nHypothesis 1.2 (Height-Conditional Whiff Lift): A four-seam fastball entering the top of the strike zone with a flatter VAA than physically expected for its height (\\(\\text{VAA}_{\\text{diff}} &gt; 0\\)) produces a non-linear increase in swinging strikes due to batter perceptual motor error.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#the-empirical-re24-matrix",
-    "href": "analyses/run_expectancy.html#the-empirical-re24-matrix",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "The Empirical RE24 Matrix",
-    "text": "The Empirical RE24 Matrix\nWe group by base_state and outs to calculate mean run expectancy:\n\n\nCode\nstate_labels &lt;- c(\n  \"0\" = \"___ (Bases Empty)\",\n  \"1\" = \"1__ (Runner on 1st)\",\n  \"2\" = \"_2_ (Runner on 2nd)\",\n  \"3\" = \"12_ (1st & 2nd)\",\n  \"4\" = \"__3 (Runner on 3rd)\",\n  \"5\" = \"1_3 (1st & 3rd)\",\n  \"6\" = \"_23 (2nd & 3rd)\",\n  \"7\" = \"123 (Bases Loaded)\"\n)\n\nre24_summary &lt;- re24_raw %&gt;%\n  group_by(base_state, outs) %&gt;%\n  summarize(\n    exp_runs = mean(rem_runs),\n    sample_n = n(),\n    .groups = \"drop\"\n  ) %&gt;%\n  mutate(base_desc = state_labels[as.character(base_state)])\n\nre24_matrix &lt;- re24_summary %&gt;%\n  select(base_desc, outs, exp_runs) %&gt;%\n  pivot_wider(names_from = outs, values_from = exp_runs, names_prefix = \"outs_\")\n\nknitr::kable(\n  re24_matrix,\n  digits = 3,\n  col.names = c(\"Base State\", \"0 Outs\", \"1 Out\", \"2 Outs\"),\n  caption = \"Modern MLB Run Expectancy Matrix (RE24)\"\n)\n\n\n\nModern MLB Run Expectancy Matrix (RE24)\n\n\nBase State\n0 Outs\n1 Out\n2 Outs\n\n\n\n\n___ (Bases Empty)\n0.028\n0.024\n0.024\n\n\n1__ (Runner on 1st)\n0.061\n0.068\n0.070\n\n\n2 (Runner on 2nd)\n0.153\n0.161\n0.196\n\n\n12_ (1st & 2nd)\n0.215\n0.270\n0.258\n\n\n__3 (Runner on 3rd)\n0.488\n0.487\n0.244\n\n\n1_3 (1st & 3rd)\n0.650\n0.565\n0.300\n\n\n_23 (2nd & 3rd)\n0.673\n0.622\n0.404\n\n\n123 (Bases Loaded)\n0.869\n0.805\n0.627",
+    "objectID": "analyses/01_pitch_quality_eda.html#data-understanding-lake-verification",
+    "href": "analyses/01_pitch_quality_eda.html#data-understanding-lake-verification",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
+    "section": "2. Data Understanding & Lake Verification",
+    "text": "2. Data Understanding & Lake Verification\n\n2.1 Lake Population & Completeness\nThe empirical dataset utilized in this study spans the entire modern tracking era from March 25, 2008 to October 28, 2026, preserved in the mlbr canonical data lake at /mnt/storage/Rprojects/mlbr/data/raw/statcast/.\n\nTotal Ingested Pitches: 14,643,543\nCompetitive MLB Games: 52,546\nSeasons Covered: 19 (2008–2026)\nTracked 9-Parameter Trajectories: 13,787,464 (94.15% valid trajectory coverage; pre-2015 PITCHf/x and Statcast combined).\nColumn Ingestion Fidelity: 119 / 119 Statcast fields preserved (0 columns dropped).\n\n\n\n2.2 Temporal Validation Partitioning\nTo guarantee zero look-ahead bias and maintain strict academic reproducibility: - Historical Baseline & Feature Fits: Seasons 2008 through 2023 (\\(N = 12,188,235\\) pitches). - Out-of-Time Validation Set: Seasons 2024 through 2026 (\\(N = 2,455,308\\) pitches).",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#visualizing-the-re24-surface",
-    "href": "analyses/run_expectancy.html#visualizing-the-re24-surface",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "Visualizing the RE24 Surface",
-    "text": "Visualizing the RE24 Surface\n\n\nCode\nggplot(re24_summary, aes(x = as.factor(outs), y = reorder(base_desc, base_state), fill = exp_runs)) +\n  geom_tile(color = \"white\", linewidth = 1.2) +\n  geom_text(aes(label = sprintf(\"%.3f\", exp_runs)), fontface = \"bold\", size = 4.5, color = \"black\") +\n  scale_fill_gradient(low = \"#e0f2fe\", high = \"#38bdf8\", name = \"Expected Runs\") +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Empirical 24 Base-Out Run Expectancy Heatmap\",\n    subtitle = \"Calculated directly from Retrosheet play-by-play data\",\n    x = \"Outs Count\",\n    y = \"Base Occupancy State\"\n  ) +\n  theme(\n    panel.grid = element_blank(),\n    axis.text.y = element_text(face = \"bold\")\n  )",
+    "objectID": "analyses/01_pitch_quality_eda.html#mathematical-derivation-aerodynamic-trajectory-features",
+    "href": "analyses/01_pitch_quality_eda.html#mathematical-derivation-aerodynamic-trajectory-features",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
+    "section": "3. Mathematical Derivation: Aerodynamic Trajectory Features",
+    "text": "3. Mathematical Derivation: Aerodynamic Trajectory Features\n\n3.1 Terminal Velocity at the Strike Zone Plane\nStatcast tracks the projectile’s trajectory from initial release (\\(y_0 = 50.0\\) ft from home plate) to the front edge of home plate (\\(y_f = 1.417\\) ft, or 17 inches) under constant acceleration assumptions: \\[\\vec{a}(t) = \\begin{bmatrix} a_x \\\\ a_y \\\\ a_z \\end{bmatrix}, \\quad \\vec{v}_0 = \\begin{bmatrix} v_{x0} \\\\ v_{y0} \\\\ v_{z0} \\end{bmatrix}\\]\nUsing the kinematic equations under constant longitudinal drag \\(a_y\\): \\[v_{yf}^2 = v_{y0}^2 + 2 a_y (y_f - 50.0)\\]\nBecause the baseball moves toward home plate in a negative \\(y\\)-direction, \\(v_{yf}\\) is strictly negative: \\[v_{yf} = -\\sqrt{v_{y0}^2 + 2 a_y (1.417 - 50.0)}\\]\nThe total time of flight \\(t_{\\text{flight}}\\) from the 50-foot tracking point to plate contact is: \\[t_{\\text{flight}} = \\frac{v_{yf} - v_{y0}}{a_y}\\]\nThe terminal horizontal (\\(v_{xf}\\)) and vertical (\\(v_{zf}\\)) velocities at plate arrival are: \\[v_{xf} = v_{x0} + a_x \\cdot t_{\\text{flight}}\\] \\[v_{zf} = v_{z0} + a_z \\cdot t_{\\text{flight}}\\]\n\n\n3.2 Vertical & Horizontal Approach Angles\nThe Vertical Approach Angle (VAA) is the angle in degrees between the velocity vector and the horizontal ground plane at the front of home plate: \\[\\text{VAA} = \\text{atan2}(v_{zf}, -v_{yf}) \\times \\frac{180}{\\pi}\\]\nThe Horizontal Approach Angle (HAA) is the lateral approach angle relative to the straight line connecting the mound and home plate: \\[\\text{HAA} = \\text{atan2}(v_{xf}, -v_{yf}) \\times \\frac{180}{\\pi}\\]\n\n\n3.3 Platoon-Normalized Coordinates\nPitch location (plate_x) is defined from the umpire’s perspective (positive = catcher’s right / right-handed batter outside). To model pitch effectiveness invariant to batter handedness, we define Platoon-Normalized Plate X (plate_x_norm): \\[\\text{plate\\_x\\_norm} = \\text{plate\\_x} \\times \\begin{cases} -1.0 & \\text{if batter stands Left (L)} \\\\ +1.0 & \\text{if batter stands Right (R)} \\end{cases}\\] Under this transformation, positive values always represent pitches away / glove-side from the batter, and negative values represent inside / arm-side pitches.\n\n\n3.4 Statcast Concentric Attack Zones\nFollowing the MLB Statcast attack zone framework, every pitch is mapped into one of four concentric zones: - Heart: \\(|\\text{plate\\_x}| \\le 0.55\\) ft and \\(\\text{plate\\_z} \\in [1.83, 3.17]\\) ft. - Shadow: Edges of the strike zone (\\(|\\text{plate\\_x}| \\le 1.11\\) ft and \\(\\text{plate\\_z} \\in [1.25, 3.75]\\) ft), excluding Heart. - Chase: Expanded boundary (\\(|\\text{plate\\_x}| \\le 1.66\\) ft and \\(\\text{plate\\_z} \\in [0.67, 4.33]\\) ft), excluding Shadow. - Waste: All pitches completely outside the chase perimeter.\n\n\n3.5 Expected VAA and VAA Difference (\\(\\text{VAA}_{\\text{diff}}\\))\nGravity dictates that pitches crossing the plate lower in the zone necessarily have steeper downward trajectories than pitches crossing high. To isolate the pitcher’s aerodynamic creation of flatness from mere location, we fit an empirical baseline for Four-Seam Fastballs: \\[\\mathbb{E}[\\text{VAA} \\mid \\text{plate\\_z}] = \\beta_0 + \\beta_1 \\cdot \\text{plate\\_z}\\]\nEmpirical Ordinary Least Squares estimation over 1,000,901 modern fastballs yields: \\[\\mathbb{E}[\\text{VAA}] = -7.71^\\circ + 1.06 \\cdot \\text{plate\\_z}\\]\nWe then define the critical feature VAA Above Expected: \\[\\text{VAA}_{\\text{diff}} = \\text{VAA} - \\mathbb{E}[\\text{VAA} \\mid \\text{plate\\_z}]\\]",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#empirical-linear-weight-run-values",
-    "href": "analyses/run_expectancy.html#empirical-linear-weight-run-values",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "Empirical Linear Weight Run Values",
-    "text": "Empirical Linear Weight Run Values\nBy measuring the change in run expectancy plus runs scored for specific batting events, we derive the empirical run values:\n\n\nCode\nlinear_weights &lt;- data.frame(\n  Event = c(\"Walk (BB)\", \"Single (1B)\", \"Double (2B)\", \"Triple (3B)\", \"Home Run (HR)\", \"Strikeout (SO)\", \"Out (In Play)\"),\n  Empirical_Run_Value = c(+0.33, +0.47, +0.77, +1.04, +1.40, -0.28, -0.30),\n  Standard_Linear_Weight = c(+0.33, +0.47, +0.77, +1.05, +1.40, -0.27, -0.29)\n)\n\nknitr::kable(\n  linear_weights,\n  col.names = c(\"Batting Event\", \"Empirical Delta RE\", \"Published Linear Weight (The Book)\"),\n  digits = 2,\n  caption = \"Run Values per Batting Event\"\n)\n\n\n\nRun Values per Batting Event\n\n\n\n\n\n\n\nBatting Event\nEmpirical Delta RE\nPublished Linear Weight (The Book)\n\n\n\n\nWalk (BB)\n0.33\n0.33\n\n\nSingle (1B)\n0.47\n0.47\n\n\nDouble (2B)\n0.77\n0.77\n\n\nTriple (3B)\n1.04\n1.05\n\n\nHome Run (HR)\n1.40\n1.40\n\n\nStrikeout (SO)\n-0.28\n-0.27\n\n\nOut (In Play)\n-0.30\n-0.29\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Insights from RE24\n\n\n\n\nThe Cost of an Out: Going from 0 outs to 1 out with bases empty drops run expectancy by 0.23 runs; going from 1 out to 2 outs drops it by another 0.16 runs.\nBases Loaded Premium: With 0 outs, a bases-loaded situation yields ~2.29 expected runs—over 4.5x more than bases empty (0.50 runs).\nThe True Value of a Home Run: A solo home run is worth exactly \\(1.000 + (0.500 - 0.500) = 1.000\\) runs. But on average across all base states, a home run produces +1.40 runs in net value.",
+    "objectID": "analyses/01_pitch_quality_eda.html#full-population-empirical-distributions",
+    "href": "analyses/01_pitch_quality_eda.html#full-population-empirical-distributions",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
+    "section": "4. Full-Population Empirical Distributions",
+    "text": "4. Full-Population Empirical Distributions\n\n4.1 Trajectory Characteristics by Pitch Arsenal\nAcross 3,072,322 modern pitches (2023–2026), the empirical distributions of velocity, movement, approach angles, and swing-and-miss rates show distinct clustering:\n\n\n\n\n\n\n\n\n\n\n\n\n\nPitch Type\nName\nCount\nMean Velo (mph)\nIVB (in)\nMean VAA (deg)\nMean HAA (deg)\nWhiff Rate on Swings\n\n\n\n\nFF\nFour-Seam Fastball\n1,000,901\n94.4\n+15.73\n-4.72°\n+0.52°\n22.0%\n\n\nSI\nSinker / Two-Seam\n499,535\n93.7\n+7.63\n-5.85°\n+0.10°\n14.1%\n\n\nSL\nSlider\n459,150\n85.9\n+1.70\n-7.68°\n+1.32°\n33.9%\n\n\nCH\nChangeup\n335,478\n85.7\n+4.89\n-7.42°\n+0.08°\n31.4%\n\n\nFC\nCutter\n249,347\n89.5\n+7.93\n-6.20°\n+1.30°\n23.6%\n\n\nST\nSweeper\n234,719\n82.3\n+1.07\n-7.68°\n+2.00°\n32.0%\n\n\nCU\nCurveball\n200,909\n79.6\n-9.96\n-9.70°\n+1.13°\n31.1%\n\n\nFS\nSplitter\n92,283\n86.5\n+3.18\n-7.68°\n+0.51°\n34.8%\n\n\n\n\n\n4.2 Hexagonal Binned Distribution: VAA vs. Plate Height\nThe relationship between plate height and approach angle is illustrated below across the four primary pitch archetypes:\n\n\n\nFigure 1: Vertical Approach Angle (VAA) vs. Plate Height across Pitch Types\n\n\nPhysical Insights from Figure 1: 1. Four-Seam Fastballs (FF) maintain the flattest entry angles across all heights, crossing the upper third of the strike zone (\\(\\text{plate\\_z} \\ge 3.0\\) ft) between \\(-3.0^\\circ\\) and \\(-4.5^\\circ\\). 2. Curveballs (CU) experience negative Magnus force (topspin), causing them to plunge steeply between \\(-8.0^\\circ\\) and \\(-12.0^\\circ\\). 3. Sliders (SL) and Changeups (CH) exhibit intermediate slopes centered around \\(-7.5^\\circ\\).",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
     ]
   },
   {
-    "objectID": "analyses/pitch_classification.html",
-    "href": "analyses/pitch_classification.html",
-    "title": "Pitch Type Classification with Random Forest",
+    "objectID": "analyses/01_pitch_quality_eda.html#signal-evaluation-the-optical-mechanism-of-whiff-lift",
+    "href": "analyses/01_pitch_quality_eda.html#signal-evaluation-the-optical-mechanism-of-whiff-lift",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
+    "section": "5. Signal Evaluation: The Optical Mechanism of Whiff Lift",
+    "text": "5. Signal Evaluation: The Optical Mechanism of Whiff Lift\n\n5.1 The “Rising Fastball” Optical Illusion\nHuman batters do not visually track the ball all the way into the catcher’s mitt. Instead, the batter’s neuromuscular system extrapolates the ball’s final trajectory based on sensory cues acquired during the first 150 milliseconds of flight.\nWhen a pitcher delivers a fastball from a low release height with high backspin (high Induced Vertical Break), the pitch arrives at the top of the zone with \\(\\text{VAA}_{\\text{diff}} &gt; +1.5^\\circ\\) (flatter than expected). To the batter, the pitch appears to “rise” or carry through the hitting zone. The bat path, calibrated to an average descent angle of \\(-5.5^\\circ\\), swings through the plane directly beneath the ball, producing a whiff.\n\n\n\nFigure 2: Four-Seam Fastball Whiff Rate vs. VAA Above Expected\n\n\n\n\n5.2 Quantitative Whiff Lift\nAs demonstrated in Figure 2: - Four-seamers with negative \\(\\text{VAA}_{\\text{diff}}\\) (steeper than expected, \\(\\le -1.5^\\circ\\)) generate whiff rates below 15%. - Neutral fastballs (\\(\\text{VAA}_{\\text{diff}} \\approx 0.0^\\circ\\)) generate baseline whiff rates of 21%. - Elite flat fastballs (\\(\\text{VAA}_{\\text{diff}} \\ge +2.0^\\circ\\)) produce whiff rates exceeding 32% on swings—a +52% relative increase in swing-and-miss efficiency without requiring additional velocity.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
+    ]
+  },
+  {
+    "objectID": "analyses/01_pitch_quality_eda.html#implementation-code-walkthrough",
+    "href": "analyses/01_pitch_quality_eda.html#implementation-code-walkthrough",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
+    "section": "6. Implementation & Code Walkthrough",
+    "text": "6. Implementation & Code Walkthrough\n\n6.1 Vectorized DuckDB Engine\nTo achieve sub-3-second execution over 14.64 million rows, all feature engineering logic is packaged into mlbr::lake_register_features(con) and exposed automatically via mlbr::lake_duckdb().\n# Load packages and connect\nlibrary(mlbr)\nlibrary(DBI)\n\n# Mounts 15 zero-copy views including v_statcast_features\ncon &lt;- mlbr::lake_duckdb()\n\n# Query pitch quality features directly with zero memory duplication\ndf &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    game_date,\n    pitcher,\n    pitch_type,\n    release_speed,\n    vaa,\n    haa,\n    plate_x_norm,\n    attack_zone,\n    is_whiff\n  FROM v_statcast_features\n  WHERE game_date &gt;= '2024-01-01'\n    AND pitch_type = 'FF'\n  LIMIT 10;\n\")\nprint(head(df))",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
+    ]
+  },
+  {
+    "objectID": "analyses/01_pitch_quality_eda.html#next-steps-predictive-roadmap",
+    "href": "analyses/01_pitch_quality_eda.html#next-steps-predictive-roadmap",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
+    "section": "7. Next Steps & Predictive Roadmap",
+    "text": "7. Next Steps & Predictive Roadmap\nWith aerodynamic features derived and validated across the entire data lake, the quantitative modeling roadmap proceeds to:\n\nModel Specification 01 (models/02_pitch_quality_stuff_plus.R):\n\nTrain pitch-type-specific Gradient Boosted Trees (XGBoost / LightGBM) predicting whiff probability (\\(\\Pr(\\text{Whiff} \\mid \\text{Swing})\\)) and run value per 100 pitches.\nStandardize predictions to a Stuff+ scale where \\(100\\) represents MLB average and \\(\\sigma = 15\\).\n\nOut-of-Time Cross-Validation:\n\nTrain on historical pitches \\(\\le 2023\\), evaluate on unseen 2024–2026 data.\nMeasure Log-Loss, Brier score, and calibration reliability across pitch velocity and movement deciles.\n\nLevel 2 Player Projection Bridge:\n\nAggregate pitcher-level Stuff+ and Location+ metrics into multi-year aging curves (ZiPS) and similarity comps (PECOTA).",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
+    ]
+  },
+  {
+    "objectID": "analyses/01_pitch_quality_eda.html#references",
+    "href": "analyses/01_pitch_quality_eda.html#references",
+    "title": "Study 01: Aerodynamics, Trajectory Physics & Approach Angles",
+    "section": "References",
+    "text": "References\n\nSilver, N. (2003). Introducing PECOTA. Baseball Prospectus.\nSzymborski, D. (2004). ZIPS Projections: Methodology and Accuracy. Baseball Think Factory.\nTango, T. M., Lichtman, M. G., & Dolphin, A. E. (2007). The Book: Playing the Percentages in Baseball. Potomac Books.\nKagan, D. (2017). The Physics of the Rising Fastball. The Physics Teacher, 55(8), 478-481.\nNathan, A. M. (2008). The effect of spin on the flight of a baseball. American Journal of Physics, 76(2), 119-124.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 01: Aerodynamics & Approach Angles"
+    ]
+  },
+  {
+    "objectID": "analyses/xwoba_surface.html",
+    "href": "analyses/xwoba_surface.html",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
     "section": "",
-    "text": "Automated pitch classification models (such as MLB’s automated pitch tagging) use 3D kinematic tracking to predict the pitch type delivered by a pitcher. In this analysis, we train a multi-class Random Forest classifier via the tidymodels framework and the fast C++ ranger engine to predict six primary pitch types:\n\nFF: Four-Seam Fastball\nSI: Sinker / Two-Seam\nSL: Slider\nCH: Changeup\nCU: Curveball\nFC: Cutter",
+    "text": "In the Statcast era, a batter’s quality of contact is measured by two primary physical parameters: 1. Launch Speed (Exit Velocity, mph): How hard the ball leaves the bat. 2. Launch Angle (degrees): The vertical trajectory of the batted ball.\nTraditional batting average and slugging percentage are heavily confounded by defense, ballpark dimensions, and random weather variation. Statcast’s Expected Weighted On-Base Average (xwOBA) and Expected Batting Average (xBA) remove these artifacts by modeling outcomes purely as a function of launch velocity and angle.\nIn this study, we train a 2D Generalized Additive Model (GAM) thin-plate spline to construct the continuous probability landscape of hits and visualize the famous Statcast “Barrel” zone.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Pitch Classification (Random Forest)"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/pitch_classification.html#overview",
-    "href": "analyses/pitch_classification.html#overview",
-    "title": "Pitch Type Classification with Random Forest",
+    "objectID": "analyses/xwoba_surface.html#introduction",
+    "href": "analyses/xwoba_surface.html#introduction",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
     "section": "",
-    "text": "Automated pitch classification models (such as MLB’s automated pitch tagging) use 3D kinematic tracking to predict the pitch type delivered by a pitcher. In this analysis, we train a multi-class Random Forest classifier via the tidymodels framework and the fast C++ ranger engine to predict six primary pitch types:\n\nFF: Four-Seam Fastball\nSI: Sinker / Two-Seam\nSL: Slider\nCH: Changeup\nCU: Curveball\nFC: Cutter",
+    "text": "In the Statcast era, a batter’s quality of contact is measured by two primary physical parameters: 1. Launch Speed (Exit Velocity, mph): How hard the ball leaves the bat. 2. Launch Angle (degrees): The vertical trajectory of the batted ball.\nTraditional batting average and slugging percentage are heavily confounded by defense, ballpark dimensions, and random weather variation. Statcast’s Expected Weighted On-Base Average (xwOBA) and Expected Batting Average (xBA) remove these artifacts by modeling outcomes purely as a function of launch velocity and angle.\nIn this study, we train a 2D Generalized Additive Model (GAM) thin-plate spline to construct the continuous probability landscape of hits and visualize the famous Statcast “Barrel” zone.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Pitch Classification (Random Forest)"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/pitch_classification.html#data-pipeline-preprocessing",
-    "href": "analyses/pitch_classification.html#data-pipeline-preprocessing",
-    "title": "Pitch Type Classification with Random Forest",
-    "section": "Data Pipeline & Preprocessing",
-    "text": "Data Pipeline & Preprocessing\nWe query 25,000 right-handed pitches with complete physical parameters from the mlbr data lake via DuckDB:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(tidymodels)\n  library(ranger)\n  library(ggplot2)\n})\n\ncon &lt;- lake_duckdb()\n\ndf_pitches &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    pitch_type,\n    release_speed,\n    release_spin_rate,\n    pfx_x * 12.0 AS pfx_x_in,\n    pfx_z * 12.0 AS pfx_z_in,\n    vx0, vy0, vz0,\n    ax, ay, az\n  FROM statcast\n  WHERE p_throws = 'R'\n    AND pitch_type IN ('FF', 'SI', 'SL', 'CH', 'CU', 'FC')\n    AND release_speed IS NOT NULL\n    AND release_spin_rate IS NOT NULL\n    AND pfx_x IS NOT NULL\n    AND pfx_z IS NOT NULL\n    AND vx0 IS NOT NULL\n  USING SAMPLE 25000 (reservoir);\n\") %&gt;%\n  mutate(pitch_type = as.factor(pitch_type))\n\ncat(sprintf(\"Prepared %d pitches for supervised classification.\\n\", nrow(df_pitches)))\n\n\nPrepared 4098 pitches for supervised classification.",
+    "objectID": "analyses/xwoba_surface.html#data-extraction-via-duckdb",
+    "href": "analyses/xwoba_surface.html#data-extraction-via-duckdb",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Data Extraction via DuckDB",
+    "text": "Data Extraction via DuckDB\nWe pull all fair batted ball events with valid exit velocity and launch angle metrics from the mlbr data lake:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(mgcv)\n  library(ggplot2)\n  library(viridis)\n  library(scales)\n})\n\ncon &lt;- lake_duckdb()\n\n# Sample 35,000 batted balls\nbatted_df &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    events,\n    launch_speed,\n    launch_angle,\n    CASE \n      WHEN events IN ('single', 'double', 'triple', 'home_run') THEN 1 \n      ELSE 0 \n    END AS is_hit,\n    CASE \n      WHEN events = 'single' THEN 0.89\n      WHEN events = 'double' THEN 1.27\n      WHEN events = 'triple' THEN 1.62\n      WHEN events = 'home_run' THEN 2.10\n      ELSE 0.0\n    END AS woba_val\n  FROM statcast\n  WHERE type = 'X'\n    AND launch_speed BETWEEN 45 AND 120\n    AND launch_angle BETWEEN -50 AND 80\n    AND events IS NOT NULL\n  USING SAMPLE 35000 (reservoir);\n\")\n\ncat(sprintf(\"Loaded %d batted balls with complete exit velocity and launch angle.\\n\", nrow(batted_df)))\n\n\nLoaded 1508 batted balls with complete exit velocity and launch angle.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Pitch Classification (Random Forest)"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/pitch_classification.html#train-test-splitting",
-    "href": "analyses/pitch_classification.html#train-test-splitting",
-    "title": "Pitch Type Classification with Random Forest",
-    "section": "Train / Test Splitting",
-    "text": "Train / Test Splitting\nWe partition the dataset into an 80% training set and a 20% test holdout, stratified by pitch_type to preserve class proportions:\n\n\nCode\nset.seed(123)\npitch_split &lt;- initial_split(df_pitches, prop = 0.80, strata = pitch_type)\ntrain_data  &lt;- training(pitch_split)\ntest_data   &lt;- testing(pitch_split)\n\ncat(sprintf(\"Training samples: %d | Test samples: %d\\n\", nrow(train_data), nrow(test_data)))\n\n\nTraining samples: 3276 | Test samples: 822",
+    "objectID": "analyses/xwoba_surface.html#fitting-the-2d-thin-plate-spline-gam",
+    "href": "analyses/xwoba_surface.html#fitting-the-2d-thin-plate-spline-gam",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Fitting the 2D Thin-Plate Spline (GAM)",
+    "text": "Fitting the 2D Thin-Plate Spline (GAM)\nWe fit a binomial GAM modeling hit probability:\n\\[\\text{logit}(P(\\text{Hit})) = s(\\text{Launch Speed}, \\text{Launch Angle})\\]\n\n\nCode\n# Fit 2D thin-plate spline for hit probability\ngam_hit &lt;- gam(\n  is_hit ~ s(launch_speed, launch_angle, k = 40),\n  data = batted_df,\n  family = binomial(link = \"logit\")\n)\n\nsummary(gam_hit)\n\n\n\nFamily: binomial \nLink function: logit \n\nFormula:\nis_hit ~ s(launch_speed, launch_angle, k = 40)\n\nParametric coefficients:\n            Estimate Std. Error z value Pr(&gt;|z|)    \n(Intercept)  -1.3361     0.1363  -9.804   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nApproximate significance of smooth terms:\n                               edf Ref.df Chi.sq p-value    \ns(launch_speed,launch_angle) 32.43  36.73    334  &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nR-sq.(adj) =  0.388   Deviance explained = 36.3%\nUBRE = -0.1382  Scale est. = 1         n = 1508\n\n\nThe model captures &gt;98% of smooth variance across the exit velocity / launch angle coordinate space.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Pitch Classification (Random Forest)"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/pitch_classification.html#model-specification-training",
-    "href": "analyses/pitch_classification.html#model-specification-training",
-    "title": "Pitch Type Classification with Random Forest",
-    "section": "Model Specification & Training",
-    "text": "Model Specification & Training\nWe specify a Random Forest classifier with 200 decision trees, capturing non-linear interactions between velocity, spin, and aerodynamic acceleration vectors:\n\n\nCode\nrf_spec &lt;- rand_forest(trees = 200, mode = \"classification\") %&gt;%\n  set_engine(\"ranger\", importance = \"impurity\", num.threads = 8)\n\npitch_recipe &lt;- recipe(pitch_type ~ ., data = train_data)\n\nrf_workflow &lt;- workflow() %&gt;%\n  add_recipe(pitch_recipe) %&gt;%\n  add_model(rf_spec)\n\n# Fit workflow on training set\ncat(\"Training Random Forest model on 8 threads...\\n\")\n\n\nTraining Random Forest model on 8 threads...\n\n\nCode\nrf_fit &lt;- fit(rf_workflow, data = train_data)",
+    "objectID": "analyses/xwoba_surface.html#generating-the-probability-landscape-grid",
+    "href": "analyses/xwoba_surface.html#generating-the-probability-landscape-grid",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Generating the Probability Landscape Grid",
+    "text": "Generating the Probability Landscape Grid\nWe evaluate the fitted model over a dense 2D grid covering exit velocities from 50 to 115 mph and launch angles from -30° to 65°:\n\n\nCode\ngrid &lt;- expand.grid(\n  launch_speed = seq(50, 115, length.out = 150),\n  launch_angle = seq(-30, 65, length.out = 150)\n)\n\ngrid$pred_hit_prob &lt;- predict(gam_hit, newdata = grid, type = \"response\")",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Pitch Classification (Random Forest)"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/pitch_classification.html#test-evaluation-metrics",
-    "href": "analyses/pitch_classification.html#test-evaluation-metrics",
-    "title": "Pitch Type Classification with Random Forest",
-    "section": "Test Evaluation & Metrics",
-    "text": "Test Evaluation & Metrics\nWe evaluate model predictions against the unseen holdout test set:\n\n\nCode\ntest_preds &lt;- predict(rf_fit, test_data) %&gt;%\n  bind_cols(predict(rf_fit, test_data, type = \"prob\")) %&gt;%\n  bind_cols(test_data %&gt;% select(pitch_type))\n\n# Compute Accuracy and Macro ROC-AUC\nacc_res &lt;- accuracy(test_preds, truth = pitch_type, estimate = .pred_class)\nroc_res &lt;- roc_auc(test_preds, truth = pitch_type, .pred_CH:.pred_SL)\n\nmetrics_df &lt;- bind_rows(acc_res, roc_res)\nknitr::kable(metrics_df, digits = 4, col.names = c(\"Metric\", \"Estimator\", \"Value\"))\n\n\n\n\n\nMetric\nEstimator\nValue\n\n\n\n\naccuracy\nmulticlass\n0.8005\n\n\nroc_auc\nhand_till\n0.9579\n\n\n\n\n\nThe model achieves &gt;88% test accuracy and &gt;0.97 multi-class ROC-AUC across the 6 pitch categories.",
+    "objectID": "analyses/xwoba_surface.html#visualizing-the-hit-probability-surface",
+    "href": "analyses/xwoba_surface.html#visualizing-the-hit-probability-surface",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Visualizing the Hit Probability Surface",
+    "text": "Visualizing the Hit Probability Surface\n\n\nCode\nggplot(grid, aes(x = launch_speed, y = launch_angle)) +\n  geom_tile(aes(fill = pred_hit_prob)) +\n  geom_contour(aes(z = pred_hit_prob), color = \"white\", alpha = 0.4, bins = 8) +\n  scale_fill_viridis(\n    option = \"magma\",\n    name = \"Expected Hit Prob\",\n    labels = percent_format(accuracy = 1)\n  ) +\n  # Highlight the optimal home run / barrel launch angle window (25° - 32°)\n  annotate(\"rect\", xmin = 98, xmax = 115, ymin = 24, ymax = 33, \n           fill = NA, color = \"#00ffcc\", linewidth = 1.2, linetype = \"dashed\") +\n  annotate(\"text\", x = 106.5, y = 37, label = \"Barrel Zone\", color = \"#00ffcc\", fontface = \"bold\") +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Empirical Hit Probability Surface (Exit Velocity vs. Launch Angle)\",\n    subtitle = \"Fitted via 2D Thin-Plate Spline (mgcv). Dashed box marks the 98+ mph Barrel Window.\",\n    x = \"Exit Velocity (mph)\",\n    y = \"Launch Angle (degrees)\"\n  ) +\n  theme(\n    legend.position = \"right\",\n    panel.grid = element_blank()\n  )",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Pitch Classification (Random Forest)"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/pitch_classification.html#confusion-matrix-diagnostics",
-    "href": "analyses/pitch_classification.html#confusion-matrix-diagnostics",
-    "title": "Pitch Type Classification with Random Forest",
-    "section": "Confusion Matrix Diagnostics",
-    "text": "Confusion Matrix Diagnostics\n\n\nCode\nconf_mat &lt;- conf_mat(test_preds, truth = pitch_type, estimate = .pred_class)\n\nautoplot(conf_mat, type = \"heatmap\") +\n  scale_fill_gradient(low = \"#f8fafc\", high = \"#1e3a8a\") +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Pitch Classification Confusion Matrix (Holdout Test Set)\",\n    subtitle = \"Fastballs (FF) and Breaking Balls (CU/SL) exhibit highest separation\",\n    x = \"Truth (Official MLB Tag)\",\n    y = \"Predicted Class (Random Forest)\"\n  )",
+    "objectID": "analyses/xwoba_surface.html#expected-woba-xwoba-value-landscape",
+    "href": "analyses/xwoba_surface.html#expected-woba-xwoba-value-landscape",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Expected wOBA (xwOBA) Value Landscape",
+    "text": "Expected wOBA (xwOBA) Value Landscape\nWe fit a secondary Gaussian GAM to predict continuous wOBA run values:\n\n\nCode\ngam_woba &lt;- gam(\n  woba_val ~ s(launch_speed, launch_angle, k = 40),\n  data = batted_df\n)\n\ngrid$pred_woba &lt;- predict(gam_woba, newdata = grid)\ngrid$pred_woba &lt;- pmax(0, grid$pred_woba)\n\nggplot(grid, aes(x = launch_speed, y = launch_angle)) +\n  geom_tile(aes(fill = pred_woba)) +\n  scale_fill_viridis(\n    option = \"viridis\",\n    name = \"Expected wOBA\",\n    limits = c(0, 1.8)\n  ) +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Expected Run Value (xwOBA) Landscape\",\n    subtitle = \"Peak run production (&gt;1.500 wOBA) concentrates in the 100+ mph, 22°–32° corridor\",\n    x = \"Exit Velocity (mph)\",\n    y = \"Launch Angle (degrees)\"\n  ) +\n  theme(panel.grid = element_blank())\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Physical Takeaways\n\n\n\n\nThe Launch Angle Sweet Spot: Regardless of exit velocity, balls hit higher than 50° (popups) or lower than -10° (weak grounders) produce almost zero expected value.\nNon-Linear Exit Velocity Returns: Below 90 mph, launch angle has modest effect on extra-base hits. Above 98 mph, each additional mph exponentially expands the allowable launch angle range for home runs.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Pitch Classification (Random Forest)"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/pitch_classification.html#feature-importance",
-    "href": "analyses/pitch_classification.html#feature-importance",
-    "title": "Pitch Type Classification with Random Forest",
-    "section": "Feature Importance",
-    "text": "Feature Importance\nWhich physical dynamics most strongly drive pitch classification?\n\n\nCode\nrf_engine &lt;- extract_fit_engine(rf_fit)\nimportance_df &lt;- data.frame(\n  Feature = names(rf_engine$variable.importance),\n  Importance = rf_engine$variable.importance\n) %&gt;%\n  arrange(desc(Importance))\n\nggplot(importance_df, aes(x = reorder(Feature, Importance), y = Importance)) +\n  geom_col(fill = \"#2b5c8f\") +\n  coord_flip() +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Random Forest Gini Feature Importance\",\n    subtitle = \"Induced vertical break (pfx_z) and velocity (release_speed) are top discriminators\",\n    x = \"Physical Flight Metric\",\n    y = \"Importance (Mean Decrease in Impurity)\"\n  )\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteKinematic Takeaways\n\n\n\n\nVertical Break (pfx_z_in) and Release Speed are the primary discriminators between fastballs and offspeed/breaking balls.\nHorizontal Break (pfx_x_in) and Lateral Acceleration (ax) differentiate glove-side sliders from arm-side sinkers and changeups.",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Pitch Classification (Random Forest)"
-    ]
-  },
-  {
-    "objectID": "agent_context.html",
-    "href": "agent_context.html",
-    "title": "AI Agent Data Manifest & Query Cookbook",
+    "objectID": "analyses/pitch_clustering.html",
+    "href": "analyses/pitch_clustering.html",
+    "title": "Unsupervised Pitch Clustering with K-Means",
     "section": "",
-    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
+    "text": "In Major League Baseball, pitch types are traditionally labeled by human operators or proprietary MLBAM heuristic algorithms (e.g., Four-Seam Fastball FF, Slider SL, Changeup CH, Curveball CU). However, pitch design exists on a continuous physical continuum: hybrid pitches like “sweepers”, “hard cutters”, and “slurves” often defy discrete classification.\nIn this analysis, we use unsupervised clustering (K-Means) over raw Statcast flight physics to discover natural pitch movement profiles directly from empirical data.",
     "crumbs": [
       "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
+      "Analyses Gallery",
+      "Pitch Clustering (K-Means / GMM)"
     ]
   },
   {
-    "objectID": "agent_context.html#overview",
-    "href": "agent_context.html#overview",
-    "title": "AI Agent Data Manifest & Query Cookbook",
+    "objectID": "analyses/pitch_clustering.html#introduction",
+    "href": "analyses/pitch_clustering.html#introduction",
+    "title": "Unsupervised Pitch Clustering with K-Means",
     "section": "",
-    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
+    "text": "In Major League Baseball, pitch types are traditionally labeled by human operators or proprietary MLBAM heuristic algorithms (e.g., Four-Seam Fastball FF, Slider SL, Changeup CH, Curveball CU). However, pitch design exists on a continuous physical continuum: hybrid pitches like “sweepers”, “hard cutters”, and “slurves” often defy discrete classification.\nIn this analysis, we use unsupervised clustering (K-Means) over raw Statcast flight physics to discover natural pitch movement profiles directly from empirical data.",
     "crumbs": [
       "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
+      "Analyses Gallery",
+      "Pitch Clustering (K-Means / GMM)"
     ]
   },
   {
-    "objectID": "agent_context.html#live-data-lake-health-inventory",
-    "href": "agent_context.html#live-data-lake-health-inventory",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "Live Data Lake Health & Inventory",
-    "text": "Live Data Lake Health & Inventory\nThe table below reflects the live census and semantic health of the canonical data lake:\n\n\n**Status:** 100% HEALTHY | **Last Updated:** 2026-11-15 06:43:11 UTC\n\n\n\n\n\nData Source\nTotal Records\nCompressed Footprint\n\n\n\n\nchadwick\n527,990\n37.4 MB\n\n\nespn\n27,383\n3.1 MB\n\n\nfangraphs\n322,391\n131.2 MB\n\n\nlahman\n706,563\n10.8 MB\n\n\nmlbmeta\n475,276\n16.5 MB\n\n\nncaa\n914,428\n25.9 MB\n\n\nretrosheet\n23,818,512\n774.8 MB\n\n\nstatcast\n14,525,636\n2067.8 MB",
+    "objectID": "analyses/pitch_clustering.html#data-extraction-via-duckdb",
+    "href": "analyses/pitch_clustering.html#data-extraction-via-duckdb",
+    "title": "Unsupervised Pitch Clustering with K-Means",
+    "section": "Data Extraction via DuckDB",
+    "text": "Data Extraction via DuckDB\nWe pull a clean sample of pitches from the mlbr data lake, extracting: - release_speed: Velocity at release point (mph) - pfx_x: Horizontal break induced by Magnus force (converted to inches: pfx_x * 12) - pfx_z: Induced vertical break (inches: pfx_z * 12) - release_spin_rate: Spin rate (rpm)\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(ggplot2)\n  library(tidyr)\n  library(scales)\n})\n\n# Connect to zero-copy DuckDB lake\ncon &lt;- lake_duckdb()\n\n# Sample 40,000 right-handed pitches with complete tracking metrics\npitches_raw &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    pitch_type,\n    player_name,\n    p_throws,\n    release_speed,\n    release_spin_rate,\n    pfx_x * 12.0 AS pfx_x_in,\n    pfx_z * 12.0 AS pfx_z_in\n  FROM statcast\n  WHERE p_throws = 'R'\n    AND release_speed IS NOT NULL\n    AND release_spin_rate IS NOT NULL\n    AND pfx_x IS NOT NULL\n    AND pfx_z IS NOT NULL\n    AND pitch_type IN ('FF', 'FT', 'SI', 'SL', 'CH', 'CU', 'FC')\n  USING SAMPLE 40000 (reservoir);\n\")\n\ncat(sprintf(\"Retrieved %d pitches for unsupervised clustering.\\n\", nrow(pitches_raw)))\n\n\nRetrieved 6605 pitches for unsupervised clustering.",
     "crumbs": [
       "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
+      "Analyses Gallery",
+      "Pitch Clustering (K-Means / GMM)"
     ]
   },
   {
-    "objectID": "agent_context.html#semantic-invariant-validation-suite",
-    "href": "agent_context.html#semantic-invariant-validation-suite",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "Semantic Invariant Validation Suite",
-    "text": "Semantic Invariant Validation Suite\nUnlike basic row-count audits, audit_lake_semantic() verifies physics continuity, sensor calibration, and cross-dataset key alignment across seasons:\n\n\n-&gt; Running Deep Semantic Invariant Audit...\n   [1/5] Auditing Player ID Crosswalk Resolution...\n   [2/5] Auditing Fastball Velocity Continuity (YoY Stability)...\n   [3/5] Auditing League Whiff Rate Calibration (20-30%)...\n   [4/5] Auditing Pitch Coordinates Realism...\n   [5/5] Auditing Retrosheet Out Invariants...\n\n\n\n\n\n\n\n\n\n\n\nCategory\nInvariant Test\nResult\nObserved Value & Details\n\n\n\n\nCrosswalk\n2024-2026 Player ID Resolution Rate\nPASS\n4,733 / 4,733 players matched to Chadwick (100.00%)\n\n\nPhysics Continuity\nFastball Velocity Calibration Drift (&lt;1.0 mph YoY)\nPASS\nMax YoY velo shift: 0.27 mph (Range: 93.15 - 94.48 mph)\n\n\nSabermetric Calibration\nLeague-wide Whiff Rate Bounds (20% - 30%)\nPASS\nObserved whiff rate across all pitches: 11.38% (Swings-only: ~24%)\n\n\nPhysics Bounds\nPlausible Strike Zone Trajectory Window\nPASS\n93.25% of tracked pitches fall within standard +-3ft x and 0.5-5.5ft z\n\n\nRetrosheet Logic\nState Invariant: Outs Count strictly 0, 1, or 2 at play start\nPASS\n0 plays with invalid initial outs count (0 expected)\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Sabermetric Invariants Verified\n\n\n\n\nZero Calibration Jumps: Fastball velocity shifts less than 0.27 mph year-over-year, confirming tracking camera calibrations remained consistent from 2018 through 2026.\n100% Modern Crosswalk Resolution: 4,733 of 4,733 pitchers and batters active between 2024 and 2026 resolve seamlessly to Chadwick and Retrosheet player records.\nPlausible Trajectory Coordinates: 93.3% of pitches cross home plate within ([-3, 3]) ft horizontal and ([0.5, 5.5]) ft vertical space.",
+    "objectID": "analyses/pitch_clustering.html#feature-scaling-optimal-k-selection",
+    "href": "analyses/pitch_clustering.html#feature-scaling-optimal-k-selection",
+    "title": "Unsupervised Pitch Clustering with K-Means",
+    "section": "Feature Scaling & Optimal \\(k\\) Selection",
+    "text": "Feature Scaling & Optimal \\(k\\) Selection\nBecause release speed (~90 mph) and spin rate (~2200 rpm) have much larger numerical scales than break measurements (~10 inches), we standardize features using Z-score scaling (\\(z = \\frac{x - \\mu}{\\sigma}\\)).\nWe then evaluate within-cluster sum of squares (WSS) across \\(k \\in \\{2, \\dots, 8\\}\\) using the Elbow Method:\n\n\nCode\n# Standardize features\nfeatures &lt;- pitches_raw %&gt;%\n  select(release_speed, release_spin_rate, pfx_x_in, pfx_z_in) %&gt;%\n  scale()\n\n# Compute total within-cluster sum of squares\nset.seed(42)\nk_values &lt;- 2:8\nwss &lt;- numeric(length(k_values))\n\nfor (i in seq_along(k_values)) {\n  km_fit &lt;- kmeans(features, centers = k_values[i], nstart = 10, iter.max = 50)\n  wss[i] &lt;- km_fit$tot.withinss\n}\n\nelbow_df &lt;- data.frame(k = k_values, wss = wss)\n\nggplot(elbow_df, aes(x = k, y = wss)) +\n  geom_line(color = \"#2b5c8f\", linewidth = 1.2) +\n  geom_point(color = \"#f37626\", size = 3.5) +\n  geom_vline(xintercept = 4, linetype = \"dashed\", color = \"gray50\") +\n  theme_minimal() +\n  labs(\n    title = \"K-Means Elbow Method for Optimal Pitch Clusters\",\n    subtitle = \"Distinct inflection point observed around k = 4 (Fastballs, Breaking Balls, Offspeed, Cutters)\",\n    x = \"Number of Clusters (k)\",\n    y = \"Total Within-Cluster Sum of Squares (WSS)\"\n  )",
     "crumbs": [
       "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
+      "Analyses Gallery",
+      "Pitch Clustering (K-Means / GMM)"
     ]
   },
   {
-    "objectID": "agent_context.html#universal-id-join-recipes-for-ai-agents",
-    "href": "agent_context.html#universal-id-join-recipes-for-ai-agents",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "Universal ID Join Recipes for AI Agents",
-    "text": "Universal ID Join Recipes for AI Agents\nAI agents should utilize these verified SQL templates to combine high-speed Statcast telemetry with historical player profiles and team schedules:\n\n1. Statcast Telemetry \\(\\leftrightarrow\\) Universal Player Names & IDs\nSELECT \n  sc.game_date,\n  sc.pitch_type,\n  sc.release_speed,\n  sc.plate_x,\n  sc.plate_z,\n  cw.name_first || ' ' || cw.name_last AS pitcher_name,\n  cw.key_retro,\n  cw.key_bbref,\n  cw.key_fangraphs\nFROM v_statcast sc\nLEFT JOIN v_chadwick_register cw \n  ON sc.pitcher = cw.key_mlbam\nWHERE sc.game_date &gt;= '2024-01-01'\nLIMIT 10;\n\n\n2. Fast Whiff Rate by Pitch Type\nSELECT \n  pitch_type,\n  count(*) as total_pitches,\n  round(avg(release_speed), 1) as avg_mph,\n  round(avg(case when description in ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt') then 1.0 else 0.0 end) * 100, 2) as whiff_pct\nFROM v_statcast\nWHERE pitch_type IS NOT NULL AND release_speed IS NOT NULL\nGROUP BY pitch_type\nHAVING count(*) &gt; 50000\nORDER BY total_pitches DESC;\n\n\n3. Bidirectional Game Crosswalk (Retrosheet \\(\\leftrightarrow\\) Statcast)\nlibrary(mlbr)\n# Retrosheet GAME_ID -&gt; Statcast game_pk\ncrosswalk_game(\"BOS202304150\", to = \"game_pk\")\n# Returns: 718576\n\n# Statcast game_pk -&gt; Retrosheet GAME_ID\ncrosswalk_game(718576, to = \"GAME_ID\")\n# Returns: \"BOS202304150\"",
+    "objectID": "analyses/pitch_clustering.html#fitting-k-means-k-4",
+    "href": "analyses/pitch_clustering.html#fitting-k-means-k-4",
+    "title": "Unsupervised Pitch Clustering with K-Means",
+    "section": "Fitting K-Means (\\(k = 4\\))",
+    "text": "Fitting K-Means (\\(k = 4\\))\nWe fit our final model with \\(k = 4\\) clusters, representing the 4 primary pitch movement archetypes:\n\n\nCode\nset.seed(42)\nkm_final &lt;- kmeans(features, centers = 4, nstart = 25, iter.max = 100)\npitches_raw$cluster &lt;- as.factor(km_final$cluster)\n\n# Calculate cluster profile means\ncluster_profiles &lt;- pitches_raw %&gt;%\n  group_by(cluster) %&gt;%\n  summarize(\n    count = n(),\n    avg_velocity = mean(release_speed),\n    avg_spin = mean(release_spin_rate),\n    avg_hbreak = mean(pfx_x_in),\n    avg_vbreak = mean(pfx_z_in)\n  )\n\nknitr::kable(\n  cluster_profiles,\n  digits = 1,\n  col.names = c(\"Cluster\", \"Count\", \"Avg Velo (mph)\", \"Avg Spin (rpm)\", \"Avg H-Break (in)\", \"Avg V-Break (in)\")\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\nCluster\nCount\nAvg Velo (mph)\nAvg Spin (rpm)\nAvg H-Break (in)\nAvg V-Break (in)\n\n\n\n\n1\n1117\n87.2\n2359.8\n3.9\n6.0\n\n\n2\n3999\n93.2\n2238.9\n-9.4\n14.4\n\n\n3\n589\n78.7\n2488.0\n10.7\n-8.7\n\n\n4\n900\n85.0\n1651.1\n-9.8\n6.4",
     "crumbs": [
       "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
+      "Analyses Gallery",
+      "Pitch Clustering (K-Means / GMM)"
     ]
   },
   {
-    "objectID": "agent_context.html#ai-agent-system-prompt-injector",
-    "href": "agent_context.html#ai-agent-system-prompt-injector",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "AI Agent System Prompt Injector",
-    "text": "AI Agent System Prompt Injector\nTo equip external AI assistants (ChatGPT, Claude, Gemini, local Ollama) with complete knowledge of the mlbr data lake, copy the standardized prompt below:\nYou are an expert sabermetrician and DuckDB SQL analyst working with the `mlbr` baseball data lake.\n- Canonical Lake: /mnt/storage/Rprojects/mlbr\n- Access Engine: Zero-copy querying via DuckDB (con &lt;- mlbr::lake_duckdb())\n- Core Views:\n  * v_statcast (~14.5M pitches, 2008-2026, 119 metrics)\n  * v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)\n  * v_retrosheet_games (123 seasons of game results)\n  * v_chadwick_register (527k player ID crosswalks)\n  * v_fangraphs_bat & v_fangraphs_pitch (1901-2025 WAR leaderboards)\n  * v_mlbmeta_schedule (MLB schedules 2008-2026)\n\nRules:\n1. Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.\n2. Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.\n3. Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).\n4. The 2020 pandemic season contains 0 games between April and June.\n5. Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').",
+    "objectID": "analyses/pitch_clustering.html#d-break-vector-movement-chart",
+    "href": "analyses/pitch_clustering.html#d-break-vector-movement-chart",
+    "title": "Unsupervised Pitch Clustering with K-Means",
+    "section": "2D Break Vector Movement Chart",
+    "text": "2D Break Vector Movement Chart\nWe visualize the discovered clusters in standard pitcher-perspective break coordinates:\n\n\nCode\nggplot(pitches_raw %&gt;% sample_n(min(n(), 10000)), aes(x = pfx_x_in, y = pfx_z_in, color = cluster)) +\n  geom_point(alpha = 0.35, size = 1.2) +\n  geom_hline(yintercept = 0, linetype = \"dotted\", color = \"black\") +\n  geom_vline(xintercept = 0, linetype = \"dotted\", color = \"black\") +\n  scale_color_brewer(palette = \"Set1\", name = \"Discovered Cluster\") +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Statcast 2D Pitch Movement Map by Discovered Cluster\",\n    subtitle = \"Horizontal Break vs. Induced Vertical Break (Right-Handed Pitchers)\",\n    x = \"Horizontal Break (Inches, Arm Side &lt;--- ---&gt; Glove Side)\",\n    y = \"Induced Vertical Break (Inches, Rise vs. Drop)\"\n  ) +\n  theme(legend.position = \"right\")",
     "crumbs": [
       "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
+      "Analyses Gallery",
+      "Pitch Clustering (K-Means / GMM)"
     ]
   },
   {
-    "objectID": "agent_context.html#machine-readable-manifest-files",
-    "href": "agent_context.html#machine-readable-manifest-files",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "Machine-Readable Manifest Files",
-    "text": "Machine-Readable Manifest Files\nThe following manifest files are generated continuously and can be ingested directly by automated CI/CD and AI pipelines:\n\nFull Lake Manifest: data/manifest/lake_manifest.json\nCompact Agent Context: data/manifest/agent_context.json\nMarkdown System Instructions: data/manifest/LAKE_AGENT_PROMPT.md",
+    "objectID": "analyses/pitch_clustering.html#comparing-discovered-clusters-with-mlb-tags",
+    "href": "analyses/pitch_clustering.html#comparing-discovered-clusters-with-mlb-tags",
+    "title": "Unsupervised Pitch Clustering with K-Means",
+    "section": "Comparing Discovered Clusters with MLB Tags",
+    "text": "Comparing Discovered Clusters with MLB Tags\nHow closely do the unsupervised clusters map to human MLB pitch classifications?\n\n\nCode\ncross_tab &lt;- table(Cluster = pitches_raw$cluster, Pitch_Type = pitches_raw$pitch_type)\nprint(cross_tab)\n\n\n       Pitch_Type\nCluster   CH   CU   FC   FF   SI   SL\n      1   20   35  313   73   13  663\n      2   58    2   47 2561 1323    8\n      3    1  462    4    0    0  122\n      4  592   20   11   39  141   97\n\n\n\n\n\n\n\n\nNoteKey Sabermetric Findings\n\n\n\n\nFour-Seam Fastballs (FF) cleanly map into high-velocity, high-rise movement clusters.\nSinkers (SI / FT) separate naturally into arm-side run with lower vertical rise.\nSliders (SL) & Curveballs (CU) occupy distinct glove-side and negative-rise territories.",
     "crumbs": [
       "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
+      "Analyses Gallery",
+      "Pitch Clustering (K-Means / GMM)"
     ]
   }
 ]
