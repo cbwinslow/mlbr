@@ -1,0 +1,52 @@
+[
+  {
+    "id": "EXP-001-AERODYNAMICS",
+    "title": "Trajectory Aerodynamics, Approach Angles (VAA/HAA) & Whiff Lift",
+    "tier": 1,
+    "tier_name": "Level 1: Pitch Physics & Quality",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-16 06:40:25 UTC",
+    "summary": "Derived full-population terminal flight velocities at y=1.417 ft, VAA, HAA, plate_x_norm, and attack zones over 14.64M pitches in DuckDB. Proved flat VAA (VAA_diff > +1.5 deg) produces +52% relative lift in Four-Seam fastball whiff rate.",
+    "hypotheses": [
+      "Approach angles (VAA/HAA) provide orthogonal predictive information to raw velocity and IVB.",
+      "Four-seam fastballs entering high with flatter VAA than expected produce non-linear whiff lift due to batter perceptual motor error."
+    ],
+    "formulas": {
+      "terminal_forward_velo": "vy_f = -sqrt(vy0^2 + 2 * ay * (1.417 - 50.0))",
+      "flight_time": "t_flight = (vy_f - vy0) / ay",
+      "vertical_approach_angle": "vaa = atan2(vz0 + az * t_flight, -vy_f) * (180.0 / PI())",
+      "horizontal_approach_angle": "haa = atan2(vx0 + ax * t_flight, -vy_f) * (180.0 / PI())",
+      "expected_four_seam_vaa": "expected_vaa = -7.71 + 1.06 * plate_z",
+      "vaa_diff": "vaa_diff = vaa - expected_vaa",
+      "plate_x_norm": "plate_x * (case when stand = 'L' then -1.0 else 1.0 end)"
+    },
+    "metrics": {
+      "total_pitches_analyzed": 14643543,
+      "valid_trajectories": 13787464,
+      "modern_sample_pitches": 3072322,
+      "four_seam_baseline_r2": 0.384,
+      "whiff_rate_flat_vaa_pct": 32.4,
+      "whiff_rate_neutral_vaa_pct": 21,
+      "whiff_rate_steep_vaa_pct": 14.8,
+      "duckdb_scan_speed_seconds": 2.26
+    },
+    "features": [
+      "vaa",
+      "haa",
+      "plate_x_norm",
+      "attack_zone",
+      "vaa_diff",
+      "hb_in",
+      "ivb_in"
+    ],
+    "artifacts": {
+      "script": "models/01_eda_feature_expansion.R",
+      "view_module": "pkg/mlbr/R/features.R",
+      "spec": "specs/01_pitch_quality_stuff_plus.md",
+      "study_qmd": "site/analyses/01_pitch_quality_eda.qmd",
+      "study_html": "http://192.168.10.1:8088/analyses/01_pitch_quality_eda.html",
+      "workbook_qmd": "site/workbooks/lab01_aerodynamics_workbook.qmd",
+      "workbook_script": "workbooks/lab01_aerodynamics_workbook.R"
+    }
+  }
+]
