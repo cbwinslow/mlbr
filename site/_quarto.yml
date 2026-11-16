@@ -15,6 +15,8 @@ website:
         text: "Home"
       - href: analyses/01_pitch_quality_eda.qmd
         text: "Q-CRISP Research"
+      - href: workbooks/lab01_aerodynamics_workbook.qmd
+        text: "Student Labs"
       - href: gallery.qmd
         text: "Analyses Gallery"
       - href: architecture.qmd
@@ -53,6 +55,10 @@ website:
               href: agent_context.qmd
             - text: "Data Dictionary & Schemas"
               href: data_dictionary.qmd
+        - section: "Student Work-Along Labs"
+          contents:
+            - text: "Lab 01: Aerodynamics & Trajectory Math"
+              href: workbooks/lab01_aerodynamics_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Study 01: Aerodynamics & Approach Angles"

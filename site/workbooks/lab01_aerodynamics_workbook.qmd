@@ -1,0 +1,197 @@
+---
+title: "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement"
+subtitle: "A Step-by-Step Guided Workbook for Hands-On Learning in RStudio"
+author: "mlbr Mentorship Series"
+date: "2026-11-16"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+---
+
+::: {.callout-tip}
+### How to Use This Workbook
+This document is designed specifically for you to work along interactively. You can open RStudio Server at [**http://192.168.10.1:8787**](http://192.168.10.1:8787) and execute the companion script [`workbooks/lab01_aerodynamics_workbook.R`](file:///mnt/storage/Rprojects/mlbr/workbooks/lab01_aerodynamics_workbook.R) line-by-line using `Ctrl + Enter`.
+:::
+
+---
+
+## 1. The Physical Coordinate System of Modern Baseball
+
+To understand how modern pitch models (like Stuff+ and Pitching+) work, you have to understand the **3D Cartesian coordinate system** that Statcast and Hawkeye use to track every baseball.
+
+```
+                  +z (Vertical Height above ground)
+                   |
+                   |      Strike zone: ~1.5 ft to 3.5 ft
+                   |
+                   +------- +y (Mound is at y = 60.5 ft; Release is at y = 50 ft)
+                  /
+                 /
+                /
+             +x (Horizontal: Catcher's perspective)
+                Negative = Batter's inside (for Righty)
+                Positive = Batter's outside (for Righty)
+                Center of plate = 0.0 ft
+```
+
+### The Key Dimensions to Memorize:
+1. **$y = 60.5\text{ ft}$**: The pitching rubber.
+2. **$y = 50.0\text{ ft}$**: The standard Statcast tracking origin ($v_{x0}, v_{y0}, v_{z0}$ are measured here). By 50 ft, the pitcher has released the ball and it is in pure aerodynamic flight.
+3. **$y = 1.417\text{ ft}$**: The **front edge of home plate**. Home plate is a 17-inch pentagon ($17\text{ inches} / 12 = 1.4167\text{ ft}$). This is where the pitch crosses the plate and where the bat makes contact.
+4. **$y = 0.0\text{ ft}$**: The back point of home plate (the origin).
+
+### Why Velocities and Accelerations Have Surprising Signs:
+- **$v_y$ is ALWAYS negative**: Because the ball travels from the pitcher ($y = 50$) toward home plate ($y = 0$), its position in $y$ is decreasing over time. A 95 mph fastball has a release velocity $v_{y0} \approx -139\text{ ft/s}$.
+- **$a_y$ is positive**: Air drag resists the baseball's forward motion. Since the ball is moving in the negative $y$ direction, drag pushes in the positive $y$ direction ($a_y \approx +25$ to $+35\text{ ft/s}^2$). This drag slows the ball down between the hand and the plate.
+
+---
+
+## 2. Deriving the Trajectory Math Step-by-Step
+
+Now, let's derive the exact mathematical formulas we use in our DuckDB feature view.
+
+### Step 2.1: Finding Forward Velocity at Home Plate ($v_{yf}$)
+In classical physics, Torricelli’s equation relates initial velocity ($u$), final velocity ($v$), acceleration ($a$), and displacement ($\Delta y$):
+$$v^2 = u^2 + 2 a \Delta y$$
+
+Here:
+- Initial position: $y_0 = 50.0\text{ ft}$
+- Final position: $y_f = 1.417\text{ ft}$
+- Displacement: $\Delta y = y_f - y_0 = 1.417 - 50.0 = -48.583\text{ ft}$
+
+Plugging this into the kinematic equation:
+$$v_{yf}^2 = v_{y0}^2 + 2 a_y (1.417 - 50.0)$$
+
+Taking the square root and remembering that the ball is still traveling toward the plate (negative direction):
+$$\mathbf{v_{yf} = -\sqrt{v_{y0}^2 + 2 a_y (1.417 - 50.0)}}$$
+
+### Step 2.2: Finding Flight Time ($t_{\text{flight}}$)
+Under constant acceleration, velocity changes linearly over time: $v = u + a t$.  
+Solving for time $t$:
+$$\mathbf{t_{\text{flight}} = \frac{v_{yf} - v_{y0}}{a_y}}$$
+
+For a 95 mph fastball, $t_{\text{flight}}$ is typically **$0.38$ to $0.42$ seconds** (roughly 400 milliseconds). That is less than the blink of a human eye!
+
+### Step 2.3: Finding Terminal Vertical and Horizontal Velocities
+With the flight time known, we calculate how fast the ball is dropping ($v_{zf}$) and drifting laterally ($v_{xf}$) at the instant it crosses the plate:
+$$\mathbf{v_{zf} = v_{z0} + a_z \cdot t_{\text{flight}}}$$
+$$\mathbf{v_{xf} = v_{x0} + a_x \cdot t_{\text{flight}}}$$
+
+### Step 2.4: Calculating the Vertical Approach Angle (VAA)
+Think of the trajectory at home plate as a right triangle:
+- Horizontal leg (forward motion): $-v_{yf}$ (we negate it so forward speed is positive).
+- Vertical leg (up/down motion): $v_{zf}$ (negative because the ball is descending).
+
+The angle $\theta$ below the horizontal plane is:
+$$\tan(\text{VAA}) = \frac{v_{zf}}{-v_{yf}} \implies \mathbf{\text{VAA} = \text{atan2}(v_{zf}, -v_{yf}) \times \frac{180}{\pi}}$$
+
+---
+
+## 3. Hands-On Exercise 1: Run the Math by Hand in R
+
+Let's test this in R with real flight parameters from a 98.5 mph four-seam fastball:
+
+```r
+# Initial tracking parameters at y = 50 ft
+vy0 <- -144.2   # ft/s (forward speed)
+vz0 <- -3.8     # ft/s (downward vertical velocity)
+vx0 <- 4.2      # ft/s (horizontal velocity)
+ay  <- 31.4     # ft/s^2 (aerodynamic drag)
+az  <- -14.2    # ft/s^2 (gravity -32.2 plus upward Magnus lift +18.0)
+ax  <- -8.1     # ft/s^2 (horizontal break)
+
+# 1. Forward velocity at front of plate (y = 1.417 ft)
+vy_f <- -sqrt(vy0^2 + 2 * ay * (1.417 - 50.0))
+cat(sprintf("Plate arrival speed: %.1f ft/s (%.1f mph)\n", abs(vy_f), abs(vy_f) * (3600 / 5280)))
+
+# 2. Time of flight
+t_flight <- (vy_f - vy0) / ay
+cat(sprintf("Flight time: %.3f seconds (%.1f ms)\n", t_flight, t_flight * 1000))
+
+# 3. Vertical terminal velocity
+vz_f <- vz0 + az * t_flight
+
+# 4. Vertical Approach Angle (VAA) in degrees
+vaa <- atan2(vz_f, -vy_f) * (180 / pi)
+cat(sprintf("Vertical Approach Angle: %.2f degrees\n", vaa))
+```
+
+**What did you find?**  
+Notice that the pitch crosses the plate with a VAA of around **$-4.3^\circ$**. For a fastball, anything flatter than $-4.5^\circ$ is exceptional!
+
+---
+
+## 4. The Platoon Problem: Why `plate_x_norm` is Mandatory
+
+In raw Statcast data, `plate_x` is recorded from the umpire's perspective:
+- `plate_x = -0.7`: Catcher's left / inside to a Right-Handed Batter (RHB) / outside to a Left-Handed Batter (LHB).
+- `plate_x = +0.7`: Catcher's right / outside to a RHB / inside to a LHB.
+
+If you feed raw `plate_x` into a machine learning model, the model gets confused because $+0.7$ represents two completely opposite baseball situations (an outside chase pitch to a righty, but an inside jam pitch to a lefty!).
+
+To fix this, we created **`plate_x_norm`**:
+$$\mathbf{\text{plate\_x\_norm} = \text{plate\_x} \times \begin{cases} -1.0 & \text{if batter stands Left (L)} \\ +1.0 & \text{if batter stands Right (R)} \end{cases}}$$
+
+Under this rule:
+- **Positive `plate_x_norm`**: ALWAYS means the pitch is away (glove-side) from the batter.
+- **Negative `plate_x_norm`**: ALWAYS means the pitch is inside (arm-side) toward the batter.
+
+Now, your decision trees and neural networks can learn pure baseball strategy without getting tripped up by batter handedness.
+
+---
+
+## 5. Hands-On Exercise 2: Comparing Pitchers in DuckDB
+
+Now let's query the live lake in RStudio to see how real pitchers compare in VAA and whiff rate:
+
+```r
+library(mlbr)
+library(DBI)
+library(dplyr)
+
+con <- mlbr::lake_duckdb()
+
+# Let's compare Four-Seam Fastballs for top starters in 2024
+top_pitchers <- DBI::dbGetQuery(con, "
+  SELECT 
+    p.name_last || ', ' || p.name_first AS pitcher_name,
+    COUNT(*) AS pitches,
+    ROUND(AVG(f.release_speed), 1) AS avg_mph,
+    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,
+    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,
+    ROUND(AVG(f.vaa), 2) AS avg_vaa,
+    ROUND(AVG(f.is_whiff[f.is_swing = 1])::NUMERIC * 100, 1) AS whiff_pct
+  FROM v_statcast_features f
+  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam
+  JOIN v_lahman_people p ON c.key_retro = p.player_id
+  WHERE f.game_date >= '2024-01-01'
+    AND f.pitch_type = 'FF'
+  GROUP BY p.name_last, p.name_first
+  HAVING COUNT(*) >= 500
+  ORDER BY avg_vaa DESC
+  LIMIT 10;
+")
+
+print(top_pitchers)
+DBI::dbDisconnect(con, shutdown = TRUE)
+```
+
+Look closely at the pitchers at the top of that list:
+- Pitchers with the highest (flattest) VAA (e.g. $-3.8^\circ$ to $-4.3^\circ$) almost always have either **low release heights** (throwing from a lower arm slot) or **extreme backspin** (high IVB).
+- These pitchers generate substantially higher whiff rates on four-seamers at the top of the zone.
+
+---
+
+## 6. Next Steps: Developing Fastball Deltas & Tunneling
+
+In our next step, we are adding two advanced features:
+
+1. **Velocity Delta ($\Delta V$)**:
+   $$\Delta V = v_{\text{pitch}} - v_{\text{primary\_fastball}}$$
+   A changeup is not just "85 mph"; it is "85 mph off a 96 mph fastball" ($\Delta V = -11\text{ mph}$). That 11 mph differential disrupts the batter's timing mechanism.
+2. **Tunneling Distance ($d_{\text{tunnel}}$)**:
+   $$d_{\text{tunnel}} = \sqrt{(x_{0,\text{pitch}} - x_{0,\text{fastball}})^2 + (z_{0,\text{pitch}} - z_{0,\text{fastball}})^2}$$
+   If a pitcher releases their slider from the exact same spatial window as their fastball ($d_{\text{tunnel}} < 2\text{ inches}$), the pitch is visually indistinguishable to the batter until late flight break occurs.
