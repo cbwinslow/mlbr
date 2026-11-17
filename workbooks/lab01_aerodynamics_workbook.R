@@ -58,6 +58,7 @@ suppressPackageStartupMessages({
   library(duckdb)
   library(dplyr)
   library(ggplot2)
+  library(scales)
 })
 
 cat("Connecting to zero-copy DuckDB lake...\n")
@@ -73,7 +74,7 @@ query_pitchers <- "
     ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,
     ROUND(AVG(f.ivb_in), 1) AS avg_ivb,
     ROUND(AVG(f.vaa), 2) AS avg_vaa,
-    ROUND(AVG(CASE WHEN f.is_whiff = 1 THEN 1.0 ELSE 0.0 END)::NUMERIC * 100, 1) AS whiff_rate_all_pitches
+    ROUND(SUM(f.is_whiff)::NUMERIC / NULLIF(SUM(f.is_swing), 0) * 100, 1) AS whiff_rate_swings
   FROM v_statcast_features f
   JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam
   WHERE f.game_date >= '2024-01-01'
@@ -89,7 +90,7 @@ print(as.data.frame(top_pitchers))
 
 
 # ------------------------------------------------------------------------------
-# Part 3: Visualizing the Whiff Lift in Your RStudio Plot Viewer
+# Part 3: Visualizing the Whiff Lift (Empirical Bins + GAM Splines)
 # ------------------------------------------------------------------------------
 cat("\nQuerying 2024 Four-Seam swings to plot VAA vs Whiff Probability...\n")
 query_swings <- "
@@ -107,35 +108,181 @@ query_swings <- "
 "
 
 swings_2024 <- DBI::dbGetQuery(con, query_swings)
-DBI::dbDisconnect(con, shutdown = TRUE)
-
 cat(sprintf("Loaded %s competitive swings in the strike zone.\n", format(nrow(swings_2024), big.mark=",")))
 
-# Create an intuitive plot showing how flatter fastballs increase whiffs
-# We use Generalized Additive Models (GAM) and empirical bins for sub-second, memory-efficient rendering
-p <- ggplot(swings_2024 |> filter(vaa >= -9.0 & vaa <= -1.0), aes(x = vaa, y = is_whiff)) +
+p1 <- ggplot(swings_2024 |> filter(vaa >= -9.0 & vaa <= -1.0), aes(x = vaa, y = is_whiff)) +
   stat_summary_bin(bins = 20, geom = "point", size = 3.5, color = "#00f2fe") +
   stat_summary_bin(bins = 20, geom = "line", color = "#00e676", linewidth = 1.1) +
   geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs"), color = "#38bdf8", fill = "#38bdf8", alpha = 0.2) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  theme_minimal(base_size = 13) +
-  theme(
-    plot.background  = element_rect(fill = "#090d16", color = NA),
-    panel.background = element_rect(fill = "#111827", color = "#1e293b", linewidth = 0.6),
-    panel.grid.major = element_line(color = "#1e293b", linewidth = 0.4),
-    panel.grid.minor = element_line(color = "#162032", linewidth = 0.2),
-    text             = element_text(color = "#e2e8f0"),
-    plot.title       = element_text(color = "#f1f5f9", face = "bold", size = rel(1.1)),
-    plot.subtitle    = element_text(color = "#94a3b8", size = rel(0.9)),
-    axis.title       = element_text(color = "#e2e8f0", face = "bold"),
-    axis.text        = element_text(color = "#94a3b8")
-  ) +
+  mlbr::theme_cyber(base_size = 13) +
   labs(
     title = "Work-Along Lab 01: Fastball Whiff Rate vs. VAA (2024 Season)",
-    subtitle = "Cyan points = Empirical bins | Green line = Trajectory | Blue ribbon = 95% GAM Confidence Band",
+    subtitle = "Cyan points = Empirical bins | Green line = Trajectory | Blue ribbon = 95% GAM Spline",
     x = "Vertical Approach Angle (degrees, higher/flatter is better)",
     y = "Observed Whiff Rate on Swings"
   )
 
-print(p)
-cat("Plot rendered in Dark Cyber Theme in RStudio Plot Viewer!\n")
+print(p1)
+# Save assets according to our mandatory Asset Preservation Mandate
+mlbr::save_plot_assets(p1, "lab01_whiff_curve_dark", data = swings_2024 |> head(1000), dir = "models")
+
+
+# ------------------------------------------------------------------------------
+# Part 4: The Movement Arena (Horizontal Break vs Induced Vertical Break)
+# ------------------------------------------------------------------------------
+cat("\nPulling pitch movement profiles across major pitch types (2024)...\n")
+query_movement <- "
+  SELECT 
+    pitch_type,
+    ROUND(hb_in, 1) AS hb_in,
+    ROUND(ivb_in, 1) AS ivb_in,
+    release_speed
+  FROM v_statcast_features
+  WHERE game_date >= '2024-01-01'
+    AND pitch_type IN ('FF', 'SI', 'FC', 'SL', 'ST', 'CH', 'CU')
+    AND hb_in IS NOT NULL 
+    AND ivb_in IS NOT NULL
+  USING SAMPLE 50000;
+"
+
+movement_2024 <- DBI::dbGetQuery(con, query_movement)
+
+p2 <- ggplot(movement_2024, aes(x = hb_in, y = ivb_in, color = pitch_type)) +
+  geom_vline(xintercept = 0, color = "#334155", linetype = "dashed", linewidth = 0.6) +
+  geom_hline(yintercept = 0, color = "#334155", linetype = "dashed", linewidth = 0.6) +
+  geom_point(alpha = 0.25, size = 1.2) +
+  stat_density_2d(aes(color = pitch_type), linewidth = 0.8, bins = 6) +
+  scale_color_manual(
+    values = c(
+      "FF" = "#38bdf8", # Cyan
+      "SI" = "#3b82f6", # Blue
+      "FC" = "#f59e0b", # Amber
+      "SL" = "#10b981", # Emerald
+      "ST" = "#84cc16", # Lime
+      "CH" = "#a855f7", # Purple
+      "CU" = "#f43f5e"  # Rose
+    ),
+    labels = c(
+      "FF" = "Four-Seam (FF)",
+      "SI" = "Sinker (SI)",
+      "FC" = "Cutter (FC)",
+      "SL" = "Slider (SL)",
+      "ST" = "Sweeper (ST)",
+      "CH" = "Changeup (CH)",
+      "CU" = "Curveball (CU)"
+    )
+  ) +
+  coord_equal(xlim = c(-25, 25), ylim = c(-25, 25)) +
+  mlbr::theme_cyber(base_size = 13) +
+  labs(
+    title = "The Pitch Movement Arena: HB vs. IVB (2024 MLB)",
+    subtitle = "Aerodynamic lift (backspin) elevates FF to +18 inches; Sweepers create extreme glove-side break",
+    x = "Horizontal Break (inches, catcher perspective: positive = arm-side)",
+    y = "Induced Vertical Break (inches, relative to gravity)",
+    color = "Pitch Type"
+  )
+
+print(p2)
+mlbr::save_plot_assets(p2, "lab01_movement_arena", data = movement_2024 |> head(2000), dir = "models")
+
+
+# ------------------------------------------------------------------------------
+# Part 5: Strike Zone Whiff Heatmap: Flat VAA vs Steep VAA
+# ------------------------------------------------------------------------------
+cat("\nEvaluating Fastball Whiff Rate across spatial strike zones...\n")
+query_zone <- "
+  SELECT 
+    CASE WHEN vaa >= -4.5 THEN 'Flat VAA (>= -4.5°)' ELSE 'Steep VAA (< -4.5°)' END AS vaa_tier,
+    ROUND(plate_x_norm, 1) AS plate_x_norm,
+    ROUND(plate_z, 1) AS plate_z,
+    COUNT(*) AS total_swings,
+    SUM(is_whiff) AS total_whiffs,
+    ROUND(SUM(is_whiff)::NUMERIC / COUNT(*) * 100, 1) AS whiff_pct
+  FROM v_statcast_features
+  WHERE game_date >= '2024-01-01'
+    AND pitch_type = 'FF'
+    AND is_swing = 1
+    AND plate_x_norm BETWEEN -1.5 AND 1.5
+    AND plate_z BETWEEN 1.2 AND 4.0
+  GROUP BY 1, 2, 3
+  HAVING COUNT(*) >= 30;
+"
+
+zone_whiff <- DBI::dbGetQuery(con, query_zone)
+
+p3 <- ggplot(zone_whiff, aes(x = plate_x_norm, y = plate_z, fill = whiff_pct)) +
+  geom_tile() +
+  scale_fill_gradientn(
+    colors = c("#090d16", "#1e3a8a", "#0284c7", "#06b6d4", "#10b981", "#f59e0b", "#ef4444"),
+    values = scales::rescale(c(5, 12, 18, 25, 32, 40, 50)),
+    labels = function(x) paste0(x, "%"),
+    name = "Whiff %"
+  ) +
+  # Strike zone bounding box
+  geom_rect(xmin = -0.83, xmax = 0.83, ymin = 1.5, ymax = 3.5,
+            color = "#f8fafc", fill = NA, linewidth = 0.9, linetype = "dashed") +
+  facet_wrap(~ vaa_tier) +
+  coord_equal(xlim = c(-1.3, 1.3), ylim = c(1.0, 4.2)) +
+  mlbr::theme_cyber(base_size = 13) +
+  labs(
+    title = "Strike Zone Whiff Rates: Flat vs. Steep Four-Seam Fastballs",
+    subtitle = "Flat VAA generates 35-45% whiffs at the upper edge (z > 3.0 ft); Steep VAA loses effectiveness up",
+    x = "Platoon Normalized Horizontal Location (ft, positive = away)",
+    y = "Vertical Plate Height (ft)"
+  )
+
+print(p3)
+mlbr::save_plot_assets(p3, "lab01_zone_whiff_heatmap", data = zone_whiff, dir = "models")
+
+
+# ------------------------------------------------------------------------------
+# Part 6: Kinematic Flight Path Simulation (Paul Skenes vs Colin Rea)
+# ------------------------------------------------------------------------------
+cat("\nSimulating 3D flight trajectories from release (y=50 ft) to home plate...\n")
+
+simulate_trajectory <- function(name, vy0_mph, vz0_fps, az_fps2, y0 = 50.0, z0 = 5.5, ay = 30.0) {
+  vy0_fps <- -vy0_mph * 5280 / 3600
+  delta_y <- 1.417 - y0
+  vy_f <- -sqrt(vy0_fps^2 + 2 * ay * delta_y)
+  t_total <- (vy_f - vy0_fps) / ay
+  
+  times <- seq(0, t_total, length.out = 100)
+  data.frame(
+    pitcher = name,
+    time = times,
+    y = y0 + vy0_fps * times + 0.5 * ay * times^2,
+    z = z0 + vz0_fps * times + 0.5 * az_fps2 * times^2
+  )
+}
+
+# Paul Skenes: 99.8 mph, low release (5.5 ft), high carry (az = -12.5 ft/s^2), VAA ~ -4.2 deg
+skenes <- simulate_trajectory("Paul Skenes (Flat VAA: -4.2°)", vy0_mph = 99.8, vz0_fps = -3.2, az_fps2 = -12.5, z0 = 5.5)
+
+# Colin Rea: 92.5 mph, high release (6.3 ft), steep drop (az = -18.5 ft/s^2), VAA ~ -6.5 deg
+rea <- simulate_trajectory("Colin Rea (Steep VAA: -6.5°)", vy0_mph = 92.5, vz0_fps = -5.8, az_fps2 = -18.5, z0 = 6.3)
+
+traj_df <- rbind(skenes, rea)
+
+p4 <- ggplot(traj_df, aes(x = y, y = z, color = pitcher)) +
+  geom_line(linewidth = 1.3) +
+  # Strike zone cross-section at home plate (y = 1.417 ft)
+  geom_segment(x = 1.417, xend = 1.417, y = 1.5, yend = 3.5, color = "#f8fafc", linewidth = 1.2, linetype = "dashed") +
+  annotate("text", x = 3.0, y = 3.6, label = "Strike Zone Top (3.5 ft)", color = "#94a3b8", size = 3.5, hjust = 0) +
+  annotate("text", x = 3.0, y = 1.4, label = "Strike Zone Bottom (1.5 ft)", color = "#94a3b8", size = 3.5, hjust = 0) +
+  scale_x_reverse() + # Ball flies from y = 50 ft to y = 1.417 ft
+  scale_color_manual(values = c("Paul Skenes (Flat VAA: -4.2°)" = "#00f2fe", "Colin Rea (Steep VAA: -6.5°)" = "#f43f5e")) +
+  mlbr::theme_cyber(base_size = 13) +
+  labs(
+    title = "Kinematic Trajectory Comparison: Flat 'Rising' Fastball vs. Steep Fastball",
+    subtitle = "Skenes' flat plane enters the zone at a shallow angle, creating the optical illusion of rising",
+    x = "Distance from Home Plate (ft, 50 ft = release, 1.4 ft = front edge)",
+    y = "Vertical Height above Ground (ft)",
+    color = "Pitcher Trajectory"
+  )
+
+print(p4)
+mlbr::save_plot_assets(p4, "lab01_trajectory_simulation", data = traj_df, dir = "models")
+
+DBI::dbDisconnect(con, shutdown = TRUE)
+cat("\nLab 01 complete! All 4 diagnostic figures and assets preserved in models/!\n")

@@ -549,17 +549,22 @@ window.Quarto = {
   <li><a href="#the-key-dimensions-to-memorize" id="toc-the-key-dimensions-to-memorize" class="nav-link" data-scroll-target="#the-key-dimensions-to-memorize">The Key Dimensions to Memorize:</a></li>
   <li><a href="#why-velocities-and-accelerations-have-surprising-signs" id="toc-why-velocities-and-accelerations-have-surprising-signs" class="nav-link" data-scroll-target="#why-velocities-and-accelerations-have-surprising-signs">Why Velocities and Accelerations Have Surprising Signs:</a></li>
   </ul></li>
-  <li><a href="#deriving-the-trajectory-math-step-by-step" id="toc-deriving-the-trajectory-math-step-by-step" class="nav-link" data-scroll-target="#deriving-the-trajectory-math-step-by-step">2. Deriving the Trajectory Math Step-by-Step</a>
+  <li><a href="#hand-calculating-trajectory-physics-in-r" id="toc-hand-calculating-trajectory-physics-in-r" class="nav-link" data-scroll-target="#hand-calculating-trajectory-physics-in-r">2. Hand-Calculating Trajectory Physics in R</a>
   <ul class="collapse">
-  <li><a href="#step-2.1-finding-forward-velocity-at-home-plate-v_yf" id="toc-step-2.1-finding-forward-velocity-at-home-plate-v_yf" class="nav-link" data-scroll-target="#step-2.1-finding-forward-velocity-at-home-plate-v_yf">Step 2.1: Finding Forward Velocity at Home Plate (<span class="math inline">\(v_{yf}\)</span>)</a></li>
-  <li><a href="#step-2.2-finding-flight-time-t_textflight" id="toc-step-2.2-finding-flight-time-t_textflight" class="nav-link" data-scroll-target="#step-2.2-finding-flight-time-t_textflight">Step 2.2: Finding Flight Time (<span class="math inline">\(t_{\text{flight}}\)</span>)</a></li>
-  <li><a href="#step-2.3-finding-terminal-vertical-and-horizontal-velocities" id="toc-step-2.3-finding-terminal-vertical-and-horizontal-velocities" class="nav-link" data-scroll-target="#step-2.3-finding-terminal-vertical-and-horizontal-velocities">Step 2.3: Finding Terminal Vertical and Horizontal Velocities</a></li>
-  <li><a href="#step-2.4-calculating-the-vertical-approach-angle-vaa" id="toc-step-2.4-calculating-the-vertical-approach-angle-vaa" class="nav-link" data-scroll-target="#step-2.4-calculating-the-vertical-approach-angle-vaa">Step 2.4: Calculating the Vertical Approach Angle (VAA)</a></li>
+  <li><a href="#step-2.1-terminal-forward-velocity-at-home-plate" id="toc-step-2.1-terminal-forward-velocity-at-home-plate" class="nav-link" data-scroll-target="#step-2.1-terminal-forward-velocity-at-home-plate">Step 2.1: Terminal Forward Velocity at Home Plate</a></li>
+  <li><a href="#step-2.2-time-of-flight" id="toc-step-2.2-time-of-flight" class="nav-link" data-scroll-target="#step-2.2-time-of-flight">Step 2.2: Time of Flight</a></li>
+  <li><a href="#step-2.3-terminal-vertical-horizontal-velocity" id="toc-step-2.3-terminal-vertical-horizontal-velocity" class="nav-link" data-scroll-target="#step-2.3-terminal-vertical-horizontal-velocity">Step 2.3: Terminal Vertical &amp; Horizontal Velocity</a></li>
+  <li><a href="#step-2.4-approach-angles-vaa-and-haa" id="toc-step-2.4-approach-angles-vaa-and-haa" class="nav-link" data-scroll-target="#step-2.4-approach-angles-vaa-and-haa">Step 2.4: Approach Angles (VAA and HAA)</a></li>
   </ul></li>
-  <li><a href="#hands-on-exercise-1-run-the-math-by-hand-in-r" id="toc-hands-on-exercise-1-run-the-math-by-hand-in-r" class="nav-link" data-scroll-target="#hands-on-exercise-1-run-the-math-by-hand-in-r">3. Hands-On Exercise 1: Run the Math by Hand in R</a></li>
-  <li><a href="#the-platoon-problem-why-plate_x_norm-is-mandatory" id="toc-the-platoon-problem-why-plate_x_norm-is-mandatory" class="nav-link" data-scroll-target="#the-platoon-problem-why-plate_x_norm-is-mandatory">4. The Platoon Problem: Why <code>plate_x_norm</code> is Mandatory</a></li>
-  <li><a href="#hands-on-exercise-2-comparing-pitchers-in-duckdb" id="toc-hands-on-exercise-2-comparing-pitchers-in-duckdb" class="nav-link" data-scroll-target="#hands-on-exercise-2-comparing-pitchers-in-duckdb">5. Hands-On Exercise 2: Comparing Pitchers in DuckDB</a></li>
-  <li><a href="#next-steps-developing-fastball-deltas-tunneling" id="toc-next-steps-developing-fastball-deltas-tunneling" class="nav-link" data-scroll-target="#next-steps-developing-fastball-deltas-tunneling">6. Next Steps: Developing Fastball Deltas &amp; Tunneling</a></li>
+  <li><a href="#querying-the-14.64m-pitch-lake-via-duckdb" id="toc-querying-the-14.64m-pitch-lake-via-duckdb" class="nav-link" data-scroll-target="#querying-the-14.64m-pitch-lake-via-duckdb">3. Querying the 14.64M Pitch Lake via DuckDB</a></li>
+  <li><a href="#visual-diagnostics-gallery" id="toc-visual-diagnostics-gallery" class="nav-link" data-scroll-target="#visual-diagnostics-gallery">4. Visual Diagnostics Gallery</a>
+  <ul class="collapse">
+  <li><a href="#figure-1-fastball-whiff-rate-vs.-vaa-gam-splines" id="toc-figure-1-fastball-whiff-rate-vs.-vaa-gam-splines" class="nav-link" data-scroll-target="#figure-1-fastball-whiff-rate-vs.-vaa-gam-splines">Figure 1: Fastball Whiff Rate vs.&nbsp;VAA (GAM Splines)</a></li>
+  <li><a href="#figure-2-the-pitch-movement-arena-hb-vs.-ivb" id="toc-figure-2-the-pitch-movement-arena-hb-vs.-ivb" class="nav-link" data-scroll-target="#figure-2-the-pitch-movement-arena-hb-vs.-ivb">Figure 2: The Pitch Movement Arena (<span class="math inline">\(HB\)</span> vs.&nbsp;<span class="math inline">\(IVB\)</span>)</a></li>
+  <li><a href="#figure-3-strike-zone-whiff-heatmap-flat-vs.-steep-fastballs" id="toc-figure-3-strike-zone-whiff-heatmap-flat-vs.-steep-fastballs" class="nav-link" data-scroll-target="#figure-3-strike-zone-whiff-heatmap-flat-vs.-steep-fastballs">Figure 3: Strike Zone Whiff Heatmap: Flat vs.&nbsp;Steep Fastballs</a></li>
+  <li><a href="#figure-4-kinematic-trajectory-simulation-skenes-vs.-rea" id="toc-figure-4-kinematic-trajectory-simulation-skenes-vs.-rea" class="nav-link" data-scroll-target="#figure-4-kinematic-trajectory-simulation-skenes-vs.-rea">Figure 4: Kinematic Trajectory Simulation (Skenes vs.&nbsp;Rea)</a></li>
+  </ul></li>
+  <li><a href="#next-steps-lab-02-pitch-tunneling-commitment-geometry" id="toc-next-steps-lab-02-pitch-tunneling-commitment-geometry" class="nav-link" data-scroll-target="#next-steps-lab-02-pitch-tunneling-commitment-geometry">5. Next Steps: Lab 02 Pitch Tunneling &amp; Commitment Geometry</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -609,7 +614,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This document is designed specifically for you to work along interactively. You can open RStudio Server at <a href="http://192.168.10.1:8787"><strong>http://192.168.10.1:8787</strong></a> and execute the companion script <a href="file:///mnt/storage/Rprojects/mlbr/workbooks/lab01_aerodynamics_workbook.R"><code>workbooks/lab01_aerodynamics_workbook.R</code></a> line-by-line using <code>Ctrl + Enter</code>.</p>
+<p>This document is designed specifically for you to work along interactively. Open RStudio Server at <a href="http://192.168.10.1:8787"><strong>http://192.168.10.1:8787</strong></a> and execute the companion script <a href="file:///mnt/storage/Rprojects/mlbr/workbooks/lab01_aerodynamics_workbook.R"><code>workbooks/lab01_aerodynamics_workbook.R</code></a> line-by-line using <code>Ctrl + Enter</code>.</p>
 </div>
 </div>
 <hr>
@@ -646,112 +651,217 @@ window.Quarto = {
 <hr>
 </section>
 </section>
-<section id="deriving-the-trajectory-math-step-by-step" class="level2">
-<h2 class="anchored" data-anchor-id="deriving-the-trajectory-math-step-by-step">2. Deriving the Trajectory Math Step-by-Step</h2>
-<p>Now, let’s derive the exact mathematical formulas we use in our DuckDB feature view.</p>
-<section id="step-2.1-finding-forward-velocity-at-home-plate-v_yf" class="level3">
-<h3 class="anchored" data-anchor-id="step-2.1-finding-forward-velocity-at-home-plate-v_yf">Step 2.1: Finding Forward Velocity at Home Plate (<span class="math inline">\(v_{yf}\)</span>)</h3>
-<p>In classical physics, Torricelli’s equation relates initial velocity (<span class="math inline">\(u\)</span>), final velocity (<span class="math inline">\(v\)</span>), acceleration (<span class="math inline">\(a\)</span>), and displacement (<span class="math inline">\(\Delta y\)</span>): <span class="math display">\[v^2 = u^2 + 2 a \Delta y\]</span></p>
-<p>Here: - Initial position: <span class="math inline">\(y_0 = 50.0\text{ ft}\)</span> - Final position: <span class="math inline">\(y_f = 1.417\text{ ft}\)</span> - Displacement: <span class="math inline">\(\Delta y = y_f - y_0 = 1.417 - 50.0 = -48.583\text{ ft}\)</span></p>
-<p>Plugging this into the kinematic equation: <span class="math display">\[v_{yf}^2 = v_{y0}^2 + 2 a_y (1.417 - 50.0)\]</span></p>
-<p>Taking the square root and remembering that the ball is still traveling toward the plate (negative direction): <span class="math display">\[\mathbf{v_{yf} = -\sqrt{v_{y0}^2 + 2 a_y (1.417 - 50.0)}}\]</span></p>
+<section id="hand-calculating-trajectory-physics-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="hand-calculating-trajectory-physics-in-r">2. Hand-Calculating Trajectory Physics in R</h2>
+<p>In <a href="file:///mnt/storage/Rprojects/mlbr/workbooks/lab01_aerodynamics_workbook.R"><code>workbooks/lab01_aerodynamics_workbook.R</code></a>, we begin with Part 1: hand-calculating real parameters from a 98.5 mph Four-Seam fastball.</p>
+<section id="step-2.1-terminal-forward-velocity-at-home-plate" class="level3">
+<h3 class="anchored" data-anchor-id="step-2.1-terminal-forward-velocity-at-home-plate">Step 2.1: Terminal Forward Velocity at Home Plate</h3>
+<p>Using the classic kinematic equation <span class="math inline">\(v_f^2 = v_0^2 + 2 a \Delta y\)</span>:</p>
+<p><span class="math display">\[\Delta y = 1.417 - 50.0 = -48.583\text{ ft}\]</span> <span class="math display">\[v_{y,f} = -\sqrt{v_{y0}^2 + 2 \cdot a_y \cdot (-48.583)}\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>vy0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">144.2</span>   <span class="co"># ft/s (98.3 mph at 50 ft)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ay  <span class="ot">&lt;-</span> <span class="fl">31.4</span>     <span class="co"># ft/s^2 (forward air drag)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>delta_y <span class="ot">&lt;-</span> <span class="fl">1.417</span> <span class="sc">-</span> <span class="fl">50.0</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>vy_f <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">sqrt</span>(vy0<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> ay <span class="sc">*</span> delta_y) <span class="co"># -133.2 ft/s (90.8 mph at plate)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The pitch loses <strong>7.5 mph</strong> of forward speed purely due to atmospheric air drag.</p>
 </section>
-<section id="step-2.2-finding-flight-time-t_textflight" class="level3">
-<h3 class="anchored" data-anchor-id="step-2.2-finding-flight-time-t_textflight">Step 2.2: Finding Flight Time (<span class="math inline">\(t_{\text{flight}}\)</span>)</h3>
-<p>Under constant acceleration, velocity changes linearly over time: <span class="math inline">\(v = u + a t\)</span>.<br>
-Solving for time <span class="math inline">\(t\)</span>: <span class="math display">\[\mathbf{t_{\text{flight}} = \frac{v_{yf} - v_{y0}}{a_y}}\]</span></p>
-<p>For a 95 mph fastball, <span class="math inline">\(t_{\text{flight}}\)</span> is typically <strong><span class="math inline">\(0.38\)</span> to <span class="math inline">\(0.42\)</span> seconds</strong> (roughly 400 milliseconds). That is less than the blink of a human eye!</p>
+<section id="step-2.2-time-of-flight" class="level3">
+<h3 class="anchored" data-anchor-id="step-2.2-time-of-flight">Step 2.2: Time of Flight</h3>
+<p><span class="math display">\[t_{\text{flight}} = \frac{v_{y,f} - v_{y0}}{a_y}\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>t_flight <span class="ot">&lt;-</span> (vy_f <span class="sc">-</span> vy0) <span class="sc">/</span> ay <span class="co"># 0.3503 seconds (350 ms)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The batter has just <strong>350 milliseconds</strong> from release to contact to recognize pitch type, predict trajectory, and execute the swing.</p>
 </section>
-<section id="step-2.3-finding-terminal-vertical-and-horizontal-velocities" class="level3">
-<h3 class="anchored" data-anchor-id="step-2.3-finding-terminal-vertical-and-horizontal-velocities">Step 2.3: Finding Terminal Vertical and Horizontal Velocities</h3>
-<p>With the flight time known, we calculate how fast the ball is dropping (<span class="math inline">\(v_{zf}\)</span>) and drifting laterally (<span class="math inline">\(v_{xf}\)</span>) at the instant it crosses the plate: <span class="math display">\[\mathbf{v_{zf} = v_{z0} + a_z \cdot t_{\text{flight}}}\]</span> <span class="math display">\[\mathbf{v_{xf} = v_{x0} + a_x \cdot t_{\text{flight}}}\]</span></p>
+<section id="step-2.3-terminal-vertical-horizontal-velocity" class="level3">
+<h3 class="anchored" data-anchor-id="step-2.3-terminal-vertical-horizontal-velocity">Step 2.3: Terminal Vertical &amp; Horizontal Velocity</h3>
+<p><span class="math display">\[v_{z,f} = v_{z0} + a_z \cdot t_{\text{flight}}\]</span> <span class="math display">\[v_{x,f} = v_{x0} + a_x \cdot t_{\text{flight}}\]</span></p>
 </section>
-<section id="step-2.4-calculating-the-vertical-approach-angle-vaa" class="level3">
-<h3 class="anchored" data-anchor-id="step-2.4-calculating-the-vertical-approach-angle-vaa">Step 2.4: Calculating the Vertical Approach Angle (VAA)</h3>
-<p>Think of the trajectory at home plate as a right triangle: - Horizontal leg (forward motion): <span class="math inline">\(-v_{yf}\)</span> (we negate it so forward speed is positive). - Vertical leg (up/down motion): <span class="math inline">\(v_{zf}\)</span> (negative because the ball is descending).</p>
-<p>The angle <span class="math inline">\(\theta\)</span> below the horizontal plane is: <span class="math display">\[\tan(\text{VAA}) = \frac{v_{zf}}{-v_{yf}} \implies \mathbf{\text{VAA} = \text{atan2}(v_{zf}, -v_{yf}) \times \frac{180}{\pi}}\]</span></p>
+<section id="step-2.4-approach-angles-vaa-and-haa" class="level3">
+<h3 class="anchored" data-anchor-id="step-2.4-approach-angles-vaa-and-haa">Step 2.4: Approach Angles (VAA and HAA)</h3>
+<p><span class="math display">\[\text{VAA} = \arctan\left(\frac{v_{z,f}}{-v_{y,f}}\right) \times \left(\frac{180}{\pi}\right)\]</span> <span class="math display">\[\text{HAA} = \arctan\left(\frac{v_{x,f}}{-v_{y,f}}\right) \times \left(\frac{180}{\pi}\right)\]</span></p>
 <hr>
 </section>
 </section>
-<section id="hands-on-exercise-1-run-the-math-by-hand-in-r" class="level2">
-<h2 class="anchored" data-anchor-id="hands-on-exercise-1-run-the-math-by-hand-in-r">3. Hands-On Exercise 1: Run the Math by Hand in R</h2>
-<p>Let’s test this in R with real flight parameters from a 98.5 mph four-seam fastball:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial tracking parameters at y = 50 ft</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>vy0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">144.2</span>   <span class="co"># ft/s (forward speed)</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>vz0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">3.8</span>     <span class="co"># ft/s (downward vertical velocity)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>vx0 <span class="ot">&lt;-</span> <span class="fl">4.2</span>      <span class="co"># ft/s (horizontal velocity)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>ay  <span class="ot">&lt;-</span> <span class="fl">31.4</span>     <span class="co"># ft/s^2 (aerodynamic drag)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>az  <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">14.2</span>    <span class="co"># ft/s^2 (gravity -32.2 plus upward Magnus lift +18.0)</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>ax  <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">8.1</span>     <span class="co"># ft/s^2 (horizontal break)</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Forward velocity at front of plate (y = 1.417 ft)</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>vy_f <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">sqrt</span>(vy0<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> ay <span class="sc">*</span> (<span class="fl">1.417</span> <span class="sc">-</span> <span class="fl">50.0</span>))</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Plate arrival speed: %.1f ft/s (%.1f mph)</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">abs</span>(vy_f), <span class="fu">abs</span>(vy_f) <span class="sc">*</span> (<span class="dv">3600</span> <span class="sc">/</span> <span class="dv">5280</span>)))</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Time of flight</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>t_flight <span class="ot">&lt;-</span> (vy_f <span class="sc">-</span> vy0) <span class="sc">/</span> ay</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Flight time: %.3f seconds (%.1f ms)</span><span class="sc">\n</span><span class="st">"</span>, t_flight, t_flight <span class="sc">*</span> <span class="dv">1000</span>))</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Vertical terminal velocity</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>vz_f <span class="ot">&lt;-</span> vz0 <span class="sc">+</span> az <span class="sc">*</span> t_flight</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Vertical Approach Angle (VAA) in degrees</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>vaa <span class="ot">&lt;-</span> <span class="fu">atan2</span>(vz_f, <span class="sc">-</span>vy_f) <span class="sc">*</span> (<span class="dv">180</span> <span class="sc">/</span> pi)</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Vertical Approach Angle: %.2f degrees</span><span class="sc">\n</span><span class="st">"</span>, vaa))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What did you find?</strong><br>
-Notice that the pitch crosses the plate with a VAA of around <strong><span class="math inline">\(-4.3^\circ\)</span></strong>. For a fastball, anything flatter than <span class="math inline">\(-4.5^\circ\)</span> is exceptional!</p>
+<section id="querying-the-14.64m-pitch-lake-via-duckdb" class="level2">
+<h2 class="anchored" data-anchor-id="querying-the-14.64m-pitch-lake-via-duckdb">3. Querying the 14.64M Pitch Lake via DuckDB</h2>
+<p>In Part 2, we query our <strong>Silver-Tier Parquet dataset</strong> using <code>mlbr::lake_duckdb()</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">lake_duckdb</span>()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>query_pitchers <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT </span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">    CONCAT(c.name_last, ', ', c.name_first) AS pitcher_name,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">    COUNT(*) AS pitches,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_speed), 1) AS avg_mph,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.vaa), 2) AS avg_vaa,</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(SUM(f.is_whiff)::NUMERIC / NULLIF(SUM(f.is_swing), 0) * 100, 1) AS whiff_rate_swings</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM v_statcast_features f</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="st">  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE f.game_date &gt;= '2024-01-01'</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="st">    AND f.pitch_type = 'FF'</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="st">  GROUP BY c.name_last, c.name_first</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="st">  HAVING COUNT(*) &gt;= 500</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="st">  ORDER BY avg_vaa DESC</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="st">  LIMIT 10;</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, query_pitchers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pitcher</th>
+<th style="text-align: center;">Pitches</th>
+<th style="text-align: center;">Avg MPH</th>
+<th style="text-align: center;">Release Height (ft)</th>
+<th style="text-align: center;">IVB (in)</th>
+<th style="text-align: center;">VAA (deg)</th>
+<th style="text-align: center;">Whiff Rate (Swings)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Paul Sewald</strong></td>
+<td style="text-align: center;">1,188</td>
+<td style="text-align: center;">91.1</td>
+<td style="text-align: center;">4.40</td>
+<td style="text-align: center;">12.8</td>
+<td style="text-align: center;"><strong>-3.45°</strong></td>
+<td style="text-align: center;">23.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Edwin Uceta</strong></td>
+<td style="text-align: center;">812</td>
+<td style="text-align: center;">94.0</td>
+<td style="text-align: center;">4.54</td>
+<td style="text-align: center;">13.5</td>
+<td style="text-align: center;"><strong>-3.48°</strong></td>
+<td style="text-align: center;"><strong>37.7%</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Alexis Díaz</strong></td>
+<td style="text-align: center;">829</td>
+<td style="text-align: center;">93.8</td>
+<td style="text-align: center;">4.64</td>
+<td style="text-align: center;">13.7</td>
+<td style="text-align: center;"><strong>-3.48°</strong></td>
+<td style="text-align: center;">22.0%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Craig Kimbrel</strong></td>
+<td style="text-align: center;">1,342</td>
+<td style="text-align: center;">93.7</td>
+<td style="text-align: center;">4.74</td>
+<td style="text-align: center;">15.2</td>
+<td style="text-align: center;"><strong>-3.56°</strong></td>
+<td style="text-align: center;">26.9%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Edwin Díaz</strong></td>
+<td style="text-align: center;">1,473</td>
+<td style="text-align: center;">97.2</td>
+<td style="text-align: center;">4.77</td>
+<td style="text-align: center;">12.8</td>
+<td style="text-align: center;"><strong>-3.63°</strong></td>
+<td style="text-align: center;"><strong>35.0%</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Emmet Sheehan</strong></td>
+<td style="text-align: center;">1,546</td>
+<td style="text-align: center;">94.9</td>
+<td style="text-align: center;">5.48</td>
+<td style="text-align: center;">18.2</td>
+<td style="text-align: center;"><strong>-3.70°</strong></td>
+<td style="text-align: center;">24.0%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Jacob Misiorowski</strong></td>
+<td style="text-align: center;">2,730</td>
+<td style="text-align: center;">100.2</td>
+<td style="text-align: center;">5.22</td>
+<td style="text-align: center;">15.4</td>
+<td style="text-align: center;"><strong>-3.74°</strong></td>
+<td style="text-align: center;"><strong>36.3%</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Bryan Woo</strong></td>
+<td style="text-align: center;">3,606</td>
+<td style="text-align: center;">95.6</td>
+<td style="text-align: center;">5.07</td>
+<td style="text-align: center;">14.8</td>
+<td style="text-align: center;"><strong>-3.78°</strong></td>
+<td style="text-align: center;">27.3%</td>
+</tr>
+</tbody>
+</table>
+<p>Notice the critical insight: <strong>High VAA (flatter angle) is driven by either low release heights (&lt; 4.8 ft) or massive spin-induced vertical break (IVB &gt; 18 inches)</strong>.</p>
 <hr>
 </section>
-<section id="the-platoon-problem-why-plate_x_norm-is-mandatory" class="level2">
-<h2 class="anchored" data-anchor-id="the-platoon-problem-why-plate_x_norm-is-mandatory">4. The Platoon Problem: Why <code>plate_x_norm</code> is Mandatory</h2>
-<p>In raw Statcast data, <code>plate_x</code> is recorded from the umpire’s perspective: - <code>plate_x = -0.7</code>: Catcher’s left / inside to a Right-Handed Batter (RHB) / outside to a Left-Handed Batter (LHB). - <code>plate_x = +0.7</code>: Catcher’s right / outside to a RHB / inside to a LHB.</p>
-<p>If you feed raw <code>plate_x</code> into a machine learning model, the model gets confused because <span class="math inline">\(+0.7\)</span> represents two completely opposite baseball situations (an outside chase pitch to a righty, but an inside jam pitch to a lefty!).</p>
-<p>To fix this, we created <strong><code>plate_x_norm</code></strong>: <span class="math display">\[\mathbf{\text{plate\_x\_norm} = \text{plate\_x} \times \begin{cases} -1.0 &amp; \text{if batter stands Left (L)} \\ +1.0 &amp; \text{if batter stands Right (R)} \end{cases}}\]</span></p>
-<p>Under this rule: - <strong>Positive <code>plate_x_norm</code></strong>: ALWAYS means the pitch is away (glove-side) from the batter. - <strong>Negative <code>plate_x_norm</code></strong>: ALWAYS means the pitch is inside (arm-side) toward the batter.</p>
-<p>Now, your decision trees and neural networks can learn pure baseball strategy without getting tripped up by batter handedness.</p>
+<section id="visual-diagnostics-gallery" class="level2">
+<h2 class="anchored" data-anchor-id="visual-diagnostics-gallery">4. Visual Diagnostics Gallery</h2>
+<p>Under our <strong>Visualization-First &amp; Asset Preservation Mandate</strong>, every diagnostic view is preserved as high-resolution graphics, native <code>.rds</code> objects, and audit datasets.</p>
+<section id="figure-1-fastball-whiff-rate-vs.-vaa-gam-splines" class="level3">
+<h3 class="anchored" data-anchor-id="figure-1-fastball-whiff-rate-vs.-vaa-gam-splines">Figure 1: Fastball Whiff Rate vs.&nbsp;VAA (GAM Splines)</h3>
+<p>This plot captures 319,305 competitive swings in the 2024 season. Whiff rate climbs dramatically from <strong>14% on steep fastballs (<span class="math inline">\(-7^\circ\)</span>) to over 33% on flat fastballs (<span class="math inline">\(-3.5^\circ\)</span>)</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/lab01_whiff_curve_dark.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Fastball Whiff Rate vs.&nbsp;VAA</figcaption>
+</figure>
+</div>
+<p><em>Preserved Assets:</em> <a href="file:///mnt/storage/Rprojects/mlbr/models/lab01_whiff_curve_dark.rds"><code>models/lab01_whiff_curve_dark.rds</code></a> &amp; <a href="file:///mnt/storage/Rprojects/mlbr/models/lab01_whiff_curve_dark.parquet"><code>models/lab01_whiff_curve_dark.parquet</code></a></p>
 <hr>
 </section>
-<section id="hands-on-exercise-2-comparing-pitchers-in-duckdb" class="level2">
-<h2 class="anchored" data-anchor-id="hands-on-exercise-2-comparing-pitchers-in-duckdb">5. Hands-On Exercise 2: Comparing Pitchers in DuckDB</h2>
-<p>Now let’s query the live lake in RStudio to see how real pitchers compare in VAA and whiff rate:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">lake_duckdb</span>()</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's compare Four-Seam Fastballs for top starters in 2024</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>top_pitchers <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, <span class="st">"</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT </span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">    c.name_last || ', ' || c.name_first AS pitcher_name,</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">    COUNT(*) AS pitches,</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_speed), 1) AS avg_mph,</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.vaa), 2) AS avg_vaa,</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.is_whiff[f.is_swing = 1])::NUMERIC * 100, 1) AS whiff_pct</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM v_statcast_features f</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="st">  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE f.game_date &gt;= '2024-01-01'</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="st">    AND f.pitch_type = 'FF'</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="st">  GROUP BY c.name_last, c.name_first</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="st">  HAVING COUNT(*) &gt;= 500</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="st">  ORDER BY avg_vaa DESC</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="st">  LIMIT 10;</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(top_pitchers)</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(con, <span class="at">shutdown =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Look closely at the pitchers at the top of that list: - Pitchers with the highest (flattest) VAA (e.g.&nbsp;<span class="math inline">\(-3.8^\circ\)</span> to <span class="math inline">\(-4.3^\circ\)</span>) almost always have either <strong>low release heights</strong> (throwing from a lower arm slot) or <strong>extreme backspin</strong> (high IVB). - These pitchers generate substantially higher whiff rates on four-seamers at the top of the zone.</p>
+<section id="figure-2-the-pitch-movement-arena-hb-vs.-ivb" class="level3">
+<h3 class="anchored" data-anchor-id="figure-2-the-pitch-movement-arena-hb-vs.-ivb">Figure 2: The Pitch Movement Arena (<span class="math inline">\(HB\)</span> vs.&nbsp;<span class="math inline">\(IVB\)</span>)</h3>
+<p>This plot maps 50,000 pitches into physical movement space. Aerodynamic backspin creates <span class="math inline">\(+18\text{ inches}\)</span> of carry for Four-Seamers, while Sweepers create extreme negative/arm-side break and Curveballs plummet under gravity.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/lab01_movement_arena.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>The Pitch Movement Arena</figcaption>
+</figure>
+</div>
+<p><em>Preserved Assets:</em> <a href="file:///mnt/storage/Rprojects/mlbr/models/lab01_movement_arena.rds"><code>models/lab01_movement_arena.rds</code></a> &amp; <a href="file:///mnt/storage/Rprojects/mlbr/models/lab01_movement_arena.parquet"><code>models/lab01_movement_arena.parquet</code></a></p>
 <hr>
 </section>
-<section id="next-steps-developing-fastball-deltas-tunneling" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps-developing-fastball-deltas-tunneling">6. Next Steps: Developing Fastball Deltas &amp; Tunneling</h2>
-<p>In our next step, we are adding two advanced features:</p>
+<section id="figure-3-strike-zone-whiff-heatmap-flat-vs.-steep-fastballs" class="level3">
+<h3 class="anchored" data-anchor-id="figure-3-strike-zone-whiff-heatmap-flat-vs.-steep-fastballs">Figure 3: Strike Zone Whiff Heatmap: Flat vs.&nbsp;Steep Fastballs</h3>
+<p>Why do flat fastballs perform so well? Because the human swing plane approaches at approximately <span class="math inline">\(-8^\circ\)</span> to <span class="math inline">\(-12^\circ\)</span> upward tilt. A flat fastball (<span class="math inline">\(-4^\circ\)</span>) crosses above the bat plane, generating swing-and-misses at the upper third of the strike zone (<span class="math inline">\(z &gt; 3.0\text{ ft}\)</span>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/lab01_zone_whiff_heatmap.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Strike Zone Whiff Rates: Flat vs.&nbsp;Steep Fastballs</figcaption>
+</figure>
+</div>
+<p><em>Preserved Assets:</em> <a href="file:///mnt/storage/Rprojects/mlbr/models/lab01_zone_whiff_heatmap.rds"><code>models/lab01_zone_whiff_heatmap.rds</code></a> &amp; <a href="file:///mnt/storage/Rprojects/mlbr/models/lab01_zone_whiff_heatmap.parquet"><code>models/lab01_zone_whiff_heatmap.parquet</code></a></p>
+<hr>
+</section>
+<section id="figure-4-kinematic-trajectory-simulation-skenes-vs.-rea" class="level3">
+<h3 class="anchored" data-anchor-id="figure-4-kinematic-trajectory-simulation-skenes-vs.-rea">Figure 4: Kinematic Trajectory Simulation (Skenes vs.&nbsp;Rea)</h3>
+<p>This figure contrasts the simulated parabolic flight path of <strong>Paul Skenes</strong> (low 5.5 ft release + flat approach) vs <strong>Colin Rea</strong> (steep downhill angle).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/lab01_trajectory_simulation.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Kinematic Trajectory Comparison</figcaption>
+</figure>
+</div>
+<p><em>Preserved Assets:</em> <a href="file:///mnt/storage/Rprojects/mlbr/models/lab01_trajectory_simulation.rds"><code>models/lab01_trajectory_simulation.rds</code></a> &amp; <a href="file:///mnt/storage/Rprojects/mlbr/models/lab01_trajectory_simulation.parquet"><code>models/lab01_trajectory_simulation.parquet</code></a></p>
+<hr>
+</section>
+</section>
+<section id="next-steps-lab-02-pitch-tunneling-commitment-geometry" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps-lab-02-pitch-tunneling-commitment-geometry">5. Next Steps: Lab 02 Pitch Tunneling &amp; Commitment Geometry</h2>
+<p>Now that we have mastered single-pitch trajectory aerodynamics, we advance to <strong>multi-pitch sequencing</strong>:</p>
 <ol type="1">
-<li><strong>Velocity Delta (<span class="math inline">\(\Delta V\)</span>)</strong>: <span class="math display">\[\Delta V = v_{\text{pitch}} - v_{\text{primary\_fastball}}\]</span> A changeup is not just “85 mph”; it is “85 mph off a 96 mph fastball” (<span class="math inline">\(\Delta V = -11\text{ mph}\)</span>). That 11 mph differential disrupts the batter’s timing mechanism.</li>
-<li><strong>Tunneling Distance (<span class="math inline">\(d_{\text{tunnel}}\)</span>)</strong>: <span class="math display">\[d_{\text{tunnel}} = \sqrt{(x_{0,\text{pitch}} - x_{0,\text{fastball}})^2 + (z_{0,\text{pitch}} - z_{0,\text{fastball}})^2}\]</span> If a pitcher releases their slider from the exact same spatial window as their fastball (<span class="math inline">\(d_{\text{tunnel}} &lt; 2\text{ inches}\)</span>), the pitch is visually indistinguishable to the batter until late flight break occurs.</li>
+<li><strong>The Batter Commitment Point (<span class="math inline">\(y = 23.8\text{ ft}\)</span>)</strong>: Approximately 175 ms before plate contact, the human batter must commit their swing decision.</li>
+<li><strong>Tunneling Differential Distance (<span class="math inline">\(d_{\text{tunnel}}\)</span>)</strong>: <span class="math display">\[d_{\text{commit}} = \sqrt{(x_{\text{pitch}} - x_{\text{fastball}})^2 + (z_{\text{pitch}} - z_{\text{fastball}})^2} \quad \text{at } y = 23.8\text{ ft}\]</span> When a slider or sweeper breaks late after mirroring the fastball tunnel within <span class="math inline">\(2.5\text{ inches}\)</span> at the commit point, chase swing rates increase by <strong>+9.3 percentage points</strong>.</li>
 </ol>
 
 
@@ -1224,203 +1334,188 @@ Notice that the pitch crosses the plate with a VAA of around <strong><span class
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Lab 01 Work-Along: Aerodynamics, Trajectory Math &amp; The Physics of Pitch Movement"</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "A Step-by-Step Guided Workbook for Hands-On Learning in RStudio"</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Mentorship Series"</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-16"</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: false</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### How to Use This Workbook</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>This document is designed specifically for you to work along interactively. You can open RStudio Server at <span class="co">[</span><span class="ot">**http://192.168.10.1:8787**</span><span class="co">](http://192.168.10.1:8787)</span> and execute the companion script <span class="co">[</span><span class="ot">`workbooks/lab01_aerodynamics_workbook.R`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/workbooks/lab01_aerodynamics_workbook.R)</span> line-by-line using <span class="in">`Ctrl + Enter`</span>.</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. The Physical Coordinate System of Modern Baseball</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>To understand how modern pitch models (like Stuff+ and Pitching+) work, you have to understand the **3D Cartesian coordinate system** that Statcast and Hawkeye use to track every baseball.</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="in">                  +z (Vertical Height above ground)</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="in">                   |</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="in">                   |      Strike zone: ~1.5 ft to 3.5 ft</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="in">                   |</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="in">                   +------- +y (Mound is at y = 60.5 ft; Release is at y = 50 ft)</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="in">                  /</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="in">                 /</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="in">                /</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="in">             +x (Horizontal: Catcher's perspective)</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="in">                Negative = Batter's inside (for Righty)</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="in">                Positive = Batter's outside (for Righty)</span></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="in">                Center of plate = 0.0 ft</span></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Key Dimensions to Memorize:</span></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**$y = 60.5\text{ ft}$**: The pitching rubber.</span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**$y = 50.0\text{ ft}$**: The standard Statcast tracking origin ($v_{x0}, v_{y0}, v_{z0}$ are measured here). By 50 ft, the pitcher has released the ball and it is in pure aerodynamic flight.</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**$y = 1.417\text{ ft}$**: The **front edge of home plate**. Home plate is a 17-inch pentagon ($17\text{ inches} / 12 = 1.4167\text{ ft}$). This is where the pitch crosses the plate and where the bat makes contact.</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**$y = 0.0\text{ ft}$**: The back point of home plate (the origin).</span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Velocities and Accelerations Have Surprising Signs:</span></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**$v_y$ is ALWAYS negative**: Because the ball travels from the pitcher ($y = 50$) toward home plate ($y = 0$), its position in $y$ is decreasing over time. A 95 mph fastball has a release velocity $v_{y0} \approx -139\text{ ft/s}$.</span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**$a_y$ is positive**: Air drag resists the baseball's forward motion. Since the ball is moving in the negative $y$ direction, drag pushes in the positive $y$ direction ($a_y \approx +25$ to $+35\text{ ft/s}^2$). This drag slows the ball down between the hand and the plate.</span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Deriving the Trajectory Math Step-by-Step</span></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>Now, let's derive the exact mathematical formulas we use in our DuckDB feature view.</span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2.1: Finding Forward Velocity at Home Plate ($v_{yf}$)</span></span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>In classical physics, Torricelli’s equation relates initial velocity ($u$), final velocity ($v$), acceleration ($a$), and displacement ($\Delta y$):</span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>$$v^2 = u^2 + 2 a \Delta y$$</span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>Here:</span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Initial position: $y_0 = 50.0\text{ ft}$</span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Final position: $y_f = 1.417\text{ ft}$</span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Displacement: $\Delta y = y_f - y_0 = 1.417 - 50.0 = -48.583\text{ ft}$</span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>Plugging this into the kinematic equation:</span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>$$v_{yf}^2 = v_{y0}^2 + 2 a_y (1.417 - 50.0)$$</span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>Taking the square root and remembering that the ball is still traveling toward the plate (negative direction):</span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>$$\mathbf{v_{yf} = -\sqrt{v_{y0}^2 + 2 a_y (1.417 - 50.0)}}$$</span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2.2: Finding Flight Time ($t_{\text{flight}}$)</span></span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>Under constant acceleration, velocity changes linearly over time: $v = u + a t$.  </span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>Solving for time $t$:</span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>$$\mathbf{t_{\text{flight}} = \frac{v_{yf} - v_{y0}}{a_y}}$$</span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>For a 95 mph fastball, $t_{\text{flight}}$ is typically **$0.38$ to $0.42$ seconds** (roughly 400 milliseconds). That is less than the blink of a human eye!</span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2.3: Finding Terminal Vertical and Horizontal Velocities</span></span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>With the flight time known, we calculate how fast the ball is dropping ($v_{zf}$) and drifting laterally ($v_{xf}$) at the instant it crosses the plate:</span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>$$\mathbf{v_{zf} = v_{z0} + a_z \cdot t_{\text{flight}}}$$</span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>$$\mathbf{v_{xf} = v_{x0} + a_x \cdot t_{\text{flight}}}$$</span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2.4: Calculating the Vertical Approach Angle (VAA)</span></span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>Think of the trajectory at home plate as a right triangle:</span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Horizontal leg (forward motion): $-v_{yf}$ (we negate it so forward speed is positive).</span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Vertical leg (up/down motion): $v_{zf}$ (negative because the ball is descending).</span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>The angle $\theta$ below the horizontal plane is:</span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>$$\tan(\text{VAA}) = \frac{v_{zf}}{-v_{yf}} \implies \mathbf{\text{VAA} = \text{atan2}(v_{zf}, -v_{yf}) \times \frac{180}{\pi}}$$</span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Hands-On Exercise 1: Run the Math by Hand in R</span></span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>Let's test this in R with real flight parameters from a 98.5 mph four-seam fastball:</span>
-<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial tracking parameters at y = 50 ft</span></span>
-<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>vy0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">144.2</span>   <span class="co"># ft/s (forward speed)</span></span>
-<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>vz0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">3.8</span>     <span class="co"># ft/s (downward vertical velocity)</span></span>
-<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>vx0 <span class="ot">&lt;-</span> <span class="fl">4.2</span>      <span class="co"># ft/s (horizontal velocity)</span></span>
-<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>ay  <span class="ot">&lt;-</span> <span class="fl">31.4</span>     <span class="co"># ft/s^2 (aerodynamic drag)</span></span>
-<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>az  <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">14.2</span>    <span class="co"># ft/s^2 (gravity -32.2 plus upward Magnus lift +18.0)</span></span>
-<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>ax  <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">8.1</span>     <span class="co"># ft/s^2 (horizontal break)</span></span>
-<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Forward velocity at front of plate (y = 1.417 ft)</span></span>
-<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>vy_f <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">sqrt</span>(vy0<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> ay <span class="sc">*</span> (<span class="fl">1.417</span> <span class="sc">-</span> <span class="fl">50.0</span>))</span>
-<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Plate arrival speed: %.1f ft/s (%.1f mph)</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">abs</span>(vy_f), <span class="fu">abs</span>(vy_f) <span class="sc">*</span> (<span class="dv">3600</span> <span class="sc">/</span> <span class="dv">5280</span>)))</span>
-<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Time of flight</span></span>
-<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>t_flight <span class="ot">&lt;-</span> (vy_f <span class="sc">-</span> vy0) <span class="sc">/</span> ay</span>
-<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Flight time: %.3f seconds (%.1f ms)</span><span class="sc">\n</span><span class="st">"</span>, t_flight, t_flight <span class="sc">*</span> <span class="dv">1000</span>))</span>
-<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Vertical terminal velocity</span></span>
-<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>vz_f <span class="ot">&lt;-</span> vz0 <span class="sc">+</span> az <span class="sc">*</span> t_flight</span>
-<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Vertical Approach Angle (VAA) in degrees</span></span>
-<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>vaa <span class="ot">&lt;-</span> <span class="fu">atan2</span>(vz_f, <span class="sc">-</span>vy_f) <span class="sc">*</span> (<span class="dv">180</span> <span class="sc">/</span> pi)</span>
-<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Vertical Approach Angle: %.2f degrees</span><span class="sc">\n</span><span class="st">"</span>, vaa))</span>
-<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>**What did you find?**  </span>
-<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>Notice that the pitch crosses the plate with a VAA of around **$-4.3^\circ$**. For a fastball, anything flatter than $-4.5^\circ$ is exceptional!</span>
-<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. The Platoon Problem: Why `plate_x_norm` is Mandatory</span></span>
-<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>In raw Statcast data, <span class="in">`plate_x`</span> is recorded from the umpire's perspective:</span>
-<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`plate_x = -0.7`</span>: Catcher's left / inside to a Right-Handed Batter (RHB) / outside to a Left-Handed Batter (LHB).</span>
-<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`plate_x = +0.7`</span>: Catcher's right / outside to a RHB / inside to a LHB.</span>
-<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>If you feed raw <span class="in">`plate_x`</span> into a machine learning model, the model gets confused because $+0.7$ represents two completely opposite baseball situations (an outside chase pitch to a righty, but an inside jam pitch to a lefty!).</span>
-<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>To fix this, we created **`plate_x_norm`**:</span>
-<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>$$\mathbf{\text{plate<span class="sc">\_</span>x<span class="sc">\_</span>norm} = \text{plate<span class="sc">\_</span>x} \times \begin{cases} -1.0 &amp; \text{if batter stands Left (L)} <span class="sc">\\</span> +1.0 &amp; \text{if batter stands Right (R)} \end{cases}}$$</span>
-<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>Under this rule:</span>
-<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Positive `plate_x_norm`**: ALWAYS means the pitch is away (glove-side) from the batter.</span>
-<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Negative `plate_x_norm`**: ALWAYS means the pitch is inside (arm-side) toward the batter.</span>
-<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a>Now, your decision trees and neural networks can learn pure baseball strategy without getting tripped up by batter handedness.</span>
-<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Hands-On Exercise 2: Comparing Pitchers in DuckDB</span></span>
-<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a>Now let's query the live lake in RStudio to see how real pitchers compare in VAA and whiff rate:</span>
-<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
-<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">lake_duckdb</span>()</span>
-<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's compare Four-Seam Fastballs for top starters in 2024</span></span>
-<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a>top_pitchers <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, <span class="st">"</span></span>
-<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT </span></span>
-<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a><span class="st">    c.name_last || ', ' || c.name_first AS pitcher_name,</span></span>
-<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a><span class="st">    COUNT(*) AS pitches,</span></span>
-<span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_speed), 1) AS avg_mph,</span></span>
-<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,</span></span>
-<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,</span></span>
-<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.vaa), 2) AS avg_vaa,</span></span>
-<span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.is_whiff[f.is_swing = 1])::NUMERIC * 100, 1) AS whiff_pct</span></span>
-<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM v_statcast_features f</span></span>
-<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a><span class="st">  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam</span></span>
-<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
-<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE f.game_date &gt;= '2024-01-01'</span></span>
-<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a><span class="st">    AND f.pitch_type = 'FF'</span></span>
-<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a><span class="st">  GROUP BY c.name_last, c.name_first</span></span>
-<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a><span class="st">  HAVING COUNT(*) &gt;= 500</span></span>
-<span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a><span class="st">  ORDER BY avg_vaa DESC</span></span>
-<span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a><span class="st">  LIMIT 10;</span></span>
-<span id="cb4-176"><a href="#cb4-176" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
-<span id="cb4-177"><a href="#cb4-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-178"><a href="#cb4-178" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(top_pitchers)</span>
-<span id="cb4-179"><a href="#cb4-179" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbDisconnect</span>(con, <span class="at">shutdown =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-180"><a href="#cb4-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-181"><a href="#cb4-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-182"><a href="#cb4-182" aria-hidden="true" tabindex="-1"></a>Look closely at the pitchers at the top of that list:</span>
-<span id="cb4-183"><a href="#cb4-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pitchers with the highest (flattest) VAA (e.g. $-3.8^\circ$ to $-4.3^\circ$) almost always have either **low release heights** (throwing from a lower arm slot) or **extreme backspin** (high IVB).</span>
-<span id="cb4-184"><a href="#cb4-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>These pitchers generate substantially higher whiff rates on four-seamers at the top of the zone.</span>
-<span id="cb4-185"><a href="#cb4-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-186"><a href="#cb4-186" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb4-187"><a href="#cb4-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-188"><a href="#cb4-188" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Next Steps: Developing Fastball Deltas &amp; Tunneling</span></span>
-<span id="cb4-189"><a href="#cb4-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-190"><a href="#cb4-190" aria-hidden="true" tabindex="-1"></a>In our next step, we are adding two advanced features:</span>
-<span id="cb4-191"><a href="#cb4-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-192"><a href="#cb4-192" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Velocity Delta ($\Delta V$)**:</span>
-<span id="cb4-193"><a href="#cb4-193" aria-hidden="true" tabindex="-1"></a>   $$\Delta V = v_{\text{pitch}} - v_{\text{primary<span class="sc">\_</span>fastball}}$$</span>
-<span id="cb4-194"><a href="#cb4-194" aria-hidden="true" tabindex="-1"></a>   A changeup is not just "85 mph"; it is "85 mph off a 96 mph fastball" ($\Delta V = -11\text{ mph}$). That 11 mph differential disrupts the batter's timing mechanism.</span>
-<span id="cb4-195"><a href="#cb4-195" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Tunneling Distance ($d_{\text{tunnel}}$)**:</span>
-<span id="cb4-196"><a href="#cb4-196" aria-hidden="true" tabindex="-1"></a>   $$d_{\text{tunnel}} = \sqrt{(x_{0,\text{pitch}} - x_{0,\text{fastball}})^2 + (z_{0,\text{pitch}} - z_{0,\text{fastball}})^2}$$</span>
-<span id="cb4-197"><a href="#cb4-197" aria-hidden="true" tabindex="-1"></a>   If a pitcher releases their slider from the exact same spatial window as their fastball ($d_{\text{tunnel}} &lt; 2\text{ inches}$), the pitch is visually indistinguishable to the batter until late flight break occurs.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Lab 01 Work-Along: Aerodynamics, Trajectory Math &amp; The Physics of Pitch Movement"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "A Step-by-Step Guided Workbook for Hands-On Learning in RStudio"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Mentorship Series"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-16"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: false</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### How to Use This Workbook</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>This document is designed specifically for you to work along interactively. Open RStudio Server at <span class="co">[</span><span class="ot">**http://192.168.10.1:8787**</span><span class="co">](http://192.168.10.1:8787)</span> and execute the companion script <span class="co">[</span><span class="ot">`workbooks/lab01_aerodynamics_workbook.R`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/workbooks/lab01_aerodynamics_workbook.R)</span> line-by-line using <span class="in">`Ctrl + Enter`</span>.</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. The Physical Coordinate System of Modern Baseball</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>To understand how modern pitch models (like Stuff+ and Pitching+) work, you have to understand the **3D Cartesian coordinate system** that Statcast and Hawkeye use to track every baseball.</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="in">                  +z (Vertical Height above ground)</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="in">                   |</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="in">                   |      Strike zone: ~1.5 ft to 3.5 ft</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="in">                   |</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="in">                   +------- +y (Mound is at y = 60.5 ft; Release is at y = 50 ft)</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="in">                  /</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="in">                 /</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="in">                /</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="in">             +x (Horizontal: Catcher's perspective)</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="in">                Negative = Batter's inside (for Righty)</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="in">                Positive = Batter's outside (for Righty)</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="in">                Center of plate = 0.0 ft</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Key Dimensions to Memorize:</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**$y = 60.5\text{ ft}$**: The pitching rubber.</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**$y = 50.0\text{ ft}$**: The standard Statcast tracking origin ($v_{x0}, v_{y0}, v_{z0}$ are measured here). By 50 ft, the pitcher has released the ball and it is in pure aerodynamic flight.</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**$y = 1.417\text{ ft}$**: The **front edge of home plate**. Home plate is a 17-inch pentagon ($17\text{ inches} / 12 = 1.4167\text{ ft}$). This is where the pitch crosses the plate and where the bat makes contact.</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**$y = 0.0\text{ ft}$**: The back point of home plate (the origin).</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Velocities and Accelerations Have Surprising Signs:</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**$v_y$ is ALWAYS negative**: Because the ball travels from the pitcher ($y = 50$) toward home plate ($y = 0$), its position in $y$ is decreasing over time. A 95 mph fastball has a release velocity $v_{y0} \approx -139\text{ ft/s}$.</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**$a_y$ is positive**: Air drag resists the baseball's forward motion. Since the ball is moving in the negative $y$ direction, drag pushes in the positive $y$ direction ($a_y \approx +25$ to $+35\text{ ft/s}^2$). This drag slows the ball down between the hand and the plate.</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Hand-Calculating Trajectory Physics in R</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>In <span class="co">[</span><span class="ot">`workbooks/lab01_aerodynamics_workbook.R`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/workbooks/lab01_aerodynamics_workbook.R)</span>, we begin with Part 1: hand-calculating real parameters from a 98.5 mph Four-Seam fastball.</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2.1: Terminal Forward Velocity at Home Plate</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>Using the classic kinematic equation $v_f^2 = v_0^2 + 2 a \Delta y$:</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>$$\Delta y = 1.417 - 50.0 = -48.583\text{ ft}$$</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>$$v_{y,f} = -\sqrt{v_{y0}^2 + 2 \cdot a_y \cdot (-48.583)}$$</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>vy0 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">144.2</span>   <span class="co"># ft/s (98.3 mph at 50 ft)</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>ay  <span class="ot">&lt;-</span> <span class="fl">31.4</span>     <span class="co"># ft/s^2 (forward air drag)</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>delta_y <span class="ot">&lt;-</span> <span class="fl">1.417</span> <span class="sc">-</span> <span class="fl">50.0</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>vy_f <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">sqrt</span>(vy0<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> ay <span class="sc">*</span> delta_y) <span class="co"># -133.2 ft/s (90.8 mph at plate)</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>The pitch loses **7.5 mph** of forward speed purely due to atmospheric air drag.</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2.2: Time of Flight</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>$$t_{\text{flight}} = \frac{v_{y,f} - v_{y0}}{a_y}$$</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>t_flight <span class="ot">&lt;-</span> (vy_f <span class="sc">-</span> vy0) <span class="sc">/</span> ay <span class="co"># 0.3503 seconds (350 ms)</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>The batter has just **350 milliseconds** from release to contact to recognize pitch type, predict trajectory, and execute the swing.</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2.3: Terminal Vertical &amp; Horizontal Velocity</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>$$v_{z,f} = v_{z0} + a_z \cdot t_{\text{flight}}$$</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>$$v_{x,f} = v_{x0} + a_x \cdot t_{\text{flight}}$$</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2.4: Approach Angles (VAA and HAA)</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>$$\text{VAA} = \arctan\left(\frac{v_{z,f}}{-v_{y,f}}\right) \times \left(\frac{180}{\pi}\right)$$</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>$$\text{HAA} = \arctan\left(\frac{v_{x,f}}{-v_{y,f}}\right) \times \left(\frac{180}{\pi}\right)$$</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Querying the 14.64M Pitch Lake via DuckDB</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>In Part 2, we query our **Silver-Tier Parquet dataset** using <span class="in">`mlbr::lake_duckdb()`</span>:</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">lake_duckdb</span>()</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>query_pitchers <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT </span></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="st">    CONCAT(c.name_last, ', ', c.name_first) AS pitcher_name,</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="st">    COUNT(*) AS pitches,</span></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_speed), 1) AS avg_mph,</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,</span></span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,</span></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.vaa), 2) AS avg_vaa,</span></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(SUM(f.is_whiff)::NUMERIC / NULLIF(SUM(f.is_swing), 0) * 100, 1) AS whiff_rate_swings</span></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM v_statcast_features f</span></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="st">  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam</span></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE f.game_date &gt;= '2024-01-01'</span></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="st">    AND f.pitch_type = 'FF'</span></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a><span class="st">  GROUP BY c.name_last, c.name_first</span></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="st">  HAVING COUNT(*) &gt;= 500</span></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="st">  ORDER BY avg_vaa DESC</span></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="st">  LIMIT 10;</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, query_pitchers)</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pitcher <span class="pp">|</span> Pitches <span class="pp">|</span> Avg MPH <span class="pp">|</span> Release Height (ft) <span class="pp">|</span> IVB (in) <span class="pp">|</span> VAA (deg) <span class="pp">|</span> Whiff Rate (Swings) <span class="pp">|</span></span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a><span class="pp">| :---</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">| :---:</span> <span class="pp">|</span></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Paul Sewald** | 1,188 | 91.1 | 4.40 | 12.8 | **-3.45°** <span class="pp">|</span> 23.1% <span class="pp">|</span></span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Edwin Uceta** | 812 | 94.0 | 4.54 | 13.5 | **-3.48°** | **37.7%** <span class="pp">|</span></span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Alexis Díaz** | 829 | 93.8 | 4.64 | 13.7 | **-3.48°** <span class="pp">|</span> 22.0% <span class="pp">|</span></span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Craig Kimbrel** | 1,342 | 93.7 | 4.74 | 15.2 | **-3.56°** <span class="pp">|</span> 26.9% <span class="pp">|</span></span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Edwin Díaz** | 1,473 | 97.2 | 4.77 | 12.8 | **-3.63°** | **35.0%** <span class="pp">|</span></span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Emmet Sheehan** | 1,546 | 94.9 | 5.48 | 18.2 | **-3.70°** <span class="pp">|</span> 24.0% <span class="pp">|</span></span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Jacob Misiorowski**| 2,730 | 100.2| 5.22 | 15.4 | **-3.74°** | **36.3%** <span class="pp">|</span></span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Bryan Woo** | 3,606 | 95.6 | 5.07 | 14.8 | **-3.78°** <span class="pp">|</span> 27.3% <span class="pp">|</span></span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>Notice the critical insight: **High VAA (flatter angle) is driven by either low release heights (&lt; 4.8 ft) or massive spin-induced vertical break (IVB &gt; 18 inches)**.</span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Visual Diagnostics Gallery</span></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>Under our **Visualization-First &amp; Asset Preservation Mandate**, every diagnostic view is preserved as high-resolution graphics, native <span class="in">`.rds`</span> objects, and audit datasets.</span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a><span class="fu">### Figure 1: Fastball Whiff Rate vs. VAA (GAM Splines)</span></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>This plot captures 319,305 competitive swings in the 2024 season. Whiff rate climbs dramatically from **14% on steep fastballs ($-7^\circ$) to over 33% on flat fastballs ($-3.5^\circ$)**.</span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a><span class="al">![Fastball Whiff Rate vs. VAA](../assets/lab01_whiff_curve_dark.png)</span>{fig-align="center" width="90%"}</span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>*Preserved Assets:* <span class="co">[</span><span class="ot">`models/lab01_whiff_curve_dark.rds`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/models/lab01_whiff_curve_dark.rds)</span> &amp; <span class="co">[</span><span class="ot">`models/lab01_whiff_curve_dark.parquet`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/models/lab01_whiff_curve_dark.parquet)</span></span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a><span class="fu">### Figure 2: The Pitch Movement Arena ($HB$ vs. $IVB$)</span></span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>This plot maps 50,000 pitches into physical movement space. Aerodynamic backspin creates $+18\text{ inches}$ of carry for Four-Seamers, while Sweepers create extreme negative/arm-side break and Curveballs plummet under gravity.</span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a><span class="al">![The Pitch Movement Arena](../assets/lab01_movement_arena.png)</span>{fig-align="center" width="90%"}</span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>*Preserved Assets:* <span class="co">[</span><span class="ot">`models/lab01_movement_arena.rds`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/models/lab01_movement_arena.rds)</span> &amp; <span class="co">[</span><span class="ot">`models/lab01_movement_arena.parquet`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/models/lab01_movement_arena.parquet)</span></span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### Figure 3: Strike Zone Whiff Heatmap: Flat vs. Steep Fastballs</span></span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>Why do flat fastballs perform so well? Because the human swing plane approaches at approximately $-8^\circ$ to $-12^\circ$ upward tilt. A flat fastball ($-4^\circ$) crosses above the bat plane, generating swing-and-misses at the upper third of the strike zone ($z &gt; 3.0\text{ ft}$).</span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a><span class="al">![Strike Zone Whiff Rates: Flat vs. Steep Fastballs](../assets/lab01_zone_whiff_heatmap.png)</span>{fig-align="center" width="90%"}</span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>*Preserved Assets:* <span class="co">[</span><span class="ot">`models/lab01_zone_whiff_heatmap.rds`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/models/lab01_zone_whiff_heatmap.rds)</span> &amp; <span class="co">[</span><span class="ot">`models/lab01_zone_whiff_heatmap.parquet`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/models/lab01_zone_whiff_heatmap.parquet)</span></span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a><span class="fu">### Figure 4: Kinematic Trajectory Simulation (Skenes vs. Rea)</span></span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>This figure contrasts the simulated parabolic flight path of **Paul Skenes** (low 5.5 ft release + flat approach) vs **Colin Rea** (steep downhill angle).</span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a><span class="al">![Kinematic Trajectory Comparison](../assets/lab01_trajectory_simulation.png)</span>{fig-align="center" width="90%"}</span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>*Preserved Assets:* <span class="co">[</span><span class="ot">`models/lab01_trajectory_simulation.rds`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/models/lab01_trajectory_simulation.rds)</span> &amp; <span class="co">[</span><span class="ot">`models/lab01_trajectory_simulation.parquet`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/models/lab01_trajectory_simulation.parquet)</span></span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Next Steps: Lab 02 Pitch Tunneling &amp; Commitment Geometry</span></span>
+<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a>Now that we have mastered single-pitch trajectory aerodynamics, we advance to **multi-pitch sequencing**:</span>
+<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**The Batter Commitment Point ($y = 23.8\text{ ft}$)**:</span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a>   Approximately 175 ms before plate contact, the human batter must commit their swing decision.</span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Tunneling Differential Distance ($d_{\text{tunnel}}$)**:</span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a>   $$d_{\text{commit}} = \sqrt{(x_{\text{pitch}} - x_{\text{fastball}})^2 + (z_{\text{pitch}} - z_{\text{fastball}})^2} \quad \text{at } y = 23.8\text{ ft}$$</span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a>   When a slider or sweeper breaks late after mirroring the fastball tunnel within $2.5\text{ inches}$ at the commit point, chase swing rates increase by **+9.3 percentage points**.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

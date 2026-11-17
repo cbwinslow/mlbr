@@ -68,11 +68,27 @@ To preserve pure historical origins while providing instant (sub-50ms) query spe
    - Aggregated leaderboards, true talent baselines, run value matrices, and simulation lookup tables.
 4. **Full-Population Materialization Mandate (NO Arbitrary Subsampling)**:
    - When a new physics metric, feature, or formula is validated, it MUST be materialized across the entire 14.64M pitch lake across all 19 seasons (2008–2026) using reproducible pipeline scripts (`R/materialize_*.R`).
-   - Arbitrary subsamples (e.g., single team, single month) are strictly prohibited for production data layers and are only permitted for local interactive sandbox probes or browser canvas rendering safety.
+   - Arbitrary subsamples are strictly prohibited for production data layers and are only permitted for local interactive sandbox probes or browser canvas rendering safety.
 
 ---
 
-## 3. Institutional Knowledge: Experiment Registry (`experiments/registry.json`)
+## 3. Visualization-First & Rich Asset Mandate
+
+1. **Visual Storytelling Requirement**:
+   - In quantitative research, charts and plots are primary discovery and communication tools, not secondary decorations.
+   - Every study, analysis, and student lab workbook MUST produce clear, compelling, publication-grade figures illustrating distributions, non-linearities, and physical flight geometry.
+   - Combine statistical summaries (GAM splines, empirical bins) with density contours and marginal distributions.
+   - Incorporate interactive plots (`plotly`, `htmlwidgets`) on the Quarto site to enable hover-over pitch and player inspection.
+2. **Saved Object Invariant (Asset Preservation)**:
+   Whenever an exploratory or production plot is generated:
+   - **Static Image**: Save high-res raster (`.png`, 300 DPI) styled with `theme_cyber_dark()` to `models/` or `site/assets/`.
+   - **Serialized Object**: Save the native R `ggplot` or `plotly` object as `.rds` in `models/` so downstream workflows can reload and restyle it without querying the lake.
+   - **Audit Dataset**: Save the aggregated plot data as `.parquet` or `.csv` in `models/` for auditability.
+   - **Interactive Widget**: Export standalone interactive `.html` widgets when applicable.
+
+---
+
+## 4. Institutional Knowledge: Experiment Registry (`experiments/registry.json`)
 
 To prevent loss of discoveries, ungrounded code drift, and duplicated effort:
 1. Every validated metric, baseline equation, invariant, or negative/rejected result MUST be cataloged in `experiments/registry.json` using `mlbr::lake_log_experiment()`.
@@ -81,7 +97,7 @@ To prevent loss of discoveries, ungrounded code drift, and duplicated effort:
 
 ---
 
-## 4. Directory Structure & Naming Conventions
+## 5. Directory Structure & Naming Conventions
 
 * `data/raw/`: Bronze tier raw Parquet lakes.
 * `data/features/`: Silver tier partitioned Parquet feature tables.
@@ -89,7 +105,7 @@ To prevent loss of discoveries, ungrounded code drift, and duplicated effort:
 * `data/manifest/`: Continuous machine-readable AI agent manifests (`lake_manifest.json`, `agent_context.json`).
 * `experiments/`: Experiment registry (`registry.json`, `README.md`).
 * `sql/`: Standalone, reusable, pure DuckDB SQL scripts (`01_statcast_features.sql`, `02_pitch_tunneling.sql`).
-* `models/`: Self-contained, reproducible R model training and research scripts (`01_eda_feature_expansion.R`, etc.).
+* `models/`: Self-contained, reproducible R model training and research scripts, along with saved figure assets (`.png`, `.rds`, `.parquet`).
 * `workbooks/`: Interactive student lab workbooks for RStudio Server (`lab01_aerodynamics_workbook.R`).
 * `specs/`: Mathematical and system architecture specifications (SDD / Q-CRISP).
 * `pkg/mlbr/`: The core R package. Must pass clean build and installation.
@@ -97,7 +113,7 @@ To prevent loss of discoveries, ungrounded code drift, and duplicated effort:
 
 ---
 
-## 5. Mandatory Research Protocol: Q-CRISP & 7-Section Study Template
+## 6. Mandatory Research Protocol: Q-CRISP & 7-Section Study Template
 
 All analytical studies MUST follow the canonical **7-Section Study Template** for both research documentation and Quarto publication:
 1. **Section 1: Executive Summary & Abstract (TL;DR)** — Bottom line up front, key findings, headline visualization.
@@ -110,7 +126,7 @@ All analytical studies MUST follow the canonical **7-Section Study Template** fo
 
 ---
 
-## 6. Teaching, Mentoring & Review Protocol (MANDATORY)
+## 7. Teaching, Mentoring & Review Protocol (MANDATORY)
 
 1. **Collaborative Tutoring & Review**:
    - The user writes code and executes experiments in RStudio Server.
@@ -127,7 +143,7 @@ All analytical studies MUST follow the canonical **7-Section Study Template** fo
 
 ---
 
-## 7. Aesthetic & Visual Standards
+## 8. Aesthetic & Visual Standards
 
 * **Dark Cyber / Antigravity Theme**:
   - Background Canvas: `#090d16`
@@ -139,7 +155,7 @@ All analytical studies MUST follow the canonical **7-Section Study Template** fo
 
 ---
 
-## 8. Server Endpoints & Remote Rules
+## 9. Server Endpoints & Remote Rules
 
 * **Remote Canonical Host:** `cbwdellr720` (IP: `192.168.10.1`, Ubuntu 24.04, 40 cores, 125 GB RAM, `/mnt/storage/Rprojects/mlbr`).
 * **Zero Local Files on Windows:** Windows client machines must remain 100% free of local project files or cloned data.

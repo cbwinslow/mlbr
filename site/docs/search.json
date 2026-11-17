@@ -736,7 +736,7 @@
     "href": "workbooks/lab01_aerodynamics_workbook.html",
     "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
     "section": "",
-    "text": "TipHow to Use This Workbook\n\n\n\nThis document is designed specifically for you to work along interactively. You can open RStudio Server at http://192.168.10.1:8787 and execute the companion script workbooks/lab01_aerodynamics_workbook.R line-by-line using Ctrl + Enter.",
+    "text": "TipHow to Use This Workbook\n\n\n\nThis document is designed specifically for you to work along interactively. Open RStudio Server at http://192.168.10.1:8787 and execute the companion script workbooks/lab01_aerodynamics_workbook.R line-by-line using Ctrl + Enter.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
@@ -756,11 +756,11 @@
     ]
   },
   {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#deriving-the-trajectory-math-step-by-step",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#deriving-the-trajectory-math-step-by-step",
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#hand-calculating-trajectory-physics-in-r",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#hand-calculating-trajectory-physics-in-r",
     "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "2. Deriving the Trajectory Math Step-by-Step",
-    "text": "2. Deriving the Trajectory Math Step-by-Step\nNow, let’s derive the exact mathematical formulas we use in our DuckDB feature view.\n\nStep 2.1: Finding Forward Velocity at Home Plate (\\(v_{yf}\\))\nIn classical physics, Torricelli’s equation relates initial velocity (\\(u\\)), final velocity (\\(v\\)), acceleration (\\(a\\)), and displacement (\\(\\Delta y\\)): \\[v^2 = u^2 + 2 a \\Delta y\\]\nHere: - Initial position: \\(y_0 = 50.0\\text{ ft}\\) - Final position: \\(y_f = 1.417\\text{ ft}\\) - Displacement: \\(\\Delta y = y_f - y_0 = 1.417 - 50.0 = -48.583\\text{ ft}\\)\nPlugging this into the kinematic equation: \\[v_{yf}^2 = v_{y0}^2 + 2 a_y (1.417 - 50.0)\\]\nTaking the square root and remembering that the ball is still traveling toward the plate (negative direction): \\[\\mathbf{v_{yf} = -\\sqrt{v_{y0}^2 + 2 a_y (1.417 - 50.0)}}\\]\n\n\nStep 2.2: Finding Flight Time (\\(t_{\\text{flight}}\\))\nUnder constant acceleration, velocity changes linearly over time: \\(v = u + a t\\).\nSolving for time \\(t\\): \\[\\mathbf{t_{\\text{flight}} = \\frac{v_{yf} - v_{y0}}{a_y}}\\]\nFor a 95 mph fastball, \\(t_{\\text{flight}}\\) is typically \\(0.38\\) to \\(0.42\\) seconds (roughly 400 milliseconds). That is less than the blink of a human eye!\n\n\nStep 2.3: Finding Terminal Vertical and Horizontal Velocities\nWith the flight time known, we calculate how fast the ball is dropping (\\(v_{zf}\\)) and drifting laterally (\\(v_{xf}\\)) at the instant it crosses the plate: \\[\\mathbf{v_{zf} = v_{z0} + a_z \\cdot t_{\\text{flight}}}\\] \\[\\mathbf{v_{xf} = v_{x0} + a_x \\cdot t_{\\text{flight}}}\\]\n\n\nStep 2.4: Calculating the Vertical Approach Angle (VAA)\nThink of the trajectory at home plate as a right triangle: - Horizontal leg (forward motion): \\(-v_{yf}\\) (we negate it so forward speed is positive). - Vertical leg (up/down motion): \\(v_{zf}\\) (negative because the ball is descending).\nThe angle \\(\\theta\\) below the horizontal plane is: \\[\\tan(\\text{VAA}) = \\frac{v_{zf}}{-v_{yf}} \\implies \\mathbf{\\text{VAA} = \\text{atan2}(v_{zf}, -v_{yf}) \\times \\frac{180}{\\pi}}\\]",
+    "section": "2. Hand-Calculating Trajectory Physics in R",
+    "text": "2. Hand-Calculating Trajectory Physics in R\nIn workbooks/lab01_aerodynamics_workbook.R, we begin with Part 1: hand-calculating real parameters from a 98.5 mph Four-Seam fastball.\n\nStep 2.1: Terminal Forward Velocity at Home Plate\nUsing the classic kinematic equation \\(v_f^2 = v_0^2 + 2 a \\Delta y\\):\n\\[\\Delta y = 1.417 - 50.0 = -48.583\\text{ ft}\\] \\[v_{y,f} = -\\sqrt{v_{y0}^2 + 2 \\cdot a_y \\cdot (-48.583)}\\]\nvy0 &lt;- -144.2   # ft/s (98.3 mph at 50 ft)\nay  &lt;- 31.4     # ft/s^2 (forward air drag)\ndelta_y &lt;- 1.417 - 50.0\nvy_f &lt;- -sqrt(vy0^2 + 2 * ay * delta_y) # -133.2 ft/s (90.8 mph at plate)\nThe pitch loses 7.5 mph of forward speed purely due to atmospheric air drag.\n\n\nStep 2.2: Time of Flight\n\\[t_{\\text{flight}} = \\frac{v_{y,f} - v_{y0}}{a_y}\\]\nt_flight &lt;- (vy_f - vy0) / ay # 0.3503 seconds (350 ms)\nThe batter has just 350 milliseconds from release to contact to recognize pitch type, predict trajectory, and execute the swing.\n\n\nStep 2.3: Terminal Vertical & Horizontal Velocity\n\\[v_{z,f} = v_{z0} + a_z \\cdot t_{\\text{flight}}\\] \\[v_{x,f} = v_{x0} + a_x \\cdot t_{\\text{flight}}\\]\n\n\nStep 2.4: Approach Angles (VAA and HAA)\n\\[\\text{VAA} = \\arctan\\left(\\frac{v_{z,f}}{-v_{y,f}}\\right) \\times \\left(\\frac{180}{\\pi}\\right)\\] \\[\\text{HAA} = \\arctan\\left(\\frac{v_{x,f}}{-v_{y,f}}\\right) \\times \\left(\\frac{180}{\\pi}\\right)\\]",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
@@ -768,11 +768,11 @@
     ]
   },
   {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#hands-on-exercise-1-run-the-math-by-hand-in-r",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#hands-on-exercise-1-run-the-math-by-hand-in-r",
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#querying-the-14.64m-pitch-lake-via-duckdb",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#querying-the-14.64m-pitch-lake-via-duckdb",
     "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "3. Hands-On Exercise 1: Run the Math by Hand in R",
-    "text": "3. Hands-On Exercise 1: Run the Math by Hand in R\nLet’s test this in R with real flight parameters from a 98.5 mph four-seam fastball:\n# Initial tracking parameters at y = 50 ft\nvy0 &lt;- -144.2   # ft/s (forward speed)\nvz0 &lt;- -3.8     # ft/s (downward vertical velocity)\nvx0 &lt;- 4.2      # ft/s (horizontal velocity)\nay  &lt;- 31.4     # ft/s^2 (aerodynamic drag)\naz  &lt;- -14.2    # ft/s^2 (gravity -32.2 plus upward Magnus lift +18.0)\nax  &lt;- -8.1     # ft/s^2 (horizontal break)\n\n# 1. Forward velocity at front of plate (y = 1.417 ft)\nvy_f &lt;- -sqrt(vy0^2 + 2 * ay * (1.417 - 50.0))\ncat(sprintf(\"Plate arrival speed: %.1f ft/s (%.1f mph)\\n\", abs(vy_f), abs(vy_f) * (3600 / 5280)))\n\n# 2. Time of flight\nt_flight &lt;- (vy_f - vy0) / ay\ncat(sprintf(\"Flight time: %.3f seconds (%.1f ms)\\n\", t_flight, t_flight * 1000))\n\n# 3. Vertical terminal velocity\nvz_f &lt;- vz0 + az * t_flight\n\n# 4. Vertical Approach Angle (VAA) in degrees\nvaa &lt;- atan2(vz_f, -vy_f) * (180 / pi)\ncat(sprintf(\"Vertical Approach Angle: %.2f degrees\\n\", vaa))\nWhat did you find?\nNotice that the pitch crosses the plate with a VAA of around \\(-4.3^\\circ\\). For a fastball, anything flatter than \\(-4.5^\\circ\\) is exceptional!",
+    "section": "3. Querying the 14.64M Pitch Lake via DuckDB",
+    "text": "3. Querying the 14.64M Pitch Lake via DuckDB\nIn Part 2, we query our Silver-Tier Parquet dataset using mlbr::lake_duckdb():\nlibrary(mlbr)\ncon &lt;- mlbr::lake_duckdb()\n\nquery_pitchers &lt;- \"\n  SELECT \n    CONCAT(c.name_last, ', ', c.name_first) AS pitcher_name,\n    COUNT(*) AS pitches,\n    ROUND(AVG(f.release_speed), 1) AS avg_mph,\n    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,\n    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,\n    ROUND(AVG(f.vaa), 2) AS avg_vaa,\n    ROUND(SUM(f.is_whiff)::NUMERIC / NULLIF(SUM(f.is_swing), 0) * 100, 1) AS whiff_rate_swings\n  FROM v_statcast_features f\n  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam\n  WHERE f.game_date &gt;= '2024-01-01'\n    AND f.pitch_type = 'FF'\n  GROUP BY c.name_last, c.name_first\n  HAVING COUNT(*) &gt;= 500\n  ORDER BY avg_vaa DESC\n  LIMIT 10;\n\"\nDBI::dbGetQuery(con, query_pitchers)\n\n\n\n\n\n\n\n\n\n\n\n\nPitcher\nPitches\nAvg MPH\nRelease Height (ft)\nIVB (in)\nVAA (deg)\nWhiff Rate (Swings)\n\n\n\n\nPaul Sewald\n1,188\n91.1\n4.40\n12.8\n-3.45°\n23.1%\n\n\nEdwin Uceta\n812\n94.0\n4.54\n13.5\n-3.48°\n37.7%\n\n\nAlexis Díaz\n829\n93.8\n4.64\n13.7\n-3.48°\n22.0%\n\n\nCraig Kimbrel\n1,342\n93.7\n4.74\n15.2\n-3.56°\n26.9%\n\n\nEdwin Díaz\n1,473\n97.2\n4.77\n12.8\n-3.63°\n35.0%\n\n\nEmmet Sheehan\n1,546\n94.9\n5.48\n18.2\n-3.70°\n24.0%\n\n\nJacob Misiorowski\n2,730\n100.2\n5.22\n15.4\n-3.74°\n36.3%\n\n\nBryan Woo\n3,606\n95.6\n5.07\n14.8\n-3.78°\n27.3%\n\n\n\nNotice the critical insight: High VAA (flatter angle) is driven by either low release heights (&lt; 4.8 ft) or massive spin-induced vertical break (IVB &gt; 18 inches).",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
@@ -780,11 +780,11 @@
     ]
   },
   {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#the-platoon-problem-why-plate_x_norm-is-mandatory",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#the-platoon-problem-why-plate_x_norm-is-mandatory",
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#visual-diagnostics-gallery",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#visual-diagnostics-gallery",
     "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "4. The Platoon Problem: Why plate_x_norm is Mandatory",
-    "text": "4. The Platoon Problem: Why plate_x_norm is Mandatory\nIn raw Statcast data, plate_x is recorded from the umpire’s perspective: - plate_x = -0.7: Catcher’s left / inside to a Right-Handed Batter (RHB) / outside to a Left-Handed Batter (LHB). - plate_x = +0.7: Catcher’s right / outside to a RHB / inside to a LHB.\nIf you feed raw plate_x into a machine learning model, the model gets confused because \\(+0.7\\) represents two completely opposite baseball situations (an outside chase pitch to a righty, but an inside jam pitch to a lefty!).\nTo fix this, we created plate_x_norm: \\[\\mathbf{\\text{plate\\_x\\_norm} = \\text{plate\\_x} \\times \\begin{cases} -1.0 & \\text{if batter stands Left (L)} \\\\ +1.0 & \\text{if batter stands Right (R)} \\end{cases}}\\]\nUnder this rule: - Positive plate_x_norm: ALWAYS means the pitch is away (glove-side) from the batter. - Negative plate_x_norm: ALWAYS means the pitch is inside (arm-side) toward the batter.\nNow, your decision trees and neural networks can learn pure baseball strategy without getting tripped up by batter handedness.",
+    "section": "4. Visual Diagnostics Gallery",
+    "text": "4. Visual Diagnostics Gallery\nUnder our Visualization-First & Asset Preservation Mandate, every diagnostic view is preserved as high-resolution graphics, native .rds objects, and audit datasets.\n\nFigure 1: Fastball Whiff Rate vs. VAA (GAM Splines)\nThis plot captures 319,305 competitive swings in the 2024 season. Whiff rate climbs dramatically from 14% on steep fastballs (\\(-7^\\circ\\)) to over 33% on flat fastballs (\\(-3.5^\\circ\\)).\n\n\n\nFastball Whiff Rate vs. VAA\n\n\nPreserved Assets: models/lab01_whiff_curve_dark.rds & models/lab01_whiff_curve_dark.parquet\n\n\n\nFigure 2: The Pitch Movement Arena (\\(HB\\) vs. \\(IVB\\))\nThis plot maps 50,000 pitches into physical movement space. Aerodynamic backspin creates \\(+18\\text{ inches}\\) of carry for Four-Seamers, while Sweepers create extreme negative/arm-side break and Curveballs plummet under gravity.\n\n\n\nThe Pitch Movement Arena\n\n\nPreserved Assets: models/lab01_movement_arena.rds & models/lab01_movement_arena.parquet\n\n\n\nFigure 3: Strike Zone Whiff Heatmap: Flat vs. Steep Fastballs\nWhy do flat fastballs perform so well? Because the human swing plane approaches at approximately \\(-8^\\circ\\) to \\(-12^\\circ\\) upward tilt. A flat fastball (\\(-4^\\circ\\)) crosses above the bat plane, generating swing-and-misses at the upper third of the strike zone (\\(z &gt; 3.0\\text{ ft}\\)).\n\n\n\nStrike Zone Whiff Rates: Flat vs. Steep Fastballs\n\n\nPreserved Assets: models/lab01_zone_whiff_heatmap.rds & models/lab01_zone_whiff_heatmap.parquet\n\n\n\nFigure 4: Kinematic Trajectory Simulation (Skenes vs. Rea)\nThis figure contrasts the simulated parabolic flight path of Paul Skenes (low 5.5 ft release + flat approach) vs Colin Rea (steep downhill angle).\n\n\n\nKinematic Trajectory Comparison\n\n\nPreserved Assets: models/lab01_trajectory_simulation.rds & models/lab01_trajectory_simulation.parquet",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
@@ -792,23 +792,11 @@
     ]
   },
   {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#hands-on-exercise-2-comparing-pitchers-in-duckdb",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#hands-on-exercise-2-comparing-pitchers-in-duckdb",
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#next-steps-lab-02-pitch-tunneling-commitment-geometry",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#next-steps-lab-02-pitch-tunneling-commitment-geometry",
     "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "5. Hands-On Exercise 2: Comparing Pitchers in DuckDB",
-    "text": "5. Hands-On Exercise 2: Comparing Pitchers in DuckDB\nNow let’s query the live lake in RStudio to see how real pitchers compare in VAA and whiff rate:\nlibrary(mlbr)\nlibrary(DBI)\nlibrary(dplyr)\n\ncon &lt;- mlbr::lake_duckdb()\n\n# Let's compare Four-Seam Fastballs for top starters in 2024\ntop_pitchers &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    c.name_last || ', ' || c.name_first AS pitcher_name,\n    COUNT(*) AS pitches,\n    ROUND(AVG(f.release_speed), 1) AS avg_mph,\n    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,\n    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,\n    ROUND(AVG(f.vaa), 2) AS avg_vaa,\n    ROUND(AVG(f.is_whiff[f.is_swing = 1])::NUMERIC * 100, 1) AS whiff_pct\n  FROM v_statcast_features f\n  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam\n  \n  WHERE f.game_date &gt;= '2024-01-01'\n    AND f.pitch_type = 'FF'\n  GROUP BY c.name_last, c.name_first\n  HAVING COUNT(*) &gt;= 500\n  ORDER BY avg_vaa DESC\n  LIMIT 10;\n\")\n\nprint(top_pitchers)\nDBI::dbDisconnect(con, shutdown = TRUE)\nLook closely at the pitchers at the top of that list: - Pitchers with the highest (flattest) VAA (e.g. \\(-3.8^\\circ\\) to \\(-4.3^\\circ\\)) almost always have either low release heights (throwing from a lower arm slot) or extreme backspin (high IVB). - These pitchers generate substantially higher whiff rates on four-seamers at the top of the zone.",
-    "crumbs": [
-      "Home",
-      "Student Work-Along Labs",
-      "Lab 01: Aerodynamics & Trajectory Math"
-    ]
-  },
-  {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#next-steps-developing-fastball-deltas-tunneling",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#next-steps-developing-fastball-deltas-tunneling",
-    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "6. Next Steps: Developing Fastball Deltas & Tunneling",
-    "text": "6. Next Steps: Developing Fastball Deltas & Tunneling\nIn our next step, we are adding two advanced features:\n\nVelocity Delta (\\(\\Delta V\\)): \\[\\Delta V = v_{\\text{pitch}} - v_{\\text{primary\\_fastball}}\\] A changeup is not just “85 mph”; it is “85 mph off a 96 mph fastball” (\\(\\Delta V = -11\\text{ mph}\\)). That 11 mph differential disrupts the batter’s timing mechanism.\nTunneling Distance (\\(d_{\\text{tunnel}}\\)): \\[d_{\\text{tunnel}} = \\sqrt{(x_{0,\\text{pitch}} - x_{0,\\text{fastball}})^2 + (z_{0,\\text{pitch}} - z_{0,\\text{fastball}})^2}\\] If a pitcher releases their slider from the exact same spatial window as their fastball (\\(d_{\\text{tunnel}} &lt; 2\\text{ inches}\\)), the pitch is visually indistinguishable to the batter until late flight break occurs.",
+    "section": "5. Next Steps: Lab 02 Pitch Tunneling & Commitment Geometry",
+    "text": "5. Next Steps: Lab 02 Pitch Tunneling & Commitment Geometry\nNow that we have mastered single-pitch trajectory aerodynamics, we advance to multi-pitch sequencing:\n\nThe Batter Commitment Point (\\(y = 23.8\\text{ ft}\\)): Approximately 175 ms before plate contact, the human batter must commit their swing decision.\nTunneling Differential Distance (\\(d_{\\text{tunnel}}\\)): \\[d_{\\text{commit}} = \\sqrt{(x_{\\text{pitch}} - x_{\\text{fastball}})^2 + (z_{\\text{pitch}} - z_{\\text{fastball}})^2} \\quad \\text{at } y = 23.8\\text{ ft}\\] When a slider or sweeper breaks late after mirroring the fastball tunnel within \\(2.5\\text{ inches}\\) at the commit point, chase swing rates increase by +9.3 percentage points.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
