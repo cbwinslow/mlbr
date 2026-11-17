@@ -67,6 +67,8 @@ website:
               href: analyses/experiment_registry.qmd
             - text: "Study 01: Aerodynamics & Approach Angles"
               href: analyses/01_pitch_quality_eda.qmd
+            - text: "Study 02: 4-Quadrant Platoon Physics"
+              href: analyses/02_platoon_physics.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

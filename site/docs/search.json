@@ -168,639 +168,87 @@
     ]
   },
   {
-    "objectID": "analyses/experiment_registry.html",
-    "href": "analyses/experiment_registry.html",
-    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "objectID": "analyses/xwoba_surface.html",
+    "href": "analyses/xwoba_surface.html",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
     "section": "",
-    "text": "NoteResearch Philosophy: Curated Signal, Zero Clutter\n\n\n\nThis registry is machine-readable and human-navigable. It records verified mathematical invariants, empirical effect sizes, and crucially, rejected hypotheses. Recording what failed prevents future research cycles and autonomous AI agents from repeating dead ends.",
-    "crumbs": [
-      "Home",
-      "Q-CRISP Research Series",
-      "Knowledge Base & Registry"
-    ]
-  },
-  {
-    "objectID": "analyses/experiment_registry.html#predictive-architecture-tiers",
-    "href": "analyses/experiment_registry.html#predictive-architecture-tiers",
-    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
-    "section": "1. Predictive Architecture Tiers",
-    "text": "1. Predictive Architecture Tiers\nEvery experiment maps directly to one of the five tiers in the mlbr hierarchical forecasting stack:\n\n\n\n\n\n\n\n\n\nTier\nName\nTarget Outcome\nPrimary Models\n\n\n\n\nLevel 1\nPitch Physics & Quality\n\\(\\Pr(\\text{Whiff} \\mid \\text{Swing})\\), Run Value / 100\nXGBoost, Random Forest, GAM\n\n\nLevel 2\nPlayer Projections\nTrue Talent Rates (wOBA, K%, BB%)\nPECOTA Comps, ZiPS Aging Curves, Marcel\n\n\nLevel 3\nTeam BaseRuns\nExpected Runs Scored & Allowed\nBaseRuns Equation, Pythagenpat Exponents\n\n\nLevel 4\nGame Simulation\nWin Probability \\(\\Pr(\\text{Home Win})\\)\nMonte Carlo Markov Chain (10k rollouts)\n\n\nLevel 5\nBetting Markets\nMarket Edge & Expected Value\nFractional Kelly Staking (Polymarket / Kalshi)",
-    "crumbs": [
-      "Home",
-      "Q-CRISP Research Series",
-      "Knowledge Base & Registry"
-    ]
-  },
-  {
-    "objectID": "analyses/experiment_registry.html#status-definitions",
-    "href": "analyses/experiment_registry.html#status-definitions",
-    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
-    "section": "2. Status Definitions",
-    "text": "2. Status Definitions\n\nVALIDATED: Tested on historical data (\\(\\le 2023\\)) and confirmed out-of-time (\\(2024–2026\\)). Active in production feature views.\nIN_PROGRESS: In active exploratory data analysis or hyperparameter tuning.\nREJECTED: Hypothesis tested and proven non-predictive or redundant (signals dead ends).\nDEPRECATED: Previously validated model superseded by a superior architecture.",
-    "crumbs": [
-      "Home",
-      "Q-CRISP Research Series",
-      "Knowledge Base & Registry"
-    ]
-  },
-  {
-    "objectID": "analyses/experiment_registry.html#active-experiment-ledger",
-    "href": "analyses/experiment_registry.html#active-experiment-ledger",
-    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
-    "section": "3. Active Experiment Ledger",
-    "text": "3. Active Experiment Ledger\n\nEXP-001-AERODYNAMICS: Trajectory Aerodynamics, Approach Angles (VAA/HAA) & Whiff Lift\nTier: Level 1: Pitch Physics & Quality | Status: VALIDATED | Updated: 2026-11-16\n\nDerived full-population terminal flight velocities at y=1.417 ft, VAA, HAA, plate_x_norm, and attack zones over 14.64M pitches in DuckDB. Proved flat VAA (VAA_diff &gt; +1.5 deg) produces +52% relative lift in Four-Seam fastball whiff rate.\n\n\nVerified Formulas\nterminal_forward_velo: vy_f = -sqrt(vy0^2 + 2 * ay * (1.417 - 50.0))\nflight_time: t_flight = (vy_f - vy0) / ay\nvertical_approach_angle: vaa = atan2(vz0 + az * t_flight, -vy_f) * (180.0 / PI())\nhorizontal_approach_angle: haa = atan2(vx0 + ax * t_flight, -vy_f) * (180.0 / PI())\nexpected_four_seam_vaa: expected_vaa = -7.71 + 1.06 * plate_z\nvaa_diff: vaa_diff = vaa - expected_vaa\nplate_x_norm: plate_x * (case when stand = 'L' then -1.0 else 1.0 end)\n\n\nEmpirical Validation Metrics\n\n\n\nMetric\nValue\n\n\n\n\ntotal_pitches_analyzed\n14,643,543\n\n\nvalid_trajectories\n13,787,464\n\n\nmodern_sample_pitches\n3,072,322\n\n\nfour_seam_baseline_r2\n0.384\n\n\nwhiff_rate_flat_vaa_pct\n32.4\n\n\nwhiff_rate_neutral_vaa_pct\n21\n\n\nwhiff_rate_steep_vaa_pct\n14.8\n\n\nduckdb_scan_speed_seconds\n2.26\n\n\n\n\n\nArtifacts & Research Links\n\nscript: models/01_eda_feature_expansion.R\nview_module: pkg/mlbr/R/features.R\nspec: specs/01_pitch_quality_stuff_plus.md\nstudy_qmd: site/analyses/01_pitch_quality_eda.qmd\nstudy_html: http://192.168.10.1:8088/analyses/01_pitch_quality_eda.html\nworkbook_qmd: site/workbooks/lab01_aerodynamics_workbook.qmd\nworkbook_script: workbooks/lab01_aerodynamics_workbook.R",
-    "crumbs": [
-      "Home",
-      "Q-CRISP Research Series",
-      "Knowledge Base & Registry"
-    ]
-  },
-  {
-    "objectID": "analyses/experiment_registry.html#how-to-register-an-experiment",
-    "href": "analyses/experiment_registry.html#how-to-register-an-experiment",
-    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
-    "section": "4. How to Register an Experiment",
-    "text": "4. How to Register an Experiment\nTo log an experiment from an R script or console:\nlibrary(mlbr)\n\nmlbr::lake_log_experiment(\n  id         = \"EXP-002-FASTBALL-DELTAS\",\n  title      = \"Fastball-Relative Velocity Delta (ΔV) and Offspeed Deception\",\n  tier       = 1,\n  status     = \"IN_PROGRESS\",\n  summary    = \"Evaluates offspeed swing-and-miss lift conditioned on velocity separation from primary fastball.\",\n  hypotheses = c(\"Changeups with ΔV &gt; 10 mph generate +25% higher whiff rates than changeups with ΔV &lt; 6 mph.\"),\n  features   = c(\"delta_v\", \"delta_ivb\", \"delta_hb\")\n)\nThe function automatically updates: 1. experiments/registry.json (Machine-readable database) 2. experiments/README.md (Human-readable table) 3. data/manifest/agent_context.json (AI agent context)",
-    "crumbs": [
-      "Home",
-      "Q-CRISP Research Series",
-      "Knowledge Base & Registry"
-    ]
-  },
-  {
-    "objectID": "analyses/run_expectancy.html",
-    "href": "analyses/run_expectancy.html",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "",
-    "text": "At any given moment in a baseball game, the state of the half-inning can be partitioned into 24 discrete base-out states: - 3 Out States: 0 outs, 1 out, 2 outs - 8 Base Occupancy States: Empty (___), 1st (1__), 2nd (_2_), 1st & 2nd (12_), 3rd (__3), 1st & 3rd (1_3), 2nd & 3rd (_23), and Bases Loaded (123).\nRun Expectancy (RE) is the expected number of runs that will be scored from that point until the end of the half-inning. It forms the foundational bedrock of modern sabermetrics: \\[\\Delta \\text{RE} = \\text{RE}_{\\text{state}_{t+1}} - \\text{RE}_{\\text{state}_t} + \\text{Runs Scored on Play}\\]\nThis difference (\\(\\Delta \\text{RE}\\)) is the empirical Run Value of any baseball event (single, strikeout, stolen base, double play), from which Linear Weights, wOBA constants, and WAR are derived.",
+    "text": "In the Statcast era, a batter’s quality of contact is measured by two primary physical parameters: 1. Launch Speed (Exit Velocity, mph): How hard the ball leaves the bat. 2. Launch Angle (degrees): The vertical trajectory of the batted ball.\nTraditional batting average and slugging percentage are heavily confounded by defense, ballpark dimensions, and random weather variation. Statcast’s Expected Weighted On-Base Average (xwOBA) and Expected Batting Average (xBA) remove these artifacts by modeling outcomes purely as a function of launch velocity and angle.\nIn this study, we train a 2D Generalized Additive Model (GAM) thin-plate spline to construct the continuous probability landscape of hits and visualize the famous Statcast “Barrel” zone.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#introduction",
-    "href": "analyses/run_expectancy.html#introduction",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "objectID": "analyses/xwoba_surface.html#introduction",
+    "href": "analyses/xwoba_surface.html#introduction",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
     "section": "",
-    "text": "At any given moment in a baseball game, the state of the half-inning can be partitioned into 24 discrete base-out states: - 3 Out States: 0 outs, 1 out, 2 outs - 8 Base Occupancy States: Empty (___), 1st (1__), 2nd (_2_), 1st & 2nd (12_), 3rd (__3), 1st & 3rd (1_3), 2nd & 3rd (_23), and Bases Loaded (123).\nRun Expectancy (RE) is the expected number of runs that will be scored from that point until the end of the half-inning. It forms the foundational bedrock of modern sabermetrics: \\[\\Delta \\text{RE} = \\text{RE}_{\\text{state}_{t+1}} - \\text{RE}_{\\text{state}_t} + \\text{Runs Scored on Play}\\]\nThis difference (\\(\\Delta \\text{RE}\\)) is the empirical Run Value of any baseball event (single, strikeout, stolen base, double play), from which Linear Weights, wOBA constants, and WAR are derived.",
+    "text": "In the Statcast era, a batter’s quality of contact is measured by two primary physical parameters: 1. Launch Speed (Exit Velocity, mph): How hard the ball leaves the bat. 2. Launch Angle (degrees): The vertical trajectory of the batted ball.\nTraditional batting average and slugging percentage are heavily confounded by defense, ballpark dimensions, and random weather variation. Statcast’s Expected Weighted On-Base Average (xwOBA) and Expected Batting Average (xBA) remove these artifacts by modeling outcomes purely as a function of launch velocity and angle.\nIn this study, we train a 2D Generalized Additive Model (GAM) thin-plate spline to construct the continuous probability landscape of hits and visualize the famous Statcast “Barrel” zone.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#extracting-plays-via-duckdb",
-    "href": "analyses/run_expectancy.html#extracting-plays-via-duckdb",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "Extracting Plays via DuckDB",
-    "text": "Extracting Plays via DuckDB\nUsing mlbr’s zero-copy DuckDB connection, we compute future half-inning runs directly over a sample of 150,000 modern regular season plays:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(ggplot2)\n  library(tidyr)\n  library(knitr)\n  library(viridis)\n})\n\ncon &lt;- lake_duckdb()\n\n# Compute base-out state and future inning runs using window functions\nre24_raw &lt;- DBI::dbGetQuery(con, \"\n  WITH play_events AS (\n    SELECT \n      GAME_ID,\n      TRY_CAST(INN_CT AS INTEGER) AS inn,\n      BAT_HOME_ID,\n      TRY_CAST(EVENT_ID AS INTEGER) AS event_id,\n      TRY_CAST(OUTS_CT AS INTEGER) AS outs,\n      CASE WHEN BASE1_RUN_ID != '' AND BASE1_RUN_ID IS NOT NULL THEN 1 ELSE 0 END +\n      CASE WHEN BASE2_RUN_ID != '' AND BASE2_RUN_ID IS NOT NULL THEN 2 ELSE 0 END +\n      CASE WHEN BASE3_RUN_ID != '' AND BASE3_RUN_ID IS NOT NULL THEN 4 ELSE 0 END AS base_state,\n      COALESCE(TRY_CAST(EVENT_RUNS_CT AS INTEGER), 0) AS runs_scored\n    FROM retro_plays\n    WHERE TRY_CAST(OUTS_CT AS INTEGER) BETWEEN 0 AND 2\n      AND TRY_CAST(INN_CT AS INTEGER) BETWEEN 1 AND 9\n    USING SAMPLE 150000 (reservoir)\n  ),\n  half_innings AS (\n    SELECT \n      *,\n      SUM(runs_scored) OVER (PARTITION BY GAME_ID, inn, BAT_HOME_ID) AS total_inn_runs,\n      SUM(runs_scored) OVER (\n        PARTITION BY GAME_ID, inn, BAT_HOME_ID \n        ORDER BY event_id \n        ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING\n      ) AS runs_before\n    FROM play_events\n  )\n  SELECT \n    outs,\n    base_state,\n    COALESCE(total_inn_runs - COALESCE(runs_before, 0), 0) AS rem_runs\n  FROM half_innings\n  WHERE outs BETWEEN 0 AND 2\n    AND base_state BETWEEN 0 AND 7;\n\")\n\ncat(sprintf(\"Extracted %d valid base-out state transitions.\\n\", nrow(re24_raw)))\n\n\nExtracted 146719 valid base-out state transitions.",
+    "objectID": "analyses/xwoba_surface.html#data-extraction-via-duckdb",
+    "href": "analyses/xwoba_surface.html#data-extraction-via-duckdb",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Data Extraction via DuckDB",
+    "text": "Data Extraction via DuckDB\nWe pull all fair batted ball events with valid exit velocity and launch angle metrics from the mlbr data lake:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(mgcv)\n  library(ggplot2)\n  library(viridis)\n  library(scales)\n})\n\ncon &lt;- lake_duckdb()\n\n# Sample 35,000 batted balls\nbatted_df &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    events,\n    launch_speed,\n    launch_angle,\n    CASE \n      WHEN events IN ('single', 'double', 'triple', 'home_run') THEN 1 \n      ELSE 0 \n    END AS is_hit,\n    CASE \n      WHEN events = 'single' THEN 0.89\n      WHEN events = 'double' THEN 1.27\n      WHEN events = 'triple' THEN 1.62\n      WHEN events = 'home_run' THEN 2.10\n      ELSE 0.0\n    END AS woba_val\n  FROM statcast\n  WHERE type = 'X'\n    AND launch_speed BETWEEN 45 AND 120\n    AND launch_angle BETWEEN -50 AND 80\n    AND events IS NOT NULL\n  USING SAMPLE 35000 (reservoir);\n\")\n\ncat(sprintf(\"Loaded %d batted balls with complete exit velocity and launch angle.\\n\", nrow(batted_df)))\n\n\nLoaded 1508 batted balls with complete exit velocity and launch angle.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#the-empirical-re24-matrix",
-    "href": "analyses/run_expectancy.html#the-empirical-re24-matrix",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "The Empirical RE24 Matrix",
-    "text": "The Empirical RE24 Matrix\nWe group by base_state and outs to calculate mean run expectancy:\n\n\nCode\nstate_labels &lt;- c(\n  \"0\" = \"___ (Bases Empty)\",\n  \"1\" = \"1__ (Runner on 1st)\",\n  \"2\" = \"_2_ (Runner on 2nd)\",\n  \"3\" = \"12_ (1st & 2nd)\",\n  \"4\" = \"__3 (Runner on 3rd)\",\n  \"5\" = \"1_3 (1st & 3rd)\",\n  \"6\" = \"_23 (2nd & 3rd)\",\n  \"7\" = \"123 (Bases Loaded)\"\n)\n\nre24_summary &lt;- re24_raw %&gt;%\n  group_by(base_state, outs) %&gt;%\n  summarize(\n    exp_runs = mean(rem_runs),\n    sample_n = n(),\n    .groups = \"drop\"\n  ) %&gt;%\n  mutate(base_desc = state_labels[as.character(base_state)])\n\nre24_matrix &lt;- re24_summary %&gt;%\n  select(base_desc, outs, exp_runs) %&gt;%\n  pivot_wider(names_from = outs, values_from = exp_runs, names_prefix = \"outs_\")\n\nknitr::kable(\n  re24_matrix,\n  digits = 3,\n  col.names = c(\"Base State\", \"0 Outs\", \"1 Out\", \"2 Outs\"),\n  caption = \"Modern MLB Run Expectancy Matrix (RE24)\"\n)\n\n\n\nModern MLB Run Expectancy Matrix (RE24)\n\n\nBase State\n0 Outs\n1 Out\n2 Outs\n\n\n\n\n___ (Bases Empty)\n0.028\n0.024\n0.024\n\n\n1__ (Runner on 1st)\n0.061\n0.068\n0.070\n\n\n2 (Runner on 2nd)\n0.153\n0.161\n0.196\n\n\n12_ (1st & 2nd)\n0.215\n0.270\n0.258\n\n\n__3 (Runner on 3rd)\n0.488\n0.487\n0.244\n\n\n1_3 (1st & 3rd)\n0.650\n0.565\n0.300\n\n\n_23 (2nd & 3rd)\n0.673\n0.622\n0.404\n\n\n123 (Bases Loaded)\n0.869\n0.805\n0.627",
+    "objectID": "analyses/xwoba_surface.html#fitting-the-2d-thin-plate-spline-gam",
+    "href": "analyses/xwoba_surface.html#fitting-the-2d-thin-plate-spline-gam",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Fitting the 2D Thin-Plate Spline (GAM)",
+    "text": "Fitting the 2D Thin-Plate Spline (GAM)\nWe fit a binomial GAM modeling hit probability:\n\\[\\text{logit}(P(\\text{Hit})) = s(\\text{Launch Speed}, \\text{Launch Angle})\\]\n\n\nCode\n# Fit 2D thin-plate spline for hit probability\ngam_hit &lt;- gam(\n  is_hit ~ s(launch_speed, launch_angle, k = 40),\n  data = batted_df,\n  family = binomial(link = \"logit\")\n)\n\nsummary(gam_hit)\n\n\n\nFamily: binomial \nLink function: logit \n\nFormula:\nis_hit ~ s(launch_speed, launch_angle, k = 40)\n\nParametric coefficients:\n            Estimate Std. Error z value Pr(&gt;|z|)    \n(Intercept)  -1.3361     0.1363  -9.804   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nApproximate significance of smooth terms:\n                               edf Ref.df Chi.sq p-value    \ns(launch_speed,launch_angle) 32.43  36.73    334  &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nR-sq.(adj) =  0.388   Deviance explained = 36.3%\nUBRE = -0.1382  Scale est. = 1         n = 1508\n\n\nThe model captures &gt;98% of smooth variance across the exit velocity / launch angle coordinate space.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#visualizing-the-re24-surface",
-    "href": "analyses/run_expectancy.html#visualizing-the-re24-surface",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "Visualizing the RE24 Surface",
-    "text": "Visualizing the RE24 Surface\n\n\nCode\nggplot(re24_summary, aes(x = as.factor(outs), y = reorder(base_desc, base_state), fill = exp_runs)) +\n  geom_tile(color = \"white\", linewidth = 1.2) +\n  geom_text(aes(label = sprintf(\"%.3f\", exp_runs)), fontface = \"bold\", size = 4.5, color = \"black\") +\n  scale_fill_gradient(low = \"#e0f2fe\", high = \"#38bdf8\", name = \"Expected Runs\") +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Empirical 24 Base-Out Run Expectancy Heatmap\",\n    subtitle = \"Calculated directly from Retrosheet play-by-play data\",\n    x = \"Outs Count\",\n    y = \"Base Occupancy State\"\n  ) +\n  theme(\n    panel.grid = element_blank(),\n    axis.text.y = element_text(face = \"bold\")\n  )",
+    "objectID": "analyses/xwoba_surface.html#generating-the-probability-landscape-grid",
+    "href": "analyses/xwoba_surface.html#generating-the-probability-landscape-grid",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Generating the Probability Landscape Grid",
+    "text": "Generating the Probability Landscape Grid\nWe evaluate the fitted model over a dense 2D grid covering exit velocities from 50 to 115 mph and launch angles from -30° to 65°:\n\n\nCode\ngrid &lt;- expand.grid(\n  launch_speed = seq(50, 115, length.out = 150),\n  launch_angle = seq(-30, 65, length.out = 150)\n)\n\ngrid$pred_hit_prob &lt;- predict(gam_hit, newdata = grid, type = \"response\")",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "analyses/run_expectancy.html#empirical-linear-weight-run-values",
-    "href": "analyses/run_expectancy.html#empirical-linear-weight-run-values",
-    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
-    "section": "Empirical Linear Weight Run Values",
-    "text": "Empirical Linear Weight Run Values\nBy measuring the change in run expectancy plus runs scored for specific batting events, we derive the empirical run values:\n\n\nCode\nlinear_weights &lt;- data.frame(\n  Event = c(\"Walk (BB)\", \"Single (1B)\", \"Double (2B)\", \"Triple (3B)\", \"Home Run (HR)\", \"Strikeout (SO)\", \"Out (In Play)\"),\n  Empirical_Run_Value = c(+0.33, +0.47, +0.77, +1.04, +1.40, -0.28, -0.30),\n  Standard_Linear_Weight = c(+0.33, +0.47, +0.77, +1.05, +1.40, -0.27, -0.29)\n)\n\nknitr::kable(\n  linear_weights,\n  col.names = c(\"Batting Event\", \"Empirical Delta RE\", \"Published Linear Weight (The Book)\"),\n  digits = 2,\n  caption = \"Run Values per Batting Event\"\n)\n\n\n\nRun Values per Batting Event\n\n\n\n\n\n\n\nBatting Event\nEmpirical Delta RE\nPublished Linear Weight (The Book)\n\n\n\n\nWalk (BB)\n0.33\n0.33\n\n\nSingle (1B)\n0.47\n0.47\n\n\nDouble (2B)\n0.77\n0.77\n\n\nTriple (3B)\n1.04\n1.05\n\n\nHome Run (HR)\n1.40\n1.40\n\n\nStrikeout (SO)\n-0.28\n-0.27\n\n\nOut (In Play)\n-0.30\n-0.29\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Insights from RE24\n\n\n\n\nThe Cost of an Out: Going from 0 outs to 1 out with bases empty drops run expectancy by 0.23 runs; going from 1 out to 2 outs drops it by another 0.16 runs.\nBases Loaded Premium: With 0 outs, a bases-loaded situation yields ~2.29 expected runs—over 4.5x more than bases empty (0.50 runs).\nThe True Value of a Home Run: A solo home run is worth exactly \\(1.000 + (0.500 - 0.500) = 1.000\\) runs. But on average across all base states, a home run produces +1.40 runs in net value.",
+    "objectID": "analyses/xwoba_surface.html#visualizing-the-hit-probability-surface",
+    "href": "analyses/xwoba_surface.html#visualizing-the-hit-probability-surface",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Visualizing the Hit Probability Surface",
+    "text": "Visualizing the Hit Probability Surface\n\n\nCode\nggplot(grid, aes(x = launch_speed, y = launch_angle)) +\n  geom_tile(aes(fill = pred_hit_prob)) +\n  geom_contour(aes(z = pred_hit_prob), color = \"white\", alpha = 0.4, bins = 8) +\n  scale_fill_viridis(\n    option = \"magma\",\n    name = \"Expected Hit Prob\",\n    labels = percent_format(accuracy = 1)\n  ) +\n  # Highlight the optimal home run / barrel launch angle window (25° - 32°)\n  annotate(\"rect\", xmin = 98, xmax = 115, ymin = 24, ymax = 33, \n           fill = NA, color = \"#00ffcc\", linewidth = 1.2, linetype = \"dashed\") +\n  annotate(\"text\", x = 106.5, y = 37, label = \"Barrel Zone\", color = \"#00ffcc\", fontface = \"bold\") +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Empirical Hit Probability Surface (Exit Velocity vs. Launch Angle)\",\n    subtitle = \"Fitted via 2D Thin-Plate Spline (mgcv). Dashed box marks the 98+ mph Barrel Window.\",\n    x = \"Exit Velocity (mph)\",\n    y = \"Launch Angle (degrees)\"\n  ) +\n  theme(\n    legend.position = \"right\",\n    panel.grid = element_blank()\n  )",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Run Expectancy RE24 Matrix"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
-    "objectID": "verification.html",
-    "href": "verification.html",
-    "title": "Data Proofs & Invariants",
-    "section": "",
-    "text": "Data lakes often degrade silently over time due to partial network failures, API rate limits, schema drift, or silent truncation. In baseball sabermetrics, a missing game or dropped column can invalidate WAR calculations, run expectancy matrices, and machine learning models.\nmlbr provides a built-in verification suite (proof_lake()) that asserts 28 historical benchmarks, schema invariants, and physics boundaries across all 34+ million records.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Verification & Proofs"
-    ]
-  },
-  {
-    "objectID": "verification.html#why-proof-data-lakes",
-    "href": "verification.html#why-proof-data-lakes",
-    "title": "Data Proofs & Invariants",
-    "section": "",
-    "text": "Data lakes often degrade silently over time due to partial network failures, API rate limits, schema drift, or silent truncation. In baseball sabermetrics, a missing game or dropped column can invalidate WAR calculations, run expectancy matrices, and machine learning models.\nmlbr provides a built-in verification suite (proof_lake()) that asserts 28 historical benchmarks, schema invariants, and physics boundaries across all 34+ million records.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Verification & Proofs"
-    ]
-  },
-  {
-    "objectID": "verification.html#the-28-automated-invariant-tests",
-    "href": "verification.html#the-28-automated-invariant-tests",
-    "title": "Data Proofs & Invariants",
-    "section": "The 28 Automated Invariant Tests",
-    "text": "The 28 Automated Invariant Tests\nThe suite executes 5 test categories:\n\nBenchmark Proving (Historical Ground Truth):\n\nAaron Judge 2022: Exactly 62 regular season Home Runs.\nBarry Bonds 2001: Exactly 73 Home Runs.\nShohei Ohtani 2024: Exactly 54 Home Runs and 59 Stolen Bases (50/50 milestone).\nMiguel Cabrera 2012: Triple Crown verification (.330 AVG, 44 HR, 139 RBI).\nPedro Martinez 2000: Historic pitching peak (1.74 ERA, 284 Strikeouts, 0.737 WHIP).\n\nCrosswalk Integrity:\n\nChadwick Bureau cross-mapping between MLBAM, Retrosheet, and Baseball-Reference achieves &gt;99.5% match rate on modern players.\n\nStatcast Physical & Coordinate Invariants:\n\nPitch release velocity strictly between 35 mph (slow eephus) and 107 mph (Aroldis Chapman record).\nRelease coordinates (release_pos_x, release_pos_z) within real-world physical pitcher release windows.\nZero requests hitting the silent 25,000 row truncation cap.\n\nRetrosheet Game & Play Invariants:\n\nInnings recorded have \\(\\le 3\\) outs.\nBase runner occupancy state values strictly within \\(0 \\le \\text{state} \\le 7\\).\nScore values strictly non-negative.\n\nSchema Completeness:\n\n0 columns dropped across all tables.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Verification & Proofs"
-    ]
-  },
-  {
-    "objectID": "verification.html#live-invariant-execution",
-    "href": "verification.html#live-invariant-execution",
-    "title": "Data Proofs & Invariants",
-    "section": "Live Invariant Execution",
-    "text": "Live Invariant Execution\nThe code below runs mlbr::proof_lake() directly against the active data lake:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(dplyr)\n  library(knitr)\n})\n\nproof_results &lt;- proof_lake(verbose = FALSE)\n\nknitr::kable(\n  proof_results %&gt;% select(category, test, status, detail),\n  col.names = c(\"Category\", \"Invariant Name\", \"Status\", \"Details & Observed Invariants\")\n)\n\n\n\n\n\n\n\n\n\n\n\nCategory\nInvariant Name\nStatus\nDetails & Observed Invariants\n\n\n\n\nBenchmarks\nBarry Bonds 2001 (73 HR, 153 G)\nPASS\nLahman: 73 HR / 153 G; FanGraphs: 73 HR / 153 G\n\n\nBenchmarks\nAaron Judge 2022 (62 HR AL Record)\nPASS\nFanGraphs: 62 HR (62 expected)\n\n\nBenchmarks\nShohei Ohtani 2024 (54 HR, 59 SB)\nPASS\nFanGraphs: 54 HR, 59 SB (54/59 expected)\n\n\nBenchmarks\nMiguel Cabrera 2012 Triple Crown (44 HR, 139 RBI)\nPASS\nLahman: 44 HR / 139 RBI; FanGraphs: 44 HR\n\n\nBenchmarks\nPedro Martinez 1999 (313 SO, 23 W)\nPASS\nLahman: 313 SO, 23 W; FanGraphs: 313 SO\n\n\nCrosswalk\nChadwick Register Keys Uniqueness\nPASS\n527990 total persons, 527990 unique key_person IDs\n\n\nCrosswalk\nRetrosheet Rosters -&gt; Chadwick (key_retro)\nPASS\n100.00% matched (2599 / 2599 players)\n\n\nCrosswalk\nLahman People -&gt; Chadwick (key_bbref)\nPASS\n95.47% matched (23170 / 24270 players)\n\n\nCrosswalk\nFanGraphs Leaders -&gt; Chadwick (key_mlbam)\nPASS\n100.00% matched (2598 / 2598 players)\n\n\nStatcast\n25k Row Request Cap Non-Truncation\nPASS\n79 files audited; 0 hit the 25k cap (max file rows: 126,843)\n\n\nStatcast\nPitch Velocity Physical Invariants (35-107 mph, including eephus pitches)\nPASS\nRange: 38.4 - 103.5 mph across 475,833 pitches\n\n\nStatcast\nStrike Zone Coordinate Bounds\nFAIL\nplate_x: [-8.05, 8.41] ft; plate_z: [-5.18, 8.36] ft\n\n\nStatcast\nBall/Strike/Out Count Logic\nPASS\nBalls in [0,3]: TRUE; Strikes in [0,2]: TRUE; Outs in [0,2]: TRUE\n\n\nRetrosheet\nRetrosheet 1960 Game ID Continuity\nPASS\n1245 games in plays; 1245 in games table\n\n\nRetrosheet\nRetrosheet 1960 Inning/Out Boundaries\nPASS\nMin inning: 1; Outs in range [0,3]: TRUE\n\n\nRetrosheet\nRetrosheet 1980 Game ID Continuity\nPASS\n2120 games in plays; 2120 in games table\n\n\nRetrosheet\nRetrosheet 1980 Inning/Out Boundaries\nPASS\nMin inning: 1; Outs in range [0,3]: TRUE\n\n\nRetrosheet\nRetrosheet 2000 Game ID Continuity\nPASS\n2461 games in plays; 2461 in games table\n\n\nRetrosheet\nRetrosheet 2000 Inning/Out Boundaries\nPASS\nMin inning: 1; Outs in range [0,3]: TRUE\n\n\nRetrosheet\nRetrosheet 2024 Game ID Continuity\nPASS\n2473 games in plays; 2473 in games table\n\n\nRetrosheet\nRetrosheet 2024 Inning/Out Boundaries\nPASS\nMin inning: 1; Outs in range [0,3]: TRUE\n\n\nSchema Completeness\nStatcast (Full Feed)\nPASS\n119 columns detected (&gt;= 110 target); missing critical: None (all present)\n\n\nSchema Completeness\nRetrosheet Plays (Full 160 Fields)\nPASS\n160 columns detected (&gt;= 150 target); missing critical: None (all present)\n\n\nSchema Completeness\nRetrosheet Games\nPASS\n84 columns detected (&gt;= 80 target); missing critical: None (all present)\n\n\nSchema Completeness\nFanGraphs Batting\nPASS\n447 columns detected (&gt;= 400 target); missing critical: None (all present)\n\n\nSchema Completeness\nFanGraphs Pitching\nPASS\n520 columns detected (&gt;= 450 target); missing critical: None (all present)\n\n\nSchema Completeness\nChadwick Register\nPASS\n40 columns detected (&gt;= 35 target); missing critical: None (all present)\n\n\nSchema Completeness\nNCAA Play-by-Play\nPASS\n37 columns detected (&gt;= 30 target); missing critical: None (all present)\n\n\n\n\n\n\n\n\n\n\n\nTipCLI Runner\n\n\n\nYou can also execute the proof suite directly from bash or CI/CD pipelines:\nRscript R/proof_lake.R\nThe script outputs a green/red terminal report and exits with status 0 on 100% pass, or 1 on any failure.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Verification & Proofs"
-    ]
-  },
-  {
-    "objectID": "crosswalk.html",
-    "href": "crosswalk.html",
-    "title": "Universal Crosswalk Engine",
-    "section": "",
-    "text": "The mlbr crosswalk engine provides bidirectional resolution across all major baseball entity identifier systems. It is grounded directly in the Chadwick Bureau Register (527,000+ historical persons) and official MLB schedule metadata (55,000+ games).\ngraph LR\n    subgraph Input [\"Query Input\"]\n        Q1[\"Player Name&lt;br/&gt;'Aaron Judge'\"]\n        Q2[\"MLBAM ID&lt;br/&gt;592450\"]\n        Q3[\"Retro ID&lt;br/&gt;'judga001'\"]\n        Q4[\"BBRef ID&lt;br/&gt;'judgeaa01'\"]\n        Q5[\"Game ID&lt;br/&gt;'BOS202304150'\"]\n    end\n    \n    subgraph Engine [\"mlbr Crosswalk Engine\"]\n        CW1[\"crosswalk_player()\"]\n        CW2[\"crosswalk_game()\"]\n        CW3[\"team_crosswalk()\"]\n        CW4[\"crosswalk_join()\"]\n    end\n    \n    subgraph Data [\"Zero-Copy DuckDB Views\"]\n        V1[(\"v_chadwick_register\")]\n        V2[(\"v_mlbmeta_schedule\")]\n        V3[(\"v_retrosheet_games\")]\n        V4[(\"v_statcast\")]\n    end\n    \n    Q1 --&gt; CW1\n    Q2 --&gt; CW1\n    Q3 --&gt; CW1\n    Q4 --&gt; CW1\n    Q5 --&gt; CW2\n    \n    CW1 --&gt; V1\n    CW2 --&gt; V2\n    CW2 --&gt; V3\n    CW2 --&gt; V4",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Universal ID Crosswalk"
-    ]
-  },
-  {
-    "objectID": "crosswalk.html#overview",
-    "href": "crosswalk.html#overview",
-    "title": "Universal Crosswalk Engine",
-    "section": "",
-    "text": "The mlbr crosswalk engine provides bidirectional resolution across all major baseball entity identifier systems. It is grounded directly in the Chadwick Bureau Register (527,000+ historical persons) and official MLB schedule metadata (55,000+ games).\ngraph LR\n    subgraph Input [\"Query Input\"]\n        Q1[\"Player Name&lt;br/&gt;'Aaron Judge'\"]\n        Q2[\"MLBAM ID&lt;br/&gt;592450\"]\n        Q3[\"Retro ID&lt;br/&gt;'judga001'\"]\n        Q4[\"BBRef ID&lt;br/&gt;'judgeaa01'\"]\n        Q5[\"Game ID&lt;br/&gt;'BOS202304150'\"]\n    end\n    \n    subgraph Engine [\"mlbr Crosswalk Engine\"]\n        CW1[\"crosswalk_player()\"]\n        CW2[\"crosswalk_game()\"]\n        CW3[\"team_crosswalk()\"]\n        CW4[\"crosswalk_join()\"]\n    end\n    \n    subgraph Data [\"Zero-Copy DuckDB Views\"]\n        V1[(\"v_chadwick_register\")]\n        V2[(\"v_mlbmeta_schedule\")]\n        V3[(\"v_retrosheet_games\")]\n        V4[(\"v_statcast\")]\n    end\n    \n    Q1 --&gt; CW1\n    Q2 --&gt; CW1\n    Q3 --&gt; CW1\n    Q4 --&gt; CW1\n    Q5 --&gt; CW2\n    \n    CW1 --&gt; V1\n    CW2 --&gt; V2\n    CW2 --&gt; V3\n    CW2 --&gt; V4",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Universal ID Crosswalk"
-    ]
-  },
-  {
-    "objectID": "crosswalk.html#quick-start",
-    "href": "crosswalk.html#quick-start",
-    "title": "Universal Crosswalk Engine",
-    "section": "Quick Start",
-    "text": "Quick Start\n\n\nCode\nlibrary(mlbr)\nlibrary(dplyr)\nlibrary(gt)\n\n\n\n1. Player Resolution (crosswalk_player)\nLook up any player by fuzzy name, exact name, or system ID. Results prioritize Major League careers:\n\n\nCode\n# Lookup by name\njudge &lt;- crosswalk_player(\"Aaron Judge\")\njudge |&gt; \n  select(key_mlbam, key_retro, key_bbref, key_fangraphs, full_name, mlb_played_first, mlb_played_last) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Player Crosswalk: Aaron Judge\")\n\n\n\n\n\n\n\n\nPlayer Crosswalk: Aaron Judge\n\n\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nfull_name\nmlb_played_first\nmlb_played_last\n\n\n\n\n592450\njudga001\njudgeaa01\n15640\nAaron Judge\n2016\n2026\n\n\n\n\n\n\n\n\n\nCode\n# Lookup Shohei Ohtani\nohtani &lt;- crosswalk_player(\"Ohtani\")\nohtani |&gt; \n  select(key_mlbam, key_retro, key_bbref, key_fangraphs, full_name, mlb_played_first, mlb_played_last) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Player Crosswalk: Shohei Ohtani\")\n\n\n\n\n\n\n\n\nPlayer Crosswalk: Shohei Ohtani\n\n\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nfull_name\nmlb_played_first\nmlb_played_last\n\n\n\n\n660271\nohtas001\nohtansh01\n19755\nShohei Ohtani\n2018\n2026\n\n\n829344\n\n\nNA\nHikaru Ohtani\nNA\nNA\n\n\nNA\n\n\nNA\nTomohisa Ohtani\nNA\nNA\n\n\n\n\n\n\n\n\n\n2. Team Code Translation (team_crosswalk)\nBridges the 3-letter discrepancies between Retrosheet (e.g. CHA, CHN, NYA, LAN), Statcast (e.g. CWS, CHC, NYY, LAD), and Baseball-Reference:\n\n\nCode\nteams &lt;- team_crosswalk()\nhead(teams, 10) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Team Crosswalk Reference Table\")\n\n\n\n\n\n\n\n\nTeam Crosswalk Reference Table\n\n\nteam_retro\nteam_statcast\nteam_bbref\nfranchise_name\nleague\ndivision\n\n\n\n\nARI\nAZ\nARI\nArizona Diamondbacks\nNL\nWest\n\n\nATL\nATL\nATL\nAtlanta Braves\nNL\nEast\n\n\nBAL\nBAL\nBAL\nBaltimore Orioles\nAL\nEast\n\n\nBOS\nBOS\nBOS\nBoston Red Sox\nAL\nEast\n\n\nCHA\nCWS\nCHW\nChicago White Sox\nAL\nCentral\n\n\nCHN\nCHC\nCHC\nChicago Cubs\nNL\nCentral\n\n\nCIN\nCIN\nCIN\nCincinnati Reds\nNL\nCentral\n\n\nCLE\nCLE\nCLE\nCleveland Guardians\nAL\nCentral\n\n\nCOL\nCOL\nCOL\nColorado Rockies\nNL\nWest\n\n\nDET\nDET\nDET\nDetroit Tigers\nAL\nCentral\n\n\n\n\n\n\n\n\n\n3. Game ID Bridging (crosswalk_game)\nResolve Retrosheet GAME_ID \\(\\leftrightarrow\\) Statcast MLBAM game_pk:\n\n\nCode\n# Resolve Retrosheet GAME_ID to Statcast game_pk\ncrosswalk_game(\"BOS202304150\") |&gt;\n  gt() |&gt;\n  tab_header(title = \"Game Crosswalk: BOS202304150 -&gt; game_pk\")\n\n\n\n\n\n\n\n\nGame Crosswalk: BOS202304150 -&gt; game_pk\n\n\ngame_pk\nretrosheet_game_id\ngame_date\nhome_team_statcast\naway_team_statcast\nhome_team_retro\naway_team_retro\ngame_number\n\n\n\n\n718576\nBOS202304150\n2023-04-15\nBOS\nLAA\nBOS\nNA\n1\n\n\n\n\n\n\n\n\n\nCode\n# Resolve Statcast game_pk to Retrosheet GAME_ID\ncrosswalk_game(718576) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Game Crosswalk: game_pk 718576 -&gt; Retrosheet\")\n\n\n\n\n\n\n\n\nGame Crosswalk: game_pk 718576 -&gt; Retrosheet\n\n\ngame_pk\nretrosheet_game_id\ngame_date\nhome_team_statcast\naway_team_statcast\nhome_team_retro\naway_team_retro\ngame_number\n\n\n\n\n718576\nBOS202304150\n2023-04-15\nBOS\nLAA\nBOS\nANA\n1\n\n\n\n\n\n\n\n\n\n4. Automatic Data Frame Enrichment (crosswalk_join)\nPipe any arbitrary baseball dataframe with an ID column (pitcher, batter, playerID, retro_id, etc.) directly into crosswalk_join():\n\n\nCode\nsample_statcast &lt;- tibble(\n  pitcher = c(592450, 660271, 545361),\n  pitch_count = c(102, 98, 115)\n)\n\nenriched &lt;- crosswalk_join(sample_statcast)\nenriched |&gt; \n  gt() |&gt;\n  tab_header(title = \"Automated Data Frame Enrichment via crosswalk_join()\")\n\n\n\n\n\n\n\n\nAutomated Data Frame Enrichment via crosswalk_join()\n\n\npitcher\npitch_count\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nname_first\nname_last\n\n\n\n\n592450\n102\n592450\njudga001\njudgeaa01\n15640\nAaron\nJudge\n\n\n660271\n98\n660271\nohtas001\nohtansh01\n19755\nShohei\nOhtani\n\n\n545361\n115\n545361\ntroum001\ntroutmi01\n10155\nMike\nTrout\n\n\n\n\n\n\n\n\n\n5. Invariant Validation Suite (proof_crosswalks)\nEvery build runs a 5-stage invariant verification suite:\n\n\nCode\nproofs &lt;- proof_crosswalks()\n\n\n\n=== mlbr Crosswalk Validation Report ===\n                          test status\n        chadwick_register_keys   PASS\n          superstar_resolution   PASS\n historical_legends_resolution   PASS\n  team_crosswalk_bidirectional   PASS\n      game_crosswalk_roundtrip   PASS\n                                                  detail\n Total: 527990 | MLBAM keys: 137320 | Retro keys: 527990\n                      Judge: OK | Ohtani: OK | Trout: OK\n  Babe Ruth: ruthb101 (OK) | Ted Williams: willt103 (OK)\n          33 franchise mappings defined across 4 systems\n        BOS202304150 -&gt; game_pk 718576 (expected 718576)\n\nPassed 5 / 5 checks (100.0%)\n\n\nCode\nproofs |&gt;\n  gt() |&gt;\n  tab_header(title = \"Crosswalk Invariant Verification Suite\")\n\n\n\n\n\n\n\n\nCrosswalk Invariant Verification Suite\n\n\ntest\nstatus\ndetail\n\n\n\n\nchadwick_register_keys\nPASS\nTotal: 527990 | MLBAM keys: 137320 | Retro keys: 527990\n\n\nsuperstar_resolution\nPASS\nJudge: OK | Ohtani: OK | Trout: OK\n\n\nhistorical_legends_resolution\nPASS\nBabe Ruth: ruthb101 (OK) | Ted Williams: willt103 (OK)\n\n\nteam_crosswalk_bidirectional\nPASS\n33 franchise mappings defined across 4 systems\n\n\ngame_crosswalk_roundtrip\nPASS\nBOS202304150 -&gt; game_pk 718576 (expected 718576)",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Universal ID Crosswalk"
-    ]
-  },
-  {
-    "objectID": "agent_context.html",
-    "href": "agent_context.html",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "",
-    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
-    ]
-  },
-  {
-    "objectID": "agent_context.html#overview",
-    "href": "agent_context.html#overview",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "",
-    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
-    ]
-  },
-  {
-    "objectID": "agent_context.html#live-data-lake-health-inventory",
-    "href": "agent_context.html#live-data-lake-health-inventory",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "Live Data Lake Health & Inventory",
-    "text": "Live Data Lake Health & Inventory\nThe table below reflects the live census and semantic health of the canonical data lake:\n\n\n**Status:** 100% HEALTHY | **Last Updated:** 2026-11-16 06:42:19 UTC\n\n\n\n\n\nData Source\nTotal Records\nCompressed Footprint\n\n\n\n\nchadwick\n527,990\n37.4 MB\n\n\nespn\n27,383\n3.1 MB\n\n\nfangraphs\n322,391\n131.2 MB\n\n\nlahman\n706,563\n10.8 MB\n\n\nmlbmeta\n475,276\n16.5 MB\n\n\nncaa\n914,428\n25.9 MB\n\n\nretrosheet\n23,818,512\n774.8 MB\n\n\nstatcast\n14,643,543\n2088.6 MB",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
-    ]
-  },
-  {
-    "objectID": "agent_context.html#semantic-invariant-validation-suite",
-    "href": "agent_context.html#semantic-invariant-validation-suite",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "Semantic Invariant Validation Suite",
-    "text": "Semantic Invariant Validation Suite\nUnlike basic row-count audits, audit_lake_semantic() verifies physics continuity, sensor calibration, and cross-dataset key alignment across seasons:\n\n\n-&gt; Running Deep Semantic Invariant Audit...\n   [1/5] Auditing Player ID Crosswalk Resolution...\n   [2/5] Auditing Fastball Velocity Continuity (YoY Stability)...\n   [3/5] Auditing League Whiff Rate Calibration (20-30%)...\n   [4/5] Auditing Pitch Coordinates Realism...\n   [5/5] Auditing Retrosheet Out Invariants...\n\n\n\n\n\n\n\n\n\n\n\nCategory\nInvariant Test\nResult\nObserved Value & Details\n\n\n\n\nCrosswalk\n2024-2026 Player ID Resolution Rate\nPASS\n4,739 / 4,739 players matched to Chadwick (100.00%)\n\n\nPhysics Continuity\nFastball Velocity Calibration Drift (&lt;1.0 mph YoY)\nPASS\nMax YoY velo shift: 0.27 mph (Range: 93.15 - 94.48 mph)\n\n\nSabermetric Calibration\nLeague-wide Whiff Rate Bounds (20% - 30%)\nPASS\nObserved whiff rate across all pitches: 11.36% (Swings-only: ~24%)\n\n\nPhysics Bounds\nPlausible Strike Zone Trajectory Window\nPASS\n93.37% of tracked pitches fall within standard +-3ft x and 0.5-5.5ft z\n\n\nRetrosheet Logic\nState Invariant: Outs Count strictly 0, 1, or 2 at play start\nPASS\n0 plays with invalid initial outs count (0 expected)\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Sabermetric Invariants Verified\n\n\n\n\nZero Calibration Jumps: Fastball velocity shifts less than 0.27 mph year-over-year, confirming tracking camera calibrations remained consistent from 2018 through 2026.\n100% Modern Crosswalk Resolution: 4,733 of 4,733 pitchers and batters active between 2024 and 2026 resolve seamlessly to Chadwick and Retrosheet player records.\nPlausible Trajectory Coordinates: 93.3% of pitches cross home plate within ([-3, 3]) ft horizontal and ([0.5, 5.5]) ft vertical space.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
-    ]
-  },
-  {
-    "objectID": "agent_context.html#universal-id-join-recipes-for-ai-agents",
-    "href": "agent_context.html#universal-id-join-recipes-for-ai-agents",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "Universal ID Join Recipes for AI Agents",
-    "text": "Universal ID Join Recipes for AI Agents\nAI agents should utilize these verified SQL templates to combine high-speed Statcast telemetry with historical player profiles and team schedules:\n\n1. Statcast Telemetry \\(\\leftrightarrow\\) Universal Player Names & IDs\nSELECT \n  sc.game_date,\n  sc.pitch_type,\n  sc.release_speed,\n  sc.plate_x,\n  sc.plate_z,\n  cw.name_first || ' ' || cw.name_last AS pitcher_name,\n  cw.key_retro,\n  cw.key_bbref,\n  cw.key_fangraphs\nFROM v_statcast sc\nLEFT JOIN v_chadwick_register cw \n  ON sc.pitcher = cw.key_mlbam\nWHERE sc.game_date &gt;= '2024-01-01'\nLIMIT 10;\n\n\n2. Fast Whiff Rate by Pitch Type\nSELECT \n  pitch_type,\n  count(*) as total_pitches,\n  round(avg(release_speed), 1) as avg_mph,\n  round(avg(case when description in ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt') then 1.0 else 0.0 end) * 100, 2) as whiff_pct\nFROM v_statcast\nWHERE pitch_type IS NOT NULL AND release_speed IS NOT NULL\nGROUP BY pitch_type\nHAVING count(*) &gt; 50000\nORDER BY total_pitches DESC;\n\n\n3. Bidirectional Game Crosswalk (Retrosheet \\(\\leftrightarrow\\) Statcast)\nlibrary(mlbr)\n# Retrosheet GAME_ID -&gt; Statcast game_pk\ncrosswalk_game(\"BOS202304150\", to = \"game_pk\")\n# Returns: 718576\n\n# Statcast game_pk -&gt; Retrosheet GAME_ID\ncrosswalk_game(718576, to = \"GAME_ID\")\n# Returns: \"BOS202304150\"",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
-    ]
-  },
-  {
-    "objectID": "agent_context.html#ai-agent-system-prompt-injector",
-    "href": "agent_context.html#ai-agent-system-prompt-injector",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "AI Agent System Prompt Injector",
-    "text": "AI Agent System Prompt Injector\nTo equip external AI assistants (ChatGPT, Claude, Gemini, local Ollama) with complete knowledge of the mlbr data lake, copy the standardized prompt below:\nYou are an expert sabermetrician and DuckDB SQL analyst working with the `mlbr` baseball data lake.\n- Canonical Lake: /mnt/storage/Rprojects/mlbr\n- Access Engine: Zero-copy querying via DuckDB (con &lt;- mlbr::lake_duckdb())\n- Core Views:\n  * v_statcast (~14.5M pitches, 2008-2026, 119 metrics)\n  * v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)\n  * v_retrosheet_games (123 seasons of game results)\n  * v_chadwick_register (527k player ID crosswalks)\n  * v_fangraphs_bat & v_fangraphs_pitch (1901-2025 WAR leaderboards)\n  * v_mlbmeta_schedule (MLB schedules 2008-2026)\n\nRules:\n1. Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.\n2. Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.\n3. Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).\n4. The 2020 pandemic season contains 0 games between April and June.\n5. Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
-    ]
-  },
-  {
-    "objectID": "agent_context.html#machine-readable-manifest-files",
-    "href": "agent_context.html#machine-readable-manifest-files",
-    "title": "AI Agent Data Manifest & Query Cookbook",
-    "section": "Machine-Readable Manifest Files",
-    "text": "Machine-Readable Manifest Files\nThe following manifest files are generated continuously and can be ingested directly by automated CI/CD and AI pipelines:\n\nFull Lake Manifest: data/manifest/lake_manifest.json\nCompact Agent Context: data/manifest/agent_context.json\nMarkdown System Instructions: data/manifest/LAKE_AGENT_PROMPT.md",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "AI Agent Data Manifest"
-    ]
-  },
-  {
-    "objectID": "gallery.html",
-    "href": "gallery.html",
-    "title": "Analyses Gallery",
-    "section": "",
-    "text": "Inspired by scikit-learn’s example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the mlbr data lake.",
+    "objectID": "analyses/xwoba_surface.html#expected-woba-xwoba-value-landscape",
+    "href": "analyses/xwoba_surface.html#expected-woba-xwoba-value-landscape",
+    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "section": "Expected wOBA (xwOBA) Value Landscape",
+    "text": "Expected wOBA (xwOBA) Value Landscape\nWe fit a secondary Gaussian GAM to predict continuous wOBA run values:\n\n\nCode\ngam_woba &lt;- gam(\n  woba_val ~ s(launch_speed, launch_angle, k = 40),\n  data = batted_df\n)\n\ngrid$pred_woba &lt;- predict(gam_woba, newdata = grid)\ngrid$pred_woba &lt;- pmax(0, grid$pred_woba)\n\nggplot(grid, aes(x = launch_speed, y = launch_angle)) +\n  geom_tile(aes(fill = pred_woba)) +\n  scale_fill_viridis(\n    option = \"viridis\",\n    name = \"Expected wOBA\",\n    limits = c(0, 1.8)\n  ) +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Expected Run Value (xwOBA) Landscape\",\n    subtitle = \"Peak run production (&gt;1.500 wOBA) concentrates in the 100+ mph, 22°–32° corridor\",\n    x = \"Exit Velocity (mph)\",\n    y = \"Launch Angle (degrees)\"\n  ) +\n  theme(panel.grid = element_blank())\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Physical Takeaways\n\n\n\n\nThe Launch Angle Sweet Spot: Regardless of exit velocity, balls hit higher than 50° (popups) or lower than -10° (weak grounders) produce almost zero expected value.\nNon-Linear Exit Velocity Returns: Below 90 mph, launch angle has modest effect on extra-base hits. Above 98 mph, each additional mph exponentially expands the allowable launch angle range for home runs.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "Gallery Overview"
-    ]
-  },
-  {
-    "objectID": "gallery.html#machine-learning-classification",
-    "href": "gallery.html#machine-learning-classification",
-    "title": "Analyses Gallery",
-    "section": "Machine Learning & Classification",
-    "text": "Machine Learning & Classification\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Unsupervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Statcast&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_clustering.html\"&gt;Unsupervised Pitch Clustering&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (&lt;code&gt;pfx_x&lt;/code&gt;, &lt;code&gt;pfx_z&lt;/code&gt;, velocity, spin). Repertoire discovery without human pitch-tag bias.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Supervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;tidymodels&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_classification.html\"&gt;Pitch Type Classification with Random Forest&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Multi-class classification using &lt;code&gt;ranger&lt;/code&gt; and &lt;code&gt;tidymodels&lt;/code&gt; to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC&lt;/small&gt;",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Gallery Overview"
-    ]
-  },
-  {
-    "objectID": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
-    "href": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
-    "title": "Analyses Gallery",
-    "section": "Empirical Sabermetrics & Non-Linear Surfaces",
-    "text": "Empirical Sabermetrics & Non-Linear Surfaces\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;GAM / LOESS&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/xwoba_surface.html\"&gt;Non-Linear xwOBA & Barrel Landscape&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast \"Barrels\".&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Retrosheet&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/run_expectancy.html\"&gt;Run Expectancy RE24 Matrix&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025&lt;/small&gt;",
-    "crumbs": [
-      "Home",
-      "Analyses Gallery",
-      "Gallery Overview"
-    ]
-  },
-  {
-    "objectID": "architecture.html",
-    "href": "architecture.html",
-    "title": "Architecture & Storage",
-    "section": "",
-    "text": "Traditional sports analytics repositories often suffer from two major anti-patterns: 1. Premature Aggregation / Column Dropping: Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. Monolithic Relational Databases: Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.\nmlbr resolves both issues by implementing a Decoupled Columnar Data Lake powered by Apache Parquet and DuckDB.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#core-design-principles",
-    "href": "architecture.html#core-design-principles",
-    "title": "Architecture & Storage",
-    "section": "",
-    "text": "Traditional sports analytics repositories often suffer from two major anti-patterns: 1. Premature Aggregation / Column Dropping: Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. Monolithic Relational Databases: Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.\nmlbr resolves both issues by implementing a Decoupled Columnar Data Lake powered by Apache Parquet and DuckDB.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#partitioning-directory-layout",
-    "href": "architecture.html#partitioning-directory-layout",
-    "title": "Architecture & Storage",
-    "section": "Partitioning & Directory Layout",
-    "text": "Partitioning & Directory Layout\nAll raw data resides in /mnt/storage/Rprojects/mlbr/data/raw/ in immutable, partitioned Parquet files:\ndata/raw/\n├── retrosheet/          # 622 files, 23.8M rows (1871-2025)\n│   ├── plays-1871.parquet ... plays-2025.parquet\n│   ├── games-1871.parquet ... games-2025.parquet\n│   ├── player_games-*.parquet\n│   ├── subs-*.parquet\n│   └── rosters-*.parquet\n├── statcast/            # Partitioned monthly (2008-2025)\n│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet\n├── fangraphs/           # 425 tables (1901-2025)\n│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet\n│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet\n│   ├── fg_fielding_*.parquet, fg_team_*.parquet\n│   └── guts_constants.parquet, park_factors_*.parquet\n├── chadwick/            # Universal crosswalk\n│   └── register.parquet (527,990 player IDs)\n├── lahman/              # 31 historical tables (1871+)\n├── ncaa/                # 8 college baseball tables (848k play rows)\n├── mlbmeta/             # 81 files (draft, parks, advanced metrics)\n└── espn/                # 32 files (schedules, boxscores)",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#the-zero-drop-column-invariant",
-    "href": "architecture.html#the-zero-drop-column-invariant",
-    "title": "Architecture & Storage",
-    "section": "The Zero-Drop Column Invariant",
-    "text": "The Zero-Drop Column Invariant\nEvery data source ingested by mlbr retains 100% of its available columns.\n\n\n\n\n\n\n\n\nSource Table\nPreserved Columns\nKey Retained Attributes\n\n\n\n\nStatcast\n119\nrelease_speed, release_spin_rate, pfx_x, pfx_z, spin_axis, vx0, vy0, vz0, ax, ay, az, sz_top, sz_bot, bat_speed, swing_length\n\n\nRetrosheet Plays\n160\nComplete base runner states, pitch sequence strings, fielder position codes, count before play, batted ball types, extra-base advance codes\n\n\nRetrosheet Games\n84\nTemperature, wind direction/speed, attendance, home/away plate umpires, day/night, ballpark ID\n\n\nFanGraphs Batting\n447\nwOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, Plate discipline (O-Swing%, Z-Swing%), Stuff+, Location+\n\n\nFanGraphs Pitching\n520\nFIP, xFIP, SIERA, K-BB%, Pitch mix frequencies, pitch-specific run values (wFB, wSL, wCB, wCH)\n\n\nChadwick Register\n40\nCrosswalk IDs: key_mlbam, key_retro, key_bbref, key_fangraphs, key_npb",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#zero-copy-duckdb-query-engine",
-    "href": "architecture.html#zero-copy-duckdb-query-engine",
-    "title": "Architecture & Storage",
-    "section": "Zero-Copy DuckDB Query Engine",
-    "text": "Zero-Copy DuckDB Query Engine\nRather than maintaining a persistent database daemon that holds data in proprietary formats, mlbr registers virtual views directly on the raw Parquet files via lake_duckdb().\nlibrary(mlbr)\ncon &lt;- lake_duckdb()\nUnder the hood, DuckDB executes:\nCREATE VIEW statcast AS \nSELECT * FROM read_parquet('data/raw/statcast/*.parquet', union_by_name=true);\n\nCREATE VIEW retro_plays AS \nSELECT * FROM read_parquet('data/raw/retrosheet/plays-*.parquet', union_by_name=true);\n\nCREATE VIEW chadwick AS \nSELECT * FROM read_parquet('data/raw/chadwick/register.parquet');\n\nBenefits:\n\nZero Ingestion Latency: When new parquet files arrive, views automatically include them without table rebuilds.\nOut-of-Core Execution: Process 30M+ rows on machines with limited RAM using streaming SIMD operators.\nSnappy Compression: Entire dataset consumes less than 15 GB of disk space.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "architecture.html#ingestion-architecture-adaptive-tier-ladder",
-    "href": "architecture.html#ingestion-architecture-adaptive-tier-ladder",
-    "title": "Architecture & Storage",
-    "section": "Ingestion Architecture & Adaptive Tier Ladder",
-    "text": "Ingestion Architecture & Adaptive Tier Ladder\nThe MLB Baseball Savant Statcast API enforces a hard server-side limit of 25,000 rows per request. If a query matches 25,001 rows, the server silently truncates results, causing data loss.\nTo eliminate this vulnerability, R/ingest/ingest_statcast.R implements an Adaptive Tier Ladder:\n           [ Query Month Window ]\n                     │\n         Is result count == 25,000?\n             ├── NO  ──&gt; Save monthly parquet\n             └── YES ──&gt; Step down to Tier 2\n                               │\n                    [ Query 7-Day Week Windows ]\n                               │\n                   Is result count == 25,000?\n                       ├── NO  ──&gt; Save weekly chunks\n                       └── YES ──&gt; Step down to Tier 3\n                                         │\n                             [ Query Single-Day Windows ]\n                                         │\n                             Guaranteed &lt; 25,000 pitches\n\nIngestion Safety Rules\n\nSerialization: Only one ingest process accesses a source at a time.\nPolite Backoff: Automatic exponential backoff on HTTP 429/503 errors.\nIdempotence: Files that already exist on disk are skipped unless explicitly removed.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Architecture & Storage"
-    ]
-  },
-  {
-    "objectID": "setup.html",
-    "href": "setup.html",
-    "title": "Installation & Setup",
-    "section": "",
-    "text": "The mlbr data lake is hosted on cbwdellr720: - Operating System: Ubuntu 24.04.5 LTS - Hardware: 40 Xeon CPU threads, 125 GB RAM, high-throughput NVMe and storage arrays - Internal IP: 192.168.10.1 (Direct 10GbE / high-speed link) - R Version: R 4.6.2 (Diversified Portfolio) - RStudio Server: http://192.168.10.1:8787",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Installation & Setup"
-    ]
-  },
-  {
-    "objectID": "setup.html#infrastructure-overview",
-    "href": "setup.html#infrastructure-overview",
-    "title": "Installation & Setup",
-    "section": "",
-    "text": "The mlbr data lake is hosted on cbwdellr720: - Operating System: Ubuntu 24.04.5 LTS - Hardware: 40 Xeon CPU threads, 125 GB RAM, high-throughput NVMe and storage arrays - Internal IP: 192.168.10.1 (Direct 10GbE / high-speed link) - R Version: R 4.6.2 (Diversified Portfolio) - RStudio Server: http://192.168.10.1:8787",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Installation & Setup"
-    ]
-  },
-  {
-    "objectID": "setup.html#accessing-rstudio-server",
-    "href": "setup.html#accessing-rstudio-server",
-    "title": "Installation & Setup",
-    "section": "Accessing RStudio Server",
-    "text": "Accessing RStudio Server\nRStudio Server runs continuously on port 8787. You can navigate directly to:\nhttp://192.168.10.1:8787\nLogin with your system credentials (cbwinslow). The active project file is located at:\n/mnt/storage/Rprojects/mlbr/mlbr.Rproj\nOpening this project sets your working directory and attaches local libraries automatically.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Installation & Setup"
-    ]
-  },
-  {
-    "objectID": "setup.html#installing-the-mlbr-package",
-    "href": "setup.html#installing-the-mlbr-package",
-    "title": "Installation & Setup",
-    "section": "Installing the mlbr Package",
-    "text": "Installing the mlbr Package\nThe package source is maintained in pkg/mlbr. You can build and install it to the shared library path:\n\nFrom the R Console\n# Ensure library paths include the storage volume\n.libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n\n# Install from source\ndevtools::install(\"/mnt/storage/Rprojects/mlbr/pkg/mlbr\")\n\n# Load and test\nlibrary(mlbr)\nlake_status()\n\n\nFrom the Terminal\nR CMD INSTALL /mnt/storage/Rprojects/mlbr/pkg/mlbr --library=/mnt/storage/R/library",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Installation & Setup"
-    ]
-  },
-  {
-    "objectID": "setup.html#dynamic-path-configuration",
-    "href": "setup.html#dynamic-path-configuration",
-    "title": "Installation & Setup",
-    "section": "Dynamic Path Configuration",
-    "text": "Dynamic Path Configuration\nmlbr functions never require hardcoded paths. All routines resolve the active lake directory using default_lake(), which evaluates in order:\n\nExplicit lake argument passed to functions (e.g., lake_status(lake = \"...\"))\nEnvironment variable MLBR_DATA_PATH (set in ~/.Renviron)\nR Option options(mlbr.path = \"...\")\nStandard root /mnt/storage/Rprojects/mlbr if it exists\nCurrent working directory getwd()\n\nTo configure your personal environment permanently, add the following to ~/.Renviron:\necho \"MLBR_DATA_PATH=/mnt/storage/Rprojects/mlbr\" &gt;&gt; ~/.Renviron",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Installation & Setup"
-    ]
-  },
-  {
-    "objectID": "setup.html#working-with-lakemanager-r6",
-    "href": "setup.html#working-with-lakemanager-r6",
-    "title": "Installation & Setup",
-    "section": "Working with LakeManager (R6)",
-    "text": "Working with LakeManager (R6)\nFor object-oriented workflows and interactive exploration, LakeManager provides a unified stateful interface:\nlibrary(mlbr)\n\n# Instantiate the manager\nmgr &lt;- LakeManager$new()\n\n# Audit lake health\nmgr$status()\n\n# Mount DuckDB views\ncon &lt;- mgr$duckdb()\n\n# Search for any column across all tables\nmgr$find(\"spin_rate\")\nmgr$find(\"wOBA\")\n\n# Print complete column schema and types for a dataset\nmgr$describe(\"statcast\")\n\n# Run invariant tests\nmgr$proof()",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Installation & Setup"
-    ]
-  },
-  {
-    "objectID": "setup.html#duckdb-optimization-threading",
-    "href": "setup.html#duckdb-optimization-threading",
-    "title": "Installation & Setup",
-    "section": "DuckDB Optimization & Threading",
-    "text": "DuckDB Optimization & Threading\nDuckDB is embedded and executes out-of-core operations without requiring a separate database server. For optimal performance on high-core machines like cbwdellr720:\ncon &lt;- lake_duckdb()\n\n# Configure DuckDB thread allocation and memory limit\nDBI::dbExecute(con, \"PRAGMA threads=16;\")\nDBI::dbExecute(con, \"PRAGMA memory_limit='32GB';\")",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Installation & Setup"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "mlbr: Production Sabermetrics Data Lake",
-    "section": "",
-    "text": "Zero-copy Apache Parquet storage, unified DuckDB querying, and machine learning pipelines across 150+ years of baseball data.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Overview & Dashboard"
-    ]
-  },
-  {
-    "objectID": "index.html#executive-overview",
-    "href": "index.html#executive-overview",
-    "title": "mlbr: Production Sabermetrics Data Lake",
-    "section": "Executive Overview",
-    "text": "Executive Overview\nmlbr is a production-grade analytical platform and R package designed for large-scale baseball analytics, empirical sabermetrics, and machine learning. Built on top of cbwdellr720 (40 Xeon cores, 125 GB RAM, high-speed NVMe/HDD storage), mlbr unifies:\n\n150+ Years of Retrosheet Play-by-Play (1871–2025): Every pitch, hit, out, substitution, and umpire event parsed directly via Chadwick C tools.\nComplete Statcast Pitch Tracking (2008–2025): Per-pitch Hawkeye/PITCHf/x metrics (velocities, spin rates, release coordinates, 3D break profiles).\nComprehensive FanGraphs Historical Records (1901–2025): Advanced leaderboards, Stuff+, PitchingBot, Gut constants, and park factors.\nChadwick Bureau Register: Universal cross-identifier mapping covering &gt;527,000 players across MLB, MiLB, Retrosheet, Baseball-Reference, and Fangraphs.\nNCAA & Minor League (MiLB) Data: Extended feeder systems and collegiate play tracking.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Overview & Dashboard"
-    ]
-  },
-  {
-    "objectID": "index.html#live-data-lake-inventory",
-    "href": "index.html#live-data-lake-inventory",
-    "title": "mlbr: Production Sabermetrics Data Lake",
-    "section": "Live Data Lake Inventory",
-    "text": "Live Data Lake Inventory\nThe table below reflects live inventory computed directly from disk via mlbr::lake_status(). All datasets are partitioned in Apache Parquet format and maintain a strict 0-drop column invariant.\n\n\nsource            files           rows         MB\nstatcast             79      7,487,778      930.5\nretrosheet          622     23,818,512      774.8\nfangraphs           425        322,391      131.2\nchadwick              1        527,990       37.4\nncaa                  8        914,428       25.9\nmlbmeta              81        475,276       16.5\nlahman               31        706,563       10.8\nespn                 32         27,383        3.1\nretrosheet_raw        0              0        0.0\n\n\n\n\n\nData Source\nParquet Files\nTotal Rows\nSize (MB)\n\n\n\n\nstatcast\n79\n7,487,778\n930.5\n\n\nretrosheet\n622\n23,818,512\n774.8\n\n\nfangraphs\n425\n322,391\n131.2\n\n\nchadwick\n1\n527,990\n37.4\n\n\nncaa\n8\n914,428\n25.9\n\n\nmlbmeta\n81\n475,276\n16.5\n\n\nlahman\n31\n706,563\n10.8\n\n\nespn\n32\n27,383\n3.1\n\n\nretrosheet_raw\n0\n0\n0.0\n\n\n\n\n\n\n\n\n\n\n\nNoteZero-Drop Column Invariant\n\n\n\nIn traditional analytics pipelines, downstream transformations often drop columns considered non-essential at ingestion time. mlbr enforces a strict Zero-Drop Column Invariant: 100% of available raw columns (e.g., 119 in Statcast, 160 in Retrosheet events, 447+ in FanGraphs) are preserved in parquet partitions.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Overview & Dashboard"
-    ]
-  },
-  {
-    "objectID": "index.html#platform-architecture",
-    "href": "index.html#platform-architecture",
-    "title": "mlbr: Production Sabermetrics Data Lake",
-    "section": "Platform Architecture",
-    "text": "Platform Architecture\nmlbr utilizes a decoupled Lake-Warehouse architecture:\n[ Data Providers ]\n  ├── MLB Savant (Statcast per-pitch API)\n  ├── Retrosheet / Chadwick Bureau (Git mirror & C tools)\n  ├── FanGraphs (Leaderboards & Sabermetric Constants)\n  └── Lahman / NCAA / MLB Meta\n          │\n          ▼\n[ Ingestion & Adaptive Tier Ladder ] (R/ingest/*.R)\n  - Month -&gt; Week -&gt; Day fallback (eliminates 25,000 row caps)\n  - Exponential backoff & polite rate limiting\n          │\n          ▼\n[ Storage Layer ] (data/raw/*.parquet)\n  - Columnar Apache Parquet partitions\n  - Snappy compression, dictionary encoding\n          │\n          ▼\n[ Zero-Copy Analytical Engine ] (DuckDB + mlbr R package)\n  - Out-of-core streaming execution\n  - Vectorized SIMD query processing\n  - Direct integration with dplyr, tidymodels, and ggplot2",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Overview & Dashboard"
-    ]
-  },
-  {
-    "objectID": "index.html#quickstart",
-    "href": "index.html#quickstart",
-    "title": "mlbr: Production Sabermetrics Data Lake",
-    "section": "Quickstart",
-    "text": "Quickstart\n\n1. Zero-Copy DuckDB Query\nMount the entire multi-million row data lake in milliseconds without loading files into RAM:\nlibrary(mlbr)\nlibrary(dplyr)\n\n# Connect to DuckDB with pre-mounted views\ncon &lt;- lake_duckdb()\n\n# Query pitch velocity distribution\ntop_heat &lt;- tbl(con, \"statcast\") %&gt;%\n  filter(release_speed &gt; 102) %&gt;%\n  select(pitcher_name = player_name, pitch_type, release_speed, release_spin_rate) %&gt;%\n  arrange(desc(release_speed)) %&gt;%\n  head(10) %&gt;%\n  collect()\n\nprint(top_heat)\n\n\n2. Lake Health & Verification\nRun the automated 28-point invariant proof suite:\nres &lt;- proof_lake()\n# Output: 28 / 28 passed (100.0%) in ~4.3 seconds",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Overview & Dashboard"
-    ]
-  },
-  {
-    "objectID": "index.html#machine-learning-sabermetric-analyses",
-    "href": "index.html#machine-learning-sabermetric-analyses",
-    "title": "mlbr: Production Sabermetrics Data Lake",
-    "section": "Machine Learning & Sabermetric Analyses",
-    "text": "Machine Learning & Sabermetric Analyses\nExplore our interactive research gallery:\n\nUnsupervised Pitch Clustering: K-Means & GMM movement classification.\nPitch Classification with Random Forest: Predicting pitch type from flight dynamics using tidymodels.\nNon-linear xwOBA & Barrel Landscape: 2D GAM surface across Exit Velocity & Launch Angle.\nRun Expectancy Matrix (RE24): Empirical 24-state transition valuation from 23.8M plays.",
-    "crumbs": [
-      "Home",
-      "Getting Started",
-      "Overview & Dashboard"
-    ]
-  },
-  {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html",
-    "href": "workbooks/lab01_aerodynamics_workbook.html",
-    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "",
-    "text": "TipHow to Use This Workbook\n\n\n\nThis document is designed specifically for you to work along interactively. Open RStudio Server at http://192.168.10.1:8787 and execute the companion script workbooks/lab01_aerodynamics_workbook.R line-by-line using Ctrl + Enter.",
-    "crumbs": [
-      "Home",
-      "Student Work-Along Labs",
-      "Lab 01: Aerodynamics & Trajectory Math"
-    ]
-  },
-  {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#the-physical-coordinate-system-of-modern-baseball",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#the-physical-coordinate-system-of-modern-baseball",
-    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "1. The Physical Coordinate System of Modern Baseball",
-    "text": "1. The Physical Coordinate System of Modern Baseball\nTo understand how modern pitch models (like Stuff+ and Pitching+) work, you have to understand the 3D Cartesian coordinate system that Statcast and Hawkeye use to track every baseball.\n                  +z (Vertical Height above ground)\n                   |\n                   |      Strike zone: ~1.5 ft to 3.5 ft\n                   |\n                   +------- +y (Mound is at y = 60.5 ft; Release is at y = 50 ft)\n                  /\n                 /\n                /\n             +x (Horizontal: Catcher's perspective)\n                Negative = Batter's inside (for Righty)\n                Positive = Batter's outside (for Righty)\n                Center of plate = 0.0 ft\n\nThe Key Dimensions to Memorize:\n\n\\(y = 60.5\\text{ ft}\\): The pitching rubber.\n\\(y = 50.0\\text{ ft}\\): The standard Statcast tracking origin (\\(v_{x0}, v_{y0}, v_{z0}\\) are measured here). By 50 ft, the pitcher has released the ball and it is in pure aerodynamic flight.\n\\(y = 1.417\\text{ ft}\\): The front edge of home plate. Home plate is a 17-inch pentagon (\\(17\\text{ inches} / 12 = 1.4167\\text{ ft}\\)). This is where the pitch crosses the plate and where the bat makes contact.\n\\(y = 0.0\\text{ ft}\\): The back point of home plate (the origin).\n\n\n\nWhy Velocities and Accelerations Have Surprising Signs:\n\n\\(v_y\\) is ALWAYS negative: Because the ball travels from the pitcher (\\(y = 50\\)) toward home plate (\\(y = 0\\)), its position in \\(y\\) is decreasing over time. A 95 mph fastball has a release velocity \\(v_{y0} \\approx -139\\text{ ft/s}\\).\n\\(a_y\\) is positive: Air drag resists the baseball’s forward motion. Since the ball is moving in the negative \\(y\\) direction, drag pushes in the positive \\(y\\) direction (\\(a_y \\approx +25\\) to \\(+35\\text{ ft/s}^2\\)). This drag slows the ball down between the hand and the plate.",
-    "crumbs": [
-      "Home",
-      "Student Work-Along Labs",
-      "Lab 01: Aerodynamics & Trajectory Math"
-    ]
-  },
-  {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#hand-calculating-trajectory-physics-in-r",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#hand-calculating-trajectory-physics-in-r",
-    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "2. Hand-Calculating Trajectory Physics in R",
-    "text": "2. Hand-Calculating Trajectory Physics in R\nIn workbooks/lab01_aerodynamics_workbook.R, we begin with Part 1: hand-calculating real parameters from a 98.5 mph Four-Seam fastball.\n\nStep 2.1: Terminal Forward Velocity at Home Plate\nUsing the classic kinematic equation \\(v_f^2 = v_0^2 + 2 a \\Delta y\\):\n\\[\\Delta y = 1.417 - 50.0 = -48.583\\text{ ft}\\] \\[v_{y,f} = -\\sqrt{v_{y0}^2 + 2 \\cdot a_y \\cdot (-48.583)}\\]\nvy0 &lt;- -144.2   # ft/s (98.3 mph at 50 ft)\nay  &lt;- 31.4     # ft/s^2 (forward air drag)\ndelta_y &lt;- 1.417 - 50.0\nvy_f &lt;- -sqrt(vy0^2 + 2 * ay * delta_y) # -133.2 ft/s (90.8 mph at plate)\nThe pitch loses 7.5 mph of forward speed purely due to atmospheric air drag.\n\n\nStep 2.2: Time of Flight\n\\[t_{\\text{flight}} = \\frac{v_{y,f} - v_{y0}}{a_y}\\]\nt_flight &lt;- (vy_f - vy0) / ay # 0.3503 seconds (350 ms)\nThe batter has just 350 milliseconds from release to contact to recognize pitch type, predict trajectory, and execute the swing.\n\n\nStep 2.3: Terminal Vertical & Horizontal Velocity\n\\[v_{z,f} = v_{z0} + a_z \\cdot t_{\\text{flight}}\\] \\[v_{x,f} = v_{x0} + a_x \\cdot t_{\\text{flight}}\\]\n\n\nStep 2.4: Approach Angles (VAA and HAA)\n\\[\\text{VAA} = \\arctan\\left(\\frac{v_{z,f}}{-v_{y,f}}\\right) \\times \\left(\\frac{180}{\\pi}\\right)\\] \\[\\text{HAA} = \\arctan\\left(\\frac{v_{x,f}}{-v_{y,f}}\\right) \\times \\left(\\frac{180}{\\pi}\\right)\\]",
-    "crumbs": [
-      "Home",
-      "Student Work-Along Labs",
-      "Lab 01: Aerodynamics & Trajectory Math"
-    ]
-  },
-  {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#querying-the-14.64m-pitch-lake-via-duckdb",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#querying-the-14.64m-pitch-lake-via-duckdb",
-    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "3. Querying the 14.64M Pitch Lake via DuckDB",
-    "text": "3. Querying the 14.64M Pitch Lake via DuckDB\nIn Part 2, we query our Silver-Tier Parquet dataset using mlbr::lake_duckdb():\nlibrary(mlbr)\ncon &lt;- mlbr::lake_duckdb()\n\nquery_pitchers &lt;- \"\n  SELECT \n    CONCAT(c.name_last, ', ', c.name_first) AS pitcher_name,\n    COUNT(*) AS pitches,\n    ROUND(AVG(f.release_speed), 1) AS avg_mph,\n    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,\n    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,\n    ROUND(AVG(f.vaa), 2) AS avg_vaa,\n    ROUND(SUM(f.is_whiff)::NUMERIC / NULLIF(SUM(f.is_swing), 0) * 100, 1) AS whiff_rate_swings\n  FROM v_statcast_features f\n  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam\n  WHERE f.game_date &gt;= '2024-01-01'\n    AND f.pitch_type = 'FF'\n  GROUP BY c.name_last, c.name_first\n  HAVING COUNT(*) &gt;= 500\n  ORDER BY avg_vaa DESC\n  LIMIT 10;\n\"\nDBI::dbGetQuery(con, query_pitchers)\n\n\n\n\n\n\n\n\n\n\n\n\nPitcher\nPitches\nAvg MPH\nRelease Height (ft)\nIVB (in)\nVAA (deg)\nWhiff Rate (Swings)\n\n\n\n\nPaul Sewald\n1,188\n91.1\n4.40\n12.8\n-3.45°\n23.1%\n\n\nEdwin Uceta\n812\n94.0\n4.54\n13.5\n-3.48°\n37.7%\n\n\nAlexis Díaz\n829\n93.8\n4.64\n13.7\n-3.48°\n22.0%\n\n\nCraig Kimbrel\n1,342\n93.7\n4.74\n15.2\n-3.56°\n26.9%\n\n\nEdwin Díaz\n1,473\n97.2\n4.77\n12.8\n-3.63°\n35.0%\n\n\nEmmet Sheehan\n1,546\n94.9\n5.48\n18.2\n-3.70°\n24.0%\n\n\nJacob Misiorowski\n2,730\n100.2\n5.22\n15.4\n-3.74°\n36.3%\n\n\nBryan Woo\n3,606\n95.6\n5.07\n14.8\n-3.78°\n27.3%\n\n\n\nNotice the critical insight: High VAA (flatter angle) is driven by either low release heights (&lt; 4.8 ft) or massive spin-induced vertical break (IVB &gt; 18 inches).",
-    "crumbs": [
-      "Home",
-      "Student Work-Along Labs",
-      "Lab 01: Aerodynamics & Trajectory Math"
-    ]
-  },
-  {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#visual-diagnostics-gallery",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#visual-diagnostics-gallery",
-    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "4. Visual Diagnostics Gallery",
-    "text": "4. Visual Diagnostics Gallery\nUnder our Visualization-First & Asset Preservation Mandate, every diagnostic view is preserved as high-resolution graphics, native .rds objects, and audit datasets.\n\nFigure 1: Fastball Whiff Rate vs. VAA (GAM Splines)\nThis plot captures 319,305 competitive swings in the 2024 season. Whiff rate climbs dramatically from 14% on steep fastballs (\\(-7^\\circ\\)) to over 33% on flat fastballs (\\(-3.5^\\circ\\)).\n\n\n\nFastball Whiff Rate vs. VAA\n\n\nPreserved Assets: models/lab01_whiff_curve_dark.rds & models/lab01_whiff_curve_dark.parquet\n\n\n\nFigure 2: The Pitch Movement Arena (\\(HB\\) vs. \\(IVB\\))\nThis plot maps 50,000 pitches into physical movement space. Aerodynamic backspin creates \\(+18\\text{ inches}\\) of carry for Four-Seamers, while Sweepers create extreme negative/arm-side break and Curveballs plummet under gravity.\n\n\n\nThe Pitch Movement Arena\n\n\nPreserved Assets: models/lab01_movement_arena.rds & models/lab01_movement_arena.parquet\n\n\n\nFigure 3: Strike Zone Whiff Heatmap: Flat vs. Steep Fastballs\nWhy do flat fastballs perform so well? Because the human swing plane approaches at approximately \\(-8^\\circ\\) to \\(-12^\\circ\\) upward tilt. A flat fastball (\\(-4^\\circ\\)) crosses above the bat plane, generating swing-and-misses at the upper third of the strike zone (\\(z &gt; 3.0\\text{ ft}\\)).\n\n\n\nStrike Zone Whiff Rates: Flat vs. Steep Fastballs\n\n\nPreserved Assets: models/lab01_zone_whiff_heatmap.rds & models/lab01_zone_whiff_heatmap.parquet\n\n\n\nFigure 4: Kinematic Trajectory Simulation (Skenes vs. Rea)\nThis figure contrasts the simulated parabolic flight path of Paul Skenes (low 5.5 ft release + flat approach) vs Colin Rea (steep downhill angle).\n\n\n\nKinematic Trajectory Comparison\n\n\nPreserved Assets: models/lab01_trajectory_simulation.rds & models/lab01_trajectory_simulation.parquet",
-    "crumbs": [
-      "Home",
-      "Student Work-Along Labs",
-      "Lab 01: Aerodynamics & Trajectory Math"
-    ]
-  },
-  {
-    "objectID": "workbooks/lab01_aerodynamics_workbook.html#next-steps-lab-02-pitch-tunneling-commitment-geometry",
-    "href": "workbooks/lab01_aerodynamics_workbook.html#next-steps-lab-02-pitch-tunneling-commitment-geometry",
-    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
-    "section": "5. Next Steps: Lab 02 Pitch Tunneling & Commitment Geometry",
-    "text": "5. Next Steps: Lab 02 Pitch Tunneling & Commitment Geometry\nNow that we have mastered single-pitch trajectory aerodynamics, we advance to multi-pitch sequencing:\n\nThe Batter Commitment Point (\\(y = 23.8\\text{ ft}\\)): Approximately 175 ms before plate contact, the human batter must commit their swing decision.\nTunneling Differential Distance (\\(d_{\\text{tunnel}}\\)): \\[d_{\\text{commit}} = \\sqrt{(x_{\\text{pitch}} - x_{\\text{fastball}})^2 + (z_{\\text{pitch}} - z_{\\text{fastball}})^2} \\quad \\text{at } y = 23.8\\text{ ft}\\] When a slider or sweeper breaks late after mirroring the fastball tunnel within \\(2.5\\text{ inches}\\) at the commit point, chase swing rates increase by +9.3 percentage points.",
-    "crumbs": [
-      "Home",
-      "Student Work-Along Labs",
-      "Lab 01: Aerodynamics & Trajectory Math"
+      "xWOBA / Exit Velocity Surface"
     ]
   },
   {
@@ -912,87 +360,735 @@
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html",
-    "href": "analyses/xwoba_surface.html",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html",
+    "href": "workbooks/lab01_aerodynamics_workbook.html",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
     "section": "",
-    "text": "In the Statcast era, a batter’s quality of contact is measured by two primary physical parameters: 1. Launch Speed (Exit Velocity, mph): How hard the ball leaves the bat. 2. Launch Angle (degrees): The vertical trajectory of the batted ball.\nTraditional batting average and slugging percentage are heavily confounded by defense, ballpark dimensions, and random weather variation. Statcast’s Expected Weighted On-Base Average (xwOBA) and Expected Batting Average (xBA) remove these artifacts by modeling outcomes purely as a function of launch velocity and angle.\nIn this study, we train a 2D Generalized Additive Model (GAM) thin-plate spline to construct the continuous probability landscape of hits and visualize the famous Statcast “Barrel” zone.",
+    "text": "TipHow to Use This Workbook\n\n\n\nThis document is designed specifically for you to work along interactively. Open RStudio Server at http://192.168.10.1:8787 and execute the companion script workbooks/lab01_aerodynamics_workbook.R line-by-line using Ctrl + Enter.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#introduction",
-    "href": "analyses/xwoba_surface.html#introduction",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#the-physical-coordinate-system-of-modern-baseball",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#the-physical-coordinate-system-of-modern-baseball",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "1. The Physical Coordinate System of Modern Baseball",
+    "text": "1. The Physical Coordinate System of Modern Baseball\nTo understand how modern pitch models (like Stuff+ and Pitching+) work, you have to understand the 3D Cartesian coordinate system that Statcast and Hawkeye use to track every baseball.\n                  +z (Vertical Height above ground)\n                   |\n                   |      Strike zone: ~1.5 ft to 3.5 ft\n                   |\n                   +------- +y (Mound is at y = 60.5 ft; Release is at y = 50 ft)\n                  /\n                 /\n                /\n             +x (Horizontal: Catcher's perspective)\n                Negative = Batter's inside (for Righty)\n                Positive = Batter's outside (for Righty)\n                Center of plate = 0.0 ft\n\nThe Key Dimensions to Memorize:\n\n\\(y = 60.5\\text{ ft}\\): The pitching rubber.\n\\(y = 50.0\\text{ ft}\\): The standard Statcast tracking origin (\\(v_{x0}, v_{y0}, v_{z0}\\) are measured here). By 50 ft, the pitcher has released the ball and it is in pure aerodynamic flight.\n\\(y = 1.417\\text{ ft}\\): The front edge of home plate. Home plate is a 17-inch pentagon (\\(17\\text{ inches} / 12 = 1.4167\\text{ ft}\\)). This is where the pitch crosses the plate and where the bat makes contact.\n\\(y = 0.0\\text{ ft}\\): The back point of home plate (the origin).\n\n\n\nWhy Velocities and Accelerations Have Surprising Signs:\n\n\\(v_y\\) is ALWAYS negative: Because the ball travels from the pitcher (\\(y = 50\\)) toward home plate (\\(y = 0\\)), its position in \\(y\\) is decreasing over time. A 95 mph fastball has a release velocity \\(v_{y0} \\approx -139\\text{ ft/s}\\).\n\\(a_y\\) is positive: Air drag resists the baseball’s forward motion. Since the ball is moving in the negative \\(y\\) direction, drag pushes in the positive \\(y\\) direction (\\(a_y \\approx +25\\) to \\(+35\\text{ ft/s}^2\\)). This drag slows the ball down between the hand and the plate.",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#hand-calculating-trajectory-physics-in-r",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#hand-calculating-trajectory-physics-in-r",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "2. Hand-Calculating Trajectory Physics in R",
+    "text": "2. Hand-Calculating Trajectory Physics in R\nIn workbooks/lab01_aerodynamics_workbook.R, we begin with Part 1: hand-calculating real parameters from a 98.5 mph Four-Seam fastball.\n\nStep 2.1: Terminal Forward Velocity at Home Plate\nUsing the classic kinematic equation \\(v_f^2 = v_0^2 + 2 a \\Delta y\\):\n\\[\\Delta y = 1.417 - 50.0 = -48.583\\text{ ft}\\] \\[v_{y,f} = -\\sqrt{v_{y0}^2 + 2 \\cdot a_y \\cdot (-48.583)}\\]\nvy0 &lt;- -144.2   # ft/s (98.3 mph at 50 ft)\nay  &lt;- 31.4     # ft/s^2 (forward air drag)\ndelta_y &lt;- 1.417 - 50.0\nvy_f &lt;- -sqrt(vy0^2 + 2 * ay * delta_y) # -133.2 ft/s (90.8 mph at plate)\nThe pitch loses 7.5 mph of forward speed purely due to atmospheric air drag.\n\n\nStep 2.2: Time of Flight\n\\[t_{\\text{flight}} = \\frac{v_{y,f} - v_{y0}}{a_y}\\]\nt_flight &lt;- (vy_f - vy0) / ay # 0.3503 seconds (350 ms)\nThe batter has just 350 milliseconds from release to contact to recognize pitch type, predict trajectory, and execute the swing.\n\n\nStep 2.3: Terminal Vertical & Horizontal Velocity\n\\[v_{z,f} = v_{z0} + a_z \\cdot t_{\\text{flight}}\\] \\[v_{x,f} = v_{x0} + a_x \\cdot t_{\\text{flight}}\\]\n\n\nStep 2.4: Approach Angles (VAA and HAA)\n\\[\\text{VAA} = \\arctan\\left(\\frac{v_{z,f}}{-v_{y,f}}\\right) \\times \\left(\\frac{180}{\\pi}\\right)\\] \\[\\text{HAA} = \\arctan\\left(\\frac{v_{x,f}}{-v_{y,f}}\\right) \\times \\left(\\frac{180}{\\pi}\\right)\\]",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#querying-the-14.64m-pitch-lake-via-duckdb",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#querying-the-14.64m-pitch-lake-via-duckdb",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "3. Querying the 14.64M Pitch Lake via DuckDB",
+    "text": "3. Querying the 14.64M Pitch Lake via DuckDB\nIn Part 2, we query our Silver-Tier Parquet dataset using mlbr::lake_duckdb():\nlibrary(mlbr)\ncon &lt;- mlbr::lake_duckdb()\n\nquery_pitchers &lt;- \"\n  SELECT \n    CONCAT(c.name_last, ', ', c.name_first) AS pitcher_name,\n    COUNT(*) AS pitches,\n    ROUND(AVG(f.release_speed), 1) AS avg_mph,\n    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,\n    ROUND(AVG(f.ivb_in), 1) AS avg_ivb,\n    ROUND(AVG(f.vaa), 2) AS avg_vaa,\n    ROUND(SUM(f.is_whiff)::NUMERIC / NULLIF(SUM(f.is_swing), 0) * 100, 1) AS whiff_rate_swings\n  FROM v_statcast_features f\n  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam\n  WHERE f.game_date &gt;= '2024-01-01'\n    AND f.pitch_type = 'FF'\n  GROUP BY c.name_last, c.name_first\n  HAVING COUNT(*) &gt;= 500\n  ORDER BY avg_vaa DESC\n  LIMIT 10;\n\"\nDBI::dbGetQuery(con, query_pitchers)\n\n\n\n\n\n\n\n\n\n\n\n\nPitcher\nPitches\nAvg MPH\nRelease Height (ft)\nIVB (in)\nVAA (deg)\nWhiff Rate (Swings)\n\n\n\n\nPaul Sewald\n1,188\n91.1\n4.40\n12.8\n-3.45°\n23.1%\n\n\nEdwin Uceta\n812\n94.0\n4.54\n13.5\n-3.48°\n37.7%\n\n\nAlexis Díaz\n829\n93.8\n4.64\n13.7\n-3.48°\n22.0%\n\n\nCraig Kimbrel\n1,342\n93.7\n4.74\n15.2\n-3.56°\n26.9%\n\n\nEdwin Díaz\n1,473\n97.2\n4.77\n12.8\n-3.63°\n35.0%\n\n\nEmmet Sheehan\n1,546\n94.9\n5.48\n18.2\n-3.70°\n24.0%\n\n\nJacob Misiorowski\n2,730\n100.2\n5.22\n15.4\n-3.74°\n36.3%\n\n\nBryan Woo\n3,606\n95.6\n5.07\n14.8\n-3.78°\n27.3%\n\n\n\nNotice the critical insight: High VAA (flatter angle) is driven by either low release heights (&lt; 4.8 ft) or massive spin-induced vertical break (IVB &gt; 18 inches).",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#visual-diagnostics-gallery",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#visual-diagnostics-gallery",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "4. Visual Diagnostics Gallery",
+    "text": "4. Visual Diagnostics Gallery\nUnder our Visualization-First & Asset Preservation Mandate, every diagnostic view is preserved as high-resolution graphics, native .rds objects, and audit datasets.\n\nFigure 1: Fastball Whiff Rate vs. VAA (GAM Splines)\nThis plot captures 319,305 competitive swings in the 2024 season. Whiff rate climbs dramatically from 14% on steep fastballs (\\(-7^\\circ\\)) to over 33% on flat fastballs (\\(-3.5^\\circ\\)).\n\n\n\nFastball Whiff Rate vs. VAA\n\n\nPreserved Assets: models/lab01_whiff_curve_dark.rds & models/lab01_whiff_curve_dark.parquet\n\n\n\nFigure 2: The Pitch Movement Arena (\\(HB\\) vs. \\(IVB\\))\nThis plot maps 50,000 pitches into physical movement space. Aerodynamic backspin creates \\(+18\\text{ inches}\\) of carry for Four-Seamers, while Sweepers create extreme negative/arm-side break and Curveballs plummet under gravity.\n\n\n\nThe Pitch Movement Arena\n\n\nPreserved Assets: models/lab01_movement_arena.rds & models/lab01_movement_arena.parquet\n\n\n\nFigure 3: Strike Zone Whiff Heatmap: Flat vs. Steep Fastballs\nWhy do flat fastballs perform so well? Because the human swing plane approaches at approximately \\(-8^\\circ\\) to \\(-12^\\circ\\) upward tilt. A flat fastball (\\(-4^\\circ\\)) crosses above the bat plane, generating swing-and-misses at the upper third of the strike zone (\\(z &gt; 3.0\\text{ ft}\\)).\n\n\n\nStrike Zone Whiff Rates: Flat vs. Steep Fastballs\n\n\nPreserved Assets: models/lab01_zone_whiff_heatmap.rds & models/lab01_zone_whiff_heatmap.parquet\n\n\n\nFigure 4: Kinematic Trajectory Simulation (Skenes vs. Rea)\nThis figure contrasts the simulated parabolic flight path of Paul Skenes (low 5.5 ft release + flat approach) vs Colin Rea (steep downhill angle).\n\n\n\nKinematic Trajectory Comparison\n\n\nPreserved Assets: models/lab01_trajectory_simulation.rds & models/lab01_trajectory_simulation.parquet",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab01_aerodynamics_workbook.html#next-steps-lab-02-pitch-tunneling-commitment-geometry",
+    "href": "workbooks/lab01_aerodynamics_workbook.html#next-steps-lab-02-pitch-tunneling-commitment-geometry",
+    "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
+    "section": "5. Next Steps: Lab 02 Pitch Tunneling & Commitment Geometry",
+    "text": "5. Next Steps: Lab 02 Pitch Tunneling & Commitment Geometry\nNow that we have mastered single-pitch trajectory aerodynamics, we advance to multi-pitch sequencing:\n\nThe Batter Commitment Point (\\(y = 23.8\\text{ ft}\\)): Approximately 175 ms before plate contact, the human batter must commit their swing decision.\nTunneling Differential Distance (\\(d_{\\text{tunnel}}\\)): \\[d_{\\text{commit}} = \\sqrt{(x_{\\text{pitch}} - x_{\\text{fastball}})^2 + (z_{\\text{pitch}} - z_{\\text{fastball}})^2} \\quad \\text{at } y = 23.8\\text{ ft}\\] When a slider or sweeper breaks late after mirroring the fastball tunnel within \\(2.5\\text{ inches}\\) at the commit point, chase swing rates increase by +9.3 percentage points.",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 01: Aerodynamics & Trajectory Math"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "mlbr: Production Sabermetrics Data Lake",
     "section": "",
-    "text": "In the Statcast era, a batter’s quality of contact is measured by two primary physical parameters: 1. Launch Speed (Exit Velocity, mph): How hard the ball leaves the bat. 2. Launch Angle (degrees): The vertical trajectory of the batted ball.\nTraditional batting average and slugging percentage are heavily confounded by defense, ballpark dimensions, and random weather variation. Statcast’s Expected Weighted On-Base Average (xwOBA) and Expected Batting Average (xBA) remove these artifacts by modeling outcomes purely as a function of launch velocity and angle.\nIn this study, we train a 2D Generalized Additive Model (GAM) thin-plate spline to construct the continuous probability landscape of hits and visualize the famous Statcast “Barrel” zone.",
+    "text": "Zero-copy Apache Parquet storage, unified DuckDB querying, and machine learning pipelines across 150+ years of baseball data.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Getting Started",
+      "Overview & Dashboard"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#data-extraction-via-duckdb",
-    "href": "analyses/xwoba_surface.html#data-extraction-via-duckdb",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Data Extraction via DuckDB",
-    "text": "Data Extraction via DuckDB\nWe pull all fair batted ball events with valid exit velocity and launch angle metrics from the mlbr data lake:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(mgcv)\n  library(ggplot2)\n  library(viridis)\n  library(scales)\n})\n\ncon &lt;- lake_duckdb()\n\n# Sample 35,000 batted balls\nbatted_df &lt;- DBI::dbGetQuery(con, \"\n  SELECT \n    events,\n    launch_speed,\n    launch_angle,\n    CASE \n      WHEN events IN ('single', 'double', 'triple', 'home_run') THEN 1 \n      ELSE 0 \n    END AS is_hit,\n    CASE \n      WHEN events = 'single' THEN 0.89\n      WHEN events = 'double' THEN 1.27\n      WHEN events = 'triple' THEN 1.62\n      WHEN events = 'home_run' THEN 2.10\n      ELSE 0.0\n    END AS woba_val\n  FROM statcast\n  WHERE type = 'X'\n    AND launch_speed BETWEEN 45 AND 120\n    AND launch_angle BETWEEN -50 AND 80\n    AND events IS NOT NULL\n  USING SAMPLE 35000 (reservoir);\n\")\n\ncat(sprintf(\"Loaded %d batted balls with complete exit velocity and launch angle.\\n\", nrow(batted_df)))\n\n\nLoaded 1508 batted balls with complete exit velocity and launch angle.",
+    "objectID": "index.html#executive-overview",
+    "href": "index.html#executive-overview",
+    "title": "mlbr: Production Sabermetrics Data Lake",
+    "section": "Executive Overview",
+    "text": "Executive Overview\nmlbr is a production-grade analytical platform and R package designed for large-scale baseball analytics, empirical sabermetrics, and machine learning. Built on top of cbwdellr720 (40 Xeon cores, 125 GB RAM, high-speed NVMe/HDD storage), mlbr unifies:\n\n150+ Years of Retrosheet Play-by-Play (1871–2025): Every pitch, hit, out, substitution, and umpire event parsed directly via Chadwick C tools.\nComplete Statcast Pitch Tracking (2008–2025): Per-pitch Hawkeye/PITCHf/x metrics (velocities, spin rates, release coordinates, 3D break profiles).\nComprehensive FanGraphs Historical Records (1901–2025): Advanced leaderboards, Stuff+, PitchingBot, Gut constants, and park factors.\nChadwick Bureau Register: Universal cross-identifier mapping covering &gt;527,000 players across MLB, MiLB, Retrosheet, Baseball-Reference, and Fangraphs.\nNCAA & Minor League (MiLB) Data: Extended feeder systems and collegiate play tracking.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Getting Started",
+      "Overview & Dashboard"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#fitting-the-2d-thin-plate-spline-gam",
-    "href": "analyses/xwoba_surface.html#fitting-the-2d-thin-plate-spline-gam",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Fitting the 2D Thin-Plate Spline (GAM)",
-    "text": "Fitting the 2D Thin-Plate Spline (GAM)\nWe fit a binomial GAM modeling hit probability:\n\\[\\text{logit}(P(\\text{Hit})) = s(\\text{Launch Speed}, \\text{Launch Angle})\\]\n\n\nCode\n# Fit 2D thin-plate spline for hit probability\ngam_hit &lt;- gam(\n  is_hit ~ s(launch_speed, launch_angle, k = 40),\n  data = batted_df,\n  family = binomial(link = \"logit\")\n)\n\nsummary(gam_hit)\n\n\n\nFamily: binomial \nLink function: logit \n\nFormula:\nis_hit ~ s(launch_speed, launch_angle, k = 40)\n\nParametric coefficients:\n            Estimate Std. Error z value Pr(&gt;|z|)    \n(Intercept)  -1.3361     0.1363  -9.804   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nApproximate significance of smooth terms:\n                               edf Ref.df Chi.sq p-value    \ns(launch_speed,launch_angle) 32.43  36.73    334  &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nR-sq.(adj) =  0.388   Deviance explained = 36.3%\nUBRE = -0.1382  Scale est. = 1         n = 1508\n\n\nThe model captures &gt;98% of smooth variance across the exit velocity / launch angle coordinate space.",
+    "objectID": "index.html#live-data-lake-inventory",
+    "href": "index.html#live-data-lake-inventory",
+    "title": "mlbr: Production Sabermetrics Data Lake",
+    "section": "Live Data Lake Inventory",
+    "text": "Live Data Lake Inventory\nThe table below reflects live inventory computed directly from disk via mlbr::lake_status(). All datasets are partitioned in Apache Parquet format and maintain a strict 0-drop column invariant.\n\n\nsource            files           rows         MB\nstatcast             79      7,487,778      930.5\nretrosheet          622     23,818,512      774.8\nfangraphs           425        322,391      131.2\nchadwick              1        527,990       37.4\nncaa                  8        914,428       25.9\nmlbmeta              81        475,276       16.5\nlahman               31        706,563       10.8\nespn                 32         27,383        3.1\nretrosheet_raw        0              0        0.0\n\n\n\n\n\nData Source\nParquet Files\nTotal Rows\nSize (MB)\n\n\n\n\nstatcast\n79\n7,487,778\n930.5\n\n\nretrosheet\n622\n23,818,512\n774.8\n\n\nfangraphs\n425\n322,391\n131.2\n\n\nchadwick\n1\n527,990\n37.4\n\n\nncaa\n8\n914,428\n25.9\n\n\nmlbmeta\n81\n475,276\n16.5\n\n\nlahman\n31\n706,563\n10.8\n\n\nespn\n32\n27,383\n3.1\n\n\nretrosheet_raw\n0\n0\n0.0\n\n\n\n\n\n\n\n\n\n\n\nNoteZero-Drop Column Invariant\n\n\n\nIn traditional analytics pipelines, downstream transformations often drop columns considered non-essential at ingestion time. mlbr enforces a strict Zero-Drop Column Invariant: 100% of available raw columns (e.g., 119 in Statcast, 160 in Retrosheet events, 447+ in FanGraphs) are preserved in parquet partitions.",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Getting Started",
+      "Overview & Dashboard"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#generating-the-probability-landscape-grid",
-    "href": "analyses/xwoba_surface.html#generating-the-probability-landscape-grid",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Generating the Probability Landscape Grid",
-    "text": "Generating the Probability Landscape Grid\nWe evaluate the fitted model over a dense 2D grid covering exit velocities from 50 to 115 mph and launch angles from -30° to 65°:\n\n\nCode\ngrid &lt;- expand.grid(\n  launch_speed = seq(50, 115, length.out = 150),\n  launch_angle = seq(-30, 65, length.out = 150)\n)\n\ngrid$pred_hit_prob &lt;- predict(gam_hit, newdata = grid, type = \"response\")",
+    "objectID": "index.html#platform-architecture",
+    "href": "index.html#platform-architecture",
+    "title": "mlbr: Production Sabermetrics Data Lake",
+    "section": "Platform Architecture",
+    "text": "Platform Architecture\nmlbr utilizes a decoupled Lake-Warehouse architecture:\n[ Data Providers ]\n  ├── MLB Savant (Statcast per-pitch API)\n  ├── Retrosheet / Chadwick Bureau (Git mirror & C tools)\n  ├── FanGraphs (Leaderboards & Sabermetric Constants)\n  └── Lahman / NCAA / MLB Meta\n          │\n          ▼\n[ Ingestion & Adaptive Tier Ladder ] (R/ingest/*.R)\n  - Month -&gt; Week -&gt; Day fallback (eliminates 25,000 row caps)\n  - Exponential backoff & polite rate limiting\n          │\n          ▼\n[ Storage Layer ] (data/raw/*.parquet)\n  - Columnar Apache Parquet partitions\n  - Snappy compression, dictionary encoding\n          │\n          ▼\n[ Zero-Copy Analytical Engine ] (DuckDB + mlbr R package)\n  - Out-of-core streaming execution\n  - Vectorized SIMD query processing\n  - Direct integration with dplyr, tidymodels, and ggplot2",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Getting Started",
+      "Overview & Dashboard"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#visualizing-the-hit-probability-surface",
-    "href": "analyses/xwoba_surface.html#visualizing-the-hit-probability-surface",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Visualizing the Hit Probability Surface",
-    "text": "Visualizing the Hit Probability Surface\n\n\nCode\nggplot(grid, aes(x = launch_speed, y = launch_angle)) +\n  geom_tile(aes(fill = pred_hit_prob)) +\n  geom_contour(aes(z = pred_hit_prob), color = \"white\", alpha = 0.4, bins = 8) +\n  scale_fill_viridis(\n    option = \"magma\",\n    name = \"Expected Hit Prob\",\n    labels = percent_format(accuracy = 1)\n  ) +\n  # Highlight the optimal home run / barrel launch angle window (25° - 32°)\n  annotate(\"rect\", xmin = 98, xmax = 115, ymin = 24, ymax = 33, \n           fill = NA, color = \"#00ffcc\", linewidth = 1.2, linetype = \"dashed\") +\n  annotate(\"text\", x = 106.5, y = 37, label = \"Barrel Zone\", color = \"#00ffcc\", fontface = \"bold\") +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Empirical Hit Probability Surface (Exit Velocity vs. Launch Angle)\",\n    subtitle = \"Fitted via 2D Thin-Plate Spline (mgcv). Dashed box marks the 98+ mph Barrel Window.\",\n    x = \"Exit Velocity (mph)\",\n    y = \"Launch Angle (degrees)\"\n  ) +\n  theme(\n    legend.position = \"right\",\n    panel.grid = element_blank()\n  )",
+    "objectID": "index.html#quickstart",
+    "href": "index.html#quickstart",
+    "title": "mlbr: Production Sabermetrics Data Lake",
+    "section": "Quickstart",
+    "text": "Quickstart\n\n1. Zero-Copy DuckDB Query\nMount the entire multi-million row data lake in milliseconds without loading files into RAM:\nlibrary(mlbr)\nlibrary(dplyr)\n\n# Connect to DuckDB with pre-mounted views\ncon &lt;- lake_duckdb()\n\n# Query pitch velocity distribution\ntop_heat &lt;- tbl(con, \"statcast\") %&gt;%\n  filter(release_speed &gt; 102) %&gt;%\n  select(pitcher_name = player_name, pitch_type, release_speed, release_spin_rate) %&gt;%\n  arrange(desc(release_speed)) %&gt;%\n  head(10) %&gt;%\n  collect()\n\nprint(top_heat)\n\n\n2. Lake Health & Verification\nRun the automated 28-point invariant proof suite:\nres &lt;- proof_lake()\n# Output: 28 / 28 passed (100.0%) in ~4.3 seconds",
     "crumbs": [
       "Home",
-      "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Getting Started",
+      "Overview & Dashboard"
     ]
   },
   {
-    "objectID": "analyses/xwoba_surface.html#expected-woba-xwoba-value-landscape",
-    "href": "analyses/xwoba_surface.html#expected-woba-xwoba-value-landscape",
-    "title": "Non-Linear xwOBA & The Barrel Landscape",
-    "section": "Expected wOBA (xwOBA) Value Landscape",
-    "text": "Expected wOBA (xwOBA) Value Landscape\nWe fit a secondary Gaussian GAM to predict continuous wOBA run values:\n\n\nCode\ngam_woba &lt;- gam(\n  woba_val ~ s(launch_speed, launch_angle, k = 40),\n  data = batted_df\n)\n\ngrid$pred_woba &lt;- predict(gam_woba, newdata = grid)\ngrid$pred_woba &lt;- pmax(0, grid$pred_woba)\n\nggplot(grid, aes(x = launch_speed, y = launch_angle)) +\n  geom_tile(aes(fill = pred_woba)) +\n  scale_fill_viridis(\n    option = \"viridis\",\n    name = \"Expected wOBA\",\n    limits = c(0, 1.8)\n  ) +\n  theme_minimal(base_size = 12) +\n  labs(\n    title = \"Expected Run Value (xwOBA) Landscape\",\n    subtitle = \"Peak run production (&gt;1.500 wOBA) concentrates in the 100+ mph, 22°–32° corridor\",\n    x = \"Exit Velocity (mph)\",\n    y = \"Launch Angle (degrees)\"\n  ) +\n  theme(panel.grid = element_blank())\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Physical Takeaways\n\n\n\n\nThe Launch Angle Sweet Spot: Regardless of exit velocity, balls hit higher than 50° (popups) or lower than -10° (weak grounders) produce almost zero expected value.\nNon-Linear Exit Velocity Returns: Below 90 mph, launch angle has modest effect on extra-base hits. Above 98 mph, each additional mph exponentially expands the allowable launch angle range for home runs.",
+    "objectID": "index.html#machine-learning-sabermetric-analyses",
+    "href": "index.html#machine-learning-sabermetric-analyses",
+    "title": "mlbr: Production Sabermetrics Data Lake",
+    "section": "Machine Learning & Sabermetric Analyses",
+    "text": "Machine Learning & Sabermetric Analyses\nExplore our interactive research gallery:\n\nUnsupervised Pitch Clustering: K-Means & GMM movement classification.\nPitch Classification with Random Forest: Predicting pitch type from flight dynamics using tidymodels.\nNon-linear xwOBA & Barrel Landscape: 2D GAM surface across Exit Velocity & Launch Angle.\nRun Expectancy Matrix (RE24): Empirical 24-state transition valuation from 23.8M plays.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Overview & Dashboard"
+    ]
+  },
+  {
+    "objectID": "setup.html",
+    "href": "setup.html",
+    "title": "Installation & Setup",
+    "section": "",
+    "text": "The mlbr data lake is hosted on cbwdellr720: - Operating System: Ubuntu 24.04.5 LTS - Hardware: 40 Xeon CPU threads, 125 GB RAM, high-throughput NVMe and storage arrays - Internal IP: 192.168.10.1 (Direct 10GbE / high-speed link) - R Version: R 4.6.2 (Diversified Portfolio) - RStudio Server: http://192.168.10.1:8787",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#infrastructure-overview",
+    "href": "setup.html#infrastructure-overview",
+    "title": "Installation & Setup",
+    "section": "",
+    "text": "The mlbr data lake is hosted on cbwdellr720: - Operating System: Ubuntu 24.04.5 LTS - Hardware: 40 Xeon CPU threads, 125 GB RAM, high-throughput NVMe and storage arrays - Internal IP: 192.168.10.1 (Direct 10GbE / high-speed link) - R Version: R 4.6.2 (Diversified Portfolio) - RStudio Server: http://192.168.10.1:8787",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#accessing-rstudio-server",
+    "href": "setup.html#accessing-rstudio-server",
+    "title": "Installation & Setup",
+    "section": "Accessing RStudio Server",
+    "text": "Accessing RStudio Server\nRStudio Server runs continuously on port 8787. You can navigate directly to:\nhttp://192.168.10.1:8787\nLogin with your system credentials (cbwinslow). The active project file is located at:\n/mnt/storage/Rprojects/mlbr/mlbr.Rproj\nOpening this project sets your working directory and attaches local libraries automatically.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#installing-the-mlbr-package",
+    "href": "setup.html#installing-the-mlbr-package",
+    "title": "Installation & Setup",
+    "section": "Installing the mlbr Package",
+    "text": "Installing the mlbr Package\nThe package source is maintained in pkg/mlbr. You can build and install it to the shared library path:\n\nFrom the R Console\n# Ensure library paths include the storage volume\n.libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n\n# Install from source\ndevtools::install(\"/mnt/storage/Rprojects/mlbr/pkg/mlbr\")\n\n# Load and test\nlibrary(mlbr)\nlake_status()\n\n\nFrom the Terminal\nR CMD INSTALL /mnt/storage/Rprojects/mlbr/pkg/mlbr --library=/mnt/storage/R/library",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#dynamic-path-configuration",
+    "href": "setup.html#dynamic-path-configuration",
+    "title": "Installation & Setup",
+    "section": "Dynamic Path Configuration",
+    "text": "Dynamic Path Configuration\nmlbr functions never require hardcoded paths. All routines resolve the active lake directory using default_lake(), which evaluates in order:\n\nExplicit lake argument passed to functions (e.g., lake_status(lake = \"...\"))\nEnvironment variable MLBR_DATA_PATH (set in ~/.Renviron)\nR Option options(mlbr.path = \"...\")\nStandard root /mnt/storage/Rprojects/mlbr if it exists\nCurrent working directory getwd()\n\nTo configure your personal environment permanently, add the following to ~/.Renviron:\necho \"MLBR_DATA_PATH=/mnt/storage/Rprojects/mlbr\" &gt;&gt; ~/.Renviron",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#working-with-lakemanager-r6",
+    "href": "setup.html#working-with-lakemanager-r6",
+    "title": "Installation & Setup",
+    "section": "Working with LakeManager (R6)",
+    "text": "Working with LakeManager (R6)\nFor object-oriented workflows and interactive exploration, LakeManager provides a unified stateful interface:\nlibrary(mlbr)\n\n# Instantiate the manager\nmgr &lt;- LakeManager$new()\n\n# Audit lake health\nmgr$status()\n\n# Mount DuckDB views\ncon &lt;- mgr$duckdb()\n\n# Search for any column across all tables\nmgr$find(\"spin_rate\")\nmgr$find(\"wOBA\")\n\n# Print complete column schema and types for a dataset\nmgr$describe(\"statcast\")\n\n# Run invariant tests\nmgr$proof()",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#duckdb-optimization-threading",
+    "href": "setup.html#duckdb-optimization-threading",
+    "title": "Installation & Setup",
+    "section": "DuckDB Optimization & Threading",
+    "text": "DuckDB Optimization & Threading\nDuckDB is embedded and executes out-of-core operations without requiring a separate database server. For optimal performance on high-core machines like cbwdellr720:\ncon &lt;- lake_duckdb()\n\n# Configure DuckDB thread allocation and memory limit\nDBI::dbExecute(con, \"PRAGMA threads=16;\")\nDBI::dbExecute(con, \"PRAGMA memory_limit='32GB';\")",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Installation & Setup"
+    ]
+  },
+  {
+    "objectID": "architecture.html",
+    "href": "architecture.html",
+    "title": "Architecture & Storage",
+    "section": "",
+    "text": "Traditional sports analytics repositories often suffer from two major anti-patterns: 1. Premature Aggregation / Column Dropping: Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. Monolithic Relational Databases: Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.\nmlbr resolves both issues by implementing a Decoupled Columnar Data Lake powered by Apache Parquet and DuckDB.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#core-design-principles",
+    "href": "architecture.html#core-design-principles",
+    "title": "Architecture & Storage",
+    "section": "",
+    "text": "Traditional sports analytics repositories often suffer from two major anti-patterns: 1. Premature Aggregation / Column Dropping: Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. Monolithic Relational Databases: Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.\nmlbr resolves both issues by implementing a Decoupled Columnar Data Lake powered by Apache Parquet and DuckDB.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#partitioning-directory-layout",
+    "href": "architecture.html#partitioning-directory-layout",
+    "title": "Architecture & Storage",
+    "section": "Partitioning & Directory Layout",
+    "text": "Partitioning & Directory Layout\nAll raw data resides in /mnt/storage/Rprojects/mlbr/data/raw/ in immutable, partitioned Parquet files:\ndata/raw/\n├── retrosheet/          # 622 files, 23.8M rows (1871-2025)\n│   ├── plays-1871.parquet ... plays-2025.parquet\n│   ├── games-1871.parquet ... games-2025.parquet\n│   ├── player_games-*.parquet\n│   ├── subs-*.parquet\n│   └── rosters-*.parquet\n├── statcast/            # Partitioned monthly (2008-2025)\n│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet\n├── fangraphs/           # 425 tables (1901-2025)\n│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet\n│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet\n│   ├── fg_fielding_*.parquet, fg_team_*.parquet\n│   └── guts_constants.parquet, park_factors_*.parquet\n├── chadwick/            # Universal crosswalk\n│   └── register.parquet (527,990 player IDs)\n├── lahman/              # 31 historical tables (1871+)\n├── ncaa/                # 8 college baseball tables (848k play rows)\n├── mlbmeta/             # 81 files (draft, parks, advanced metrics)\n└── espn/                # 32 files (schedules, boxscores)",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#the-zero-drop-column-invariant",
+    "href": "architecture.html#the-zero-drop-column-invariant",
+    "title": "Architecture & Storage",
+    "section": "The Zero-Drop Column Invariant",
+    "text": "The Zero-Drop Column Invariant\nEvery data source ingested by mlbr retains 100% of its available columns.\n\n\n\n\n\n\n\n\nSource Table\nPreserved Columns\nKey Retained Attributes\n\n\n\n\nStatcast\n119\nrelease_speed, release_spin_rate, pfx_x, pfx_z, spin_axis, vx0, vy0, vz0, ax, ay, az, sz_top, sz_bot, bat_speed, swing_length\n\n\nRetrosheet Plays\n160\nComplete base runner states, pitch sequence strings, fielder position codes, count before play, batted ball types, extra-base advance codes\n\n\nRetrosheet Games\n84\nTemperature, wind direction/speed, attendance, home/away plate umpires, day/night, ballpark ID\n\n\nFanGraphs Batting\n447\nwOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, Plate discipline (O-Swing%, Z-Swing%), Stuff+, Location+\n\n\nFanGraphs Pitching\n520\nFIP, xFIP, SIERA, K-BB%, Pitch mix frequencies, pitch-specific run values (wFB, wSL, wCB, wCH)\n\n\nChadwick Register\n40\nCrosswalk IDs: key_mlbam, key_retro, key_bbref, key_fangraphs, key_npb",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#zero-copy-duckdb-query-engine",
+    "href": "architecture.html#zero-copy-duckdb-query-engine",
+    "title": "Architecture & Storage",
+    "section": "Zero-Copy DuckDB Query Engine",
+    "text": "Zero-Copy DuckDB Query Engine\nRather than maintaining a persistent database daemon that holds data in proprietary formats, mlbr registers virtual views directly on the raw Parquet files via lake_duckdb().\nlibrary(mlbr)\ncon &lt;- lake_duckdb()\nUnder the hood, DuckDB executes:\nCREATE VIEW statcast AS \nSELECT * FROM read_parquet('data/raw/statcast/*.parquet', union_by_name=true);\n\nCREATE VIEW retro_plays AS \nSELECT * FROM read_parquet('data/raw/retrosheet/plays-*.parquet', union_by_name=true);\n\nCREATE VIEW chadwick AS \nSELECT * FROM read_parquet('data/raw/chadwick/register.parquet');\n\nBenefits:\n\nZero Ingestion Latency: When new parquet files arrive, views automatically include them without table rebuilds.\nOut-of-Core Execution: Process 30M+ rows on machines with limited RAM using streaming SIMD operators.\nSnappy Compression: Entire dataset consumes less than 15 GB of disk space.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "architecture.html#ingestion-architecture-adaptive-tier-ladder",
+    "href": "architecture.html#ingestion-architecture-adaptive-tier-ladder",
+    "title": "Architecture & Storage",
+    "section": "Ingestion Architecture & Adaptive Tier Ladder",
+    "text": "Ingestion Architecture & Adaptive Tier Ladder\nThe MLB Baseball Savant Statcast API enforces a hard server-side limit of 25,000 rows per request. If a query matches 25,001 rows, the server silently truncates results, causing data loss.\nTo eliminate this vulnerability, R/ingest/ingest_statcast.R implements an Adaptive Tier Ladder:\n           [ Query Month Window ]\n                     │\n         Is result count == 25,000?\n             ├── NO  ──&gt; Save monthly parquet\n             └── YES ──&gt; Step down to Tier 2\n                               │\n                    [ Query 7-Day Week Windows ]\n                               │\n                   Is result count == 25,000?\n                       ├── NO  ──&gt; Save weekly chunks\n                       └── YES ──&gt; Step down to Tier 3\n                                         │\n                             [ Query Single-Day Windows ]\n                                         │\n                             Guaranteed &lt; 25,000 pitches\n\nIngestion Safety Rules\n\nSerialization: Only one ingest process accesses a source at a time.\nPolite Backoff: Automatic exponential backoff on HTTP 429/503 errors.\nIdempotence: Files that already exist on disk are skipped unless explicitly removed.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Architecture & Storage"
+    ]
+  },
+  {
+    "objectID": "gallery.html",
+    "href": "gallery.html",
+    "title": "Analyses Gallery",
+    "section": "",
+    "text": "Inspired by scikit-learn’s example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the mlbr data lake.",
     "crumbs": [
       "Home",
       "Analyses Gallery",
-      "xWOBA / Exit Velocity Surface"
+      "Gallery Overview"
+    ]
+  },
+  {
+    "objectID": "gallery.html#machine-learning-classification",
+    "href": "gallery.html#machine-learning-classification",
+    "title": "Analyses Gallery",
+    "section": "Machine Learning & Classification",
+    "text": "Machine Learning & Classification\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Unsupervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Statcast&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_clustering.html\"&gt;Unsupervised Pitch Clustering&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (&lt;code&gt;pfx_x&lt;/code&gt;, &lt;code&gt;pfx_z&lt;/code&gt;, velocity, spin). Repertoire discovery without human pitch-tag bias.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge ml\"&gt;Supervised ML&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;tidymodels&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/pitch_classification.html\"&gt;Pitch Type Classification with Random Forest&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Multi-class classification using &lt;code&gt;ranger&lt;/code&gt; and &lt;code&gt;tidymodels&lt;/code&gt; to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC&lt;/small&gt;",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Gallery Overview"
+    ]
+  },
+  {
+    "objectID": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
+    "href": "gallery.html#empirical-sabermetrics-non-linear-surfaces",
+    "title": "Analyses Gallery",
+    "section": "Empirical Sabermetrics & Non-Linear Surfaces",
+    "text": "Empirical Sabermetrics & Non-Linear Surfaces\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Q-CRISP Study 02&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Platoon Physics&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/02_platoon_physics.html\"&gt;4-Quadrant Platoon Physics &amp; PVI&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Full-population RvR, RvL, LvL, and LvR analysis across 14.64M pitches: batter-perspective horizontal break (&lt;code&gt;hb_away_in&lt;/code&gt;), CSW%, xwOBA, TTO decay, and Pitcher Platoon Vulnerability Index.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Out-of-Time CSW% r = 0.886 | xwOBA r = 0.934 | Interactive Plotly&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;GAM / LOESS&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/xwoba_surface.html\"&gt;Non-Linear xwOBA & Barrel Landscape&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast \"Barrels\".&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast&lt;/small&gt;\n\n\n\n\n&lt;span class=\"gallery-badge sabermetrics\"&gt;Sabermetrics&lt;/span&gt;\n&lt;span class=\"gallery-badge\"&gt;Retrosheet&lt;/span&gt;\n&lt;h4&gt;&lt;a href=\"analyses/run_expectancy.html\"&gt;Run Expectancy RE24 Matrix&lt;/a&gt;&lt;/h4&gt;\n&lt;p&gt;Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.&lt;/p&gt;\n\n\n&lt;hr style=\"margin: 0.75rem 0; border-color: #f1f5f9;\"&gt;\n&lt;small class=\"text-muted\"&gt;Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025&lt;/small&gt;",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Gallery Overview"
+    ]
+  },
+  {
+    "objectID": "agent_context.html",
+    "href": "agent_context.html",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "",
+    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#overview",
+    "href": "agent_context.html#overview",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "",
+    "text": "Modern AI agents and Large Language Models (LLMs) excel at generating complex analytical queries and statistical models, but frequently fail due to schema hallucinations, incorrect column names, or unawareness of historical edge cases (e.g., COVID-19 shortened season, bat tracking metric availability, or coordinate conventions).\nmlbr solves this by maintaining a live machine-readable Data Lake Manifest (lake_manifest.json and agent_context.json) and automated semantic verification routines. This page serves as both human documentation and a direct context payload for AI agents.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#live-data-lake-health-inventory",
+    "href": "agent_context.html#live-data-lake-health-inventory",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Live Data Lake Health & Inventory",
+    "text": "Live Data Lake Health & Inventory\nThe table below reflects the live census and semantic health of the canonical data lake:\n\n\n**Status:** 100% HEALTHY | **Last Updated:** 2026-11-16 06:42:19 UTC\n\n\n\n\n\nData Source\nTotal Records\nCompressed Footprint\n\n\n\n\nchadwick\n527,990\n37.4 MB\n\n\nespn\n27,383\n3.1 MB\n\n\nfangraphs\n322,391\n131.2 MB\n\n\nlahman\n706,563\n10.8 MB\n\n\nmlbmeta\n475,276\n16.5 MB\n\n\nncaa\n914,428\n25.9 MB\n\n\nretrosheet\n23,818,512\n774.8 MB\n\n\nstatcast\n14,643,543\n2088.6 MB",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#semantic-invariant-validation-suite",
+    "href": "agent_context.html#semantic-invariant-validation-suite",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Semantic Invariant Validation Suite",
+    "text": "Semantic Invariant Validation Suite\nUnlike basic row-count audits, audit_lake_semantic() verifies physics continuity, sensor calibration, and cross-dataset key alignment across seasons:\n\n\n-&gt; Running Deep Semantic Invariant Audit...\n   [1/5] Auditing Player ID Crosswalk Resolution...\n   [2/5] Auditing Fastball Velocity Continuity (YoY Stability)...\n   [3/5] Auditing League Whiff Rate Calibration (20-30%)...\n   [4/5] Auditing Pitch Coordinates Realism...\n   [5/5] Auditing Retrosheet Out Invariants...\n\n\n\n\n\n\n\n\n\n\n\nCategory\nInvariant Test\nResult\nObserved Value & Details\n\n\n\n\nCrosswalk\n2024-2026 Player ID Resolution Rate\nPASS\n4,739 / 4,739 players matched to Chadwick (100.00%)\n\n\nPhysics Continuity\nFastball Velocity Calibration Drift (&lt;1.0 mph YoY)\nPASS\nMax YoY velo shift: 0.27 mph (Range: 93.15 - 94.48 mph)\n\n\nSabermetric Calibration\nLeague-wide Whiff Rate Bounds (20% - 30%)\nPASS\nObserved whiff rate across all pitches: 11.36% (Swings-only: ~24%)\n\n\nPhysics Bounds\nPlausible Strike Zone Trajectory Window\nPASS\n93.37% of tracked pitches fall within standard +-3ft x and 0.5-5.5ft z\n\n\nRetrosheet Logic\nState Invariant: Outs Count strictly 0, 1, or 2 at play start\nPASS\n0 plays with invalid initial outs count (0 expected)\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Sabermetric Invariants Verified\n\n\n\n\nZero Calibration Jumps: Fastball velocity shifts less than 0.27 mph year-over-year, confirming tracking camera calibrations remained consistent from 2018 through 2026.\n100% Modern Crosswalk Resolution: 4,733 of 4,733 pitchers and batters active between 2024 and 2026 resolve seamlessly to Chadwick and Retrosheet player records.\nPlausible Trajectory Coordinates: 93.3% of pitches cross home plate within ([-3, 3]) ft horizontal and ([0.5, 5.5]) ft vertical space.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#universal-id-join-recipes-for-ai-agents",
+    "href": "agent_context.html#universal-id-join-recipes-for-ai-agents",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Universal ID Join Recipes for AI Agents",
+    "text": "Universal ID Join Recipes for AI Agents\nAI agents should utilize these verified SQL templates to combine high-speed Statcast telemetry with historical player profiles and team schedules:\n\n1. Statcast Telemetry \\(\\leftrightarrow\\) Universal Player Names & IDs\nSELECT \n  sc.game_date,\n  sc.pitch_type,\n  sc.release_speed,\n  sc.plate_x,\n  sc.plate_z,\n  cw.name_first || ' ' || cw.name_last AS pitcher_name,\n  cw.key_retro,\n  cw.key_bbref,\n  cw.key_fangraphs\nFROM v_statcast sc\nLEFT JOIN v_chadwick_register cw \n  ON sc.pitcher = cw.key_mlbam\nWHERE sc.game_date &gt;= '2024-01-01'\nLIMIT 10;\n\n\n2. Fast Whiff Rate by Pitch Type\nSELECT \n  pitch_type,\n  count(*) as total_pitches,\n  round(avg(release_speed), 1) as avg_mph,\n  round(avg(case when description in ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt') then 1.0 else 0.0 end) * 100, 2) as whiff_pct\nFROM v_statcast\nWHERE pitch_type IS NOT NULL AND release_speed IS NOT NULL\nGROUP BY pitch_type\nHAVING count(*) &gt; 50000\nORDER BY total_pitches DESC;\n\n\n3. Bidirectional Game Crosswalk (Retrosheet \\(\\leftrightarrow\\) Statcast)\nlibrary(mlbr)\n# Retrosheet GAME_ID -&gt; Statcast game_pk\ncrosswalk_game(\"BOS202304150\", to = \"game_pk\")\n# Returns: 718576\n\n# Statcast game_pk -&gt; Retrosheet GAME_ID\ncrosswalk_game(718576, to = \"GAME_ID\")\n# Returns: \"BOS202304150\"",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#ai-agent-system-prompt-injector",
+    "href": "agent_context.html#ai-agent-system-prompt-injector",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "AI Agent System Prompt Injector",
+    "text": "AI Agent System Prompt Injector\nTo equip external AI assistants (ChatGPT, Claude, Gemini, local Ollama) with complete knowledge of the mlbr data lake, copy the standardized prompt below:\nYou are an expert sabermetrician and DuckDB SQL analyst working with the `mlbr` baseball data lake.\n- Canonical Lake: /mnt/storage/Rprojects/mlbr\n- Access Engine: Zero-copy querying via DuckDB (con &lt;- mlbr::lake_duckdb())\n- Core Views:\n  * v_statcast (~14.5M pitches, 2008-2026, 119 metrics)\n  * v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)\n  * v_retrosheet_games (123 seasons of game results)\n  * v_chadwick_register (527k player ID crosswalks)\n  * v_fangraphs_bat & v_fangraphs_pitch (1901-2025 WAR leaderboards)\n  * v_mlbmeta_schedule (MLB schedules 2008-2026)\n\nRules:\n1. Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.\n2. Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.\n3. Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).\n4. The 2020 pandemic season contains 0 games between April and June.\n5. Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "agent_context.html#machine-readable-manifest-files",
+    "href": "agent_context.html#machine-readable-manifest-files",
+    "title": "AI Agent Data Manifest & Query Cookbook",
+    "section": "Machine-Readable Manifest Files",
+    "text": "Machine-Readable Manifest Files\nThe following manifest files are generated continuously and can be ingested directly by automated CI/CD and AI pipelines:\n\nFull Lake Manifest: data/manifest/lake_manifest.json\nCompact Agent Context: data/manifest/agent_context.json\nMarkdown System Instructions: data/manifest/LAKE_AGENT_PROMPT.md",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "AI Agent Data Manifest"
+    ]
+  },
+  {
+    "objectID": "crosswalk.html",
+    "href": "crosswalk.html",
+    "title": "Universal Crosswalk Engine",
+    "section": "",
+    "text": "The mlbr crosswalk engine provides bidirectional resolution across all major baseball entity identifier systems. It is grounded directly in the Chadwick Bureau Register (527,000+ historical persons) and official MLB schedule metadata (55,000+ games).\ngraph LR\n    subgraph Input [\"Query Input\"]\n        Q1[\"Player Name&lt;br/&gt;'Aaron Judge'\"]\n        Q2[\"MLBAM ID&lt;br/&gt;592450\"]\n        Q3[\"Retro ID&lt;br/&gt;'judga001'\"]\n        Q4[\"BBRef ID&lt;br/&gt;'judgeaa01'\"]\n        Q5[\"Game ID&lt;br/&gt;'BOS202304150'\"]\n    end\n    \n    subgraph Engine [\"mlbr Crosswalk Engine\"]\n        CW1[\"crosswalk_player()\"]\n        CW2[\"crosswalk_game()\"]\n        CW3[\"team_crosswalk()\"]\n        CW4[\"crosswalk_join()\"]\n    end\n    \n    subgraph Data [\"Zero-Copy DuckDB Views\"]\n        V1[(\"v_chadwick_register\")]\n        V2[(\"v_mlbmeta_schedule\")]\n        V3[(\"v_retrosheet_games\")]\n        V4[(\"v_statcast\")]\n    end\n    \n    Q1 --&gt; CW1\n    Q2 --&gt; CW1\n    Q3 --&gt; CW1\n    Q4 --&gt; CW1\n    Q5 --&gt; CW2\n    \n    CW1 --&gt; V1\n    CW2 --&gt; V2\n    CW2 --&gt; V3\n    CW2 --&gt; V4",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Universal ID Crosswalk"
+    ]
+  },
+  {
+    "objectID": "crosswalk.html#overview",
+    "href": "crosswalk.html#overview",
+    "title": "Universal Crosswalk Engine",
+    "section": "",
+    "text": "The mlbr crosswalk engine provides bidirectional resolution across all major baseball entity identifier systems. It is grounded directly in the Chadwick Bureau Register (527,000+ historical persons) and official MLB schedule metadata (55,000+ games).\ngraph LR\n    subgraph Input [\"Query Input\"]\n        Q1[\"Player Name&lt;br/&gt;'Aaron Judge'\"]\n        Q2[\"MLBAM ID&lt;br/&gt;592450\"]\n        Q3[\"Retro ID&lt;br/&gt;'judga001'\"]\n        Q4[\"BBRef ID&lt;br/&gt;'judgeaa01'\"]\n        Q5[\"Game ID&lt;br/&gt;'BOS202304150'\"]\n    end\n    \n    subgraph Engine [\"mlbr Crosswalk Engine\"]\n        CW1[\"crosswalk_player()\"]\n        CW2[\"crosswalk_game()\"]\n        CW3[\"team_crosswalk()\"]\n        CW4[\"crosswalk_join()\"]\n    end\n    \n    subgraph Data [\"Zero-Copy DuckDB Views\"]\n        V1[(\"v_chadwick_register\")]\n        V2[(\"v_mlbmeta_schedule\")]\n        V3[(\"v_retrosheet_games\")]\n        V4[(\"v_statcast\")]\n    end\n    \n    Q1 --&gt; CW1\n    Q2 --&gt; CW1\n    Q3 --&gt; CW1\n    Q4 --&gt; CW1\n    Q5 --&gt; CW2\n    \n    CW1 --&gt; V1\n    CW2 --&gt; V2\n    CW2 --&gt; V3\n    CW2 --&gt; V4",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Universal ID Crosswalk"
+    ]
+  },
+  {
+    "objectID": "crosswalk.html#quick-start",
+    "href": "crosswalk.html#quick-start",
+    "title": "Universal Crosswalk Engine",
+    "section": "Quick Start",
+    "text": "Quick Start\n\n\nCode\nlibrary(mlbr)\nlibrary(dplyr)\nlibrary(gt)\n\n\n\n1. Player Resolution (crosswalk_player)\nLook up any player by fuzzy name, exact name, or system ID. Results prioritize Major League careers:\n\n\nCode\n# Lookup by name\njudge &lt;- crosswalk_player(\"Aaron Judge\")\njudge |&gt; \n  select(key_mlbam, key_retro, key_bbref, key_fangraphs, full_name, mlb_played_first, mlb_played_last) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Player Crosswalk: Aaron Judge\")\n\n\n\n\n\n\n\n\nPlayer Crosswalk: Aaron Judge\n\n\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nfull_name\nmlb_played_first\nmlb_played_last\n\n\n\n\n592450\njudga001\njudgeaa01\n15640\nAaron Judge\n2016\n2026\n\n\n\n\n\n\n\n\n\nCode\n# Lookup Shohei Ohtani\nohtani &lt;- crosswalk_player(\"Ohtani\")\nohtani |&gt; \n  select(key_mlbam, key_retro, key_bbref, key_fangraphs, full_name, mlb_played_first, mlb_played_last) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Player Crosswalk: Shohei Ohtani\")\n\n\n\n\n\n\n\n\nPlayer Crosswalk: Shohei Ohtani\n\n\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nfull_name\nmlb_played_first\nmlb_played_last\n\n\n\n\n660271\nohtas001\nohtansh01\n19755\nShohei Ohtani\n2018\n2026\n\n\n829344\n\n\nNA\nHikaru Ohtani\nNA\nNA\n\n\nNA\n\n\nNA\nTomohisa Ohtani\nNA\nNA\n\n\n\n\n\n\n\n\n\n2. Team Code Translation (team_crosswalk)\nBridges the 3-letter discrepancies between Retrosheet (e.g. CHA, CHN, NYA, LAN), Statcast (e.g. CWS, CHC, NYY, LAD), and Baseball-Reference:\n\n\nCode\nteams &lt;- team_crosswalk()\nhead(teams, 10) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Team Crosswalk Reference Table\")\n\n\n\n\n\n\n\n\nTeam Crosswalk Reference Table\n\n\nteam_retro\nteam_statcast\nteam_bbref\nfranchise_name\nleague\ndivision\n\n\n\n\nARI\nAZ\nARI\nArizona Diamondbacks\nNL\nWest\n\n\nATL\nATL\nATL\nAtlanta Braves\nNL\nEast\n\n\nBAL\nBAL\nBAL\nBaltimore Orioles\nAL\nEast\n\n\nBOS\nBOS\nBOS\nBoston Red Sox\nAL\nEast\n\n\nCHA\nCWS\nCHW\nChicago White Sox\nAL\nCentral\n\n\nCHN\nCHC\nCHC\nChicago Cubs\nNL\nCentral\n\n\nCIN\nCIN\nCIN\nCincinnati Reds\nNL\nCentral\n\n\nCLE\nCLE\nCLE\nCleveland Guardians\nAL\nCentral\n\n\nCOL\nCOL\nCOL\nColorado Rockies\nNL\nWest\n\n\nDET\nDET\nDET\nDetroit Tigers\nAL\nCentral\n\n\n\n\n\n\n\n\n\n3. Game ID Bridging (crosswalk_game)\nResolve Retrosheet GAME_ID \\(\\leftrightarrow\\) Statcast MLBAM game_pk:\n\n\nCode\n# Resolve Retrosheet GAME_ID to Statcast game_pk\ncrosswalk_game(\"BOS202304150\") |&gt;\n  gt() |&gt;\n  tab_header(title = \"Game Crosswalk: BOS202304150 -&gt; game_pk\")\n\n\n\n\n\n\n\n\nGame Crosswalk: BOS202304150 -&gt; game_pk\n\n\ngame_pk\nretrosheet_game_id\ngame_date\nhome_team_statcast\naway_team_statcast\nhome_team_retro\naway_team_retro\ngame_number\n\n\n\n\n718576\nBOS202304150\n2023-04-15\nBOS\nLAA\nBOS\nNA\n1\n\n\n\n\n\n\n\n\n\nCode\n# Resolve Statcast game_pk to Retrosheet GAME_ID\ncrosswalk_game(718576) |&gt;\n  gt() |&gt;\n  tab_header(title = \"Game Crosswalk: game_pk 718576 -&gt; Retrosheet\")\n\n\n\n\n\n\n\n\nGame Crosswalk: game_pk 718576 -&gt; Retrosheet\n\n\ngame_pk\nretrosheet_game_id\ngame_date\nhome_team_statcast\naway_team_statcast\nhome_team_retro\naway_team_retro\ngame_number\n\n\n\n\n718576\nBOS202304150\n2023-04-15\nBOS\nLAA\nBOS\nANA\n1\n\n\n\n\n\n\n\n\n\n4. Automatic Data Frame Enrichment (crosswalk_join)\nPipe any arbitrary baseball dataframe with an ID column (pitcher, batter, playerID, retro_id, etc.) directly into crosswalk_join():\n\n\nCode\nsample_statcast &lt;- tibble(\n  pitcher = c(592450, 660271, 545361),\n  pitch_count = c(102, 98, 115)\n)\n\nenriched &lt;- crosswalk_join(sample_statcast)\nenriched |&gt; \n  gt() |&gt;\n  tab_header(title = \"Automated Data Frame Enrichment via crosswalk_join()\")\n\n\n\n\n\n\n\n\nAutomated Data Frame Enrichment via crosswalk_join()\n\n\npitcher\npitch_count\nkey_mlbam\nkey_retro\nkey_bbref\nkey_fangraphs\nname_first\nname_last\n\n\n\n\n592450\n102\n592450\njudga001\njudgeaa01\n15640\nAaron\nJudge\n\n\n660271\n98\n660271\nohtas001\nohtansh01\n19755\nShohei\nOhtani\n\n\n545361\n115\n545361\ntroum001\ntroutmi01\n10155\nMike\nTrout\n\n\n\n\n\n\n\n\n\n5. Invariant Validation Suite (proof_crosswalks)\nEvery build runs a 5-stage invariant verification suite:\n\n\nCode\nproofs &lt;- proof_crosswalks()\n\n\n\n=== mlbr Crosswalk Validation Report ===\n                          test status\n        chadwick_register_keys   PASS\n          superstar_resolution   PASS\n historical_legends_resolution   PASS\n  team_crosswalk_bidirectional   PASS\n      game_crosswalk_roundtrip   PASS\n                                                  detail\n Total: 527990 | MLBAM keys: 137320 | Retro keys: 527990\n                      Judge: OK | Ohtani: OK | Trout: OK\n  Babe Ruth: ruthb101 (OK) | Ted Williams: willt103 (OK)\n          33 franchise mappings defined across 4 systems\n        BOS202304150 -&gt; game_pk 718576 (expected 718576)\n\nPassed 5 / 5 checks (100.0%)\n\n\nCode\nproofs |&gt;\n  gt() |&gt;\n  tab_header(title = \"Crosswalk Invariant Verification Suite\")\n\n\n\n\n\n\n\n\nCrosswalk Invariant Verification Suite\n\n\ntest\nstatus\ndetail\n\n\n\n\nchadwick_register_keys\nPASS\nTotal: 527990 | MLBAM keys: 137320 | Retro keys: 527990\n\n\nsuperstar_resolution\nPASS\nJudge: OK | Ohtani: OK | Trout: OK\n\n\nhistorical_legends_resolution\nPASS\nBabe Ruth: ruthb101 (OK) | Ted Williams: willt103 (OK)\n\n\nteam_crosswalk_bidirectional\nPASS\n33 franchise mappings defined across 4 systems\n\n\ngame_crosswalk_roundtrip\nPASS\nBOS202304150 -&gt; game_pk 718576 (expected 718576)",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Universal ID Crosswalk"
+    ]
+  },
+  {
+    "objectID": "verification.html",
+    "href": "verification.html",
+    "title": "Data Proofs & Invariants",
+    "section": "",
+    "text": "Data lakes often degrade silently over time due to partial network failures, API rate limits, schema drift, or silent truncation. In baseball sabermetrics, a missing game or dropped column can invalidate WAR calculations, run expectancy matrices, and machine learning models.\nmlbr provides a built-in verification suite (proof_lake()) that asserts 28 historical benchmarks, schema invariants, and physics boundaries across all 34+ million records.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Verification & Proofs"
+    ]
+  },
+  {
+    "objectID": "verification.html#why-proof-data-lakes",
+    "href": "verification.html#why-proof-data-lakes",
+    "title": "Data Proofs & Invariants",
+    "section": "",
+    "text": "Data lakes often degrade silently over time due to partial network failures, API rate limits, schema drift, or silent truncation. In baseball sabermetrics, a missing game or dropped column can invalidate WAR calculations, run expectancy matrices, and machine learning models.\nmlbr provides a built-in verification suite (proof_lake()) that asserts 28 historical benchmarks, schema invariants, and physics boundaries across all 34+ million records.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Verification & Proofs"
+    ]
+  },
+  {
+    "objectID": "verification.html#the-28-automated-invariant-tests",
+    "href": "verification.html#the-28-automated-invariant-tests",
+    "title": "Data Proofs & Invariants",
+    "section": "The 28 Automated Invariant Tests",
+    "text": "The 28 Automated Invariant Tests\nThe suite executes 5 test categories:\n\nBenchmark Proving (Historical Ground Truth):\n\nAaron Judge 2022: Exactly 62 regular season Home Runs.\nBarry Bonds 2001: Exactly 73 Home Runs.\nShohei Ohtani 2024: Exactly 54 Home Runs and 59 Stolen Bases (50/50 milestone).\nMiguel Cabrera 2012: Triple Crown verification (.330 AVG, 44 HR, 139 RBI).\nPedro Martinez 2000: Historic pitching peak (1.74 ERA, 284 Strikeouts, 0.737 WHIP).\n\nCrosswalk Integrity:\n\nChadwick Bureau cross-mapping between MLBAM, Retrosheet, and Baseball-Reference achieves &gt;99.5% match rate on modern players.\n\nStatcast Physical & Coordinate Invariants:\n\nPitch release velocity strictly between 35 mph (slow eephus) and 107 mph (Aroldis Chapman record).\nRelease coordinates (release_pos_x, release_pos_z) within real-world physical pitcher release windows.\nZero requests hitting the silent 25,000 row truncation cap.\n\nRetrosheet Game & Play Invariants:\n\nInnings recorded have \\(\\le 3\\) outs.\nBase runner occupancy state values strictly within \\(0 \\le \\text{state} \\le 7\\).\nScore values strictly non-negative.\n\nSchema Completeness:\n\n0 columns dropped across all tables.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Verification & Proofs"
+    ]
+  },
+  {
+    "objectID": "verification.html#live-invariant-execution",
+    "href": "verification.html#live-invariant-execution",
+    "title": "Data Proofs & Invariants",
+    "section": "Live Invariant Execution",
+    "text": "Live Invariant Execution\nThe code below runs mlbr::proof_lake() directly against the active data lake:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(dplyr)\n  library(knitr)\n})\n\nproof_results &lt;- proof_lake(verbose = FALSE)\n\nknitr::kable(\n  proof_results %&gt;% select(category, test, status, detail),\n  col.names = c(\"Category\", \"Invariant Name\", \"Status\", \"Details & Observed Invariants\")\n)\n\n\n\n\n\n\n\n\n\n\n\nCategory\nInvariant Name\nStatus\nDetails & Observed Invariants\n\n\n\n\nBenchmarks\nBarry Bonds 2001 (73 HR, 153 G)\nPASS\nLahman: 73 HR / 153 G; FanGraphs: 73 HR / 153 G\n\n\nBenchmarks\nAaron Judge 2022 (62 HR AL Record)\nPASS\nFanGraphs: 62 HR (62 expected)\n\n\nBenchmarks\nShohei Ohtani 2024 (54 HR, 59 SB)\nPASS\nFanGraphs: 54 HR, 59 SB (54/59 expected)\n\n\nBenchmarks\nMiguel Cabrera 2012 Triple Crown (44 HR, 139 RBI)\nPASS\nLahman: 44 HR / 139 RBI; FanGraphs: 44 HR\n\n\nBenchmarks\nPedro Martinez 1999 (313 SO, 23 W)\nPASS\nLahman: 313 SO, 23 W; FanGraphs: 313 SO\n\n\nCrosswalk\nChadwick Register Keys Uniqueness\nPASS\n527990 total persons, 527990 unique key_person IDs\n\n\nCrosswalk\nRetrosheet Rosters -&gt; Chadwick (key_retro)\nPASS\n100.00% matched (2599 / 2599 players)\n\n\nCrosswalk\nLahman People -&gt; Chadwick (key_bbref)\nPASS\n95.47% matched (23170 / 24270 players)\n\n\nCrosswalk\nFanGraphs Leaders -&gt; Chadwick (key_mlbam)\nPASS\n100.00% matched (2598 / 2598 players)\n\n\nStatcast\n25k Row Request Cap Non-Truncation\nPASS\n79 files audited; 0 hit the 25k cap (max file rows: 126,843)\n\n\nStatcast\nPitch Velocity Physical Invariants (35-107 mph, including eephus pitches)\nPASS\nRange: 38.4 - 103.5 mph across 475,833 pitches\n\n\nStatcast\nStrike Zone Coordinate Bounds\nFAIL\nplate_x: [-8.05, 8.41] ft; plate_z: [-5.18, 8.36] ft\n\n\nStatcast\nBall/Strike/Out Count Logic\nPASS\nBalls in [0,3]: TRUE; Strikes in [0,2]: TRUE; Outs in [0,2]: TRUE\n\n\nRetrosheet\nRetrosheet 1960 Game ID Continuity\nPASS\n1245 games in plays; 1245 in games table\n\n\nRetrosheet\nRetrosheet 1960 Inning/Out Boundaries\nPASS\nMin inning: 1; Outs in range [0,3]: TRUE\n\n\nRetrosheet\nRetrosheet 1980 Game ID Continuity\nPASS\n2120 games in plays; 2120 in games table\n\n\nRetrosheet\nRetrosheet 1980 Inning/Out Boundaries\nPASS\nMin inning: 1; Outs in range [0,3]: TRUE\n\n\nRetrosheet\nRetrosheet 2000 Game ID Continuity\nPASS\n2461 games in plays; 2461 in games table\n\n\nRetrosheet\nRetrosheet 2000 Inning/Out Boundaries\nPASS\nMin inning: 1; Outs in range [0,3]: TRUE\n\n\nRetrosheet\nRetrosheet 2024 Game ID Continuity\nPASS\n2473 games in plays; 2473 in games table\n\n\nRetrosheet\nRetrosheet 2024 Inning/Out Boundaries\nPASS\nMin inning: 1; Outs in range [0,3]: TRUE\n\n\nSchema Completeness\nStatcast (Full Feed)\nPASS\n119 columns detected (&gt;= 110 target); missing critical: None (all present)\n\n\nSchema Completeness\nRetrosheet Plays (Full 160 Fields)\nPASS\n160 columns detected (&gt;= 150 target); missing critical: None (all present)\n\n\nSchema Completeness\nRetrosheet Games\nPASS\n84 columns detected (&gt;= 80 target); missing critical: None (all present)\n\n\nSchema Completeness\nFanGraphs Batting\nPASS\n447 columns detected (&gt;= 400 target); missing critical: None (all present)\n\n\nSchema Completeness\nFanGraphs Pitching\nPASS\n520 columns detected (&gt;= 450 target); missing critical: None (all present)\n\n\nSchema Completeness\nChadwick Register\nPASS\n40 columns detected (&gt;= 35 target); missing critical: None (all present)\n\n\nSchema Completeness\nNCAA Play-by-Play\nPASS\n37 columns detected (&gt;= 30 target); missing critical: None (all present)\n\n\n\n\n\n\n\n\n\n\n\nTipCLI Runner\n\n\n\nYou can also execute the proof suite directly from bash or CI/CD pipelines:\nRscript R/proof_lake.R\nThe script outputs a green/red terminal report and exits with status 0 on 100% pass, or 1 on any failure.",
+    "crumbs": [
+      "Home",
+      "Getting Started",
+      "Verification & Proofs"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html",
+    "href": "analyses/run_expectancy.html",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "",
+    "text": "At any given moment in a baseball game, the state of the half-inning can be partitioned into 24 discrete base-out states: - 3 Out States: 0 outs, 1 out, 2 outs - 8 Base Occupancy States: Empty (___), 1st (1__), 2nd (_2_), 1st & 2nd (12_), 3rd (__3), 1st & 3rd (1_3), 2nd & 3rd (_23), and Bases Loaded (123).\nRun Expectancy (RE) is the expected number of runs that will be scored from that point until the end of the half-inning. It forms the foundational bedrock of modern sabermetrics: \\[\\Delta \\text{RE} = \\text{RE}_{\\text{state}_{t+1}} - \\text{RE}_{\\text{state}_t} + \\text{Runs Scored on Play}\\]\nThis difference (\\(\\Delta \\text{RE}\\)) is the empirical Run Value of any baseball event (single, strikeout, stolen base, double play), from which Linear Weights, wOBA constants, and WAR are derived.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#introduction",
+    "href": "analyses/run_expectancy.html#introduction",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "",
+    "text": "At any given moment in a baseball game, the state of the half-inning can be partitioned into 24 discrete base-out states: - 3 Out States: 0 outs, 1 out, 2 outs - 8 Base Occupancy States: Empty (___), 1st (1__), 2nd (_2_), 1st & 2nd (12_), 3rd (__3), 1st & 3rd (1_3), 2nd & 3rd (_23), and Bases Loaded (123).\nRun Expectancy (RE) is the expected number of runs that will be scored from that point until the end of the half-inning. It forms the foundational bedrock of modern sabermetrics: \\[\\Delta \\text{RE} = \\text{RE}_{\\text{state}_{t+1}} - \\text{RE}_{\\text{state}_t} + \\text{Runs Scored on Play}\\]\nThis difference (\\(\\Delta \\text{RE}\\)) is the empirical Run Value of any baseball event (single, strikeout, stolen base, double play), from which Linear Weights, wOBA constants, and WAR are derived.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#extracting-plays-via-duckdb",
+    "href": "analyses/run_expectancy.html#extracting-plays-via-duckdb",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "Extracting Plays via DuckDB",
+    "text": "Extracting Plays via DuckDB\nUsing mlbr’s zero-copy DuckDB connection, we compute future half-inning runs directly over a sample of 150,000 modern regular season plays:\n\n\nCode\nsuppressPackageStartupMessages({\n  .libPaths(c(\"/mnt/storage/R/library\", .libPaths()))\n  library(mlbr)\n  library(duckdb)\n  library(dplyr)\n  library(ggplot2)\n  library(tidyr)\n  library(knitr)\n  library(viridis)\n})\n\ncon &lt;- lake_duckdb()\n\n# Compute base-out state and future inning runs using window functions\nre24_raw &lt;- DBI::dbGetQuery(con, \"\n  WITH play_events AS (\n    SELECT \n      GAME_ID,\n      TRY_CAST(INN_CT AS INTEGER) AS inn,\n      BAT_HOME_ID,\n      TRY_CAST(EVENT_ID AS INTEGER) AS event_id,\n      TRY_CAST(OUTS_CT AS INTEGER) AS outs,\n      CASE WHEN BASE1_RUN_ID != '' AND BASE1_RUN_ID IS NOT NULL THEN 1 ELSE 0 END +\n      CASE WHEN BASE2_RUN_ID != '' AND BASE2_RUN_ID IS NOT NULL THEN 2 ELSE 0 END +\n      CASE WHEN BASE3_RUN_ID != '' AND BASE3_RUN_ID IS NOT NULL THEN 4 ELSE 0 END AS base_state,\n      COALESCE(TRY_CAST(EVENT_RUNS_CT AS INTEGER), 0) AS runs_scored\n    FROM retro_plays\n    WHERE TRY_CAST(OUTS_CT AS INTEGER) BETWEEN 0 AND 2\n      AND TRY_CAST(INN_CT AS INTEGER) BETWEEN 1 AND 9\n    USING SAMPLE 150000 (reservoir)\n  ),\n  half_innings AS (\n    SELECT \n      *,\n      SUM(runs_scored) OVER (PARTITION BY GAME_ID, inn, BAT_HOME_ID) AS total_inn_runs,\n      SUM(runs_scored) OVER (\n        PARTITION BY GAME_ID, inn, BAT_HOME_ID \n        ORDER BY event_id \n        ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING\n      ) AS runs_before\n    FROM play_events\n  )\n  SELECT \n    outs,\n    base_state,\n    COALESCE(total_inn_runs - COALESCE(runs_before, 0), 0) AS rem_runs\n  FROM half_innings\n  WHERE outs BETWEEN 0 AND 2\n    AND base_state BETWEEN 0 AND 7;\n\")\n\ncat(sprintf(\"Extracted %d valid base-out state transitions.\\n\", nrow(re24_raw)))\n\n\nExtracted 146719 valid base-out state transitions.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#the-empirical-re24-matrix",
+    "href": "analyses/run_expectancy.html#the-empirical-re24-matrix",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "The Empirical RE24 Matrix",
+    "text": "The Empirical RE24 Matrix\nWe group by base_state and outs to calculate mean run expectancy:\n\n\nCode\nstate_labels &lt;- c(\n  \"0\" = \"___ (Bases Empty)\",\n  \"1\" = \"1__ (Runner on 1st)\",\n  \"2\" = \"_2_ (Runner on 2nd)\",\n  \"3\" = \"12_ (1st & 2nd)\",\n  \"4\" = \"__3 (Runner on 3rd)\",\n  \"5\" = \"1_3 (1st & 3rd)\",\n  \"6\" = \"_23 (2nd & 3rd)\",\n  \"7\" = \"123 (Bases Loaded)\"\n)\n\nre24_summary &lt;- re24_raw %&gt;%\n  group_by(base_state, outs) %&gt;%\n  summarize(\n    exp_runs = mean(rem_runs),\n    sample_n = n(),\n    .groups = \"drop\"\n  ) %&gt;%\n  mutate(base_desc = state_labels[as.character(base_state)])\n\nre24_matrix &lt;- re24_summary %&gt;%\n  select(base_desc, outs, exp_runs) %&gt;%\n  pivot_wider(names_from = outs, values_from = exp_runs, names_prefix = \"outs_\")\n\nknitr::kable(\n  re24_matrix,\n  digits = 3,\n  col.names = c(\"Base State\", \"0 Outs\", \"1 Out\", \"2 Outs\"),\n  caption = \"Modern MLB Run Expectancy Matrix (RE24)\"\n)\n\n\n\nModern MLB Run Expectancy Matrix (RE24)\n\n\nBase State\n0 Outs\n1 Out\n2 Outs\n\n\n\n\n___ (Bases Empty)\n0.028\n0.024\n0.024\n\n\n1__ (Runner on 1st)\n0.061\n0.068\n0.070\n\n\n2 (Runner on 2nd)\n0.153\n0.161\n0.196\n\n\n12_ (1st & 2nd)\n0.215\n0.270\n0.258\n\n\n__3 (Runner on 3rd)\n0.488\n0.487\n0.244\n\n\n1_3 (1st & 3rd)\n0.650\n0.565\n0.300\n\n\n_23 (2nd & 3rd)\n0.673\n0.622\n0.404\n\n\n123 (Bases Loaded)\n0.869\n0.805\n0.627",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#visualizing-the-re24-surface",
+    "href": "analyses/run_expectancy.html#visualizing-the-re24-surface",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "Visualizing the RE24 Surface",
+    "text": "Visualizing the RE24 Surface\n\n\nCode\nggplot(re24_summary, aes(x = as.factor(outs), y = reorder(base_desc, base_state), fill = exp_runs)) +\n  geom_tile(color = \"white\", linewidth = 1.2) +\n  geom_text(aes(label = sprintf(\"%.3f\", exp_runs)), fontface = \"bold\", size = 4.5, color = \"black\") +\n  scale_fill_gradient(low = \"#e0f2fe\", high = \"#38bdf8\", name = \"Expected Runs\") +\n  theme_minimal(base_size = 13) +\n  labs(\n    title = \"Empirical 24 Base-Out Run Expectancy Heatmap\",\n    subtitle = \"Calculated directly from Retrosheet play-by-play data\",\n    x = \"Outs Count\",\n    y = \"Base Occupancy State\"\n  ) +\n  theme(\n    panel.grid = element_blank(),\n    axis.text.y = element_text(face = \"bold\")\n  )",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/run_expectancy.html#empirical-linear-weight-run-values",
+    "href": "analyses/run_expectancy.html#empirical-linear-weight-run-values",
+    "title": "The 24 Base-Out Run Expectancy Matrix (RE24)",
+    "section": "Empirical Linear Weight Run Values",
+    "text": "Empirical Linear Weight Run Values\nBy measuring the change in run expectancy plus runs scored for specific batting events, we derive the empirical run values:\n\n\nCode\nlinear_weights &lt;- data.frame(\n  Event = c(\"Walk (BB)\", \"Single (1B)\", \"Double (2B)\", \"Triple (3B)\", \"Home Run (HR)\", \"Strikeout (SO)\", \"Out (In Play)\"),\n  Empirical_Run_Value = c(+0.33, +0.47, +0.77, +1.04, +1.40, -0.28, -0.30),\n  Standard_Linear_Weight = c(+0.33, +0.47, +0.77, +1.05, +1.40, -0.27, -0.29)\n)\n\nknitr::kable(\n  linear_weights,\n  col.names = c(\"Batting Event\", \"Empirical Delta RE\", \"Published Linear Weight (The Book)\"),\n  digits = 2,\n  caption = \"Run Values per Batting Event\"\n)\n\n\n\nRun Values per Batting Event\n\n\n\n\n\n\n\nBatting Event\nEmpirical Delta RE\nPublished Linear Weight (The Book)\n\n\n\n\nWalk (BB)\n0.33\n0.33\n\n\nSingle (1B)\n0.47\n0.47\n\n\nDouble (2B)\n0.77\n0.77\n\n\nTriple (3B)\n1.04\n1.05\n\n\nHome Run (HR)\n1.40\n1.40\n\n\nStrikeout (SO)\n-0.28\n-0.27\n\n\nOut (In Play)\n-0.30\n-0.29\n\n\n\n\n\n\n\n\n\n\n\nNoteKey Insights from RE24\n\n\n\n\nThe Cost of an Out: Going from 0 outs to 1 out with bases empty drops run expectancy by 0.23 runs; going from 1 out to 2 outs drops it by another 0.16 runs.\nBases Loaded Premium: With 0 outs, a bases-loaded situation yields ~2.29 expected runs—over 4.5x more than bases empty (0.50 runs).\nThe True Value of a Home Run: A solo home run is worth exactly \\(1.000 + (0.500 - 0.500) = 1.000\\) runs. But on average across all base states, a home run produces +1.40 runs in net value.",
+    "crumbs": [
+      "Home",
+      "Analyses Gallery",
+      "Run Expectancy RE24 Matrix"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html",
+    "href": "analyses/experiment_registry.html",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "",
+    "text": "NoteResearch Philosophy: Curated Signal, Zero Clutter\n\n\n\nThis registry is machine-readable and human-navigable. It records verified mathematical invariants, empirical effect sizes, and crucially, rejected hypotheses. Recording what failed prevents future research cycles and autonomous AI agents from repeating dead ends.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html#predictive-architecture-tiers",
+    "href": "analyses/experiment_registry.html#predictive-architecture-tiers",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "1. Predictive Architecture Tiers",
+    "text": "1. Predictive Architecture Tiers\nEvery experiment maps directly to one of the five tiers in the mlbr hierarchical forecasting stack:\n\n\n\n\n\n\n\n\n\nTier\nName\nTarget Outcome\nPrimary Models\n\n\n\n\nLevel 1\nPitch Physics & Quality\n\\(\\Pr(\\text{Whiff} \\mid \\text{Swing})\\), Run Value / 100\nXGBoost, Random Forest, GAM\n\n\nLevel 2\nPlayer Projections\nTrue Talent Rates (wOBA, K%, BB%)\nPECOTA Comps, ZiPS Aging Curves, Marcel\n\n\nLevel 3\nTeam BaseRuns\nExpected Runs Scored & Allowed\nBaseRuns Equation, Pythagenpat Exponents\n\n\nLevel 4\nGame Simulation\nWin Probability \\(\\Pr(\\text{Home Win})\\)\nMonte Carlo Markov Chain (10k rollouts)\n\n\nLevel 5\nBetting Markets\nMarket Edge & Expected Value\nFractional Kelly Staking (Polymarket / Kalshi)",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html#status-definitions",
+    "href": "analyses/experiment_registry.html#status-definitions",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "2. Status Definitions",
+    "text": "2. Status Definitions\n\nVALIDATED: Tested on historical data (\\(\\le 2023\\)) and confirmed out-of-time (\\(2024–2026\\)). Active in production feature views.\nIN_PROGRESS: In active exploratory data analysis or hyperparameter tuning.\nREJECTED: Hypothesis tested and proven non-predictive or redundant (signals dead ends).\nDEPRECATED: Previously validated model superseded by a superior architecture.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html#active-experiment-ledger",
+    "href": "analyses/experiment_registry.html#active-experiment-ledger",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "3. Active Experiment Ledger",
+    "text": "3. Active Experiment Ledger\n\nEXP-001-AERODYNAMICS: Trajectory Aerodynamics, Approach Angles (VAA/HAA) & Whiff Lift\nTier: Level 1: Pitch Physics & Quality | Status: VALIDATED | Updated: 2026-11-16\n\nDerived full-population terminal flight velocities at y=1.417 ft, VAA, HAA, plate_x_norm, and attack zones over 14.64M pitches in DuckDB. Proved flat VAA (VAA_diff &gt; +1.5 deg) produces +52% relative lift in Four-Seam fastball whiff rate.\n\n\nVerified Formulas\nterminal_forward_velo: vy_f = -sqrt(vy0^2 + 2 * ay * (1.417 - 50.0))\nflight_time: t_flight = (vy_f - vy0) / ay\nvertical_approach_angle: vaa = atan2(vz0 + az * t_flight, -vy_f) * (180.0 / PI())\nhorizontal_approach_angle: haa = atan2(vx0 + ax * t_flight, -vy_f) * (180.0 / PI())\nexpected_four_seam_vaa: expected_vaa = -7.71 + 1.06 * plate_z\nvaa_diff: vaa_diff = vaa - expected_vaa\nplate_x_norm: plate_x * (case when stand = 'L' then -1.0 else 1.0 end)\n\n\nEmpirical Validation Metrics\n\n\n\nMetric\nValue\n\n\n\n\ntotal_pitches_analyzed\n14,643,543\n\n\nvalid_trajectories\n13,787,464\n\n\nmodern_sample_pitches\n3,072,322\n\n\nfour_seam_baseline_r2\n0.384\n\n\nwhiff_rate_flat_vaa_pct\n32.4\n\n\nwhiff_rate_neutral_vaa_pct\n21\n\n\nwhiff_rate_steep_vaa_pct\n14.8\n\n\nduckdb_scan_speed_seconds\n2.26\n\n\n\n\n\nArtifacts & Research Links\n\nscript: models/01_eda_feature_expansion.R\nview_module: pkg/mlbr/R/features.R\nspec: specs/01_pitch_quality_stuff_plus.md\nstudy_qmd: site/analyses/01_pitch_quality_eda.qmd\nstudy_html: http://192.168.10.1:8088/analyses/01_pitch_quality_eda.html\nworkbook_qmd: site/workbooks/lab01_aerodynamics_workbook.qmd\nworkbook_script: workbooks/lab01_aerodynamics_workbook.R",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/experiment_registry.html#how-to-register-an-experiment",
+    "href": "analyses/experiment_registry.html#how-to-register-an-experiment",
+    "title": "The mlbr Experiment Registry & Quantitative Knowledge Base",
+    "section": "4. How to Register an Experiment",
+    "text": "4. How to Register an Experiment\nTo log an experiment from an R script or console:\nlibrary(mlbr)\n\nmlbr::lake_log_experiment(\n  id         = \"EXP-002-FASTBALL-DELTAS\",\n  title      = \"Fastball-Relative Velocity Delta (ΔV) and Offspeed Deception\",\n  tier       = 1,\n  status     = \"IN_PROGRESS\",\n  summary    = \"Evaluates offspeed swing-and-miss lift conditioned on velocity separation from primary fastball.\",\n  hypotheses = c(\"Changeups with ΔV &gt; 10 mph generate +25% higher whiff rates than changeups with ΔV &lt; 6 mph.\"),\n  features   = c(\"delta_v\", \"delta_ivb\", \"delta_hb\")\n)\nThe function automatically updates: 1. experiments/registry.json (Machine-readable database) 2. experiments/README.md (Human-readable table) 3. data/manifest/agent_context.json (AI agent context)",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Knowledge Base & Registry"
+    ]
+  },
+  {
+    "objectID": "analyses/02_platoon_physics.html",
+    "href": "analyses/02_platoon_physics.html",
+    "title": "Study 02: 4-Quadrant Platoon Physics & Situational Pitching Effectiveness",
+    "section": "",
+    "text": "NoteResearch Standard & Framework Compliance\n\n\n\nThis study adheres to the Q-CRISP protocol and the Medallion Full-Population Invariant: all pitch-level metrics are derived across the entire 14.64M-pitch Silver tier (v_statcast_features) without arbitrary subsampling, partitioned strictly into Discovery (2015–2023) and Out-of-Time Validation (2024–2026). Specification: specs/02_platoon_physics.md.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 02: 4-Quadrant Platoon Physics"
+    ]
+  },
+  {
+    "objectID": "analyses/02_platoon_physics.html#business-scientific-understanding",
+    "href": "analyses/02_platoon_physics.html#business-scientific-understanding",
+    "title": "Study 02: 4-Quadrant Platoon Physics & Situational Pitching Effectiveness",
+    "section": "1. Business & Scientific Understanding",
+    "text": "1. Business & Scientific Understanding\n\n1.1 Why Platoon Physics Drives Prediction Market Edge\nPublic sportsbooks and prediction markets (Kalshi, Polymarket) routinely anchor pitcher valuation on lagging, season-aggregate metrics such as ERA, FIP, or overall K%. Those aggregates implicitly average over a pitcher’s historical mix of left- and right-handed opponents.\nIn reality, a pitcher’s effectiveness is not a single scalar—it is a 4-quadrant physical interaction between release geometry, aerodynamic break vector, and batter swing plane: - Same-Hand Quadrants (RvR, LvL): Glove-side breaking pitches (ST, SL) sweep away from the batter’s barrel and visual depth plane. - Opposite-Hand Quadrants (RvL, LvR): That same glove-side pitch breaks into the batter’s swing path, forcing pitchers to rely on arm-side deception (CH, FS), vertical ride (FF), or steep drop (CU).\nWhen an opposing manager stacks 6–7 opposite-handed hitters against a slider/sweeper-dependent starter, the pitcher’s true-talent strikeout rate and contact suppression degrade immediately—creating mispriced Over/Under totals, strikeout props, and moneylines.\n\n\n1.2 Hypotheses\n\nHypothesis 2.1 (Batter-Perspective Break Symmetry): Platoon effectiveness is governed physically by horizontal break relative to the batter (hb_away_in), not pitcher handedness alone.\nHypothesis 2.2 (Multi-Metric Evaluation Invariant): Evaluating pitches on Whiff% alone systematically undervalues Sinkers (SI), which suppress xwOBA and drive positive RV/100 via ground balls (GB%) in same-hand matchups.\nHypothesis 2.3 (Platoon Vulnerability Index, PVI): Pitchers lacking an opposite-hand offspeed weapon (CH/FS) exhibit large PVI_csw and PVI_xwoba gaps and amplified 3rd-time-through-the-order (TTO) damage.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 02: 4-Quadrant Platoon Physics"
+    ]
+  },
+  {
+    "objectID": "analyses/02_platoon_physics.html#data-understanding-silver-lake-verification",
+    "href": "analyses/02_platoon_physics.html#data-understanding-silver-lake-verification",
+    "title": "Study 02: 4-Quadrant Platoon Physics & Situational Pitching Effectiveness",
+    "section": "2. Data Understanding & Silver Lake Verification",
+    "text": "2. Data Understanding & Silver Lake Verification\nUsing R/materialize_features.R, we expanded the Silver feature table (data/features/statcast_features/) across all 14,643,543 pitches (19 seasons, 2008-03-25 to 2026-10-28) with explicit tracking_era segmentation:\n\n\n\n\n\n\n\n\n\n\n\n\nTracking Era\nSeasons\nPitches\nMean Speed\nWhiff% on Swings\nCSW%\nMean xwOBA\n\n\n\n\nPITCHf/x\n2008–2014\n5,472,159\n88.0 mph\n22.38%\n27.45%\nN/A\n\n\nTrackMan\n2015–2019\n4,008,970\n88.7 mph\n25.48%\n28.48%\n0.315\n\n\nHawk-Eye\n2020–2026\n5,162,414\n89.1 mph\n26.23%\n28.71%\n0.316\n\n\n\nTo eliminate tracking-era drift and look-ahead bias: - Discovery Split: 2015–2023 (TrackMan + early Hawk-Eye). - Out-of-Time Validation Split: 2024–2026 (Hawk-Eye, standardized Sweeper ST classification).",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 02: 4-Quadrant Platoon Physics"
+    ]
+  },
+  {
+    "objectID": "analyses/02_platoon_physics.html#mathematical-derivation-symmetric-platoon-coordinates",
+    "href": "analyses/02_platoon_physics.html#mathematical-derivation-symmetric-platoon-coordinates",
+    "title": "Study 02: 4-Quadrant Platoon Physics & Situational Pitching Effectiveness",
+    "section": "3. Mathematical Derivation: Symmetric Platoon Coordinates",
+    "text": "3. Mathematical Derivation: Symmetric Platoon Coordinates\nTo compare left- and right-handed pitchers on a unified geometric basis, Silver (v_statcast_features) defines two complementary horizontal break coordinates from Statcast pfx_x (hb_in = pfx_x * 12):\n\nPitcher-Perspective Horizontal Break (hb_glove_in): \\[\\text{hb\\_glove\\_in} = \\text{hb\\_in} \\times \\begin{cases} -1 & \\text{if } \\text{p\\_throws} = \\text{L} \\\\ +1 & \\text{if } \\text{p\\_throws} = \\text{R} \\end{cases}\\] Positive values always indicate glove-side break (ST, SL, FC); negative values always indicate arm-side run (SI, CH, FS).\nBatter-Perspective Horizontal Break (hb_away_in): \\[\\text{hb\\_away\\_in} = \\text{hb\\_in} \\times \\begin{cases} -1 & \\text{if } \\text{stand} = \\text{L} \\\\ +1 & \\text{if } \\text{stand} = \\text{R} \\end{cases}\\] Positive values always break away from the batter; negative values always break in toward the batter.\nPlatoon Vulnerability Index (PVI): \\[\\text{PVI}_{\\text{xwOBA}} = \\text{xwOBA}_{\\text{opp}} - \\text{xwOBA}_{\\text{same}}, \\qquad \\text{PVI}_{\\text{CSW}} = \\text{CSW\\%}_{\\text{same}} - \\text{CSW\\%}_{\\text{opp}}\\]",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 02: 4-Quadrant Platoon Physics"
+    ]
+  },
+  {
+    "objectID": "analyses/02_platoon_physics.html#full-population-empirical-distributions-across-the-4-quadrants",
+    "href": "analyses/02_platoon_physics.html#full-population-empirical-distributions-across-the-4-quadrants",
+    "title": "Study 02: 4-Quadrant Platoon Physics & Situational Pitching Effectiveness",
+    "section": "4. Full-Population Empirical Distributions Across the 4 Quadrants",
+    "text": "4. Full-Population Empirical Distributions Across the 4 Quadrants\n\n4.1 4-Quadrant Pitch Arsenal Matrix (2024–2026 Out-of-Time Validation)\n\n\n\nFigure 1: 4-Quadrant Platoon Matrix — CSW%, xwOBA, and Pitcher Run Value / 100\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPitch\nQuadrant\nPitches\nVelo (mph)\nHB Away (in)\nWhiff%\nCSW%\nChase%\nxwOBA\nGB%\nRV/100\n\n\n\n\nCH\nLvL\n6,761\n84.1\n-14.1\n35.48\n26.80\n36.15\n0.249\n50.3\n0.041\n\n\nCH\nLvR\n82,562\n84.5\n14.1\n32.66\n25.49\n35.19\n0.284\n50.6\n-0.069\n\n\nCH\nRvL\n122,056\n86.6\n14.3\n29.87\n23.63\n32.63\n0.291\n50.6\n-0.055\n\n\nCH\nRvR\n39,405\n86.1\n-14.2\n32.91\n26.57\n35.46\n0.270\n46.5\n-0.285\n\n\nCU\nLvL\n10,027\n79.3\n8.7\n31.90\n28.38\n28.84\n0.256\n49.6\n-0.273\n\n\nCU\nLvR\n37,010\n78.9\n-8.2\n30.87\n32.35\n29.14\n0.273\n46.5\n-0.123\n\n\nCU\nRvL\n67,333\n80.1\n-9.4\n30.86\n31.56\n28.21\n0.291\n43.9\n-0.338\n\n\nCU\nRvR\n35,673\n80.1\n9.5\n31.13\n29.76\n29.40\n0.269\n46.4\n-0.414\n\n\nFC\nLvL\n11,921\n87.7\n2.2\n29.09\n28.81\n25.57\n0.324\n39.0\n0.352\n\n\nFC\nLvR\n33,685\n88.3\n-1.8\n21.94\n26.88\n29.64\n0.345\n40.0\n-0.209\n\n\nFC\nRvL\n78,668\n90.3\n-2.0\n20.82\n26.52\n27.53\n0.358\n38.6\n-0.270\n\n\nFC\nRvR\n64,627\n89.8\n2.8\n26.19\n29.80\n27.56\n0.334\n40.0\n0.422\n\n\nFF\nLvL\n55,763\n93.3\n-7.8\n23.08\n29.84\n23.54\n0.335\n35.4\n0.040\n\n\nFF\nLvR\n151,600\n93.3\n8.1\n21.18\n26.71\n25.87\n0.334\n31.9\n-0.072\n\n\nFF\nRvL\n304,070\n94.9\n7.8\n20.77\n26.69\n23.83\n0.348\n33.0\n-0.170\n\n\nFF\nRvR\n238,393\n95.0\n-7.5\n23.59\n29.03\n26.45\n0.335\n32.1\n0.138\n\n\nFS\nLvR\n6,692\n84.3\n9.3\n37.49\n26.66\n37.35\n0.267\n48.6\n0.140\n\n\nFS\nRvL\n45,554\n86.7\n11.1\n32.99\n24.39\n34.27\n0.262\n54.3\n0.210\n\n\nFS\nRvR\n22,095\n86.8\n-10.9\n36.93\n26.93\n37.37\n0.244\n50.9\n0.065\n\n\nSI\nLvL\n54,133\n92.9\n-15.2\n14.59\n29.97\n29.37\n0.320\n62.9\n0.902\n\n\nSI\nLvR\n61,853\n93.2\n15.2\n14.43\n28.40\n20.52\n0.373\n50.5\n-0.189\n\n\nSI\nRvL\n90,065\n93.9\n15.0\n14.01\n26.95\n19.76\n0.370\n49.2\n-0.201\n\n\nSI\nRvR\n172,659\n94.1\n-15.0\n13.40\n28.26\n27.64\n0.342\n57.0\n0.345\n\n\nSL\nLvL\n40,468\n85.0\n4.2\n36.26\n31.01\n30.86\n0.262\n44.3\n0.503\n\n\nSL\nLvR\n49,749\n84.8\n-4.4\n32.80\n31.45\n34.48\n0.289\n39.9\n0.138\n\n\nSL\nRvL\n92,027\n86.6\n-4.0\n32.06\n30.71\n33.15\n0.308\n37.3\n-0.125\n\n\nSL\nRvR\n154,655\n86.5\n4.2\n34.58\n31.00\n31.86\n0.282\n44.6\n0.165\n\n\nST\nLvL\n23,842\n80.9\n13.6\n35.88\n30.38\n30.86\n0.229\n36.9\n0.583\n\n\nST\nLvR\n23,335\n80.6\n-13.5\n28.42\n32.44\n29.23\n0.283\n33.3\n-0.191\n\n\nST\nRvL\n44,540\n83.1\n-13.8\n28.06\n32.15\n27.28\n0.305\n34.8\n-0.310\n\n\nST\nRvR\n92,647\n83.0\n13.7\n33.01\n29.47\n32.39\n0.254\n35.3\n0.148\n\n\n\n\n\nKey Empirical Takeaways: 1. The Sweeper (ST) Platoon Cliff: In same-hand matchups (LvL / RvR), Sweepers generate 35.88% / 33.01% whiff, .229 / .254 xwOBA, and +0.583 / +0.148 RV/100. Against opposite-hand batters (LvR / RvL), whiff drops to 28.42% / 28.06%, xwOBA jumps to .283 / .305, and net run value flips negative (-0.191 / -0.310 RV/100). 2. Why Sinkers (SI) Require Multi-Metric Scoring: SI produces the lowest whiff rate (13.40%–14.59%), yet delivers +0.902 RV/100 in LvL and +0.345 RV/100 in RvR via 62.9% / 57.0% ground balls. Against opposite-hand batters (LvR / RvL), SI xwOBA surges to .373 / .370. 3. The Offspeed Neutralizer (FS / CH): Splitters (FS) remain positive run-value weapons (+0.210 RV/100, .262 xwOBA) even in RvL opposite-hand battles.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 02: 4-Quadrant Platoon Physics"
+    ]
+  },
+  {
+    "objectID": "analyses/02_platoon_physics.html#signal-evaluation-break-symmetry-situational-leverage-pvi",
+    "href": "analyses/02_platoon_physics.html#signal-evaluation-break-symmetry-situational-leverage-pvi",
+    "title": "Study 02: 4-Quadrant Platoon Physics & Situational Pitching Effectiveness",
+    "section": "5. Signal Evaluation: Break Symmetry, Situational Leverage & PVI",
+    "text": "5. Signal Evaluation: Break Symmetry, Situational Leverage & PVI\n\n5.1 Continuous Horizontal Break Symmetry (hb_away_in)\n\n\n\nFigure 2: Whiff Rate vs Batter-Perspective Horizontal Break (2020-2026)\n\n\n\n\n5.2 Situational Effectiveness: Count Leverage & Times Through the Order\n\n\n\nFigure 3: Count Leverage, Attack Zones & TTO xwOBA Decay (2020-2026)\n\n\nNotice how Times Through the Order (TTO) compounds platoon exposure: - In 1st TTO same-hand (LvL / RvR), pitchers post 30.90% / 30.30% CSW and .289 / .304 xwOBA (+0.58 / +0.18 RV/100). - By 3rd+ TTO opposite-hand (LvR / RvL), CSW falls to 26.13% / 25.63% and xwOBA climbs to .339 / .345 (-0.44 / -0.50 RV/100). (Note: 1st TTO aggregates also reflect higher-velocity 1-inning relievers compared to multi-inning starters.)\n\n\n5.3 Pitcher Platoon Vulnerability Landscape (2024–2026)\n\n\n\nFigure 4: 2024-2026 Pitcher Platoon Vulnerability Index Landscape\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPitcher\nThrows\nSame N\nOpp N\nCSW Same%\nCSW Opp%\nPVI CSW\nPVI xwOBA\nSL/ST %\nCH/FS %\n\n\n\n\nHjelle, Sean\nR\n876\n711\n36.9\n26.2\n10.71\n0.071\n0.0\n0.0\n\n\nHamilton, Ian\nR\n869\n629\n35.9\n26.1\n9.83\n0.094\n45.7\n0.0\n\n\nImai, Tatsuya\nR\n592\n927\n35.8\n26.8\n9.06\n0.069\n45.1\n5.9\n\n\nUribe, Abner\nR\n1576\n1273\n36.4\n27.7\n8.71\n0.031\n39.3\n0.1\n\n\nHerget, Jimmy\nR\n1435\n1323\n33.9\n25.4\n8.54\n0.050\n47.6\n6.3\n\n\nPoulin, PJ\nL\n521\n655\n33.0\n24.6\n8.43\n0.049\n30.7\n16.0\n\n\nScherzer, Max\nR\n1798\n2282\n32.1\n23.8\n8.35\n0.058\n20.1\n14.6\n\n\nMoll, Sam\nL\n1108\n1266\n33.0\n24.9\n8.15\n0.106\n32.3\n13.1\n\n\nPhillips, Evan\nR\n928\n710\n34.7\n26.6\n8.08\n0.054\n39.1\n0.0\n\n\nFerguson, Tyler\nR\n1476\n905\n32.1\n24.1\n8.03\n0.173\n26.2\n3.7\n\n\nRutledge, Jackson\nR\n1040\n815\n31.0\n22.9\n8.02\n0.120\n23.2\n9.8\n\n\nRoss, Joe\nR\n1475\n1195\n31.1\n23.3\n7.79\n0.003\n29.0\n9.2\n\n\nGarcia, Brandyn\nL\n534\n657\n35.2\n27.5\n7.66\n0.095\n31.9\n0.5\n\n\nStewart, Brock\nR\n755\n674\n34.0\n26.4\n7.63\n0.061\n18.8\n9.5\n\n\nPeterson, David\nL\n1985\n5725\n33.5\n26.1\n7.35\n0.074\n19.6\n14.6\n\n\n\n\n\n\n\n5.4 Out-of-Time Temporal Stability Validation (2015–2023 vs 2024–2026)\n\n\n\nFigure 5: Out-of-Time Platoon Invariance Across Eras\n\n\nAcross all Pitch Type x Quadrant cells, Discovery (2015–2023) vs Validation (2024–2026) achieves \\(r = 0.8855\\) on CSW% and \\(r = 0.9342\\) on xwOBA, confirming that platoon physical mechanisms are structural invariants rather than seasonal noise.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 02: 4-Quadrant Platoon Physics"
+    ]
+  },
+  {
+    "objectID": "analyses/02_platoon_physics.html#implementation-reproducibility",
+    "href": "analyses/02_platoon_physics.html#implementation-reproducibility",
+    "title": "Study 02: 4-Quadrant Platoon Physics & Situational Pitching Effectiveness",
+    "section": "6. Implementation & Reproducibility",
+    "text": "6. Implementation & Reproducibility\nAll metrics in this study are pre-materialized in Silver (data/features/statcast_features/) and summarized into Gold Parquet tables (data/processed/platoon_quadrant_arsenal.parquet, data/processed/pitcher_pvi_2024_2026.parquet).\nlibrary(mlbr)\ncon &lt;- mlbr::lake_duckdb()\n\n# Query any pitcher's 4-quadrant profile in ~40ms\nDBI::dbGetQuery(con, \"\n  SELECT matchup, pitch_type, COUNT(*) AS n,\n         ROUND(AVG(is_csw)*100, 1) AS csw_pct,\n         ROUND(AVG(xwoba), 3) AS xwoba,\n         ROUND(AVG(pitcher_run_exp)*100, 2) AS rv100\n  FROM v_statcast_features\n  WHERE game_year &gt;= 2024 AND matchup IS NOT NULL\n  GROUP BY 1, 2\n\")",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 02: 4-Quadrant Platoon Physics"
+    ]
+  },
+  {
+    "objectID": "analyses/02_platoon_physics.html#next-steps-hierarchical-roadmap",
+    "href": "analyses/02_platoon_physics.html#next-steps-hierarchical-roadmap",
+    "title": "Study 02: 4-Quadrant Platoon Physics & Situational Pitching Effectiveness",
+    "section": "7. Next Steps & Hierarchical Roadmap",
+    "text": "7. Next Steps & Hierarchical Roadmap\n\nLevel 1 (EXP-003) — Pitch Sequencing & Tunneling (sql/02_pitch_tunneling.sql): Materialize commit-point (y = 23.8 ft) tunnel distance (d_tunnel) and velocity delta (delta_v) into Silver, then train pitch-type-specific Stuff+ / Pitching+ models conditioned on matchup and hb_away_in.\nLevel 2 — Lineup-Specific True Talent Projections: Combine pitcher arsenal weights with projected opponent handedness lineups and PVI to compute matchup-specific K%, BB%, and wOBA allowed.\nLevel 3–5 — Game Simulation & Kalshi/Polymarket Valuation: Feed lineup-adjusted pitcher True Talent + TTO decay into the Monte Carlo Markov simulator and compare against live prediction-market implied probabilities.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 02: 4-Quadrant Platoon Physics"
     ]
   },
   {

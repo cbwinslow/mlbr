@@ -50,6 +50,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge sabermetrics">Q-CRISP Study 02</span>
+    <span class="gallery-badge">Platoon Physics</span>
+    <h4><a href="analyses/02_platoon_physics.html">4-Quadrant Platoon Physics &amp; PVI</a></h4>
+    <p>Full-population RvR, RvL, LvL, and LvR analysis across 14.64M pitches: batter-perspective horizontal break (<code>hb_away_in</code>), CSW%, xwOBA, TTO decay, and Pitcher Platoon Vulnerability Index.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Out-of-Time CSW% r = 0.886 | xwOBA r = 0.934 | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge sabermetrics">Sabermetrics</span>
     <span class="gallery-badge">GAM / LOESS</span>
     <h4><a href="analyses/xwoba_surface.html">Non-Linear xwOBA & Barrel Landscape</a></h4>

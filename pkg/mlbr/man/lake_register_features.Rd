@@ -4,26 +4,20 @@
 \alias{lake_register_features}
 \title{Register Lake-Wide Aerodynamic and Trajectory Features in DuckDB}
 \usage{
-lake_register_features(con)
+lake_register_features(con, lake = NULL, force_dynamic = FALSE)
 }
 \arguments{
 \item{con}{A DBI connection to DuckDB}
+
+\item{lake}{Project root directory (default: mlbr default_lake)}
+
+\item{force_dynamic}{Logical; if TRUE, bypass materialized Parquet and evaluate live SQL over \code{v_statcast}}
 }
 \value{
 Invisibly returns the connection
 }
 \description{
-Derives physics-based aerodynamic features across all 14.64M Statcast pitches:
-\itemize{
-\item vy_f: Plate-plane forward velocity at y = 1.417 ft
-\item t_flight: Time of flight from release (50 ft) to plate front (1.417 ft)
-\item vaa: Vertical Approach Angle (degrees relative to horizontal plane)
-\item haa: Horizontal Approach Angle (degrees)
-\item plate_x_norm: Platoon-normalized horizontal location (positive = glove-side/away)
-\item attack_zone: Statcast concentric zones (Heart, Shadow, Chase, Waste)
-\item is_swing: Binary indicator of swing attempt
-\item is_whiff: Binary indicator of swinging strike
-\item hb_in: Horizontal break in inches
-\item ivb_in: Induced vertical break in inches
-}
+Mounts the pre-materialized Silver-tier feature table (data/features/statcast_features)
+if present, providing sub-50ms queries over 14.64M rows. If unmaterialized or if
+\code{force_dynamic = TRUE}, builds the canonical dynamic CTE derivation over Bronze \code{v_statcast}.
 }

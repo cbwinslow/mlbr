@@ -9,52 +9,56 @@
     <lastmod>2026-11-14T22:01:33.080Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/experiment_registry.html</loc>
-    <lastmod>2026-11-16T07:29:56.777Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/analyses/run_expectancy.html</loc>
-    <lastmod>2026-11-14T22:04:37.436Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/verification.html</loc>
-    <lastmod>2026-11-14T22:07:25.356Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/crosswalk.html</loc>
-    <lastmod>2026-11-15T03:13:17.898Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/agent_context.html</loc>
-    <lastmod>2026-11-15T06:43:54.167Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/gallery.html</loc>
-    <lastmod>2026-11-14T22:06:12.732Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/architecture.html</loc>
-    <lastmod>2026-11-14T23:18:32.275Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/setup.html</loc>
-    <lastmod>2026-11-14T23:18:32.278Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/index.html</loc>
-    <lastmod>2026-11-14T22:06:01.181Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab01_aerodynamics_workbook.html</loc>
-    <lastmod>2026-11-17T11:31:23.505Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/xwoba_surface.html</loc>
+    <lastmod>2026-11-14T22:01:50.584Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/analyses/01_pitch_quality_eda.html</loc>
     <lastmod>2026-11-16T05:14:19.086Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/xwoba_surface.html</loc>
-    <lastmod>2026-11-14T22:01:50.584Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab01_aerodynamics_workbook.html</loc>
+    <lastmod>2026-11-17T11:31:23.505Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/index.html</loc>
+    <lastmod>2026-11-14T22:06:01.181Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/setup.html</loc>
+    <lastmod>2026-11-14T23:18:32.278Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/architecture.html</loc>
+    <lastmod>2026-11-14T23:18:32.275Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/gallery.html</loc>
+    <lastmod>2026-11-17T13:27:10.757Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/agent_context.html</loc>
+    <lastmod>2026-11-15T06:43:54.167Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/crosswalk.html</loc>
+    <lastmod>2026-11-15T03:13:17.898Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/verification.html</loc>
+    <lastmod>2026-11-14T22:07:25.356Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/run_expectancy.html</loc>
+    <lastmod>2026-11-14T22:04:37.436Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/experiment_registry.html</loc>
+    <lastmod>2026-11-16T07:29:56.777Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/02_platoon_physics.html</loc>
+    <lastmod>2026-11-17T13:26:59.490Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/analyses/pitch_clustering.html</loc>

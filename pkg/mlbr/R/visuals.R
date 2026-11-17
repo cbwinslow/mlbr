@@ -1,20 +1,17 @@
-#' Dark Cyber / Antigravity Visual Theme for ggplot2
+#' Antigravity Dark Cyber Theme for ggplot2
 #'
-#' Provides an immersive dark aesthetic matching the mlbr Quarto site:
-#' - Canvas: #090d16
-#' - Panel surface: #111827
-#' - Gridlines: #1e293b
-#' - Typography: High-contrast legible text
+#' Applies the official mlbr dark cyber aesthetic (#090d16 canvas, #111827 surface,
+#' subtle #1e293b gridlines, high-contrast typography) across all figures.
 #'
 #' @param base_size Base font size (default: 12)
-#' @param base_family Base font family
+#' @param base_family Base font family (default: "sans")
 #' @return A ggplot2 theme object
 #' @export
-theme_cyber <- function(base_size = 12, base_family = "") {
+theme_cyber <- function(base_size = 12, base_family = "sans") {
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       plot.background   = ggplot2::element_rect(fill = "#090d16", color = NA),
-      panel.background  = ggplot2::element_rect(fill = "#111827", color = "#1e293b", linewidth = 0.6),
+      panel.background  = ggplot2::element_rect(fill = "#111827", color = "#1e293b", linewidth = 0.5),
       panel.grid.major  = ggplot2::element_line(color = "#1e293b", linewidth = 0.4),
       panel.grid.minor  = ggplot2::element_line(color = "#162032", linewidth = 0.2),
       text              = ggplot2::element_text(color = "#e2e8f0"),
@@ -33,8 +30,7 @@ theme_cyber <- function(base_size = 12, base_family = "") {
 
 #' Cyber Color Palette
 #'
-#' @param n Number of colors or name of palette
-#' @return Vector of hex colors
+#' @return Named character vector of Dark Cyber hex colors
 #' @export
 cyber_palette <- function() {
   c(
@@ -46,6 +42,37 @@ cyber_palette <- function() {
     blue    = "#3b82f6",
     lime    = "#84cc16",
     indigo  = "#6366f1"
+  )
+}
+
+#' Standard Dark Cyber Pitch-Type Color Map
+#'
+#' @return Named character vector mapping Statcast pitch codes to hex colors
+#' @export
+cyber_pitch_colors <- function() {
+  c(
+    FF = "#38bdf8",
+    SI = "#3b82f6",
+    FC = "#6366f1",
+    SL = "#10b981",
+    ST = "#84cc16",
+    CH = "#a855f7",
+    FS = "#f59e0b",
+    CU = "#f43f5e",
+    KC = "#fb7185"
+  )
+}
+
+#' Standard Dark Cyber 4-Quadrant Platoon Color Map
+#'
+#' @return Named character vector mapping RvR, RvL, LvL, LvR to hex colors
+#' @export
+cyber_quadrant_colors <- function() {
+  c(
+    RvR = "#38bdf8",
+    RvL = "#f43f5e",
+    LvL = "#10b981",
+    LvR = "#f59e0b"
   )
 }
 
@@ -68,21 +95,21 @@ cyber_palette <- function() {
 #' @export
 save_plot_assets <- function(plot, name, data = NULL, width = 10, height = 6, dpi = 300, dir = "models") {
   if (!dir.exists(dir)) dir.create(dir, recursive = TRUE, showWarnings = FALSE)
-  
+
   res <- list()
-  
+
   # 1. High-resolution PNG
   png_path <- file.path(dir, paste0(name, ".png"))
   if (inherits(plot, "ggplot")) {
     ggplot2::ggsave(png_path, plot = plot, width = width, height = height, dpi = dpi)
     res$png <- png_path
   }
-  
+
   # 2. Serialized Native R Object (.rds)
   rds_path <- file.path(dir, paste0(name, ".rds"))
   saveRDS(plot, file = rds_path)
   res$rds <- rds_path
-  
+
   # 3. Underlying Audit Data (.parquet / .csv)
   if (!is.null(data) && is.data.frame(data)) {
     if (requireNamespace("arrow", quietly = TRUE)) {
@@ -95,16 +122,16 @@ save_plot_assets <- function(plot, name, data = NULL, width = 10, height = 6, dp
       res$csv <- csv_path
     }
   }
-  
+
   # 4. Interactive HTML widget if plotly
   if (inherits(plot, "plotly") && requireNamespace("htmlwidgets", quietly = TRUE)) {
     html_path <- file.path(dir, paste0(name, ".html"))
     htmlwidgets::saveWidget(plot, file = html_path, selfcontained = TRUE)
     res$html <- html_path
   }
-  
+
   cat(sprintf("[mlbr] Preserved plot assets for '%s':\n", name))
   for (nm in names(res)) cat(sprintf("  - %s: %s\n", nm, res[[nm]]))
-  
+
   invisible(res)
 }

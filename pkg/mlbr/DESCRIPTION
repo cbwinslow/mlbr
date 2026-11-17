@@ -23,6 +23,9 @@ Imports:
     tibble,
     purrr,
     baseballr,
+    ggplot2,
+    stats,
+    tools,
     utils,
     R6
 Suggests:
@@ -30,5 +33,8 @@ Suggests:
     duckdb,
     DBI,
     cli,
+    jsonlite,
+    htmlwidgets,
+    plotly,
     testthat (>= 3.0.0)
 Config/roxygen2/version: 8.1.1

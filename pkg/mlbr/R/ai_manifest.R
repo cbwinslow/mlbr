@@ -276,7 +276,7 @@ generate_agent_manifest <- function(lake = NULL, out_dir = NULL) {
     sources = lapply(manifest$sources, function(s) list(rows = s$total_rows, size_mb = s$size_mb)),
     join_graph = manifest$join_graph,
     caveats = manifest$sabermetric_caveats,
-    experiments = lake_get_experiments(lake),
+    experiments = lake_get_experiments(lake = lake),
     audit_summary = list(
       passed = sum(audit_results$status == "PASS"),
       total = nrow(audit_results),

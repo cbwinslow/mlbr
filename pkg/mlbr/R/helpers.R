@@ -63,11 +63,10 @@ write_df <- function(df, path, partition_cols = NULL) {
   invisible(TRUE)
 }
 
-#' Validate directory structure of baseball data lake
+#' Check basic directory structure of baseball data lake
 #' @param lake_path Root path of the data lake
 #' @return Logical TRUE if valid, FALSE otherwise
-#' @export
-validate_lake <- function(lake_path = default_lake()) {
+has_lake_dirs <- function(lake_path = default_lake()) {
   expected <- c("data/raw", "data/processed")
   all(dir.exists(file.path(lake_path, expected)))
 }

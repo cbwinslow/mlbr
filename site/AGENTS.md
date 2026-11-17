@@ -30,6 +30,8 @@
     - `pitch_classification.qmd`: Multi-class pitch type classifier with tidymodels Random Forest (`ranger`).
     - `xwoba_surface.qmd`: 2D Non-linear GAM surface on Exit Velocity & Launch Angle.
     - `run_expectancy.qmd`: 24-state Run Expectancy (RE24) matrix from 23.8M Retrosheet plays.
+    - `01_pitch_quality_eda.qmd`: Study 01 — Aerodynamics, VAA/HAA, and whiff lift.
+    - `02_platoon_physics.qmd`: Study 02 — 4-Quadrant Platoon Physics, break symmetry, and PVI.
 - Build command: `quarto render site/` from project root.
 
 ## Verification

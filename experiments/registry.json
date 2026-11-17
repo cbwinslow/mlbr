@@ -48,5 +48,52 @@
       "workbook_qmd": "site/workbooks/lab01_aerodynamics_workbook.qmd",
       "workbook_script": "workbooks/lab01_aerodynamics_workbook.R"
     }
+  },
+  {
+    "id": "EXP-002-PLATOON-PHYSICS",
+    "title": "4-Quadrant Platoon Physics, Break Symmetry & Situational Pitching Effectiveness",
+    "tier": 1,
+    "tier_name": "Level 1: Pitch Physics & Quality",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-17 13:25:54 UTC",
+    "summary": "Quantified full-population pitching mechanics across RvR, RvL, LvL, and LvR using Silver v_statcast_features. Established Batter-Perspective Horizontal Break (hb_away_in) as the physical driver of platoon splits: glove-side breaking pitches (ST/SL) lose 4.9-7.5 pct whiff and ~2-3 pct CSW against opposite-hand batters while offspeed (CH/FS) inverts the edge. Derived Pitcher Platoon Vulnerability Index (PVI) and verified out-of-time stability (r = 0.885).",
+    "hypotheses": [
+      "Platoon splits are physically driven by horizontal break direction relative to the batter (hb_away_in), not merely pitcher handedness.",
+      "Evaluating pitchers on CSW%, xwOBA, and RV/100 prevents undervaluing ground-ball sinkers (SI) that generate low whiffs.",
+      "Pitchers lacking an opposite-hand offspeed weapon exhibit elevated PVI and suffer amplified 3rd-TTO xwOBA degradation."
+    ],
+    "formulas": {
+      "hb_glove_in": "hb_in * (CASE WHEN p_throws = 'L' THEN -1 ELSE 1 END)",
+      "hb_away_in": "hb_in * (CASE WHEN stand = 'L' THEN -1 ELSE 1 END)",
+      "pvi_xwoba": "xwOBA_opposite - xwOBA_same",
+      "pvi_csw": "CSW_same - CSW_opposite",
+      "rv_per_100": "AVG(COALESCE(delta_pitcher_run_exp, -delta_run_exp)) * 100"
+    },
+    "metrics": {
+      "out_of_time_csw_r": 0.8855,
+      "out_of_time_xwoba_r": 0.9342,
+      "qualified_pitchers_2024_2026": 630
+    },
+    "features": [
+      "matchup",
+      "is_same_hand",
+      "hb_glove_in",
+      "hb_away_in",
+      "haa_glove",
+      "haa_away",
+      "is_csw",
+      "is_chase",
+      "xwoba",
+      "pitcher_run_exp",
+      "n_thruorder_pitcher"
+    ],
+    "artifacts": {
+      "script": "models/02_platoon_splits_analysis.R",
+      "spec": "specs/02_platoon_physics.md",
+      "study_qmd": "site/analyses/02_platoon_physics.qmd",
+      "study_html": "http://192.168.10.1:8088/analyses/02_platoon_physics.html",
+      "gold_quadrant_table": "data/processed/platoon_quadrant_arsenal.parquet",
+      "gold_pvi_table": "data/processed/pitcher_pvi_2024_2026.parquet"
+    }
   }
 ]
