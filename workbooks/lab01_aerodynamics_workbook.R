@@ -112,16 +112,30 @@ DBI::dbDisconnect(con, shutdown = TRUE)
 cat(sprintf("Loaded %s competitive swings in the strike zone.\n", format(nrow(swings_2024), big.mark=",")))
 
 # Create an intuitive plot showing how flatter fastballs increase whiffs
-p <- ggplot(swings_2024, aes(x = vaa, y = is_whiff)) +
-  geom_smooth(method = "loess", color = "#2b5c8f", linewidth = 1.2, se = TRUE) +
+# We use Generalized Additive Models (GAM) and empirical bins for sub-second, memory-efficient rendering
+p <- ggplot(swings_2024 |> filter(vaa >= -9.0 & vaa <= -1.0), aes(x = vaa, y = is_whiff)) +
+  stat_summary_bin(bins = 20, geom = "point", size = 3.5, color = "#00f2fe") +
+  stat_summary_bin(bins = 20, geom = "line", color = "#00e676", linewidth = 1.1) +
+  geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs"), color = "#38bdf8", fill = "#38bdf8", alpha = 0.2) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  theme_minimal(base_size = 14) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.background  = element_rect(fill = "#090d16", color = NA),
+    panel.background = element_rect(fill = "#111827", color = "#1e293b", linewidth = 0.6),
+    panel.grid.major = element_line(color = "#1e293b", linewidth = 0.4),
+    panel.grid.minor = element_line(color = "#162032", linewidth = 0.2),
+    text             = element_text(color = "#e2e8f0"),
+    plot.title       = element_text(color = "#f1f5f9", face = "bold", size = rel(1.1)),
+    plot.subtitle    = element_text(color = "#94a3b8", size = rel(0.9)),
+    axis.title       = element_text(color = "#e2e8f0", face = "bold"),
+    axis.text        = element_text(color = "#94a3b8")
+  ) +
   labs(
     title = "Work-Along Lab 01: Fastball Whiff Rate vs. VAA (2024 Season)",
-    subtitle = "Notice the steep upward curve: fastballs flatter than -4.5 deg induce dramatically more misses",
+    subtitle = "Cyan points = Empirical bins | Green line = Trajectory | Blue ribbon = 95% GAM Confidence Band",
     x = "Vertical Approach Angle (degrees, higher/flatter is better)",
-    y = "Probability of Whiff on Swing"
+    y = "Observed Whiff Rate on Swings"
   )
 
 print(p)
-cat("Plot rendered in RStudio Plot Viewer!\n")
+cat("Plot rendered in Dark Cyber Theme in RStudio Plot Viewer!\n")
