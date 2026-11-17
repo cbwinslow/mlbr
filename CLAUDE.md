@@ -1,6 +1,6 @@
 # CLAUDE.md - Operating Contract & Quantitative Research Protocol for mlbr
 
-This file defines the mandatory working contract, behavioral guidelines, and engineering standards for all AI agents working in `/mnt/storage/Rprojects/mlbr`.
+This file defines the mandatory working contract, behavioral guidelines, and engineering standards for all AI agents working in `/mnt/storage/Rprojects/mlbr` on `cbwdellr720`.
 
 ---
 
@@ -8,7 +8,7 @@ This file defines the mandatory working contract, behavioral guidelines, and eng
 
 `mlbr` is a production-grade Sabermetrics research platform, data lake, and quantitative game prediction engine.
 
-The ultimate objective is a **5-tier hierarchical modeling system** building from atomic pitch physics to predictive game simulation and prediction market valuation (Kalshi, Polymarket):
+The platform executes a **5-tier hierarchical modeling system** building from atomic pitch physics to predictive game simulation and prediction market valuation (Kalshi, Polymarket):
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -53,41 +53,73 @@ The ultimate objective is a **5-tier hierarchical modeling system** building fro
 
 ---
 
-## 2. Mandatory Research Protocol: Q-CRISP & 7-Section Study Template
+## 2. Medallion Data Architecture & Full-Population Mandate
 
-All analytical investigations and models MUST follow the **Q-CRISP (Quantitative CRISP-DM)** framework and be structured into the canonical **7-Section Study Template** for both research documentation and Quarto website publication:
+To preserve pure historical origins while providing instant (sub-50ms) query speeds, `mlbr` strictly enforces a 3-tier Medallion architecture:
 
+1. **Bronze Tier (`data/raw/`)**:
+   - Machine-managed, partitioned Parquet files (Statcast 2008–2026, Retrosheet 1900–2025, FanGraphs 1901–2025, Chadwick, Lahman, NCAA, MLB Meta).
+   - **Zero-Drop Raw Invariant**: 100% column fidelity. Never drop fields, never overwrite raw partitions.
+2. **Silver Tier (`data/features/`)**:
+   - Lake-wide materialized feature datasets partitioned by `game_year` (e.g. `data/features/statcast_features/`).
+   - Every row MUST retain composite primary keys linking directly to raw data: `game_pk`, `at_bat_number`, `pitch_number`.
+   - Mounted dynamically via `v_statcast_features` in DuckDB (scanning 14.64M rows in 39ms).
+3. **Gold Tier (`data/processed/` & `data/models/`)**:
+   - Aggregated leaderboards, true talent baselines, run value matrices, and simulation lookup tables.
+4. **Full-Population Materialization Mandate (NO Arbitrary Subsampling)**:
+   - When a new physics metric, feature, or formula is validated, it MUST be materialized across the entire 14.64M pitch lake across all 19 seasons (2008–2026) using reproducible pipeline scripts (`R/materialize_*.R`).
+   - Arbitrary subsamples (e.g., single team, single month) are strictly prohibited for production data layers and are only permitted for local interactive sandbox probes or browser canvas rendering safety.
+
+---
+
+## 3. Institutional Knowledge: Experiment Registry (`experiments/registry.json`)
+
+To prevent loss of discoveries, ungrounded code drift, and duplicated effort:
+1. Every validated metric, baseline equation, invariant, or negative/rejected result MUST be cataloged in `experiments/registry.json` using `mlbr::lake_log_experiment()`.
+2. Logging automatically updates `experiments/README.md` and syncs `data/manifest/agent_context.json`.
+3. AI agents and student workbooks must check `experiments/registry.json` before proposing or deriving duplicate features.
+
+---
+
+## 4. Directory Structure & Naming Conventions
+
+* `data/raw/`: Bronze tier raw Parquet lakes.
+* `data/features/`: Silver tier partitioned Parquet feature tables.
+* `data/processed/`: Gold tier aggregated model outputs and simulation artifacts.
+* `data/manifest/`: Continuous machine-readable AI agent manifests (`lake_manifest.json`, `agent_context.json`).
+* `experiments/`: Experiment registry (`registry.json`, `README.md`).
+* `sql/`: Standalone, reusable, pure DuckDB SQL scripts (`01_statcast_features.sql`, `02_pitch_tunneling.sql`).
+* `models/`: Self-contained, reproducible R model training and research scripts (`01_eda_feature_expansion.R`, etc.).
+* `workbooks/`: Interactive student lab workbooks for RStudio Server (`lab01_aerodynamics_workbook.R`).
+* `specs/`: Mathematical and system architecture specifications (SDD / Q-CRISP).
+* `pkg/mlbr/`: The core R package. Must pass clean build and installation.
+* `site/`: Quarto multi-page research gallery and documentation (`site/analyses/`, `site/workbooks/`), deployed via GitHub Pages.
+
+---
+
+## 5. Mandatory Research Protocol: Q-CRISP & 7-Section Study Template
+
+All analytical studies MUST follow the canonical **7-Section Study Template** for both research documentation and Quarto publication:
 1. **Section 1: Executive Summary & Abstract (TL;DR)** — Bottom line up front, key findings, headline visualization.
-2. **Section 2: Domain Problem & Theoretical Physics** — Perceptual/biomechanical mechanisms, historical context, why linear models fail.
+2. **Section 2: Domain Problem & Theoretical Physics** — Perceptual/biomechanical mechanisms, why linear models fail.
 3. **Section 3: Mathematical Formulation & Lake-Wide Pipeline** — Formal KaTeX formulas and full-population DuckDB SQL queries.
-4. **Section 4: Exploratory Data Analysis (EDA) & Feature Diagnostics** — 2D density surfaces (hexbins), correlation matrices, mutual information ranking.
-5. **Section 5: Model Architecture & Temporal Validation** — Out-of-season temporal validation (train past -> test future), calibration curves, benchmark comparisons.
-6. **Section 6: Leaderboards & Player Case Studies** — Model rankings, outlier detection (undervalued/overvalued arms and hitters).
-7. **Section 7: Downstream Integration & Market Applications** — Connection to player projections (Level 2) and game betting edge (Levels 4–5).
+4. **Section 4: Exploratory Data Analysis (EDA) & Feature Diagnostics** — 2D density surfaces (hexbins), correlation matrices.
+5. **Section 5: Model Architecture & Temporal Validation** — Out-of-season temporal validation (train past -> test future).
+6. **Section 6: Leaderboards & Player Case Studies** — Model rankings, outlier detection.
+7. **Section 7: Downstream Integration & Market Applications** — Connection to player projections and game betting edge.
 
 ---
 
-## 3. Data Lake Invariants & Population Mandate
+## 6. Teaching, Mentoring & Review Protocol (MANDATORY)
 
-1. **Full-Population Invariant (NO Arbitrary Subsampling)**:
-   - Feature engineering and model scoring must be calculated and materialized **lake-wide across all 14,643,543 pitches and 125 historical seasons**.
-   - Subsampling or small slices are **strictly restricted** to interactive prototyping probes or rendering raw vector scatter plots that would otherwise crash web browsers.
-2. **Zero-Drop Raw Invariant**:
-   - Raw Parquet partitions must retain 100% of upstream columns. Never drop fields during ingestion or storage.
-3. **Strict Temporal Validation (No Look-Ahead Leakage)**:
-   - Models must NEVER train on future game dates to predict the past. Training splits must be strictly chronological.
-4. **Dynamic Path Resolution**:
-   - Always resolve paths via `mlbr::default_lake()`; never hardcode absolute paths in library or analysis code.
-
----
-
-## 4. Teaching & Mentoring Protocol (MANDATORY)
-
-1. **Collaborative Tutoring Tone**:
-   - The user is using this project as a masterclass in modern sabermetrics, statistical modeling, and quantitative prediction.
-   - Explain the *why*, mathematical foundations, and historical sabermetric context (e.g. why Tangotiger chose 5/4/3, why BaseRuns outperforms Linear Weights, the aerodynamics of Magnus lift vs Seam-Shifted Wake).
-   - Write didactic, readable code with Google-style documentation and clear comments.
-2. **Mandatory Response Structure**:
+1. **Collaborative Tutoring & Review**:
+   - The user writes code and executes experiments in RStudio Server.
+   - AI agents review student code at explicit checkpoints, checking for:
+     - Correct joins (e.g. using `v_chadwick_register` instead of broken joins).
+     - Proper aggregation syntax (e.g. `SUM(is_whiff)::NUMERIC / NULLIF(SUM(is_swing), 0)`).
+     - Scalable plotting methods (GAM splines / binning instead of 150GB LOESS allocations).
+     - Execution speed and sample completeness.
+2. **Mandatory Output Structure**:
    Every response MUST include:
    - **Concrete Recommendations** (Actionable immediate next steps)
    - **Pros & Cons Analysis** (Trade-offs for analytical and technical options)
@@ -95,8 +127,21 @@ All analytical investigations and models MUST follow the **Q-CRISP (Quantitative
 
 ---
 
-## 5. Key Server Endpoints
+## 7. Aesthetic & Visual Standards
 
-* **RStudio Server:** `http://192.168.10.1:8787` (Persistent session; 365-day keepalive; zero idle timeout)
-* **Quarto Documentation Site:** `http://192.168.10.1:8088` (Serving `site/docs/`)
-* **Host Server:** `cbwdellr720` (40 CPU cores, 125 GB RAM, RAID volume `/mnt/storage/Rprojects/mlbr`)
+* **Dark Cyber / Antigravity Theme**:
+  - Background Canvas: `#090d16`
+  - Surface Cards: `#111827`
+  - Borders: `#1f2937` with cyan/emerald glowing focus
+  - Palette: `#38bdf8` (Cyan), `#10b981` (Emerald), `#f59e0b` (Amber), `#f43f5e` (Rose)
+  - Typography: Google Sans / Inter for prose, Consolas / JetBrains Mono for code.
+  - Zero harsh white backgrounds on website or in saved `ggplot2` figures.
+
+---
+
+## 8. Server Endpoints & Remote Rules
+
+* **Remote Canonical Host:** `cbwdellr720` (IP: `192.168.10.1`, Ubuntu 24.04, 40 cores, 125 GB RAM, `/mnt/storage/Rprojects/mlbr`).
+* **Zero Local Files on Windows:** Windows client machines must remain 100% free of local project files or cloned data.
+* **RStudio Server:** `http://192.168.10.1:8787` (Persistent session; 365-day keepalive).
+* **Quarto Documentation Site:** `http://192.168.10.1:8088` and `https://cbwinslow.github.io/mlbr/`.

@@ -723,7 +723,7 @@ Notice that the pitch crosses the plate with a VAA of around <strong><span class
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's compare Four-Seam Fastballs for top starters in 2024</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>top_pitchers <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, <span class="st">"</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT </span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">    p.name_last || ', ' || p.name_first AS pitcher_name,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">    c.name_last || ', ' || c.name_first AS pitcher_name,</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">    COUNT(*) AS pitches,</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_speed), 1) AS avg_mph,</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,</span></span>
@@ -732,10 +732,10 @@ Notice that the pitch crosses the plate with a VAA of around <strong><span class
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.is_whiff[f.is_swing = 1])::NUMERIC * 100, 1) AS whiff_pct</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM v_statcast_features f</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="st">  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="st">  JOIN v_lahman_people p ON c.key_retro = p.player_id</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE f.game_date &gt;= '2024-01-01'</span></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="st">    AND f.pitch_type = 'FF'</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="st">  GROUP BY p.name_last, p.name_first</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="st">  GROUP BY c.name_last, c.name_first</span></span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="st">  HAVING COUNT(*) &gt;= 500</span></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="st">  ORDER BY avg_vaa DESC</span></span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="st">  LIMIT 10;</span></span>
@@ -1383,7 +1383,7 @@ Notice that the pitch crosses the plate with a VAA of around <strong><span class
 <span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's compare Four-Seam Fastballs for top starters in 2024</span></span>
 <span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a>top_pitchers <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, <span class="st">"</span></span>
 <span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a><span class="st">  SELECT </span></span>
-<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a><span class="st">    p.name_last || ', ' || p.name_first AS pitcher_name,</span></span>
+<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a><span class="st">    c.name_last || ', ' || c.name_first AS pitcher_name,</span></span>
 <span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a><span class="st">    COUNT(*) AS pitches,</span></span>
 <span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_speed), 1) AS avg_mph,</span></span>
 <span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,</span></span>
@@ -1392,10 +1392,10 @@ Notice that the pitch crosses the plate with a VAA of around <strong><span class
 <span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a><span class="st">    ROUND(AVG(f.is_whiff[f.is_swing = 1])::NUMERIC * 100, 1) AS whiff_pct</span></span>
 <span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a><span class="st">  FROM v_statcast_features f</span></span>
 <span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a><span class="st">  JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam</span></span>
-<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a><span class="st">  JOIN v_lahman_people p ON c.key_retro = p.player_id</span></span>
+<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
 <span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a><span class="st">  WHERE f.game_date &gt;= '2024-01-01'</span></span>
 <span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a><span class="st">    AND f.pitch_type = 'FF'</span></span>
-<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a><span class="st">  GROUP BY p.name_last, p.name_first</span></span>
+<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a><span class="st">  GROUP BY c.name_last, c.name_first</span></span>
 <span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a><span class="st">  HAVING COUNT(*) &gt;= 500</span></span>
 <span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a><span class="st">  ORDER BY avg_vaa DESC</span></span>
 <span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a><span class="st">  LIMIT 10;</span></span>
