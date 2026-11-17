@@ -67,7 +67,7 @@ con <- mlbr::lake_duckdb()
 cat("\nPulling top Four-Seam Fastball pitchers by VAA in 2024...\n")
 query_pitchers <- "
   SELECT 
-    p.name_last || ', ' || p.name_first AS pitcher_name,
+    CONCAT(c.name_last, ', ', c.name_first) AS pitcher_name,
     COUNT(*) AS pitches,
     ROUND(AVG(f.release_speed), 1) AS avg_mph,
     ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,
@@ -76,10 +76,9 @@ query_pitchers <- "
     ROUND(AVG(CASE WHEN f.is_whiff = 1 THEN 1.0 ELSE 0.0 END)::NUMERIC * 100, 1) AS whiff_rate_all_pitches
   FROM v_statcast_features f
   JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam
-  JOIN v_lahman_people p ON c.key_retro = p.player_id
   WHERE f.game_date >= '2024-01-01'
     AND f.pitch_type = 'FF'
-  GROUP BY p.name_last, p.name_first
+  GROUP BY c.name_last, c.name_first
   HAVING COUNT(*) >= 500
   ORDER BY avg_vaa DESC
   LIMIT 15;

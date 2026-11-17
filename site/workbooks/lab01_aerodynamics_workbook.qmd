@@ -157,7 +157,7 @@ con <- mlbr::lake_duckdb()
 # Let's compare Four-Seam Fastballs for top starters in 2024
 top_pitchers <- DBI::dbGetQuery(con, "
   SELECT 
-    p.name_last || ', ' || p.name_first AS pitcher_name,
+    c.name_last || ', ' || c.name_first AS pitcher_name,
     COUNT(*) AS pitches,
     ROUND(AVG(f.release_speed), 1) AS avg_mph,
     ROUND(AVG(f.release_pos_z), 2) AS avg_rel_height,
@@ -166,10 +166,10 @@ top_pitchers <- DBI::dbGetQuery(con, "
     ROUND(AVG(f.is_whiff[f.is_swing = 1])::NUMERIC * 100, 1) AS whiff_pct
   FROM v_statcast_features f
   JOIN v_chadwick_register c ON f.pitcher = c.key_mlbam
-  JOIN v_lahman_people p ON c.key_retro = p.player_id
+  
   WHERE f.game_date >= '2024-01-01'
     AND f.pitch_type = 'FF'
-  GROUP BY p.name_last, p.name_first
+  GROUP BY c.name_last, c.name_first
   HAVING COUNT(*) >= 500
   ORDER BY avg_vaa DESC
   LIMIT 10;
