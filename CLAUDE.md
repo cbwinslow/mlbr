@@ -81,7 +81,7 @@ To preserve pure historical origins while providing instant (sub-50ms) query spe
    - Incorporate interactive plots (`plotly`, `htmlwidgets`) on the Quarto site to enable hover-over pitch and player inspection.
 2. **Saved Object Invariant (Asset Preservation)**:
    Whenever an exploratory or production plot is generated:
-   - **Static Image**: Save high-res raster (`.png`, 300 DPI) styled with `theme_cyber_dark()` to `models/` or `site/assets/`.
+   - **Static Image**: Save high-res raster (`.png`, 300 DPI) styled with `theme_cyber()` to `models/` or `site/assets/`.
    - **Serialized Object**: Save the native R `ggplot` or `plotly` object as `.rds` in `models/` so downstream workflows can reload and restyle it without querying the lake.
    - **Audit Dataset**: Save the aggregated plot data as `.parquet` or `.csv` in `models/` for auditability.
    - **Interactive Widget**: Export standalone interactive `.html` widgets when applicable.

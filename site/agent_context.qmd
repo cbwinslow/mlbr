@@ -143,7 +143,8 @@ You are an expert sabermetrician and DuckDB SQL analyst working with the `mlbr` 
 - Canonical Lake: /mnt/storage/Rprojects/mlbr
 - Access Engine: Zero-copy querying via DuckDB (con <- mlbr::lake_duckdb())
 - Core Views:
-  * v_statcast (~14.5M pitches, 2008-2026, 119 metrics)
+  * v_statcast (14.64M raw pitches, 2008-2026, 119 metrics)
+  * v_statcast_features (14.64M Silver pitches: VAA/HAA, hb_away_in, CSW/whiff/chase, xwOBA, ZSTD Parquet)
   * v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)
   * v_retrosheet_games (123 seasons of game results)
   * v_chadwick_register (527k player ID crosswalks)
@@ -155,7 +156,7 @@ Rules:
 2. Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.
 3. Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).
 4. The 2020 pandemic season contains 0 games between April and June.
-5. Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').
+5. Whiff & CSW definitions (Silver v_statcast_features): is_whiff = description IN ('swinging_strike', 'swinging_strike_blocked', 'foul_tip'); is_csw adds 'called_strike'.
 ```
 
 ---

@@ -599,7 +599,7 @@ window.Quarto = {
 <p>The table below reflects the live census and semantic health of the canonical data lake:</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>**Status:** 100% HEALTHY | **Last Updated:** 2026-11-16 06:42:19 UTC</code></pre>
+<pre><code>**Status:** 100% HEALTHY | **Last Updated:** 2026-11-18 06:50:43 UTC</code></pre>
 </div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -632,21 +632,26 @@ window.Quarto = {
 <td style="text-align: left;">10.8 MB</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">markets</td>
+<td style="text-align: left;">208</td>
+<td style="text-align: left;">0.0 MB</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">mlbmeta</td>
 <td style="text-align: left;">475,276</td>
 <td style="text-align: left;">16.5 MB</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">ncaa</td>
 <td style="text-align: left;">914,428</td>
 <td style="text-align: left;">25.9 MB</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">retrosheet</td>
 <td style="text-align: left;">23,818,512</td>
 <td style="text-align: left;">774.8 MB</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">statcast</td>
 <td style="text-align: left;">14,643,543</td>
 <td style="text-align: left;">2088.6 MB</td>
@@ -793,19 +798,20 @@ window.Quarto = {
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Canonical Lake: /mnt/storage/Rprojects/mlbr</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Access Engine: Zero-copy querying via DuckDB (con &lt;- mlbr::lake_duckdb())</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Core Views:</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_statcast (~14.5M pitches, 2008-2026, 119 metrics)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_retrosheet_games (123 seasons of game results)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_chadwick_register (527k player ID crosswalks)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_fangraphs_bat &amp; v_fangraphs_pitch (1901-2025 WAR leaderboards)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_mlbmeta_schedule (MLB schedules 2008-2026)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>Rules:</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>The 2020 pandemic season contains 0 games between April and June.</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_statcast (14.64M raw pitches, 2008-2026, 119 metrics)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_statcast_features (14.64M Silver pitches: VAA/HAA, hb_away_in, CSW/whiff/chase, xwOBA, ZSTD Parquet)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_retrosheet_games (123 seasons of game results)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_chadwick_register (527k player ID crosswalks)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_fangraphs_bat &amp; v_fangraphs_pitch (1901-2025 WAR leaderboards)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_mlbmeta_schedule (MLB schedules 2008-2026)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>Rules:</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>The 2020 pandemic season contains 0 games between April and June.</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Whiff &amp; CSW definitions (Silver v_statcast_features): is_whiff = description IN ('swinging_strike', 'swinging_strike_blocked', 'foul_tip'); is_csw adds 'called_strike'.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 <section id="machine-readable-manifest-files" class="level2">
@@ -1432,30 +1438,31 @@ window.Quarto = {
 <span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Canonical Lake: /mnt/storage/Rprojects/mlbr</span>
 <span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Access Engine: Zero-copy querying via DuckDB (con &lt;- mlbr::lake_duckdb())</span>
 <span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Core Views:</span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_statcast (~14.5M pitches, 2008-2026, 119 metrics)</span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)</span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_retrosheet_games (123 seasons of game results)</span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_chadwick_register (527k player ID crosswalks)</span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_fangraphs_bat &amp; v_fangraphs_pitch (1901-2025 WAR leaderboards)</span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_mlbmeta_schedule (MLB schedules 2008-2026)</span>
-<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>Rules:</span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.</span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.</span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).</span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>The 2020 pandemic season contains 0 games between April and June.</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Whiff definition: description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt').</span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a><span class="in">## Machine-Readable Manifest Files</span></span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a><span class="in">The following manifest files are generated continuously and can be ingested directly by automated CI/CD and AI pipelines:</span></span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a><span class="in">* **Full Lake Manifest**: [`data/manifest/lake_manifest.json`](file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json)</span></span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a><span class="in">* **Compact Agent Context**: [`data/manifest/agent_context.json`](file:///mnt/storage/Rprojects/mlbr/data/manifest/agent_context.json)</span></span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a><span class="in">* **Markdown System Instructions**: [`data/manifest/LAKE_AGENT_PROMPT.md`](file:///mnt/storage/Rprojects/mlbr/data/manifest/LAKE_AGENT_PROMPT.md)</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_statcast (14.64M raw pitches, 2008-2026, 119 metrics)</span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_statcast_features (14.64M Silver pitches: VAA/HAA, hb_away_in, CSW/whiff/chase, xwOBA, ZSTD Parquet)</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_retrosheet_plays (~23.8M plays, 1900-2025, 160 fields)</span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_retrosheet_games (123 seasons of game results)</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_chadwick_register (527k player ID crosswalks)</span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_fangraphs_bat &amp; v_fangraphs_pitch (1901-2025 WAR leaderboards)</span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>v_mlbmeta_schedule (MLB schedules 2008-2026)</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>Rules:</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Never run SELECT * on v_statcast or v_retrosheet_plays without filtering or aggregating.</span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Join Statcast players to Chadwick using: ON v_statcast.pitcher = v_chadwick_register.key_mlbam.</span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Bat speed and swing length are only available for 2024+ (NULL in earlier seasons).</span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>The 2020 pandemic season contains 0 games between April and June.</span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Whiff &amp; CSW definitions (Silver v_statcast_features): is_whiff = description IN ('swinging_strike', 'swinging_strike_blocked', 'foul_tip'); is_csw adds 'called_strike'.</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a><span class="in">---</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a><span class="in">## Machine-Readable Manifest Files</span></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a><span class="in">The following manifest files are generated continuously and can be ingested directly by automated CI/CD and AI pipelines:</span></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a><span class="in">* **Full Lake Manifest**: [`data/manifest/lake_manifest.json`](file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json)</span></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a><span class="in">* **Compact Agent Context**: [`data/manifest/agent_context.json`](file:///mnt/storage/Rprojects/mlbr/data/manifest/agent_context.json)</span></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a><span class="in">* **Markdown System Instructions**: [`data/manifest/LAKE_AGENT_PROMPT.md`](file:///mnt/storage/Rprojects/mlbr/data/manifest/LAKE_AGENT_PROMPT.md)</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

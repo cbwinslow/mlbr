@@ -557,6 +557,7 @@ window.Quarto = {
   <li><a href="#active-experiment-ledger" id="toc-active-experiment-ledger" class="nav-link" data-scroll-target="#active-experiment-ledger">3. Active Experiment Ledger</a>
   <ul class="collapse">
   <li><a href="#exp-001-aerodynamics-trajectory-aerodynamics-approach-angles-vaahaa-whiff-lift" id="toc-exp-001-aerodynamics-trajectory-aerodynamics-approach-angles-vaahaa-whiff-lift" class="nav-link" data-scroll-target="#exp-001-aerodynamics-trajectory-aerodynamics-approach-angles-vaahaa-whiff-lift">EXP-001-AERODYNAMICS: Trajectory Aerodynamics, Approach Angles (VAA/HAA) &amp; Whiff Lift</a></li>
+  <li><a href="#exp-002-platoon-physics-4-quadrant-platoon-physics-break-symmetry-situational-pitching-effectiveness" id="toc-exp-002-platoon-physics-4-quadrant-platoon-physics-break-symmetry-situational-pitching-effectiveness" class="nav-link" data-scroll-target="#exp-002-platoon-physics-4-quadrant-platoon-physics-break-symmetry-situational-pitching-effectiveness">EXP-002-PLATOON-PHYSICS: 4-Quadrant Platoon Physics, Break Symmetry &amp; Situational Pitching Effectiveness</a></li>
   </ul></li>
   <li><a href="#how-to-register-an-experiment" id="toc-how-to-register-an-experiment" class="nav-link" data-scroll-target="#how-to-register-an-experiment">4. How to Register an Experiment</a></li>
   </ul>
@@ -749,6 +750,59 @@ plate_x_norm: plate_x * (case when stand = 'L' then -1.0 else 1.0 end)</code></p
 <li><strong>workbook_script</strong>: <code>workbooks/lab01_aerodynamics_workbook.R</code></li>
 </ul>
 <hr>
+</section>
+</section>
+<section id="exp-002-platoon-physics-4-quadrant-platoon-physics-break-symmetry-situational-pitching-effectiveness" class="level3">
+<h3 class="anchored" data-anchor-id="exp-002-platoon-physics-4-quadrant-platoon-physics-break-symmetry-situational-pitching-effectiveness">EXP-002-PLATOON-PHYSICS: 4-Quadrant Platoon Physics, Break Symmetry &amp; Situational Pitching Effectiveness</h3>
+<p><strong>Tier:</strong> Level 1: Pitch Physics &amp; Quality | <strong>Status:</strong> <span class="badge bg-success" style="padding:3px 6px; border-radius:3px;">VALIDATED</span> | <strong>Updated:</strong> <code>2026-11-18</code></p>
+<blockquote class="blockquote">
+<p>Quantified full-population pitching mechanics across RvR, RvL, LvL, and LvR using Silver v_statcast_features. Established Batter-Perspective Horizontal Break (hb_away_in) as the physical driver of platoon splits: glove-side breaking pitches (ST/SL) lose 4.9-7.5 pct whiff and ~2-3 pct CSW against opposite-hand batters while offspeed (CH/FS) inverts the edge. Derived Pitcher Platoon Vulnerability Index (PVI) and verified out-of-time stability (r = 0.885).</p>
+</blockquote>
+<section id="verified-formulas-1" class="level4">
+<h4 class="anchored" data-anchor-id="verified-formulas-1">Verified Formulas</h4>
+<pre><code>hb_glove_in: hb_in * (CASE WHEN p_throws = 'L' THEN -1 ELSE 1 END)
+hb_away_in: hb_in * (CASE WHEN stand = 'L' THEN -1 ELSE 1 END)
+pvi_xwoba: xwOBA_opposite - xwOBA_same
+pvi_csw: CSW_same - CSW_opposite
+rv_per_100: AVG(COALESCE(delta_pitcher_run_exp, -delta_run_exp)) * 100</code></pre>
+</section>
+<section id="empirical-validation-metrics-1" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-1">Empirical Validation Metrics</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>out_of_time_csw_r</code></td>
+<td style="text-align: left;"><strong>0.8855</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>out_of_time_xwoba_r</code></td>
+<td style="text-align: left;"><strong>0.9342</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>qualified_pitchers_2024_2026</code></td>
+<td style="text-align: left;"><strong>630</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="artifacts-research-links-1" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-1">Artifacts &amp; Research Links</h4>
+<ul>
+<li><strong>script</strong>: <code>models/02_platoon_splits_analysis.R</code></li>
+<li><strong>spec</strong>: <code>specs/02_platoon_physics.md</code></li>
+<li><strong>study_qmd</strong>: <code>site/analyses/02_platoon_physics.qmd</code></li>
+<li><strong>study_html</strong>: <a href="http://192.168.10.1:8088/analyses/02_platoon_physics.html">http://192.168.10.1:8088/analyses/02_platoon_physics.html</a></li>
+<li><strong>gold_quadrant_table</strong>: <code>data/processed/platoon_quadrant_arsenal.parquet</code></li>
+<li><strong>gold_pvi_table</strong>: <code>data/processed/pitcher_pvi_2024_2026.parquet</code></li>
+<li><strong>gold_starter_tto_table</strong>: <code>data/processed/starter_tto_platoon_2020_2026.parquet</code></li>
+</ul>
+<hr>
 <hr>
 </section>
 </section>
@@ -756,17 +810,17 @@ plate_x_norm: plate_x * (case when stand = 'L' then -1.0 else 1.0 end)</code></p
 <section id="how-to-register-an-experiment" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-register-an-experiment">4. How to Register an Experiment</h2>
 <p>To log an experiment from an R script or console:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mlbr<span class="sc">::</span><span class="fu">lake_log_experiment</span>(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">id         =</span> <span class="st">"EXP-002-FASTBALL-DELTAS"</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">title      =</span> <span class="st">"Fastball-Relative Velocity Delta (ΔV) and Offspeed Deception"</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tier       =</span> <span class="dv">1</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">status     =</span> <span class="st">"IN_PROGRESS"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary    =</span> <span class="st">"Evaluates offspeed swing-and-miss lift conditioned on velocity separation from primary fastball."</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">hypotheses =</span> <span class="fu">c</span>(<span class="st">"Changeups with ΔV &gt; 10 mph generate +25% higher whiff rates than changeups with ΔV &lt; 6 mph."</span>),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">features   =</span> <span class="fu">c</span>(<span class="st">"delta_v"</span>, <span class="st">"delta_ivb"</span>, <span class="st">"delta_hb"</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mlbr<span class="sc">::</span><span class="fu">lake_log_experiment</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">id         =</span> <span class="st">"EXP-002-FASTBALL-DELTAS"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">title      =</span> <span class="st">"Fastball-Relative Velocity Delta (ΔV) and Offspeed Deception"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tier       =</span> <span class="dv">1</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">status     =</span> <span class="st">"IN_PROGRESS"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary    =</span> <span class="st">"Evaluates offspeed swing-and-miss lift conditioned on velocity separation from primary fastball."</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">hypotheses =</span> <span class="fu">c</span>(<span class="st">"Changeups with ΔV &gt; 10 mph generate +25% higher whiff rates than changeups with ΔV &lt; 6 mph."</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">features   =</span> <span class="fu">c</span>(<span class="st">"delta_v"</span>, <span class="st">"delta_ivb"</span>, <span class="st">"delta_hb"</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The function automatically updates: 1. <code>experiments/registry.json</code> (Machine-readable database) 2. <code>experiments/README.md</code> (Human-readable table) 3. <code>data/manifest/agent_context.json</code> (AI agent context)</p>
 
 
@@ -1239,161 +1293,161 @@ plate_x_norm: plate_x * (case when stand = 'L' then -1.0 else 1.0 end)</code></p
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "The mlbr Experiment Registry &amp; Quantitative Knowledge Base"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Curated Repository of Verified Models, Mathematical Formulas, Invariants &amp; Negative Results"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Quantitative Research Group"</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-16"</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Research Philosophy: Curated Signal, Zero Clutter</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>This registry is machine-readable and human-navigable. It records verified mathematical invariants, empirical effect sizes, and crucially, **rejected hypotheses**. Recording what *failed* prevents future research cycles and autonomous AI agents from repeating dead ends.</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Predictive Architecture Tiers</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>Every experiment maps directly to one of the five tiers in the <span class="in">`mlbr`</span> hierarchical forecasting stack:</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Tier <span class="pp">|</span> Name <span class="pp">|</span> Target Outcome <span class="pp">|</span> Primary Models <span class="pp">|</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---:|:---|:---|:---|</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 1** | **Pitch Physics &amp; Quality** <span class="pp">|</span> $\Pr(\text{Whiff} \mid \text{Swing})$, Run Value / 100 <span class="pp">|</span> XGBoost, Random Forest, GAM <span class="pp">|</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 2** | **Player Projections** <span class="pp">|</span> True Talent Rates (wOBA, K%, BB%) <span class="pp">|</span> PECOTA Comps, ZiPS Aging Curves, Marcel <span class="pp">|</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 3** | **Team BaseRuns** <span class="pp">|</span> Expected Runs Scored &amp; Allowed <span class="pp">|</span> BaseRuns Equation, Pythagenpat Exponents <span class="pp">|</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 4** | **Game Simulation** <span class="pp">|</span> Win Probability $\Pr(\text{Home Win})$ <span class="pp">|</span> Monte Carlo Markov Chain (10k rollouts) <span class="pp">|</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 5** | **Betting Markets** <span class="pp">|</span> Market Edge &amp; Expected Value <span class="pp">|</span> Fractional Kelly Staking (Polymarket / Kalshi) <span class="pp">|</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Status Definitions</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"badge bg-success"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"color:white; padding:4px 8px; border-radius:4px;"</span><span class="dt">&gt;</span>VALIDATED<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span>: Tested on historical data ($\le 2023$) and confirmed out-of-time ($2024–2026$). Active in production feature views.</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"badge bg-warning text-dark"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"padding:4px 8px; border-radius:4px;"</span><span class="dt">&gt;</span>IN_PROGRESS<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span>: In active exploratory data analysis or hyperparameter tuning.</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"badge bg-danger"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"color:white; padding:4px 8px; border-radius:4px;"</span><span class="dt">&gt;</span>REJECTED<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span>: Hypothesis tested and proven non-predictive or redundant (signals dead ends).</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"badge bg-secondary"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"color:white; padding:4px 8px; border-radius:4px;"</span><span class="dt">&gt;</span>DEPRECATED<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span>: Previously validated model superseded by a superior architecture.</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Active Experiment Ledger</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-registry</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.libPaths</span>(<span class="fu">c</span>(<span class="st">"/mnt/storage/R/library"</span>, <span class="fu">.libPaths</span>()))</span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(jsonlite)</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(knitr)</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>reg_path <span class="ot">&lt;-</span> <span class="st">"/mnt/storage/Rprojects/mlbr/experiments/registry.json"</span></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>experiments <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">file.exists</span>(reg_path)) {</span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>  jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(reg_path, <span class="at">simplifyVector =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>()</span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: render-experiments</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: asis</span></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(experiments) <span class="sc">==</span> <span class="dv">0</span>) {</span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"*No experiments registered yet.*"</span>)</span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (exp <span class="cf">in</span> experiments) {</span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    status_color <span class="ot">&lt;-</span> <span class="cf">switch</span>(</span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>      exp<span class="sc">$</span>status,</span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>      <span class="st">"VALIDATED"</span> <span class="ot">=</span> <span class="st">"success"</span>,</span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>      <span class="st">"IN_PROGRESS"</span> <span class="ot">=</span> <span class="st">"warning text-dark"</span>,</span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>      <span class="st">"REJECTED"</span> <span class="ot">=</span> <span class="st">"danger"</span>,</span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>      <span class="st">"secondary"</span></span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"### %s: %s</span><span class="sc">\n\n</span><span class="st">"</span>, exp<span class="sc">$</span>id, exp<span class="sc">$</span>title))</span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"**Tier:** %s | **Status:** &lt;span class='badge bg-%s' style='padding:3px 6px; border-radius:3px;'&gt;%s&lt;/span&gt; | **Updated:** `%s`</span><span class="sc">\n\n</span><span class="st">"</span>,</span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>                exp<span class="sc">$</span>tier_name, status_color, exp<span class="sc">$</span>status, <span class="fu">substr</span>(exp<span class="sc">$</span>updated_at, <span class="dv">1</span>, <span class="dv">10</span>)))</span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"&gt; %s</span><span class="sc">\n\n</span><span class="st">"</span>, exp<span class="sc">$</span>summary))</span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Formulas table</span></span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(exp<span class="sc">$</span>formulas) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"#### Verified Formulas</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"```</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (fname <span class="cf">in</span> <span class="fu">names</span>(exp<span class="sc">$</span>formulas)) {</span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%s: %s</span><span class="sc">\n</span><span class="st">"</span>, fname, exp<span class="sc">$</span>formulas[[fname]]))</span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"```</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Key Metrics</span></span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(exp<span class="sc">$</span>metrics) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"#### Empirical Validation Metrics</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"| Metric | Value |</span><span class="sc">\n</span><span class="st">|:---|:---|</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (mname <span class="cf">in</span> <span class="fu">names</span>(exp<span class="sc">$</span>metrics)) {</span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>        val <span class="ot">&lt;-</span> exp<span class="sc">$</span>metrics[[mname]]</span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is.numeric</span>(val)) {</span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>          val_str <span class="ot">&lt;-</span> <span class="cf">if</span> (val <span class="sc">&gt;=</span> <span class="dv">1000</span>) <span class="fu">format</span>(val, <span class="at">big.mark =</span> <span class="st">","</span>) <span class="cf">else</span> <span class="fu">as.character</span>(val)</span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>          val_str <span class="ot">&lt;-</span> <span class="fu">as.character</span>(val)</span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"| `%s` | **%s** |</span><span class="sc">\n</span><span class="st">"</span>, mname, val_str))</span>
-<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Artifacts &amp; Links</span></span>
-<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(exp<span class="sc">$</span>artifacts) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"#### Artifacts &amp; Research Links</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (aname <span class="cf">in</span> <span class="fu">names</span>(exp<span class="sc">$</span>artifacts)) {</span>
-<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>        target <span class="ot">&lt;-</span> exp<span class="sc">$</span>artifacts[[aname]]</span>
-<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"^http"</span>, target)) {</span>
-<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"- **%s**: [%s](%s)</span><span class="sc">\n</span><span class="st">"</span>, aname, target, target))</span>
-<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
-<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"- **%s**: `%s`</span><span class="sc">\n</span><span class="st">"</span>, aname, target))</span>
-<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"---</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
-<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. How to Register an Experiment</span></span>
-<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>To log an experiment from an R script or console:</span>
-<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
-<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>mlbr<span class="sc">::</span><span class="fu">lake_log_experiment</span>(</span>
-<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>  <span class="at">id         =</span> <span class="st">"EXP-002-FASTBALL-DELTAS"</span>,</span>
-<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>  <span class="at">title      =</span> <span class="st">"Fastball-Relative Velocity Delta (ΔV) and Offspeed Deception"</span>,</span>
-<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>  <span class="at">tier       =</span> <span class="dv">1</span>,</span>
-<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">status     =</span> <span class="st">"IN_PROGRESS"</span>,</span>
-<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary    =</span> <span class="st">"Evaluates offspeed swing-and-miss lift conditioned on velocity separation from primary fastball."</span>,</span>
-<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>  <span class="at">hypotheses =</span> <span class="fu">c</span>(<span class="st">"Changeups with ΔV &gt; 10 mph generate +25% higher whiff rates than changeups with ΔV &lt; 6 mph."</span>),</span>
-<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">features   =</span> <span class="fu">c</span>(<span class="st">"delta_v"</span>, <span class="st">"delta_ivb"</span>, <span class="st">"delta_hb"</span>)</span>
-<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>The function automatically updates:</span>
-<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="in">`experiments/registry.json`</span> (Machine-readable database)</span>
-<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="in">`experiments/README.md`</span> (Human-readable table)</span>
-<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span><span class="in">`data/manifest/agent_context.json`</span> (AI agent context)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "The mlbr Experiment Registry &amp; Quantitative Knowledge Base"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Curated Repository of Verified Models, Mathematical Formulas, Invariants &amp; Negative Results"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Quantitative Research Group"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-16"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Research Philosophy: Curated Signal, Zero Clutter</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>This registry is machine-readable and human-navigable. It records verified mathematical invariants, empirical effect sizes, and crucially, **rejected hypotheses**. Recording what *failed* prevents future research cycles and autonomous AI agents from repeating dead ends.</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Predictive Architecture Tiers</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>Every experiment maps directly to one of the five tiers in the <span class="in">`mlbr`</span> hierarchical forecasting stack:</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Tier <span class="pp">|</span> Name <span class="pp">|</span> Target Outcome <span class="pp">|</span> Primary Models <span class="pp">|</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---:|:---|:---|:---|</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 1** | **Pitch Physics &amp; Quality** <span class="pp">|</span> $\Pr(\text{Whiff} \mid \text{Swing})$, Run Value / 100 <span class="pp">|</span> XGBoost, Random Forest, GAM <span class="pp">|</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 2** | **Player Projections** <span class="pp">|</span> True Talent Rates (wOBA, K%, BB%) <span class="pp">|</span> PECOTA Comps, ZiPS Aging Curves, Marcel <span class="pp">|</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 3** | **Team BaseRuns** <span class="pp">|</span> Expected Runs Scored &amp; Allowed <span class="pp">|</span> BaseRuns Equation, Pythagenpat Exponents <span class="pp">|</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 4** | **Game Simulation** <span class="pp">|</span> Win Probability $\Pr(\text{Home Win})$ <span class="pp">|</span> Monte Carlo Markov Chain (10k rollouts) <span class="pp">|</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Level 5** | **Betting Markets** <span class="pp">|</span> Market Edge &amp; Expected Value <span class="pp">|</span> Fractional Kelly Staking (Polymarket / Kalshi) <span class="pp">|</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Status Definitions</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"badge bg-success"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"color:white; padding:4px 8px; border-radius:4px;"</span><span class="dt">&gt;</span>VALIDATED<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span>: Tested on historical data ($\le 2023$) and confirmed out-of-time ($2024–2026$). Active in production feature views.</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"badge bg-warning text-dark"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"padding:4px 8px; border-radius:4px;"</span><span class="dt">&gt;</span>IN_PROGRESS<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span>: In active exploratory data analysis or hyperparameter tuning.</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"badge bg-danger"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"color:white; padding:4px 8px; border-radius:4px;"</span><span class="dt">&gt;</span>REJECTED<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span>: Hypothesis tested and proven non-predictive or redundant (signals dead ends).</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"badge bg-secondary"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"color:white; padding:4px 8px; border-radius:4px;"</span><span class="dt">&gt;</span>DEPRECATED<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span>: Previously validated model superseded by a superior architecture.</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Active Experiment Ledger</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-registry</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.libPaths</span>(<span class="fu">c</span>(<span class="st">"/mnt/storage/R/library"</span>, <span class="fu">.libPaths</span>()))</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(jsonlite)</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(knitr)</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>reg_path <span class="ot">&lt;-</span> <span class="st">"/mnt/storage/Rprojects/mlbr/experiments/registry.json"</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>experiments <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">file.exists</span>(reg_path)) {</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>  jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(reg_path, <span class="at">simplifyVector =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>()</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: render-experiments</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="co">#| results: asis</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(experiments) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"*No experiments registered yet.*"</span>)</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (exp <span class="cf">in</span> experiments) {</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>    status_color <span class="ot">&lt;-</span> <span class="cf">switch</span>(</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>      exp<span class="sc">$</span>status,</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>      <span class="st">"VALIDATED"</span> <span class="ot">=</span> <span class="st">"success"</span>,</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>      <span class="st">"IN_PROGRESS"</span> <span class="ot">=</span> <span class="st">"warning text-dark"</span>,</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>      <span class="st">"REJECTED"</span> <span class="ot">=</span> <span class="st">"danger"</span>,</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>      <span class="st">"secondary"</span></span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"### %s: %s</span><span class="sc">\n\n</span><span class="st">"</span>, exp<span class="sc">$</span>id, exp<span class="sc">$</span>title))</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"**Tier:** %s | **Status:** &lt;span class='badge bg-%s' style='padding:3px 6px; border-radius:3px;'&gt;%s&lt;/span&gt; | **Updated:** `%s`</span><span class="sc">\n\n</span><span class="st">"</span>,</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>                exp<span class="sc">$</span>tier_name, status_color, exp<span class="sc">$</span>status, <span class="fu">substr</span>(exp<span class="sc">$</span>updated_at, <span class="dv">1</span>, <span class="dv">10</span>)))</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"&gt; %s</span><span class="sc">\n\n</span><span class="st">"</span>, exp<span class="sc">$</span>summary))</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Formulas table</span></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(exp<span class="sc">$</span>formulas) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"#### Verified Formulas</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"```</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (fname <span class="cf">in</span> <span class="fu">names</span>(exp<span class="sc">$</span>formulas)) {</span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%s: %s</span><span class="sc">\n</span><span class="st">"</span>, fname, exp<span class="sc">$</span>formulas[[fname]]))</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"```</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Key Metrics</span></span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(exp<span class="sc">$</span>metrics) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"#### Empirical Validation Metrics</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"| Metric | Value |</span><span class="sc">\n</span><span class="st">|:---|:---|</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (mname <span class="cf">in</span> <span class="fu">names</span>(exp<span class="sc">$</span>metrics)) {</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>        val <span class="ot">&lt;-</span> exp<span class="sc">$</span>metrics[[mname]]</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is.numeric</span>(val)) {</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>          val_str <span class="ot">&lt;-</span> <span class="cf">if</span> (val <span class="sc">&gt;=</span> <span class="dv">1000</span>) <span class="fu">format</span>(val, <span class="at">big.mark =</span> <span class="st">","</span>) <span class="cf">else</span> <span class="fu">as.character</span>(val)</span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>          val_str <span class="ot">&lt;-</span> <span class="fu">as.character</span>(val)</span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"| `%s` | **%s** |</span><span class="sc">\n</span><span class="st">"</span>, mname, val_str))</span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Artifacts &amp; Links</span></span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(exp<span class="sc">$</span>artifacts) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"#### Artifacts &amp; Research Links</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (aname <span class="cf">in</span> <span class="fu">names</span>(exp<span class="sc">$</span>artifacts)) {</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>        target <span class="ot">&lt;-</span> exp<span class="sc">$</span>artifacts[[aname]]</span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">grepl</span>(<span class="st">"^http"</span>, target)) {</span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"- **%s**: [%s](%s)</span><span class="sc">\n</span><span class="st">"</span>, aname, target, target))</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"- **%s**: `%s`</span><span class="sc">\n</span><span class="st">"</span>, aname, target))</span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"---</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. How to Register an Experiment</span></span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>To log an experiment from an R script or console:</span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
+<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a>mlbr<span class="sc">::</span><span class="fu">lake_log_experiment</span>(</span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a>  <span class="at">id         =</span> <span class="st">"EXP-002-FASTBALL-DELTAS"</span>,</span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>  <span class="at">title      =</span> <span class="st">"Fastball-Relative Velocity Delta (ΔV) and Offspeed Deception"</span>,</span>
+<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a>  <span class="at">tier       =</span> <span class="dv">1</span>,</span>
+<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">status     =</span> <span class="st">"IN_PROGRESS"</span>,</span>
+<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">summary    =</span> <span class="st">"Evaluates offspeed swing-and-miss lift conditioned on velocity separation from primary fastball."</span>,</span>
+<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a>  <span class="at">hypotheses =</span> <span class="fu">c</span>(<span class="st">"Changeups with ΔV &gt; 10 mph generate +25% higher whiff rates than changeups with ΔV &lt; 6 mph."</span>),</span>
+<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">features   =</span> <span class="fu">c</span>(<span class="st">"delta_v"</span>, <span class="st">"delta_ivb"</span>, <span class="st">"delta_hb"</span>)</span>
+<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a>The function automatically updates:</span>
+<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="in">`experiments/registry.json`</span> (Machine-readable database)</span>
+<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="in">`experiments/README.md`</span> (Human-readable table)</span>
+<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span><span class="in">`data/manifest/agent_context.json`</span> (AI agent context)</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -490,7 +490,8 @@ mlbr::lake_log_experiment(
     study_qmd = "site/analyses/02_platoon_physics.qmd",
     study_html = "http://192.168.10.1:8088/analyses/02_platoon_physics.html",
     gold_quadrant_table = "data/processed/platoon_quadrant_arsenal.parquet",
-    gold_pvi_table = "data/processed/pitcher_pvi_2024_2026.parquet"
+    gold_pvi_table = "data/processed/pitcher_pvi_2024_2026.parquet",
+    gold_starter_tto_table = "data/processed/starter_tto_platoon_2020_2026.parquet"
   ),
   lake = lake
 )

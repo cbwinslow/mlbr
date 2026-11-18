@@ -40,7 +40,7 @@ build_lake_manifest <- function(lake = NULL) {
   }
 
   # 2. Key views column catalogs & null profiles
-  key_views <- c("v_statcast", "v_retrosheet_plays", "v_retrosheet_games",
+  key_views <- c("v_statcast", "v_statcast_features", "v_retrosheet_plays", "v_retrosheet_games",
                  "v_fangraphs_bat", "v_fangraphs_pitch", "v_chadwick_register",
                  "v_lahman_people", "v_mlbmeta_schedule")
 
@@ -305,6 +305,7 @@ con <- mlbr::lake_duckdb()
 # - v_fangraphs_pitch       (1901-2025 pitching leaderboards)
 # - v_chadwick_register     (527,990 player ID crosswalks)
 # - v_lahman_people         (Historical biographical registry)
+# - v_statcast_features     (14.64M Silver physics/platoon/outcome rows, ZSTD Parquet)
 # - v_mlbmeta_schedule      (Official MLB schedule 2008-2026)
 ```
 
@@ -326,7 +327,7 @@ WHERE sc.game_date >= '2024-01-01';
 ## 3. Sabermetric Ground Rules & Invariants
 1. **COVID-19 Season (2020)**: Regular season began July 23, 2020. Months April-June have 0 games.
 2. **Bat Speed**: Available only from 2024 onwards. Null in earlier years.
-3. **Whiff Definition**: `description IN ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt')`.
+3. **Whiff & CSW Definitions (Silver `v_statcast_features`)**: `is_whiff` = `description IN ('swinging_strike', 'swinging_strike_blocked', 'foul_tip')`; `is_csw` adds `'called_strike'`.
 4. **Strike Zone Boundaries**: `plate_x` is horizontal break from home plate center (ft); `plate_z` is vertical height above plate (ft).
 ",
     manifest$generated_at,
