@@ -51,7 +51,7 @@ write_df <- function(df, path, partition_cols = NULL) {
     if (!is.null(partition_cols) && length(partition_cols) > 0) {
       arrow::write_dataset(df, tmp, partitioning = partition_cols, format = "parquet")
     } else {
-      arrow::write_parquet(df, tmp)
+      arrow::write_parquet(df, tmp, compression = "zstd")
     }
   } else if (ext == "rds") {
     saveRDS(df, tmp, compress = "xz")
@@ -85,8 +85,17 @@ default_lake <- function(lake = NULL) {
   getwd()
 }
 
+#' Resolve path inside raw data lake directory
+#' @param lake Root path of the data lake
+#' @param ... Subdirectories or filename components under data/raw
+#' @return Normalized path under data/raw
+#' @keywords internal
+lake_raw <- function(lake, ...) {
+  file.path(default_lake(lake), "data", "raw", ...)
+}
+
 utils::globalVariables(c(
-  "GAME_ID", "dates", "flag", "game_date", "game_pk",
+  "GAME_ID", "data", "dates", "flag", "game_date", "game_pk",
   "gap_days", "maxd", "mind", "month", "ndays", "rows", "year",
   "playerID", "yearID", "PlayerName", "HR", "SB", "RBI", "SO", "W",
   "key_person", "key_retro", "key_bbref", "key_mlbam",

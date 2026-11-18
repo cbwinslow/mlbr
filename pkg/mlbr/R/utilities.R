@@ -176,7 +176,7 @@ lake_describe <- function(source, file_pattern = NULL, lake = NULL) {
   ctypes <- vapply(schema$fields, function(f) f$type$ToString(), character(1))
   
   # Sample 5000 rows to calculate null rates efficiently
-  sample_df <- head(ds, 5000) %>% as.data.frame()
+  sample_df <- as.data.frame(utils::head(ds, 5000))
   null_rates <- vapply(sample_df, function(col) mean(is.na(col)), numeric(1))
   
   data.frame(

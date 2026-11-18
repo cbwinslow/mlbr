@@ -161,3 +161,12 @@ All analytical studies MUST follow the canonical **7-Section Study Template** fo
 * **Zero Local Files on Windows:** Windows client machines must remain 100% free of local project files or cloned data.
 * **RStudio Server:** `http://192.168.10.1:8787` (Persistent session; 365-day keepalive).
 * **Quarto Documentation Site:** `http://192.168.10.1:8088` and `https://cbwinslow.github.io/mlbr/`.
+
+---
+
+## Storage Format & Multi-Engine Protocol (ADR-001)
+
+- **Canonical Storage:** **Apache Parquet (`ZSTD` compression, sorted row groups)** across Bronze (`data/raw/`), Silver (`data/features/`), and Gold (`data/processed/`).
+- **SQL & DataFrame Access:** Query via **DuckDB SQL** (`v_statcast`, `v_statcast_features`) or zero-copy **Apache Arrow / Polars** (`scan_parquet`).
+- **Why Not `.sql` or `.duckdb` Files:** `.sql` text dumps lack columnar compression and projection pushdown; `.duckdb` single-file storage introduces single-writer file locks and slower multi-language reads compared to open ZSTD Parquet.
+- **Passive Market & Lineup Archiving:** `R/ingest/archive_market_snapshots.py` snapshots MLB Stats API lineups and Polymarket/Kalshi public prices into ZSTD Parquet (`data/raw/mlb_lineups/`, `data/raw/markets/`) for future CLV backtesting.

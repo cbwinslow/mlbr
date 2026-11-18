@@ -580,7 +580,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>source            files           rows         MB
-statcast             79      7,487,778      930.5
+statcast            158     14,643,543     2088.6
 retrosheet          622     23,818,512      774.8
 fangraphs           425        322,391      131.2
 chadwick              1        527,990       37.4
@@ -588,6 +588,7 @@ ncaa                  8        914,428       25.9
 mlbmeta              81        475,276       16.5
 lahman               31        706,563       10.8
 espn                 32         27,383        3.1
+markets               2            208        0.0
 retrosheet_raw        0              0        0.0</code></pre>
 </div>
 <div class="cell-output-display">
@@ -603,9 +604,9 @@ retrosheet_raw        0              0        0.0</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">statcast</td>
-<td style="text-align: right;">79</td>
-<td style="text-align: right;">7,487,778</td>
-<td style="text-align: right;">930.5</td>
+<td style="text-align: right;">158</td>
+<td style="text-align: right;">14,643,543</td>
+<td style="text-align: right;">2,088.6</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">retrosheet</td>
@@ -650,6 +651,12 @@ retrosheet_raw        0              0        0.0</code></pre>
 <td style="text-align: right;">3.1</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">markets</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">208</td>
+<td style="text-align: right;">0.0</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">retrosheet_raw</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
@@ -691,7 +698,7 @@ retrosheet_raw        0              0        0.0</code></pre>
           ▼
 [ Storage Layer ] (data/raw/*.parquet)
   - Columnar Apache Parquet partitions
-  - Snappy compression, dictionary encoding
+  - ZSTD / Snappy compression, dictionary encoding, sorted row groups
           │
           ▼
 [ Zero-Copy Analytical Engine ] (DuckDB + mlbr R package)
@@ -733,6 +740,9 @@ retrosheet_raw        0              0        0.0</code></pre>
 <h2 class="anchored" data-anchor-id="machine-learning-sabermetric-analyses">Machine Learning &amp; Sabermetric Analyses</h2>
 <p>Explore our interactive research gallery:</p>
 <ul>
+<li><a href="analyses/01_pitch_quality_eda.html"><strong>Q-CRISP Study 01: Aerodynamics &amp; Approach Angles</strong></a>: Full-population VAA/HAA trajectory physics across 14.64M pitches.</li>
+<li><a href="analyses/02_platoon_physics.html"><strong>Q-CRISP Study 02: 4-Quadrant Platoon Physics &amp; PVI</strong></a>: <code>RvR</code>/<code>RvL</code>/<code>LvL</code>/<code>LvR</code> mechanics, <code>hb_away_in</code>, starter TTO decay, and Pitcher PVI.</li>
+<li><a href="workbooks/lab01_aerodynamics_workbook.html"><strong>Student Lab 01: Aerodynamics &amp; Trajectory Math</strong></a>: Hands-on RStudio workbook with Dark Cyber diagnostics.</li>
 <li><a href="analyses/pitch_clustering.html"><strong>Unsupervised Pitch Clustering</strong></a>: K-Means &amp; GMM movement classification.</li>
 <li><a href="analyses/pitch_classification.html"><strong>Pitch Classification with Random Forest</strong></a>: Predicting pitch type from flight dynamics using <code>tidymodels</code>.</li>
 <li><a href="analyses/xwoba_surface.html"><strong>Non-linear xwOBA &amp; Barrel Landscape</strong></a>: 2D GAM surface across Exit Velocity &amp; Launch Angle.</li>
@@ -1282,7 +1292,7 @@ retrosheet_raw        0              0        0.0</code></pre>
 <span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="in">          ▼</span></span>
 <span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="in">[ Storage Layer ] (data/raw/*.parquet)</span></span>
 <span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="in">  - Columnar Apache Parquet partitions</span></span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="in">  - Snappy compression, dictionary encoding</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="in">  - ZSTD / Snappy compression, dictionary encoding, sorted row groups</span></span>
 <span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="in">          │</span></span>
 <span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="in">          ▼</span></span>
 <span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="in">[ Zero-Copy Analytical Engine ] (DuckDB + mlbr R package)</span></span>
@@ -1332,10 +1342,13 @@ retrosheet_raw        0              0        0.0</code></pre>
 <span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>Explore our interactive research gallery:</span>
 <span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Unsupervised Pitch Clustering**</span><span class="co">](analyses/pitch_clustering.html)</span>: K-Means &amp; GMM movement classification.</span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Pitch Classification with Random Forest**</span><span class="co">](analyses/pitch_classification.html)</span>: Predicting pitch type from flight dynamics using <span class="in">`tidymodels`</span>.</span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Non-linear xwOBA &amp; Barrel Landscape**</span><span class="co">](analyses/xwoba_surface.html)</span>: 2D GAM surface across Exit Velocity &amp; Launch Angle.</span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Run Expectancy Matrix (RE24)**</span><span class="co">](analyses/run_expectancy.html)</span>: Empirical 24-state transition valuation from 23.8M plays.</span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Q-CRISP Study 01: Aerodynamics &amp; Approach Angles**</span><span class="co">](analyses/01_pitch_quality_eda.html)</span>: Full-population VAA/HAA trajectory physics across 14.64M pitches.</span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Q-CRISP Study 02: 4-Quadrant Platoon Physics &amp; PVI**</span><span class="co">](analyses/02_platoon_physics.html)</span>: <span class="in">`RvR`</span>/<span class="in">`RvL`</span>/<span class="in">`LvL`</span>/<span class="in">`LvR`</span> mechanics, <span class="in">`hb_away_in`</span>, starter TTO decay, and Pitcher PVI.</span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Student Lab 01: Aerodynamics &amp; Trajectory Math**</span><span class="co">](workbooks/lab01_aerodynamics_workbook.html)</span>: Hands-on RStudio workbook with Dark Cyber diagnostics.</span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Unsupervised Pitch Clustering**</span><span class="co">](analyses/pitch_clustering.html)</span>: K-Means &amp; GMM movement classification.</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Pitch Classification with Random Forest**</span><span class="co">](analyses/pitch_classification.html)</span>: Predicting pitch type from flight dynamics using <span class="in">`tidymodels`</span>.</span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Non-linear xwOBA &amp; Barrel Landscape**</span><span class="co">](analyses/xwoba_surface.html)</span>: 2D GAM surface across Exit Velocity &amp; Launch Angle.</span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Run Expectancy Matrix (RE24)**</span><span class="co">](analyses/run_expectancy.html)</span>: Empirical 24-state transition valuation from 23.8M plays.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

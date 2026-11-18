@@ -10,7 +10,7 @@ Production baseball intelligence workspace, high-performance Apache Parquet data
 
 ## 1. Data Lake Inventory & Granularity
 
-Every dataset is stored at the finest raw atomic granularity (per pitch, per play, per player-day) in Snappy-compressed Apache Parquet format. Raw columns are 100% preserved with zero dropping or lossy downcasting.
+Every dataset is stored at the finest raw atomic granularity (per pitch, per play, per player-day) in compressed Apache Parquet format (Bronze legacy partitions in Snappy; Silver, Gold, and new acquisitions in **ZSTD-compressed, key-sorted Parquet** per ADR-001). Raw columns are 100% preserved with zero dropping or lossy downcasting.
 
 | Domain | Parquet Path | Granularity | Seasons | Total Records | Compressed Size |
 |:---|:---|:---|:---:|:---:|:---:|
@@ -32,7 +32,7 @@ Rather than importing 41+ million records into memory or maintaining complex dat
 
 ```r
 library(mlbr)
-con <- lake_duckdb() # Mounts 14 zero-copy views in ~15 milliseconds
+con <- lake_duckdb() # Mounts 15 zero-copy views in ~15 milliseconds
 
 # Query millions of pitches in sub-second time
 tbl(con, "v_statcast") %>%
@@ -49,6 +49,7 @@ tbl(con, "v_statcast") %>%
 * `v_chadwick_register` — Universal player ID mapping (`key_mlbam`, `key_retro`, `key_bbref`, `key_fangraphs`)
 * `v_lahman_people`, `v_lahman_batting`, `v_lahman_pitching` — Biographical and historical tables
 * `v_mlbmeta_schedule` — Official MLB game schedule (2008–2026)
+* `v_statcast_features` — Silver-tier materialized physics, platoon coordinates, CSW/chase flags, and xwOBA (`14.64M` pitches, ZSTD Sorted Parquet)
 
 ---
 
@@ -108,5 +109,7 @@ Automated manifests are kept continuously synchronized in `data/manifest/`:
 ## 6. Machine Learning & Modeling
 
 Modeling scripts are organized in `models/`:
-* `models/01_whiff_model.R` — Expected Whiff Probability (`xWhiff`) and Stuff+ modeling using Logistic Regression, Random Forest (`ranger`), and XGBoost.
+* `models/01_eda_feature_expansion.R` — Study 01: Trajectory Aerodynamics, VAA/HAA & Whiff Lift (`EXP-001`).
+* `models/02_platoon_splits_analysis.R` — Study 02: 4-Quadrant Platoon Physics, `hb_away_in`, Starter TTO Decay & Pitcher PVI (`EXP-002`).
+* `models/01_whiff_model.R` — Expected Whiff Probability (`xWhiff`) baseline modeling.
 * Interactive execution in RStudio Server: [http://192.168.10.1:8787](http://192.168.10.1:8787).

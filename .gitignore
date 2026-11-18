@@ -34,3 +34,9 @@ data/
 _freeze/
 */_freeze/
 Rplots.pdf
+
+# Python artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
+*_interactive_files/

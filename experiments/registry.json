@@ -55,7 +55,7 @@
     "tier": 1,
     "tier_name": "Level 1: Pitch Physics & Quality",
     "status": "VALIDATED",
-    "updated_at": "2026-11-17 13:25:54 UTC",
+    "updated_at": "2026-11-18 04:49:29 UTC",
     "summary": "Quantified full-population pitching mechanics across RvR, RvL, LvL, and LvR using Silver v_statcast_features. Established Batter-Perspective Horizontal Break (hb_away_in) as the physical driver of platoon splits: glove-side breaking pitches (ST/SL) lose 4.9-7.5 pct whiff and ~2-3 pct CSW against opposite-hand batters while offspeed (CH/FS) inverts the edge. Derived Pitcher Platoon Vulnerability Index (PVI) and verified out-of-time stability (r = 0.885).",
     "hypotheses": [
       "Platoon splits are physically driven by horizontal break direction relative to the batter (hb_away_in), not merely pitcher handedness.",

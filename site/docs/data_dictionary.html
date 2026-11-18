@@ -559,6 +559,8 @@ window.Quarto = {
   </ul></li>
   <li><a href="#retrosheet-play-by-play-dictionary-v_retrosheet_plays" id="toc-retrosheet-play-by-play-dictionary-v_retrosheet_plays" class="nav-link" data-scroll-target="#retrosheet-play-by-play-dictionary-v_retrosheet_plays">3. Retrosheet Play-by-Play Dictionary (<code>v_retrosheet_plays</code>)</a></li>
   <li><a href="#universal-chadwick-crosswalk-dictionary-v_chadwick_register" id="toc-universal-chadwick-crosswalk-dictionary-v_chadwick_register" class="nav-link" data-scroll-target="#universal-chadwick-crosswalk-dictionary-v_chadwick_register">4. Universal Chadwick Crosswalk Dictionary (<code>v_chadwick_register</code>)</a></li>
+  <li><a href="#b.-silver-tier-derived-features-v_statcast_features" id="toc-b.-silver-tier-derived-features-v_statcast_features" class="nav-link" data-scroll-target="#b.-silver-tier-derived-features-v_statcast_features">4b. Silver Tier Derived Features (<code>v_statcast_features</code>)</a></li>
+  <li><a href="#c.-gold-tier-analytical-market-snapshot-tables" id="toc-c.-gold-tier-analytical-market-snapshot-tables" class="nav-link" data-scroll-target="#c.-gold-tier-analytical-market-snapshot-tables">4c. Gold Tier Analytical &amp; Market Snapshot Tables</a></li>
   <li><a href="#live-interactive-schema-browser" id="toc-live-interactive-schema-browser" class="nav-link" data-scroll-target="#live-interactive-schema-browser">5. Live Interactive Schema Browser</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
@@ -956,6 +958,162 @@ window.Quarto = {
 </tbody>
 </table>
 <hr>
+<hr>
+</section>
+<section id="b.-silver-tier-derived-features-v_statcast_features" class="level2">
+<h2 class="anchored" data-anchor-id="b.-silver-tier-derived-features-v_statcast_features">4b. Silver Tier Derived Features (<code>v_statcast_features</code>)</h2>
+<p>Pre-materialized in ZSTD-compressed, key-sorted Apache Parquet (<code>data/features/statcast_features/</code>, partitioned by <code>game_year</code>) via <code>R/materialize_features.R</code> and <code>sql/01_statcast_features.sql</code>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>tracking_era</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Sensor era: <code>PITCHf/x</code> (2008–2014), <code>TrackMan</code> (2015–2019), <code>Hawk-Eye</code> (2020–2026).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>matchup</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">4-quadrant platoon key: <code>RvR</code>, <code>RvL</code>, <code>LvL</code>, <code>LvR</code>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>is_same_hand</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;"><code>1</code> when <code>p_throws = stand</code>, <code>0</code> otherwise.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>release_pos_x_arm</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Pitcher arm-side horizontal release offset (ft; always positive toward throwing arm).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>hb_in</code>, <code>ivb_in</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Horizontal and induced vertical aerodynamic break in inches (<code>pfx_x * 12</code>, <code>pfx_z * 12</code>).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>hb_glove_in</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Pitcher-perspective horizontal break (inches; positive = glove-side, negative = arm-side).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>hb_away_in</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Batter-perspective horizontal break (inches; positive = breaks away from batter, negative = into batter).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>plate_x_norm</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Platoon-normalized plate horizontal coordinate (ft; positive = away from batter).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>attack_zone</code></td>
+<td style="text-align: left;">String</td>
+<td style="text-align: left;">Statcast concentric zone: <code>Heart</code>, <code>Shadow</code>, <code>Chase</code>, <code>Waste</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>vy_f</code>, <code>t_flight</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Terminal forward speed at <code>y = 1.417 ft</code> (ft/s) and flight time from <code>y = 50 ft</code> (s).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>vaa</code>, <code>haa</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Vertical and Horizontal Approach Angles at <code>y = 1.417 ft</code> (degrees).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>haa_glove</code>, <code>haa_away</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Pitcher-glove-signed and batter-away-signed Horizontal Approach Angles (degrees).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>is_called_strike</code>, <code>is_swing</code>, <code>is_whiff</code>, <code>is_csw</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Plate-discipline flags (<code>is_csw = 1</code> for called strikes + whiffs).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>is_in_zone</code>, <code>is_chase</code>, <code>is_ball</code>, <code>is_bip</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Rulebook zone, out-of-zone chase, ball, and ball-in-play indicators.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>xwoba</code>, <code>xba</code>, <code>xslg</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Expected batted-ball outcomes cast cleanly from Statcast <code>estimated_*_using_speedangle</code>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pitcher_run_exp</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Pitcher-perspective run expectancy delta (<code>COALESCE(delta_pitcher_run_exp, -delta_run_exp)</code>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>is_gb</code>, <code>is_hard_hit</code></td>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: left;">Ground-ball (<code>bb_type = 'ground_ball'</code>) and hard-hit (<code>launch_speed &gt;= 95</code>) indicators.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>arm_angle_deg</code>, <code>bat_speed_mph</code>, <code>swing_length_ft</code></td>
+<td style="text-align: left;">Double</td>
+<td style="text-align: left;">Safely cast modern Hawk-Eye arm-slot and bat-tracking metrics.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="c.-gold-tier-analytical-market-snapshot-tables" class="level2">
+<h2 class="anchored" data-anchor-id="c.-gold-tier-analytical-market-snapshot-tables">4c. Gold Tier Analytical &amp; Market Snapshot Tables</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Path</th>
+<th style="text-align: left;">Granularity</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>data/processed/platoon_quadrant_arsenal.parquet</code></td>
+<td style="text-align: left;">Pitch Type × Quadrant × Era</td>
+<td style="text-align: left;">4-quadrant CSW%, Whiff%, Chase%, xwOBA, GB%, and RV/100 matrices.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>data/processed/pitcher_pvi_2024_2026.parquet</code></td>
+<td style="text-align: left;">Pitcher (2024–2026)</td>
+<td style="text-align: left;">Pitcher Platoon Vulnerability Index (<code>PVI_csw</code>, <code>PVI_xwoba</code>, <code>PVI_rv100</code>) + repertoire mix.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>data/processed/starter_tto_platoon_2020_2026.parquet</code></td>
+<td style="text-align: left;">TTO × Quadrant</td>
+<td style="text-align: left;">Starting-pitcher-only Times-Through-Order fatigue &amp; platoon decay (<code>inning = 1</code> starter cohort).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>data/raw/mlb_lineups/lineups-*.parquet</code></td>
+<td style="text-align: left;">Game × Side × Slot</td>
+<td style="text-align: left;">Live/pre-game MLB Stats API probable pitchers and confirmed batting orders.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>data/raw/markets/{polymarket,kalshi}-*.parquet</code></td>
+<td style="text-align: left;">Snapshot × Contract</td>
+<td style="text-align: left;">Read-only Polymarket Gamma &amp; Kalshi v2 order-book snapshots (ZSTD Parquet).</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="live-interactive-schema-browser" class="level2">
 <h2 class="anchored" data-anchor-id="live-interactive-schema-browser">5. Live Interactive Schema Browser</h2>
@@ -1579,38 +1737,78 @@ window.Quarto = {
 <span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Live Interactive Schema Browser</span></span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>Below is the live column-by-column schema generated dynamically from <span class="co">[</span><span class="ot">`data/manifest/lake_manifest.json`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json)</span>:</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: live-schema-explorer</span></span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.libPaths</span>(<span class="fu">c</span>(<span class="st">"/mnt/storage/R/library"</span>, <span class="fu">.libPaths</span>()))</span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(jsonlite)</span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(knitr)</span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>manifest_file <span class="ot">&lt;-</span> <span class="st">"/mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json"</span></span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(manifest_file)) {</span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">read_json</span>(manifest_file)</span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>  views_summary <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">names</span>(m<span class="sc">$</span>schema_catalog), <span class="cf">function</span>(vn) {</span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>    v <span class="ot">&lt;-</span> m<span class="sc">$</span>schema_catalog[[vn]]</span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>      <span class="at">View_Name =</span> vn,</span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>      <span class="at">Total_Columns =</span> v<span class="sc">$</span>column_count,</span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>  }))</span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(views_summary, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"DuckDB View Name"</span>, <span class="st">"Audited Column Count"</span>))</span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Manifest not found. Run `Rscript R/generate_agent_manifest.R` to build."</span>)</span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4b. Silver Tier Derived Features (`v_statcast_features`)</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>Pre-materialized in ZSTD-compressed, key-sorted Apache Parquet (<span class="in">`data/features/statcast_features/`</span>, partitioned by <span class="in">`game_year`</span>) via <span class="in">`R/materialize_features.R`</span> and <span class="in">`sql/01_statcast_features.sql`</span>.</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column Name <span class="pp">|</span> Type <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`tracking_era`</span> <span class="pp">|</span> String <span class="pp">|</span> Sensor era: <span class="in">`PITCHf/x`</span> (2008–2014), <span class="in">`TrackMan`</span> (2015–2019), <span class="in">`Hawk-Eye`</span> (2020–2026). <span class="pp">|</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`matchup`</span> <span class="pp">|</span> String <span class="pp">|</span> 4-quadrant platoon key: <span class="in">`RvR`</span>, <span class="in">`RvL`</span>, <span class="in">`LvL`</span>, <span class="in">`LvR`</span>. <span class="pp">|</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`is_same_hand`</span> <span class="pp">|</span> Integer <span class="pp">|</span> <span class="in">`1`</span> when <span class="in">`p_throws = stand`</span>, <span class="in">`0`</span> otherwise. <span class="pp">|</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`release_pos_x_arm`</span> <span class="pp">|</span> Double <span class="pp">|</span> Pitcher arm-side horizontal release offset (ft; always positive toward throwing arm). <span class="pp">|</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`hb_in`</span>, <span class="in">`ivb_in`</span> <span class="pp">|</span> Double <span class="pp">|</span> Horizontal and induced vertical aerodynamic break in inches (<span class="in">`pfx_x * 12`</span>, <span class="in">`pfx_z * 12`</span>). <span class="pp">|</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`hb_glove_in`</span> <span class="pp">|</span> Double <span class="pp">|</span> Pitcher-perspective horizontal break (inches; positive = glove-side, negative = arm-side). <span class="pp">|</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`hb_away_in`</span> <span class="pp">|</span> Double <span class="pp">|</span> Batter-perspective horizontal break (inches; positive = breaks away from batter, negative = into batter). <span class="pp">|</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`plate_x_norm`</span> <span class="pp">|</span> Double <span class="pp">|</span> Platoon-normalized plate horizontal coordinate (ft; positive = away from batter). <span class="pp">|</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`attack_zone`</span> <span class="pp">|</span> String <span class="pp">|</span> Statcast concentric zone: <span class="in">`Heart`</span>, <span class="in">`Shadow`</span>, <span class="in">`Chase`</span>, <span class="in">`Waste`</span>. <span class="pp">|</span></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vy_f`</span>, <span class="in">`t_flight`</span> <span class="pp">|</span> Double <span class="pp">|</span> Terminal forward speed at <span class="in">`y = 1.417 ft`</span> (ft/s) and flight time from <span class="in">`y = 50 ft`</span> (s). <span class="pp">|</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vaa`</span>, <span class="in">`haa`</span> <span class="pp">|</span> Double <span class="pp">|</span> Vertical and Horizontal Approach Angles at <span class="in">`y = 1.417 ft`</span> (degrees). <span class="pp">|</span></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`haa_glove`</span>, <span class="in">`haa_away`</span> <span class="pp">|</span> Double <span class="pp">|</span> Pitcher-glove-signed and batter-away-signed Horizontal Approach Angles (degrees). <span class="pp">|</span></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`is_called_strike`</span>, <span class="in">`is_swing`</span>, <span class="in">`is_whiff`</span>, <span class="in">`is_csw`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Plate-discipline flags (<span class="in">`is_csw = 1`</span> for called strikes + whiffs). <span class="pp">|</span></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`is_in_zone`</span>, <span class="in">`is_chase`</span>, <span class="in">`is_ball`</span>, <span class="in">`is_bip`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Rulebook zone, out-of-zone chase, ball, and ball-in-play indicators. <span class="pp">|</span></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`xwoba`</span>, <span class="in">`xba`</span>, <span class="in">`xslg`</span> <span class="pp">|</span> Double <span class="pp">|</span> Expected batted-ball outcomes cast cleanly from Statcast <span class="in">`estimated_*_using_speedangle`</span>. <span class="pp">|</span></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pitcher_run_exp`</span> <span class="pp">|</span> Double <span class="pp">|</span> Pitcher-perspective run expectancy delta (<span class="in">`COALESCE(delta_pitcher_run_exp, -delta_run_exp)`</span>). <span class="pp">|</span></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`is_gb`</span>, <span class="in">`is_hard_hit`</span> <span class="pp">|</span> Integer <span class="pp">|</span> Ground-ball (<span class="in">`bb_type = 'ground_ball'`</span>) and hard-hit (<span class="in">`launch_speed &gt;= 95`</span>) indicators. <span class="pp">|</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`arm_angle_deg`</span>, <span class="in">`bat_speed_mph`</span>, <span class="in">`swing_length_ft`</span> <span class="pp">|</span> Double <span class="pp">|</span> Safely cast modern Hawk-Eye arm-slot and bat-tracking metrics. <span class="pp">|</span></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4c. Gold Tier Analytical &amp; Market Snapshot Tables</span></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Path <span class="pp">|</span> Granularity <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`data/processed/platoon_quadrant_arsenal.parquet`</span> <span class="pp">|</span> Pitch Type × Quadrant × Era <span class="pp">|</span> 4-quadrant CSW%, Whiff%, Chase%, xwOBA, GB%, and RV/100 matrices. <span class="pp">|</span></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`data/processed/pitcher_pvi_2024_2026.parquet`</span> <span class="pp">|</span> Pitcher (2024–2026) <span class="pp">|</span> Pitcher Platoon Vulnerability Index (<span class="in">`PVI_csw`</span>, <span class="in">`PVI_xwoba`</span>, <span class="in">`PVI_rv100`</span>) + repertoire mix. <span class="pp">|</span></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`data/processed/starter_tto_platoon_2020_2026.parquet`</span> <span class="pp">|</span> TTO × Quadrant <span class="pp">|</span> Starting-pitcher-only Times-Through-Order fatigue &amp; platoon decay (<span class="in">`inning = 1`</span> starter cohort). <span class="pp">|</span></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`data/raw/mlb_lineups/lineups-*.parquet`</span> <span class="pp">|</span> Game × Side × Slot <span class="pp">|</span> Live/pre-game MLB Stats API probable pitchers and confirmed batting orders. <span class="pp">|</span></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`data/raw/markets/{polymarket,kalshi}-*.parquet`</span> <span class="pp">|</span> Snapshot × Contract <span class="pp">|</span> Read-only Polymarket Gamma &amp; Kalshi v2 order-book snapshots (ZSTD Parquet). <span class="pp">|</span></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Live Interactive Schema Browser</span></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>Below is the live column-by-column schema generated dynamically from <span class="co">[</span><span class="ot">`data/manifest/lake_manifest.json`</span><span class="co">](file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json)</span>:</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: live-schema-explorer</span></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.libPaths</span>(<span class="fu">c</span>(<span class="st">"/mnt/storage/R/library"</span>, <span class="fu">.libPaths</span>()))</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(jsonlite)</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(knitr)</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>manifest_file <span class="ot">&lt;-</span> <span class="st">"/mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json"</span></span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(manifest_file)) {</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">read_json</span>(manifest_file)</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>  views_summary <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(<span class="fu">names</span>(m<span class="sc">$</span>schema_catalog), <span class="cf">function</span>(vn) {</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>    v <span class="ot">&lt;-</span> m<span class="sc">$</span>schema_catalog[[vn]]</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>      <span class="at">View_Name =</span> vn,</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>      <span class="at">Total_Columns =</span> v<span class="sc">$</span>column_count,</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(views_summary, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"DuckDB View Name"</span>, <span class="st">"Audited Column Count"</span>))</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Manifest not found. Run `Rscript R/generate_agent_manifest.R` to build."</span>)</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

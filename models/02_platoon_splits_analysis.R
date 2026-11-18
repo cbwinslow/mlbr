@@ -94,7 +94,7 @@ quad_arsenal <- DBI::dbGetQuery(con, "
   ORDER BY split_period, pitch_type, matchup;
 ")
 
-arrow::write_parquet(quad_arsenal, file.path(proc_dir, "platoon_quadrant_arsenal.parquet"))
+arrow::write_parquet(quad_arsenal, file.path(proc_dir, "platoon_quadrant_arsenal.parquet"), compression = "zstd")
 
 val_quad <- quad_arsenal |>
   filter(split_period == "2024-2026 (Validation)") |>
@@ -242,23 +242,30 @@ count_zone_df <- DBI::dbGetQuery(con, "
 ")
 
 tto_df <- DBI::dbGetQuery(con, "
+  WITH starters AS (
+    SELECT DISTINCT game_pk, pitcher
+    FROM v_statcast_features
+    WHERE game_year >= 2020 AND inning = 1
+  )
   SELECT
-    CASE WHEN n_thruorder_pitcher >= 3 THEN '3rd+ TTO' ELSE CAST(n_thruorder_pitcher AS VARCHAR) || ' TTO' END AS tto_bucket,
-    matchup,
-    CASE WHEN is_same_hand = 1 THEN 'Same-Hand' ELSE 'Opposite-Hand' END AS platoon_regime,
+    CASE WHEN f.n_thruorder_pitcher >= 3 THEN '3rd+ TTO' ELSE CAST(f.n_thruorder_pitcher AS VARCHAR) || ' TTO' END AS tto_bucket,
+    f.matchup,
+    CASE WHEN f.is_same_hand = 1 THEN 'Same-Hand' ELSE 'Opposite-Hand' END AS platoon_regime,
     COUNT(*) AS pitches,
-    ROUND(AVG(CASE WHEN pitch_type = 'FF' THEN release_speed END), 2) AS ff_velo,
-    ROUND(AVG(is_csw) * 100, 2) AS csw_pct,
-    ROUND(SUM(is_whiff)::DOUBLE / NULLIF(SUM(is_swing), 0) * 100, 2) AS whiff_pct,
-    ROUND(AVG(xwoba), 3) AS avg_xwoba,
-    ROUND(AVG(pitcher_run_exp) * 100, 2) AS rv_per_100
-  FROM v_statcast_features
-  WHERE game_year >= 2020
-    AND matchup IS NOT NULL
-    AND n_thruorder_pitcher BETWEEN 1 AND 4
+    ROUND(AVG(CASE WHEN f.pitch_type = 'FF' THEN f.release_speed END), 2) AS ff_velo,
+    ROUND(AVG(f.is_csw) * 100, 2) AS csw_pct,
+    ROUND(SUM(f.is_whiff)::DOUBLE / NULLIF(SUM(f.is_swing), 0) * 100, 2) AS whiff_pct,
+    ROUND(AVG(f.xwoba), 3) AS avg_xwoba,
+    ROUND(AVG(f.pitcher_run_exp) * 100, 2) AS rv_per_100
+  FROM v_statcast_features f
+  INNER JOIN starters s ON f.game_pk = s.game_pk AND f.pitcher = s.pitcher
+  WHERE f.game_year >= 2020
+    AND f.matchup IS NOT NULL
+    AND f.n_thruorder_pitcher BETWEEN 1 AND 4
   GROUP BY 1, 2, 3
   ORDER BY 1, 2;
 ")
+arrow::write_parquet(tto_df, file.path(proc_dir, "starter_tto_platoon_2020_2026.parquet"), compression = "zstd")
 
 count_zone_df$attack_zone <- factor(count_zone_df$attack_zone, levels = c("Heart", "Shadow", "Chase", "Waste"))
 count_zone_df$count_leverage <- factor(
@@ -285,7 +292,7 @@ p3_tto <- ggplot(tto_df, aes(x = tto_bucket, y = avg_xwoba, color = matchup, gro
   geom_point(size = 3) +
   scale_color_manual(values = mlbr::cyber_quadrant_colors()) +
   labs(
-    title = "B. Times-Through-Order (TTO) xwOBA Penalty",
+    title = "B. Starting Pitcher TTO xwOBA Penalty",
     x = "Times Through Order",
     y = "xwOBA Allowed on Contact",
     color = "Matchup"
@@ -343,7 +350,7 @@ pvi_df <- DBI::dbGetQuery(con, "
   ORDER BY pvi_csw DESC;
 ")
 
-arrow::write_parquet(pvi_df, file.path(proc_dir, "pitcher_pvi_2024_2026.parquet"))
+arrow::write_parquet(pvi_df, file.path(proc_dir, "pitcher_pvi_2024_2026.parquet"), compression = "zstd")
 
 # Identify top extremes for labels
 top_vuln <- pvi_df |> arrange(desc(pvi_csw)) |> slice_head(n = 8)

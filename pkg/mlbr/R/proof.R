@@ -178,7 +178,7 @@ proof_crosswalk <- function(lake = NULL) {
                             pattern = "^bat-202[0-4]\\.parquet$", full.names = TRUE)
     if (length(fg_sample)) {
       fg_players <- do.call(rbind, lapply(fg_sample, function(f) arrow::read_parquet(f, col_select = "xMLBAMID")))
-      fg_ids <- unique(na.omit(as.integer(fg_players$xMLBAMID)))
+      fg_ids <- unique(stats::na.omit(as.integer(fg_players$xMLBAMID)))
       match_fg <- sum(fg_ids %in% as.integer(reg$key_mlbam))
       pct_fg <- (match_fg / length(fg_ids)) * 100
       res[[length(res) + 1L]] <- .record_check(

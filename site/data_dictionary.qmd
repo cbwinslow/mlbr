@@ -100,6 +100,46 @@ The master identifier nexus mapping 527,990 persons across all baseball systems.
 
 ---
 
+
+---
+
+## 4b. Silver Tier Derived Features (`v_statcast_features`)
+
+Pre-materialized in ZSTD-compressed, key-sorted Apache Parquet (`data/features/statcast_features/`, partitioned by `game_year`) via `R/materialize_features.R` and `sql/01_statcast_features.sql`.
+
+| Column Name | Type | Description |
+|:---|:---|:---|
+| `tracking_era` | String | Sensor era: `PITCHf/x` (2008–2014), `TrackMan` (2015–2019), `Hawk-Eye` (2020–2026). |
+| `matchup` | String | 4-quadrant platoon key: `RvR`, `RvL`, `LvL`, `LvR`. |
+| `is_same_hand` | Integer | `1` when `p_throws = stand`, `0` otherwise. |
+| `release_pos_x_arm` | Double | Pitcher arm-side horizontal release offset (ft; always positive toward throwing arm). |
+| `hb_in`, `ivb_in` | Double | Horizontal and induced vertical aerodynamic break in inches (`pfx_x * 12`, `pfx_z * 12`). |
+| `hb_glove_in` | Double | Pitcher-perspective horizontal break (inches; positive = glove-side, negative = arm-side). |
+| `hb_away_in` | Double | Batter-perspective horizontal break (inches; positive = breaks away from batter, negative = into batter). |
+| `plate_x_norm` | Double | Platoon-normalized plate horizontal coordinate (ft; positive = away from batter). |
+| `attack_zone` | String | Statcast concentric zone: `Heart`, `Shadow`, `Chase`, `Waste`. |
+| `vy_f`, `t_flight` | Double | Terminal forward speed at `y = 1.417 ft` (ft/s) and flight time from `y = 50 ft` (s). |
+| `vaa`, `haa` | Double | Vertical and Horizontal Approach Angles at `y = 1.417 ft` (degrees). |
+| `haa_glove`, `haa_away` | Double | Pitcher-glove-signed and batter-away-signed Horizontal Approach Angles (degrees). |
+| `is_called_strike`, `is_swing`, `is_whiff`, `is_csw` | Integer | Plate-discipline flags (`is_csw = 1` for called strikes + whiffs). |
+| `is_in_zone`, `is_chase`, `is_ball`, `is_bip` | Integer | Rulebook zone, out-of-zone chase, ball, and ball-in-play indicators. |
+| `xwoba`, `xba`, `xslg` | Double | Expected batted-ball outcomes cast cleanly from Statcast `estimated_*_using_speedangle`. |
+| `pitcher_run_exp` | Double | Pitcher-perspective run expectancy delta (`COALESCE(delta_pitcher_run_exp, -delta_run_exp)`). |
+| `is_gb`, `is_hard_hit` | Integer | Ground-ball (`bb_type = 'ground_ball'`) and hard-hit (`launch_speed >= 95`) indicators. |
+| `arm_angle_deg`, `bat_speed_mph`, `swing_length_ft` | Double | Safely cast modern Hawk-Eye arm-slot and bat-tracking metrics. |
+
+---
+
+## 4c. Gold Tier Analytical & Market Snapshot Tables
+
+| Path | Granularity | Description |
+|:---|:---|:---|
+| `data/processed/platoon_quadrant_arsenal.parquet` | Pitch Type × Quadrant × Era | 4-quadrant CSW%, Whiff%, Chase%, xwOBA, GB%, and RV/100 matrices. |
+| `data/processed/pitcher_pvi_2024_2026.parquet` | Pitcher (2024–2026) | Pitcher Platoon Vulnerability Index (`PVI_csw`, `PVI_xwoba`, `PVI_rv100`) + repertoire mix. |
+| `data/processed/starter_tto_platoon_2020_2026.parquet` | TTO × Quadrant | Starting-pitcher-only Times-Through-Order fatigue & platoon decay (`inning = 1` starter cohort). |
+| `data/raw/mlb_lineups/lineups-*.parquet` | Game × Side × Slot | Live/pre-game MLB Stats API probable pitchers and confirmed batting orders. |
+| `data/raw/markets/{polymarket,kalshi}-*.parquet` | Snapshot × Contract | Read-only Polymarket Gamma & Kalshi v2 order-book snapshots (ZSTD Parquet). |
+
 ## 5. Live Interactive Schema Browser
 
 Below is the live column-by-column schema generated dynamically from [`data/manifest/lake_manifest.json`](file:///mnt/storage/Rprojects/mlbr/data/manifest/lake_manifest.json):

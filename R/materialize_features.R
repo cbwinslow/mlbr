@@ -128,7 +128,8 @@ COPY (
     events,
     description
   FROM v_statcast_features
-) TO '%s' (FORMAT PARQUET, PARTITION_BY (game_year), OVERWRITE_OR_IGNORE);
+  ORDER BY game_year, pitcher, game_date, game_pk, at_bat_number, pitch_number
+) TO '%s' (FORMAT PARQUET, PARTITION_BY (game_year), COMPRESSION ZSTD, ROW_GROUP_SIZE 100000, OVERWRITE_OR_IGNORE);
 ", stage_dir)
 
 DBI::dbExecute(con, export_sql)

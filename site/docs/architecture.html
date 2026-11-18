@@ -520,16 +520,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#core-design-principles" id="toc-core-design-principles" class="nav-link active" data-scroll-target="#core-design-principles">Core Design Principles</a></li>
-  <li><a href="#partitioning-directory-layout" id="toc-partitioning-directory-layout" class="nav-link" data-scroll-target="#partitioning-directory-layout">Partitioning &amp; Directory Layout</a></li>
+  <li><a href="#medallion-data-lake-layout" id="toc-medallion-data-lake-layout" class="nav-link" data-scroll-target="#medallion-data-lake-layout">Medallion Data Lake Layout</a></li>
+  <li><a href="#adr-001-storage-format-compression-sql-vs.-parquet" id="toc-adr-001-storage-format-compression-sql-vs.-parquet" class="nav-link" data-scroll-target="#adr-001-storage-format-compression-sql-vs.-parquet">ADR-001: Storage Format, Compression &amp; SQL vs.&nbsp;Parquet</a>
+  <ul class="collapse">
+  <li><a href="#what-is-sql01_statcast_features.sql" id="toc-what-is-sql01_statcast_features.sql" class="nav-link" data-scroll-target="#what-is-sql01_statcast_features.sql">What Is <code>sql/01_statcast_features.sql</code>?</a></li>
+  <li><a href="#empirical-benchmark-on-cbwdellr720-2024-partition-802059-pitches-80-columns" id="toc-empirical-benchmark-on-cbwdellr720-2024-partition-802059-pitches-80-columns" class="nav-link" data-scroll-target="#empirical-benchmark-on-cbwdellr720-2024-partition-802059-pitches-80-columns">Empirical Benchmark on <code>cbwdellr720</code> (2024 Partition: 802,059 Pitches × 80+ Columns)</a></li>
+  <li><a href="#how-polars-arrow-duckdb-fit-together" id="toc-how-polars-arrow-duckdb-fit-together" class="nav-link" data-scroll-target="#how-polars-arrow-duckdb-fit-together">How Polars, Arrow &amp; DuckDB Fit Together</a></li>
+  </ul></li>
   <li><a href="#the-zero-drop-column-invariant" id="toc-the-zero-drop-column-invariant" class="nav-link" data-scroll-target="#the-zero-drop-column-invariant">The Zero-Drop Column Invariant</a></li>
-  <li><a href="#zero-copy-duckdb-query-engine" id="toc-zero-copy-duckdb-query-engine" class="nav-link" data-scroll-target="#zero-copy-duckdb-query-engine">Zero-Copy DuckDB Query Engine</a>
-  <ul class="collapse">
-  <li><a href="#benefits" id="toc-benefits" class="nav-link" data-scroll-target="#benefits">Benefits:</a></li>
-  </ul></li>
-  <li><a href="#ingestion-architecture-adaptive-tier-ladder" id="toc-ingestion-architecture-adaptive-tier-ladder" class="nav-link" data-scroll-target="#ingestion-architecture-adaptive-tier-ladder">Ingestion Architecture &amp; Adaptive Tier Ladder</a>
-  <ul class="collapse">
-  <li><a href="#ingestion-safety-rules" id="toc-ingestion-safety-rules" class="nav-link" data-scroll-target="#ingestion-safety-rules">Ingestion Safety Rules</a></li>
-  </ul></li>
+  <li><a href="#ingestion-safety-passive-market-archiving" id="toc-ingestion-safety-passive-market-archiving" class="nav-link" data-scroll-target="#ingestion-safety-passive-market-archiving">Ingestion Safety &amp; Passive Market Archiving</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -540,7 +539,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Getting Started</a></li><li class="breadcrumb-item"><a href="./architecture.html">Architecture &amp; Storage</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Architecture &amp; Storage</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-<p class="subtitle lead">Partitioning design, zero-copy DuckDB views, and rate-limit safe ingestion</p>
+<p class="subtitle lead">Medallion Lakehouse, ZSTD Sorted Parquet (ADR-001), Zero-Copy DuckDB SQL &amp; Multi-Engine Access</p>
 </div>
 
 
@@ -559,38 +558,101 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="core-design-principles" class="level2">
 <h2 class="anchored" data-anchor-id="core-design-principles">Core Design Principles</h2>
-<p>Traditional sports analytics repositories often suffer from two major anti-patterns: 1. <strong>Premature Aggregation / Column Dropping:</strong> Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. <strong>Monolithic Relational Databases:</strong> Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.</p>
-<p><code>mlbr</code> resolves both issues by implementing a <strong>Decoupled Columnar Data Lake</strong> powered by Apache Parquet and DuckDB.</p>
+<p>Traditional sports analytics repositories suffer from two major anti-patterns: 1. <strong>Premature Aggregation / Column Dropping:</strong> Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise. 2. <strong>Monolithic Databases or Row-Oriented SQL Dumps:</strong> Storing 41.5M+ rows in <code>.sql</code> text dumps or single-writer database files (<code>.duckdb</code>, SQLite) creates file-lock contention, slow column scans, and tool lock-in.</p>
+<p><code>mlbr</code> resolves both by separating <strong>storage</strong> (<strong>ZSTD-compressed, key-sorted Apache Parquet</strong>) from <strong>query/compute</strong> (<strong>DuckDB SQL</strong>, <strong>R <code>arrow</code></strong>, and <strong>Python <code>pyarrow</code>/<code>polars</code></strong>).</p>
 <hr>
 </section>
-<section id="partitioning-directory-layout" class="level2">
-<h2 class="anchored" data-anchor-id="partitioning-directory-layout">Partitioning &amp; Directory Layout</h2>
-<p>All raw data resides in <code>/mnt/storage/Rprojects/mlbr/data/raw/</code> in immutable, partitioned Parquet files:</p>
-<pre><code>data/raw/
-├── retrosheet/          # 622 files, 23.8M rows (1871-2025)
-│   ├── plays-1871.parquet ... plays-2025.parquet
-│   ├── games-1871.parquet ... games-2025.parquet
-│   ├── player_games-*.parquet
-│   ├── subs-*.parquet
-│   └── rosters-*.parquet
-├── statcast/            # Partitioned monthly (2008-2025)
-│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet
-├── fangraphs/           # 425 tables (1901-2025)
-│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet
-│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet
-│   ├── fg_fielding_*.parquet, fg_team_*.parquet
-│   └── guts_constants.parquet, park_factors_*.parquet
-├── chadwick/            # Universal crosswalk
-│   └── register.parquet (527,990 player IDs)
-├── lahman/              # 31 historical tables (1871+)
-├── ncaa/                # 8 college baseball tables (848k play rows)
-├── mlbmeta/             # 81 files (draft, parks, advanced metrics)
-└── espn/                # 32 files (schedules, boxscores)</code></pre>
+<section id="medallion-data-lake-layout" class="level2">
+<h2 class="anchored" data-anchor-id="medallion-data-lake-layout">Medallion Data Lake Layout</h2>
+<pre><code>data/
+├── raw/                 # BRONZE TIER: Immutable, 100% schema fidelity Parquet
+│   ├── statcast/        # 14.64M pitches (2008-2026), 119 columns
+│   ├── retrosheet/      # 23.82M plays (1900-2025), 160 columns
+│   ├── fangraphs/       # 322K leaderboard rows (1901-2025), 447-520 columns
+│   ├── chadwick/        # 527,990 player crosswalk records
+│   ├── lahman/          # 31 historical tables (1871-2025)
+│   ├── ncaa/            # 914K college PBP rows
+│   ├── mlbmeta/         # Schedules, drafts, parks
+│   ├── mlb_lineups/     # Live/pre-game MLB Stats API probable pitchers &amp; lineups
+│   └── markets/         # Read-only Polymarket &amp; Kalshi ZSTD order-book snapshots
+├── features/            # SILVER TIER: Full-population physics &amp; outcome features
+│   └── statcast_features/  # 14.64M rows, ZSTD Sorted Parquet, partitioned by game_year (1.4 GB)
+└── processed/           # GOLD TIER: Aggregated matrices, PVI, TTO &amp; model outputs
+    ├── platoon_quadrant_arsenal.parquet
+    ├── pitcher_pvi_2024_2026.parquet
+    └── starter_tto_platoon_2020_2026.parquet</code></pre>
 <hr>
+</section>
+<section id="adr-001-storage-format-compression-sql-vs.-parquet" class="level2">
+<h2 class="anchored" data-anchor-id="adr-001-storage-format-compression-sql-vs.-parquet">ADR-001: Storage Format, Compression &amp; SQL vs.&nbsp;Parquet</h2>
+<section id="what-is-sql01_statcast_features.sql" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-sql01_statcast_features.sql">What Is <code>sql/01_statcast_features.sql</code>?</h3>
+<p><code>sql/01_statcast_features.sql</code> is a <strong>DuckDB SQL view definition</strong> (<code>CREATE OR REPLACE VIEW v_statcast_features ...</code>), <strong>not a storage file</strong>. It stores zero data. Instead: - <code>R/materialize_features.R</code> executes the canonical view definition inside DuckDB and materializes the full 14.64M-row Silver table to <strong>ZSTD-compressed, key-sorted Parquet</strong> (<code>data/features/statcast_features/</code>). - <code>mlbr::lake_register_features()</code> mounts that Parquet dataset as <code>v_statcast_features</code> for sub-50ms SQL queries (falling back to live SQL evaluation over Bronze only when Silver isn’t materialized yet or <code>force_dynamic = TRUE</code>).</p>
+</section>
+<section id="empirical-benchmark-on-cbwdellr720-2024-partition-802059-pitches-80-columns" class="level3">
+<h3 class="anchored" data-anchor-id="empirical-benchmark-on-cbwdellr720-2024-partition-802059-pitches-80-columns">Empirical Benchmark on <code>cbwdellr720</code> (2024 Partition: 802,059 Pitches × 80+ Columns)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 22%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Storage Format</th>
+<th style="text-align: right;">2024 Size</th>
+<th style="text-align: right;">Single-Pitcher Scan (<code>pitcher = 543037</code>)</th>
+<th style="text-align: center;">Multi-Reader Safe?</th>
+<th style="text-align: center;">DuckDB / Polars / Arrow Native?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>ZSTD Sorted Parquet</strong> <em>(Chosen Standard)</em></td>
+<td style="text-align: right;"><strong>92.4 MB</strong></td>
+<td style="text-align: right;"><strong>0.013s</strong> (0.022s across 14.64M lake)</td>
+<td style="text-align: center;"><strong>Yes</strong></td>
+<td style="text-align: center;"><strong>Yes</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Snappy Unsorted Parquet <em>(Legacy)</em></td>
+<td style="text-align: right;">105.7 MB</td>
+<td style="text-align: right;">0.044s</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">Yes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Monolithic <code>.duckdb</code> Table</td>
+<td style="text-align: right;">127.2 MB</td>
+<td style="text-align: right;">0.166s</td>
+<td style="text-align: center;">No (write lock)</td>
+<td style="text-align: center;">DuckDB only</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ZSTD Arrow IPC / Feather</td>
+<td style="text-align: right;">151.6 MB</td>
+<td style="text-align: right;">0.203s</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">Arrow/Polars only</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-polars-arrow-duckdb-fit-together" class="level3">
+<h3 class="anchored" data-anchor-id="how-polars-arrow-duckdb-fit-together">How Polars, Arrow &amp; DuckDB Fit Together</h3>
+<ul>
+<li><strong>In Memory (Zero-Copy Interchange):</strong> <strong>Polars</strong> uses <strong>Apache Arrow</strong> columnar buffers in memory (<code>polars-arrow</code>), the same memory layout used by <strong>DuckDB</strong> and <strong>R <code>arrow</code></strong> via the <strong>Arrow C Data Interface</strong>. Moving query results between DuckDB SQL, R, and Python/Polars requires zero serialization copies.</li>
+<li><strong>On Disk (Canonical Storage):</strong> Polars and DuckDB both treat <strong>Apache Parquet</strong> as their primary analytical disk format. Combining <strong><code>COMPRESSION ZSTD</code></strong> with <strong><code>ROW_GROUP_SIZE = 100000</code></strong> and <strong><code>ORDER BY (game_year, pitcher, game_date, game_pk, at_bat_number, pitch_number)</code></strong> shrinks the 14.64M-row Silver table from <strong>1.6 GB (Snappy)</strong> down to <strong>1.4 GB (ZSTD)</strong> while enabling Parquet min-max zone-map pruning (<strong>3.4× faster</strong> filtered reads).</li>
+<li><strong>Future Lakehouse Scaling (Delta Lake / Apache Iceberg):</strong> Because our canonical storage is already open Parquet, adding an Iceberg or Delta transaction log later requires zero data re-encoding if concurrent streaming writes grow.</li>
+</ul>
+<hr>
+</section>
 </section>
 <section id="the-zero-drop-column-invariant" class="level2">
 <h2 class="anchored" data-anchor-id="the-zero-drop-column-invariant">The Zero-Drop Column Invariant</h2>
-<p>Every data source ingested by <code>mlbr</code> retains <strong>100% of its available columns</strong>.</p>
+<p>Every raw dataset in <code>data/raw/</code> retains <strong>100% of its available columns</strong>.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -613,22 +675,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td><strong>Retrosheet Plays</strong></td>
 <td><strong>160</strong></td>
-<td>Complete base runner states, pitch sequence strings, fielder position codes, count before play, batted ball types, extra-base advance codes</td>
+<td>Base runner states, pitch sequence strings, fielder position codes, count, batted ball types</td>
 </tr>
 <tr class="odd">
 <td><strong>Retrosheet Games</strong></td>
 <td><strong>84</strong></td>
-<td>Temperature, wind direction/speed, attendance, home/away plate umpires, day/night, ballpark ID</td>
+<td>Temperature, wind, attendance, umpires, day/night, ballpark ID</td>
 </tr>
 <tr class="even">
 <td><strong>FanGraphs Batting</strong></td>
 <td><strong>447</strong></td>
-<td>wOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, Plate discipline (O-Swing%, Z-Swing%), Stuff+, Location+</td>
+<td>wOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, plate discipline</td>
 </tr>
 <tr class="odd">
 <td><strong>FanGraphs Pitching</strong></td>
 <td><strong>520</strong></td>
-<td>FIP, xFIP, SIERA, K-BB%, Pitch mix frequencies, pitch-specific run values (wFB, wSL, wCB, wCH)</td>
+<td>FIP, xFIP, SIERA, K-BB%, Pitch mix, pitch run values</td>
 </tr>
 <tr class="even">
 <td><strong>Chadwick Register</strong></td>
@@ -639,61 +701,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <hr>
 </section>
-<section id="zero-copy-duckdb-query-engine" class="level2">
-<h2 class="anchored" data-anchor-id="zero-copy-duckdb-query-engine">Zero-Copy DuckDB Query Engine</h2>
-<p>Rather than maintaining a persistent database daemon that holds data in proprietary formats, <code>mlbr</code> registers <strong>virtual views</strong> directly on the raw Parquet files via <code>lake_duckdb()</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">lake_duckdb</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Under the hood, DuckDB executes:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> statcast <span class="kw">AS</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_parquet(<span class="st">'data/raw/statcast/*.parquet'</span>, union_by_name<span class="op">=</span><span class="kw">true</span>);</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> retro_plays <span class="kw">AS</span> </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_parquet(<span class="st">'data/raw/retrosheet/plays-*.parquet'</span>, union_by_name<span class="op">=</span><span class="kw">true</span>);</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> chadwick <span class="kw">AS</span> </span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_parquet(<span class="st">'data/raw/chadwick/register.parquet'</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="benefits" class="level3">
-<h3 class="anchored" data-anchor-id="benefits">Benefits:</h3>
+<section id="ingestion-safety-passive-market-archiving" class="level2">
+<h2 class="anchored" data-anchor-id="ingestion-safety-passive-market-archiving">Ingestion Safety &amp; Passive Market Archiving</h2>
 <ul>
-<li><strong>Zero Ingestion Latency:</strong> When new parquet files arrive, views automatically include them without table rebuilds.</li>
-<li><strong>Out-of-Core Execution:</strong> Process 30M+ rows on machines with limited RAM using streaming SIMD operators.</li>
-<li><strong>Snappy Compression:</strong> Entire dataset consumes less than 15 GB of disk space.</li>
+<li><strong>Statcast Adaptive Tier Ladder:</strong> <code>R/ingest/ingest_statcast.R</code> steps down <code>month → week → day</code> whenever Baseball Savant approaches its 25,000-row query cap.</li>
+<li><strong>Passive Market &amp; Lineup Archiver:</strong> <code>R/ingest/archive_market_snapshots.py</code> asynchronously polls the MLB Stats API (<code>probablePitcher,lineups</code>), Polymarket Gamma (<code>tag_slug=mlb</code>/<code>baseball</code>), and Kalshi public v2 MLB series, persisting <strong>ZSTD Parquet</strong> snapshots for Closing Line Value (CLV) backtesting.</li>
 </ul>
-<hr>
-</section>
-</section>
-<section id="ingestion-architecture-adaptive-tier-ladder" class="level2">
-<h2 class="anchored" data-anchor-id="ingestion-architecture-adaptive-tier-ladder">Ingestion Architecture &amp; Adaptive Tier Ladder</h2>
-<p>The MLB Baseball Savant Statcast API enforces a hard server-side limit of <strong>25,000 rows per request</strong>. If a query matches 25,001 rows, the server silently truncates results, causing data loss.</p>
-<p>To eliminate this vulnerability, <code>R/ingest/ingest_statcast.R</code> implements an <strong>Adaptive Tier Ladder</strong>:</p>
-<pre><code>           [ Query Month Window ]
-                     │
-         Is result count == 25,000?
-             ├── NO  ──&gt; Save monthly parquet
-             └── YES ──&gt; Step down to Tier 2
-                               │
-                    [ Query 7-Day Week Windows ]
-                               │
-                   Is result count == 25,000?
-                       ├── NO  ──&gt; Save weekly chunks
-                       └── YES ──&gt; Step down to Tier 3
-                                         │
-                             [ Query Single-Day Windows ]
-                                         │
-                             Guaranteed &lt; 25,000 pitches</code></pre>
-<section id="ingestion-safety-rules" class="level3">
-<h3 class="anchored" data-anchor-id="ingestion-safety-rules">Ingestion Safety Rules</h3>
-<ol type="1">
-<li><strong>Serialization:</strong> Only one ingest process accesses a source at a time.</li>
-<li><strong>Polite Backoff:</strong> Automatic exponential backoff on HTTP 429/503 errors.</li>
-<li><strong>Idempotence:</strong> Files that already exist on disk are skipped unless explicitly removed.</li>
-</ol>
 
 
 <!-- -->
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1161,125 +1178,90 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Architecture &amp; Storage"</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Partitioning design, zero-copy DuckDB views, and rate-limit safe ingestion"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Core Design Principles</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>Traditional sports analytics repositories often suffer from two major anti-patterns:</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Premature Aggregation / Column Dropping:** Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise.</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Monolithic Relational Databases:** Ingesting 30M+ rows into traditional relational databases (MySQL, SQLite), resulting in slow bulk loads, vacuum locks, and memory bottlenecks.</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="in">`mlbr`</span> resolves both issues by implementing a **Decoupled Columnar Data Lake** powered by Apache Parquet and DuckDB.</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Partitioning &amp; Directory Layout</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>All raw data resides in <span class="in">`/mnt/storage/Rprojects/mlbr/data/raw/`</span> in immutable, partitioned Parquet files:</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="in">data/raw/</span></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="in">├── retrosheet/          # 622 files, 23.8M rows (1871-2025)</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── plays-1871.parquet ... plays-2025.parquet</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── games-1871.parquet ... games-2025.parquet</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── player_games-*.parquet</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── subs-*.parquet</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="in">│   └── rosters-*.parquet</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="in">├── statcast/            # Partitioned monthly (2008-2025)</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── statcast-2008-03.parquet ... statcast-2025-10.parquet</span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="in">├── fangraphs/           # 425 tables (1901-2025)</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── fg_bat_1901.parquet ... fg_bat_2025.parquet</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── fg_pitch_1901.parquet ... fg_pitch_2025.parquet</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── fg_fielding_*.parquet, fg_team_*.parquet</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="in">│   └── guts_constants.parquet, park_factors_*.parquet</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="in">├── chadwick/            # Universal crosswalk</span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="in">│   └── register.parquet (527,990 player IDs)</span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="in">├── lahman/              # 31 historical tables (1871+)</span></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="in">├── ncaa/                # 8 college baseball tables (848k play rows)</span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="in">├── mlbmeta/             # 81 files (draft, parks, advanced metrics)</span></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="in">└── espn/                # 32 files (schedules, boxscores)</span></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Zero-Drop Column Invariant</span></span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>Every data source ingested by <span class="in">`mlbr`</span> retains **100% of its available columns**. </span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Source Table <span class="pp">|</span> Preserved Columns <span class="pp">|</span> Key Retained Attributes <span class="pp">|</span></span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Statcast** | **119** <span class="pp">|</span> <span class="in">`release_speed`</span>, <span class="in">`release_spin_rate`</span>, <span class="in">`pfx_x`</span>, <span class="in">`pfx_z`</span>, <span class="in">`spin_axis`</span>, <span class="in">`vx0`</span>, <span class="in">`vy0`</span>, <span class="in">`vz0`</span>, <span class="in">`ax`</span>, <span class="in">`ay`</span>, <span class="in">`az`</span>, <span class="in">`sz_top`</span>, <span class="in">`sz_bot`</span>, <span class="in">`bat_speed`</span>, <span class="in">`swing_length`</span> <span class="pp">|</span></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Retrosheet Plays** | **160** <span class="pp">|</span> Complete base runner states, pitch sequence strings, fielder position codes, count before play, batted ball types, extra-base advance codes <span class="pp">|</span></span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Retrosheet Games** | **84** <span class="pp">|</span> Temperature, wind direction/speed, attendance, home/away plate umpires, day/night, ballpark ID <span class="pp">|</span></span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FanGraphs Batting** | **447** <span class="pp">|</span> wOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, Plate discipline (O-Swing%, Z-Swing%), Stuff+, Location+ <span class="pp">|</span></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FanGraphs Pitching**| **520** <span class="pp">|</span> FIP, xFIP, SIERA, K-BB%, Pitch mix frequencies, pitch-specific run values (wFB, wSL, wCB, wCH) <span class="pp">|</span></span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Chadwick Register** | **40** <span class="pp">|</span> Crosswalk IDs: <span class="in">`key_mlbam`</span>, <span class="in">`key_retro`</span>, <span class="in">`key_bbref`</span>, <span class="in">`key_fangraphs`</span>, <span class="in">`key_npb`</span> <span class="pp">|</span></span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## Zero-Copy DuckDB Query Engine</span></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>Rather than maintaining a persistent database daemon that holds data in proprietary formats, <span class="in">`mlbr`</span> registers **virtual views** directly on the raw Parquet files via <span class="in">`lake_duckdb()`</span>.</span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">lake_duckdb</span>()</span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>Under the hood, DuckDB executes:</span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="in">```sql</span></span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> VIEW statcast <span class="kw">AS</span> </span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_parquet(<span class="st">'data/raw/statcast/*.parquet'</span>, union_by_name<span class="op">=</span>true);</span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> VIEW retro_plays <span class="kw">AS</span> </span>
-<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_parquet(<span class="st">'data/raw/retrosheet/plays-*.parquet'</span>, union_by_name<span class="op">=</span>true);</span>
-<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> VIEW chadwick <span class="kw">AS</span> </span>
-<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> read_parquet(<span class="st">'data/raw/chadwick/register.parquet'</span>);</span>
-<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="fu">### Benefits:</span></span>
-<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Zero Ingestion Latency:** When new parquet files arrive, views automatically include them without table rebuilds.</span>
-<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Out-of-Core Execution:** Process 30M+ rows on machines with limited RAM using streaming SIMD operators.</span>
-<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Snappy Compression:** Entire dataset consumes less than 15 GB of disk space.</span>
-<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ingestion Architecture &amp; Adaptive Tier Ladder</span></span>
-<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>The MLB Baseball Savant Statcast API enforces a hard server-side limit of **25,000 rows per request**. If a query matches 25,001 rows, the server silently truncates results, causing data loss.</span>
-<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>To eliminate this vulnerability, <span class="in">`R/ingest/ingest_statcast.R`</span> implements an **Adaptive Tier Ladder**:</span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a><span class="in">           [ Query Month Window ]</span></span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="in">                     │</span></span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="in">         Is result count == 25,000?</span></span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="in">             ├── NO  ──&gt; Save monthly parquet</span></span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="in">             └── YES ──&gt; Step down to Tier 2</span></span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="in">                               │</span></span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="in">                    [ Query 7-Day Week Windows ]</span></span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="in">                               │</span></span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="in">                   Is result count == 25,000?</span></span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="in">                       ├── NO  ──&gt; Save weekly chunks</span></span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="in">                       └── YES ──&gt; Step down to Tier 3</span></span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="in">                                         │</span></span>
-<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a><span class="in">                             [ Query Single-Day Windows ]</span></span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="in">                                         │</span></span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="in">                             Guaranteed &lt; 25,000 pitches</span></span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ingestion Safety Rules</span></span>
-<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Serialization:** Only one ingest process accesses a source at a time.</span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Polite Backoff:** Automatic exponential backoff on HTTP 429/503 errors.</span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Idempotence:** Files that already exist on disk are skipped unless explicitly removed.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Architecture &amp; Storage"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Medallion Lakehouse, ZSTD Sorted Parquet (ADR-001), Zero-Copy DuckDB SQL &amp; Multi-Engine Access"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Core Design Principles</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>Traditional sports analytics repositories suffer from two major anti-patterns:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Premature Aggregation / Column Dropping:** Dropping columns during ingestion to save disk space, requiring full re-downloads when new research questions arise.</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Monolithic Databases or Row-Oriented SQL Dumps:** Storing 41.5M+ rows in <span class="in">`.sql`</span> text dumps or single-writer database files (<span class="in">`.duckdb`</span>, SQLite) creates file-lock contention, slow column scans, and tool lock-in.</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="in">`mlbr`</span> resolves both by separating **storage** (**ZSTD-compressed, key-sorted Apache Parquet**) from **query/compute** (**DuckDB SQL**, **R `arrow`**, and **Python `pyarrow`/`polars`**).</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Medallion Data Lake Layout</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="in">data/</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="in">├── raw/                 # BRONZE TIER: Immutable, 100% schema fidelity Parquet</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── statcast/        # 14.64M pitches (2008-2026), 119 columns</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── retrosheet/      # 23.82M plays (1900-2025), 160 columns</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── fangraphs/       # 322K leaderboard rows (1901-2025), 447-520 columns</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── chadwick/        # 527,990 player crosswalk records</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── lahman/          # 31 historical tables (1871-2025)</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── ncaa/            # 914K college PBP rows</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── mlbmeta/         # Schedules, drafts, parks</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="in">│   ├── mlb_lineups/     # Live/pre-game MLB Stats API probable pitchers &amp; lineups</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="in">│   └── markets/         # Read-only Polymarket &amp; Kalshi ZSTD order-book snapshots</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="in">├── features/            # SILVER TIER: Full-population physics &amp; outcome features</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="in">│   └── statcast_features/  # 14.64M rows, ZSTD Sorted Parquet, partitioned by game_year (1.4 GB)</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="in">└── processed/           # GOLD TIER: Aggregated matrices, PVI, TTO &amp; model outputs</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="in">    ├── platoon_quadrant_arsenal.parquet</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="in">    ├── pitcher_pvi_2024_2026.parquet</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="in">    └── starter_tto_platoon_2020_2026.parquet</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## ADR-001: Storage Format, Compression &amp; SQL vs. Parquet</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="fu">### What Is `sql/01_statcast_features.sql`?</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="in">`sql/01_statcast_features.sql`</span> is a **DuckDB SQL view definition** (`CREATE OR REPLACE VIEW v_statcast_features ...`), **not a storage file**. It stores zero data. Instead:</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`R/materialize_features.R`</span> executes the canonical view definition inside DuckDB and materializes the full 14.64M-row Silver table to **ZSTD-compressed, key-sorted Parquet** (<span class="in">`data/features/statcast_features/`</span>).</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`mlbr::lake_register_features()`</span> mounts that Parquet dataset as <span class="in">`v_statcast_features`</span> for sub-50ms SQL queries (falling back to live SQL evaluation over Bronze only when Silver isn't materialized yet or <span class="in">`force_dynamic = TRUE`</span>).</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">### Empirical Benchmark on `cbwdellr720` (2024 Partition: 802,059 Pitches × 80+ Columns)</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Storage Format <span class="pp">|</span> 2024 Size <span class="pp">|</span> Single-Pitcher Scan (<span class="in">`pitcher = 543037`</span>) <span class="pp">|</span> Multi-Reader Safe? <span class="pp">|</span> DuckDB / Polars / Arrow Native? <span class="pp">|</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|---:|---:|:---:|:---:|</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ZSTD Sorted Parquet** *(Chosen Standard)* | **92.4 MB** | **0.013s** (0.022s across 14.64M lake) | **Yes** | **Yes** <span class="pp">|</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Snappy Unsorted Parquet *(Legacy)* <span class="pp">|</span> 105.7 MB <span class="pp">|</span> 0.044s <span class="pp">|</span> Yes <span class="pp">|</span> Yes <span class="pp">|</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Monolithic <span class="in">`.duckdb`</span> Table <span class="pp">|</span> 127.2 MB <span class="pp">|</span> 0.166s <span class="pp">|</span> No (write lock) <span class="pp">|</span> DuckDB only <span class="pp">|</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> ZSTD Arrow IPC / Feather <span class="pp">|</span> 151.6 MB <span class="pp">|</span> 0.203s <span class="pp">|</span> Yes <span class="pp">|</span> Arrow/Polars only <span class="pp">|</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="fu">### How Polars, Arrow &amp; DuckDB Fit Together</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In Memory (Zero-Copy Interchange):** **Polars** uses **Apache Arrow** columnar buffers in memory (`polars-arrow`), the same memory layout used by **DuckDB** and **R `arrow`** via the **Arrow C Data Interface**. Moving query results between DuckDB SQL, R, and Python/Polars requires zero serialization copies.</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**On Disk (Canonical Storage):** Polars and DuckDB both treat **Apache Parquet** as their primary analytical disk format. Combining **`COMPRESSION ZSTD`** with **`ROW_GROUP_SIZE = 100000`** and **`ORDER BY (game_year, pitcher, game_date, game_pk, at_bat_number, pitch_number)`** shrinks the 14.64M-row Silver table from **1.6 GB (Snappy)** down to **1.4 GB (ZSTD)** while enabling Parquet min-max zone-map pruning (**3.4× faster** filtered reads).</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Future Lakehouse Scaling (Delta Lake / Apache Iceberg):** Because our canonical storage is already open Parquet, adding an Iceberg or Delta transaction log later requires zero data re-encoding if concurrent streaming writes grow.</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Zero-Drop Column Invariant</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>Every raw dataset in <span class="in">`data/raw/`</span> retains **100% of its available columns**.</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Source Table <span class="pp">|</span> Preserved Columns <span class="pp">|</span> Key Retained Attributes <span class="pp">|</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Statcast** | **119** <span class="pp">|</span> <span class="in">`release_speed`</span>, <span class="in">`release_spin_rate`</span>, <span class="in">`pfx_x`</span>, <span class="in">`pfx_z`</span>, <span class="in">`spin_axis`</span>, <span class="in">`vx0`</span>, <span class="in">`vy0`</span>, <span class="in">`vz0`</span>, <span class="in">`ax`</span>, <span class="in">`ay`</span>, <span class="in">`az`</span>, <span class="in">`sz_top`</span>, <span class="in">`sz_bot`</span>, <span class="in">`bat_speed`</span>, <span class="in">`swing_length`</span> <span class="pp">|</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Retrosheet Plays** | **160** <span class="pp">|</span> Base runner states, pitch sequence strings, fielder position codes, count, batted ball types <span class="pp">|</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Retrosheet Games** | **84** <span class="pp">|</span> Temperature, wind, attendance, umpires, day/night, ballpark ID <span class="pp">|</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FanGraphs Batting** | **447** <span class="pp">|</span> wOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, plate discipline <span class="pp">|</span></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FanGraphs Pitching**| **520** <span class="pp">|</span> FIP, xFIP, SIERA, K-BB%, Pitch mix, pitch run values <span class="pp">|</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Chadwick Register** | **40** <span class="pp">|</span> Crosswalk IDs: <span class="in">`key_mlbam`</span>, <span class="in">`key_retro`</span>, <span class="in">`key_bbref`</span>, <span class="in">`key_fangraphs`</span>, <span class="in">`key_npb`</span> <span class="pp">|</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ingestion Safety &amp; Passive Market Archiving</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Statcast Adaptive Tier Ladder:** <span class="in">`R/ingest/ingest_statcast.R`</span> steps down <span class="in">`month → week → day`</span> whenever Baseball Savant approaches its 25,000-row query cap.</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Passive Market &amp; Lineup Archiver:** `R/ingest/archive_market_snapshots.py` asynchronously polls the MLB Stats API (`probablePitcher,lineups`), Polymarket Gamma (`tag_slug=mlb`/`baseball`), and Kalshi public v2 MLB series, persisting **ZSTD Parquet** snapshots for Closing Line Value (CLV) backtesting.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

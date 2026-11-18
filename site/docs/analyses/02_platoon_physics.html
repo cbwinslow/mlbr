@@ -1184,7 +1184,7 @@ window.Quarto = {
 <figcaption>Figure 3: Count Leverage, Attack Zones &amp; TTO xwOBA Decay (2020-2026)</figcaption>
 </figure>
 </div>
-<p>Notice how <strong>Times Through the Order (<code>TTO</code>)</strong> compounds platoon exposure: - In <code>1st TTO</code> same-hand (<code>LvL</code> / <code>RvR</code>), pitchers post <strong>30.90% / 30.30% CSW</strong> and <strong>.289 / .304 xwOBA</strong> (<strong>+0.58 / +0.18 RV/100</strong>). - By <code>3rd+ TTO</code> opposite-hand (<code>LvR</code> / <code>RvL</code>), CSW falls to <strong>26.13% / 25.63%</strong> and xwOBA climbs to <strong>.339 / .345</strong> (<strong>-0.44 / -0.50 RV/100</strong>). <em>(Note: 1st TTO aggregates also reflect higher-velocity 1-inning relievers compared to multi-inning starters.)</em></p>
+<p>Isolating strictly to <strong>Starting Pitchers (<code>inning = 1</code> cohort, 2020–2026)</strong> removes reliever selection bias and reveals the causal TTO x Platoon penalty: - In <code>1st TTO</code> same-hand (<code>LvL</code> / <code>RvR</code>), starters post <strong>30.95% / 30.48% CSW</strong> and <strong>.294 / .304 xwOBA</strong> (<strong>+0.57 / +0.25 RV/100</strong>). - By <code>3rd+ TTO</code>, average four-seam velocity declines only <strong>~0.2 mph</strong> (<code>94.41 → 94.22 mph</code> RvR; <code>92.77 → 92.56 mph</code> LvL), yet <strong>CSW% drops ~2.9–3.1 percentage points</strong> across all quadrants and opposite-hand (<code>LvR</code> / <code>RvL</code>) xwOBA climbs to <strong>.340 / .345</strong> (<strong>-0.45 / -0.50 RV/100</strong>)—proving that third-time-through-the-order decay is driven primarily by <strong>batter perceptual familiarity</strong> rather than arm fatigue.</p>
 </section>
 <section id="pitcher-platoon-vulnerability-landscape-20242026" class="level3">
 <h3 class="anchored" data-anchor-id="pitcher-platoon-vulnerability-landscape-20242026">5.3 Pitcher Platoon Vulnerability Landscape (2024–2026)</h3>
@@ -1425,7 +1425,7 @@ window.Quarto = {
 </section>
 <section id="implementation-reproducibility" class="level2">
 <h2 class="anchored" data-anchor-id="implementation-reproducibility">6. Implementation &amp; Reproducibility</h2>
-<p>All metrics in this study are pre-materialized in Silver (<code>data/features/statcast_features/</code>) and summarized into Gold Parquet tables (<code>data/processed/platoon_quadrant_arsenal.parquet</code>, <code>data/processed/pitcher_pvi_2024_2026.parquet</code>).</p>
+<p>All metrics in this study are pre-materialized in Silver (<code>data/features/statcast_features/</code>) and summarized into Gold Parquet tables (<code>data/processed/platoon_quadrant_arsenal.parquet</code>, <code>data/processed/pitcher_pvi_2024_2026.parquet</code>, <code>data/processed/starter_tto_platoon_2020_2026.parquet</code>).</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">lake_duckdb</span>()</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2043,9 +2043,9 @@ window.Quarto = {
 <span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 3: Count Leverage, Attack Zones &amp; TTO xwOBA Decay (2020-2026)](../assets/platoon03_strikeout_drivers_count_tto.png)</span>{width=100%}</span>
 <span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>Notice how **Times Through the Order (`TTO`)** compounds platoon exposure:</span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>In <span class="in">`1st TTO`</span> same-hand (<span class="in">`LvL`</span> / <span class="in">`RvR`</span>), pitchers post **30.90% / 30.30% CSW** and **.289 / .304 xwOBA** (**+0.58 / +0.18 RV/100**).</span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>By <span class="in">`3rd+ TTO`</span> opposite-hand (<span class="in">`LvR`</span> / <span class="in">`RvL`</span>), CSW falls to **26.13% / 25.63%** and xwOBA climbs to **.339 / .345** (**-0.44 / -0.50 RV/100**). *(Note: 1st TTO aggregates also reflect higher-velocity 1-inning relievers compared to multi-inning starters.)*</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>Isolating strictly to **Starting Pitchers (`inning = 1` cohort, 2020–2026)** removes reliever selection bias and reveals the causal TTO x Platoon penalty:</span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>In <span class="in">`1st TTO`</span> same-hand (<span class="in">`LvL`</span> / <span class="in">`RvR`</span>), starters post **30.95% / 30.48% CSW** and **.294 / .304 xwOBA** (**+0.57 / +0.25 RV/100**).</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>By <span class="in">`3rd+ TTO`</span>, average four-seam velocity declines only **~0.2 mph** (`94.41 → 94.22 mph` RvR; `92.77 → 92.56 mph` LvL), yet **CSW% drops ~2.9–3.1 percentage points** across all quadrants and opposite-hand (`LvR` / `RvL`) xwOBA climbs to **.340 / .345** (**-0.45 / -0.50 RV/100**)—proving that third-time-through-the-order decay is driven primarily by **batter perceptual familiarity** rather than arm fatigue.</span>
 <span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="fu">### 5.3 Pitcher Platoon Vulnerability Landscape (2024–2026)</span></span>
 <span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a></span>
@@ -2084,7 +2084,7 @@ window.Quarto = {
 <span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Implementation &amp; Reproducibility</span></span>
 <span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a>All metrics in this study are pre-materialized in Silver (<span class="in">`data/features/statcast_features/`</span>) and summarized into Gold Parquet tables (<span class="in">`data/processed/platoon_quadrant_arsenal.parquet`</span>, <span class="in">`data/processed/pitcher_pvi_2024_2026.parquet`</span>).</span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a>All metrics in this study are pre-materialized in Silver (<span class="in">`data/features/statcast_features/`</span>) and summarized into Gold Parquet tables (<span class="in">`data/processed/platoon_quadrant_arsenal.parquet`</span>, <span class="in">`data/processed/pitcher_pvi_2024_2026.parquet`</span>, <span class="in">`data/processed/starter_tto_platoon_2020_2026.parquet`</span>).</span>
 <span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
 <span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbr)</span>

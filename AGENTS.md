@@ -34,6 +34,10 @@
 - **Zero-Drop Column Invariant:** Raw datasets MUST preserve 100% of available columns. Never drop fields during ingestion or raw storage.
 - **Spec-Driven Development (SDD):** Complex modeling features and estimators must be specified in `specs/` with defined loss functions, temporal validation splits, and mathematical invariants.
 - **Dynamic Path Resolution:** Never hardcode absolute paths; always resolve via `mlbr::default_lake()`.
+- **Storage Format & Multi-Engine Standard (ADR-001):**
+  - **Canonical On-Disk Format:** Apache Parquet with **ZSTD compression** (`ROW_GROUP_SIZE = 100000`), Hive-partitioned by season (`game_year`) and sorted by lookup keys (`pitcher, game_date, game_pk, at_bat_number, pitch_number`) for min-max row-group pruning.
+  - **Query & Compute Layer:** Access data via **DuckDB SQL** (`mlbr::lake_duckdb()`) or zero-copy **Apache Arrow / Polars** (`pyarrow` / `polars.scan_parquet`). Never store canonical tables as `.sql` dumps or monolithic single-writer `.duckdb` database files; reserve Arrow IPC/Feather strictly for ephemeral scratch IPC.
+  - **Zero-NOTE R Package Standard:** `pkg/mlbr` must pass `R CMD check --no-manual` with 0 ERRORS, 0 WARNINGS, and 0 R-code check NOTEs.
 - **Dark Cyber / Antigravity Visual Standard:** Canvas `#090d16`, surface `#111827`, gridlines `#1e293b`, glowing cyber accents (`#38bdf8` cyan, `#10b981` emerald, `#f59e0b` amber, `#f43f5e` rose), Google Sans / Inter for prose, Consolas for code. Zero harsh white backgrounds.
 
 ## Purpose
@@ -49,7 +53,7 @@ The `mlbr` workspace on `cbwdellr720` is a comprehensive, production-grade Saber
 - `models/`: Self-contained, reproducible model training and exploratory research scripts in R, including saved figure artifacts (`.png`, `.rds`, `.parquet`).
 - `workbooks/`: Student-facing interactive lab workbooks for RStudio Server (`lab01_aerodynamics_workbook.R`, etc.).
 - `specs/`: Engineering and sabermetric model specifications following SDD principles and Q-CRISP.
-- `pkg/mlbr/`: The core R package. Must pass `R CMD check` with 0 ERRORS and 0 WARNINGS.
+- `pkg/mlbr/`: The core R package. Must pass `R CMD check` with 0 ERRORS, 0 WARNINGS, and 0 code NOTEs.
 - `site/`: Quarto multi-page documentation, interactive data dictionary, and analysis gallery website, outputting to `site/docs/`.
 - Temporal Leakage Rule: NEVER train on future game dates to predict the past. Validation splits must be strictly chronological.
 

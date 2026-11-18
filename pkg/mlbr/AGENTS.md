@@ -17,7 +17,7 @@
   3. Option `options("mlbr.path")`
   4. Local project root detection (`/mnt/storage/Rprojects/mlbr` or `getwd()`)
 - **Schema Preservation:** 0 columns dropped. Ingestion and extraction preserve 100% of raw fields.
-- **R CMD Check Cleanliness:** Must pass with 0 ERRORS and 0 WARNINGS.
+- **R CMD Check Cleanliness:** Must pass with 0 ERRORS, 0 WARNINGS, and 0 R-code check NOTEs.
 - **Documentation:** All exported functions and methods must have complete roxygen2 documentation with `@export`, `@param`, `@return`, and `@examples`.
 
 ## Work Guidance
@@ -29,6 +29,7 @@
   - `lake_duckdb(lake, read_only=TRUE)`: DuckDB connection pre-mounted with views across all parquet datasets.
   - `proof_lake(lake, verbose=TRUE)`: Comprehensive test suite of 28 benchmark, schema, and sabermetric invariants.
   - Ingestion wrappers: `statcast_ingest`, `retrosheet_github_ingest`, `fangraphs_ingest`, `lahman_ingest`, `chadwick_ingest`, etc.
+  - Silver & Visual helpers: `lake_register_features(con, lake, force_dynamic)`, `theme_cyber()`, `cyber_palette()`, `cyber_pitch_colors()`, `cyber_quadrant_colors()`, `save_plot_assets()` (writes ZSTD Parquet), `lake_log_experiment()`.
 - When adding or modifying functions, regenerate docs with `roxygen2::roxygenise()` and reinstall with `R CMD INSTALL pkg/mlbr --library=/mnt/storage/R/library`.
 
 ## Verification

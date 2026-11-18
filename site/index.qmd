@@ -71,7 +71,7 @@ In traditional analytics pipelines, downstream transformations often drop column
           ▼
 [ Storage Layer ] (data/raw/*.parquet)
   - Columnar Apache Parquet partitions
-  - Snappy compression, dictionary encoding
+  - ZSTD / Snappy compression, dictionary encoding, sorted row groups
           │
           ▼
 [ Zero-Copy Analytical Engine ] (DuckDB + mlbr R package)
@@ -121,6 +121,9 @@ res <- proof_lake()
 
 Explore our interactive research gallery:
 
+- [**Q-CRISP Study 01: Aerodynamics & Approach Angles**](analyses/01_pitch_quality_eda.html): Full-population VAA/HAA trajectory physics across 14.64M pitches.
+- [**Q-CRISP Study 02: 4-Quadrant Platoon Physics & PVI**](analyses/02_platoon_physics.html): `RvR`/`RvL`/`LvL`/`LvR` mechanics, `hb_away_in`, starter TTO decay, and Pitcher PVI.
+- [**Student Lab 01: Aerodynamics & Trajectory Math**](workbooks/lab01_aerodynamics_workbook.html): Hands-on RStudio workbook with Dark Cyber diagnostics.
 - [**Unsupervised Pitch Clustering**](analyses/pitch_clustering.html): K-Means & GMM movement classification.
 - [**Pitch Classification with Random Forest**](analyses/pitch_classification.html): Predicting pitch type from flight dynamics using `tidymodels`.
 - [**Non-linear xwOBA & Barrel Landscape**](analyses/xwoba_surface.html): 2D GAM surface across Exit Velocity & Launch Angle.

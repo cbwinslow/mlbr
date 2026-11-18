@@ -25,6 +25,7 @@
   - `ingest_ncaa.R`: College baseball play-by-play and schedules.
   - `ingest_mlb_meta.R`: MLB draft, schedules, park dimensions, and advanced metric tables.
   - `ingest_espn.R`: ESPN schedules and boxscores.
+  - `archive_market_snapshots.py`: Async read-only Python archiver for MLB Stats API probable pitchers/lineups (`data/raw/mlb_lineups/`) and Polymarket Gamma / Kalshi public v2 market snapshots (`data/raw/markets/`) in ZSTD Parquet (`pytest` suite in `tests/test_archive_market_snapshots.py`).
 
 ## Verification
 - Inspect output counts: `Rscript -e 'mlbr::lake_status()'`

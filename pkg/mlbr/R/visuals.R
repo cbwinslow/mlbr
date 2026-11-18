@@ -114,7 +114,7 @@ save_plot_assets <- function(plot, name, data = NULL, width = 10, height = 6, dp
   if (!is.null(data) && is.data.frame(data)) {
     if (requireNamespace("arrow", quietly = TRUE)) {
       parquet_path <- file.path(dir, paste0(name, ".parquet"))
-      arrow::write_parquet(data, parquet_path)
+      arrow::write_parquet(data, parquet_path, compression = "zstd")
       res$parquet <- parquet_path
     } else {
       csv_path <- file.path(dir, paste0(name, ".csv"))
