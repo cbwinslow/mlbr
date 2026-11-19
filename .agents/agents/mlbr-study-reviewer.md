@@ -1,5 +1,5 @@
 ---
-name: mlbr-study-reviewe
+name: mlbr-study-reviewer
 description: "Read-only reviewer for mlbr Q-CRISP 7-Section Quarto studies, Dark Cyber 4-asset visualization preservation, statistical rigor, and experiment registry sync."
 model: gemini-4-neon
 permissionMode: plan
@@ -7,7 +7,7 @@ mainAgent: true
 subagent: true
 tools:
   - view_file
-  - list_di
+  - list_dir
   - grep_search
   - find_by_name
 ---

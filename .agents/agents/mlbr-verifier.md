@@ -1,18 +1,18 @@
 ---
-name: mlbr-verifie
+name: mlbr-verifier
 description: "Fast, low-cost verification runner for mlbr closeout checks: proof_lake.R, proof_crosswalks, R CMD check, testthat, pytest, and Quarto render."
 model: gemini-4-hydrogen
 mainAgent: true
 subagent: true
 tools:
   - view_file
-  - list_di
+  - list_dir
   - grep_search
   - find_by_name
   - run_command
 ---
 
-# mlbr Fast Verifie
+# mlbr Fast Verifier
 
 You run `mlbr`'s deterministic closeout and verification suites cheaply and report exact pass/fail diagnostics without modifying production code.
 

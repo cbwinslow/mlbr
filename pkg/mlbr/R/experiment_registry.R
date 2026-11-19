@@ -104,7 +104,7 @@ lake_log_experiment <- function(id,
   registry <- registry[order(order_keys)]
   
   # Write clean, formatted JSON
-  jsonlite::write_json(registry, reg_file, pretty = TRUE, auto_unbox = TRUE)
+  jsonlite::write_json(registry, reg_file, pretty = TRUE, auto_unbox = TRUE, digits = 6)
   
   # Auto-synchronize agent_context.json for immediate AI agent context inheritance
   if (sync_manifest) {
@@ -114,7 +114,7 @@ lake_log_experiment <- function(id,
         ac <- jsonlite::fromJSON(agent_context_file, simplifyVector = FALSE)
         ac$experiments <- registry
         ac$updated_at <- format(Sys.time(), "%Y-%m-%d %H:%M:%S UTC")
-        jsonlite::write_json(ac, agent_context_file, pretty = TRUE, auto_unbox = TRUE)
+        jsonlite::write_json(ac, agent_context_file, pretty = TRUE, auto_unbox = TRUE, digits = 6)
         message("-> Auto-synchronized agent_context.json with updated registry.")
       }, error = function(e) NULL)
     }

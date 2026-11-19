@@ -65,6 +65,8 @@ lake_duckdb <- function(lake = NULL, dbdir = ":memory:", read_only = TRUE) {
   }
   lake <- default_lake(lake)
   con <- DBI::dbConnect(duckdb::duckdb(), dbdir = dbdir, read_only = read_only)
+  setup_ok <- FALSE
+  on.exit(if (!setup_ok && DBI::dbIsValid(con)) DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
   
   # Register primary views
   views <- list(
@@ -120,25 +122,24 @@ lake_duckdb <- function(lake = NULL, dbdir = ":memory:", read_only = TRUE) {
     target <- aliases[[aname]]
     p <- views[[target]]
     if (!is.null(p) && length(Sys.glob(p)) > 0) {
-      tryCatch(
-        DBI::dbExecute(con, sprintf("CREATE OR REPLACE VIEW %s AS SELECT * FROM %s;", aname, target)),
-        error = function(e) NULL
-      )
+      DBI::dbExecute(con, sprintf("CREATE OR REPLACE VIEW %s AS SELECT * FROM %s;", aname, target))
     }
   }
   
-  # Register derived features if statcast is mounted
+  # Register derived Silver features and tunneling views if statcast is mounted (fail fast on errors)
   if ("v_statcast" %in% names(views) && length(Sys.glob(views[["v_statcast"]])) > 0) {
-    tryCatch({
-      lake_register_features(con)
-      registered <- registered + 1L
-    }, error = function(e) NULL)
+    lake_register_features(con, lake = lake)
+    registered <- registered + 1L
+    lake_register_tunneling(con, lake = lake)
+    registered <- registered + 1L
   }
 
-  message(sprintf("Mounted %d zero-copy DuckDB views over %s.", registered, lake))
-  active_views <- names(views)[vapply(views, function(p) length(Sys.glob(p)) > 0, logical(1))]
-  if ("v_statcast" %in% active_views) active_views <- c(active_views, "v_statcast_features")
+  mounted_v <- DBI::dbGetQuery(con, "SELECT table_name FROM information_schema.views WHERE table_name LIKE 'v_%'")$table_name
+  ordered_v <- c(names(views), "v_statcast_features", "v_statcast_tunneling")
+  active_views <- ordered_v[ordered_v %in% mounted_v]
+  message(sprintf("Mounted %d zero-copy DuckDB views over %s.", length(active_views), lake))
   message("Available views: ", paste(active_views, collapse = ", "))
+  setup_ok <- TRUE
   con
 }
 

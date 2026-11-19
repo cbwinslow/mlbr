@@ -128,3 +128,143 @@ test_that("lake_register_features(force_dynamic = TRUE) builds valid v_statcast_
   expect_equal(res$hb_glove_in[3], -8.4, tolerance = 1e-6)
   expect_equal(res$xwoba[3], 0.42, tolerance = 1e-6)
 })
+
+test_that("lake_register_tunneling(force_dynamic = TRUE) computes exact commit-point kinematics and guards", {
+  skip_if_not_installed("duckdb")
+  skip_if_not_installed("DBI")
+
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = ":memory:")
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+  tmp_lake <- tempfile("mlbr_tun_test_")
+  dir.create(tmp_lake, recursive = TRUE)
+  on.exit(unlink(tmp_lake, recursive = TRUE), add = TRUE)
+
+  # Construct 6 synthetic pitches testing:
+  # - AB 1, pitch 1 -> 2: same pitcher (100), FF -> SL (VALID pair)
+  # - AB 1, pitch 2 -> 3: mid-AB pitcher change 100 -> 200 (MUST BE EXCLUDED)
+  # - AB 1, pitch 3 -> 4: same pitcher (200), FF -> FF repeat pitch (VALID pair)
+  # - AB 2, pitch 1 -> 3: gap pitch_number = 2 missing (MUST BE EXCLUDED)
+  sample_sc <- data.frame(
+    game_pk = c(1L, 1L, 1L, 1L, 2L, 2L),
+    game_date = as.Date(rep("2025-05-01", 6)),
+    at_bat_number = c(1L, 1L, 1L, 1L, 2L, 2L),
+    pitch_number = c(1L, 2L, 3L, 4L, 1L, 3L),
+    pitcher = c(100L, 100L, 200L, 200L, 100L, 100L),
+    batter = c(500L, 500L, 500L, 500L, 501L, 501L),
+    pitch_type = c("FF", "SL", "FF", "FF", "FF", "CH"),
+    p_throws = rep("R", 6),
+    stand = rep("R", 6),
+    release_speed = c(96.0, 86.0, 94.0, 95.0, 96.0, 85.0),
+    release_pos_x = c(-1.5, -1.5, -1.8, -1.8, -1.5, -1.5),
+    pfx_x = c(-0.6, 0.5, -0.5, -0.5, -0.6, -1.0),
+    pfx_z = c(1.5, 0.2, 1.4, 1.4, 1.5, 0.5),
+    plate_x = c(0.10, 0.90, -0.20, -0.10, 0.00, -0.50),
+    plate_z = c(3.10, 1.90, 2.80, 2.90, 3.00, 1.80),
+    sz_top = rep(3.5, 6),
+    sz_bot = rep(1.5, 6),
+    zone = c(5L, 14L, 5L, 5L, 5L, 13L),
+    description = c("called_strike", "swinging_strike", "foul", "called_strike", "ball", "swinging_strike"),
+    estimated_woba_using_speedangle = rep("null", 6),
+    estimated_ba_using_speedangle = rep("null", 6),
+    estimated_slg_using_speedangle = rep("null", 6),
+    arm_angle = rep("40.0", 6),
+    bat_speed = rep("null", 6),
+    swing_length = rep("null", 6),
+    delta_pitcher_run_exp = c(0.04, 0.08, 0.02, 0.05, -0.03, 0.07),
+    delta_run_exp = c(-0.04, -0.08, -0.02, -0.05, 0.03, -0.07),
+    bb_type = rep(NA_character_, 6),
+    launch_speed = rep(NA_real_, 6),
+    vx0 = c(4.0, 2.0, 3.5, 3.6, 4.0, 1.5),
+    vy0 = c(-140.0, -125.0, -137.0, -138.0, -140.0, -124.0),
+    vz0 = c(-3.5, -1.0, -3.2, -3.1, -3.5, -0.8),
+    ax = c(-10.0, 8.0, -9.0, -9.2, -10.0, -14.0),
+    ay = c(28.0, 23.0, 27.0, 27.5, 28.0, 22.0),
+    az = c(-15.0, -33.0, -16.0, -15.5, -15.0, -28.0),
+    stringsAsFactors = FALSE
+  )
+
+  duckdb::duckdb_register(con, "raw_sc_tun", sample_sc)
+  DBI::dbExecute(con, "CREATE VIEW v_statcast AS SELECT * FROM raw_sc_tun")
+
+  lake_register_features(con, lake = tmp_lake, force_dynamic = TRUE)
+  lake_register_tunneling(con, lake = tmp_lake, force_dynamic = TRUE)
+
+  res <- DBI::dbGetQuery(con, "SELECT * FROM v_statcast_tunneling ORDER BY game_pk, at_bat_number, pitch_number")
+
+  # Only 2 valid consecutive same-pitcher pairs should survive
+  expect_equal(nrow(res), 2)
+  expect_equal(res$pitch_number, c(2L, 4L))
+  expect_equal(res$pitch_sequence, c("FF -> SL", "FF -> FF"))
+  expect_equal(res$is_repeat_pitch, c(0L, 1L))
+  expect_equal(res$delta_velo_mph, c(-10.0, 1.0), tolerance = 1e-6)
+
+  # Analytical verification of exact y0=50 -> y=23.8 ft reconstruction for AB 1 pitch 1 & 2
+  calc_dec <- function(i) {
+    vy0 <- sample_sc$vy0[i]; ay <- sample_sc$ay[i]
+    vx0 <- sample_sc$vx0[i]; ax <- sample_sc$ax[i]
+    vz0 <- sample_sc$vz0[i]; az <- sample_sc$az[i]
+    px <- sample_sc$plate_x[i]; pz <- sample_sc$plate_z[i]
+    tp <- (-sqrt(vy0^2 + 2 * ay * (1.417 - 50.0)) - vy0) / ay
+    td <- (-sqrt(vy0^2 + 2 * ay * (23.8 - 50.0)) - vy0) / ay
+    x50 <- px - vx0 * tp - 0.5 * ax * tp^2
+    z50 <- pz - vz0 * tp - 0.5 * az * tp^2
+    c(x = x50 + vx0 * td + 0.5 * ax * td^2, z = z50 + vz0 * td + 0.5 * az * td^2, tp = tp)
+  }
+  p1 <- calc_dec(1); p2 <- calc_dec(2)
+  exp_tun <- round(sqrt((p2["x"] - p1["x"])^2 + (p2["z"] - p1["z"])^2) * 12, 2)
+  exp_plate <- round(sqrt((sample_sc$plate_x[2] - sample_sc$plate_x[1])^2 + (sample_sc$plate_z[2] - sample_sc$plate_z[1])^2) * 12, 2)
+  exp_post_break <- round(
+    sqrt(((sample_sc$plate_x[2] - p2["x"]) - (sample_sc$plate_x[1] - p1["x"]))^2 +
+         ((sample_sc$plate_z[2] - p2["z"]) - (sample_sc$plate_z[1] - p1["z"]))^2) * 12,
+    2
+  )
+  exp_bp_ratio <- round(exp_post_break / max(exp_tun, 1.0), 3)
+  exp_plate_ratio <- round(exp_plate / max(exp_tun, 1.0), 3)
+
+  expect_equal(res$x_dec[1], unname(round(p2["x"], 4)), tolerance = 1e-4)
+  expect_equal(res$z_dec[1], unname(round(p2["z"], 4)), tolerance = 1e-4)
+  expect_equal(res$tunnel_dist_in[1], unname(exp_tun), tolerance = 1e-2)
+  expect_equal(res$plate_sep_in[1], unname(exp_plate), tolerance = 1e-2)
+  expect_equal(res$post_tunnel_break_in[1], unname(exp_post_break), tolerance = 1e-2)
+  expect_equal(res$break_to_tunnel_ratio[1], unname(exp_bp_ratio), tolerance = 1e-3)
+  expect_equal(res$plate_to_tunnel_ratio[1], unname(exp_plate_ratio), tolerance = 1e-3)
+})
+
+test_that("lake_register_tunneling fails fast on missing dependency and mounts materialized Hive Parquet", {
+  skip_if_not_installed("duckdb")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("arrow")
+
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = ":memory:")
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+  tmp_lake <- tempfile("mlbr_tun_mat_")
+  dir.create(tmp_lake, recursive = TRUE)
+  on.exit(unlink(tmp_lake, recursive = TRUE), add = TRUE)
+
+  # Fail fast when v_statcast_features is absent
+  expect_error(lake_register_tunneling(con, lake = tmp_lake, force_dynamic = TRUE), "v_statcast_features")
+
+  # Mount materialized Hive-partitioned Silver Parquet when present
+  part_dir <- file.path(tmp_lake, "data", "features", "statcast_tunneling", "game_year=2025")
+  dir.create(part_dir, recursive = TRUE)
+  mock_tun <- data.frame(
+    game_pk = 999L,
+    game_date = as.Date("2025-06-01"),
+    game_type = "R",
+    at_bat_number = 1L,
+    pitch_number = 2L,
+    pitcher = 123L,
+    tunnel_dist_in = 0.5,
+    post_tunnel_break_in = 12.0,
+    break_to_tunnel_ratio = 12.0,
+    stringsAsFactors = FALSE
+  )
+  arrow::write_parquet(mock_tun, file.path(part_dir, "data_0.parquet"), compression = "zstd")
+
+  lake_register_tunneling(con, lake = tmp_lake, force_dynamic = FALSE)
+  out <- DBI::dbGetQuery(con, "SELECT * FROM v_statcast_tunneling")
+  expect_equal(nrow(out), 1)
+  expect_equal(as.integer(out$game_year), 2025L)
+  expect_equal(out$game_type, "R")
+  expect_equal(out$break_to_tunnel_ratio, 12.0)
+})

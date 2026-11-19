@@ -1,5 +1,5 @@
 ---
-name: mlbr-pipeline-audito
+name: mlbr-pipeline-auditor
 description: "Read-only auditor for mlbr data pipelines, Silver feature materialization, Bronze zero-drop fidelity, ADR-001 Parquet layout, and dynamic path invariants."
 model: gemini-4-neon
 permissionMode: plan
@@ -7,7 +7,7 @@ mainAgent: true
 subagent: true
 tools:
   - view_file
-  - list_di
+  - list_dir
   - grep_search
   - find_by_name
 ---

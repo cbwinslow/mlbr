@@ -16,6 +16,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 03</span>
+    <span class="gallery-badge">XGBoost + Tunneling</span>
+    <h4><a href="analyses/03_tunneling_stuff_plus.html">Commit-Point Pitch Tunneling &amp; Stuff+ / Pitching+</a></h4>
+    <p>Exact <code>y₀ = 50 ft → 23.8 ft</code> commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost <code>Stuff+</code>, orthogonal <code>Location+</code>, and <code>Pitching+Tunnel</code> trained on 8.11M regular-season pitches.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Unsupervised ML</span>
     <span class="gallery-badge">Statcast</span>
     <h4><a href="analyses/pitch_clustering.html">Unsupervised Pitch Clustering</a></h4>

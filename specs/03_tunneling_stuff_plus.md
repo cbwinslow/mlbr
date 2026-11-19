@@ -29,18 +29,19 @@ $$x_{\text{dec}} = x_{50} + v_{x0} t_{\text{dec}} + \frac{1}{2} a_x t_{\text{dec
 For pitch $N$ following pitch $N-1$ by the **same pitcher** (`prev_pitcher = pitcher`) within `(game_pk, at_bat_number)`:
 $$d_{\text{tunnel}} = 12 \sqrt{(x_{\text{dec}, N} - x_{\text{dec}, N-1})^2 + (z_{\text{dec}, N} - z_{\text{dec}, N-1})^2}\text{ (inches)}$$
 $$d_{\text{plate}} = 12 \sqrt{(\text{plate\_x}_N - \text{plate\_x}_{N-1})^2 + (\text{plate\_z}_N - \text{plate\_z}_{N-1})^2}\text{ (inches)}$$
-$$\text{Break-to-Tunnel Ratio} = \frac{d_{\text{plate}}}{\max(d_{\text{tunnel}}, 1.0)}$$
+$$d_{\text{post}} = 12 \sqrt{\bigl((\text{plate\_x}_N - x_{\text{dec}, N}) - (\text{plate\_x}_{N-1} - x_{\text{dec}, N-1})\bigr)^2 + \bigl((\text{plate\_z}_N - z_{\text{dec}, N}) - (\text{plate\_z}_{N-1} - z_{\text{dec}, N-1})\bigr)^2}\text{ (inches)}$$
+$$\text{Break-to-Tunnel Ratio (BP)} = \frac{d_{\text{post}}}{\max(d_{\text{tunnel}}, 1.0)}, \qquad \text{Plate-to-Tunnel Ratio} = \frac{d_{\text{plate}}}{\max(d_{\text{tunnel}}, 1.0)}$$
 
 ### 1.3 Standardized Plus-Scale Calibration
-For each model $\hat{r}_i$ predicting `pitcher_run_exp` (positive = pitcher-favorable runs per pitch), standardize against the **training-era** pitch-level mean $\mu_{\text{train}}$ and pitcher-season (min 250 pitches) standard deviation $\sigma_{\text{pit, train}}$:
-$$\text{Stuff+}_i = 100 + 10 \cdot \frac{\hat{r}_i - \mu_{\text{train}}}{\sigma_{\text{pit, train}}}$$
+For each model $\hat{r}_i$ predicting `pitcher_run_exp` (positive = pitcher-favorable runs per pitch), standardize against the **2024 out-of-sample calibration** pitch-level mean $\mu_{2024}$ and pitcher-season (min 250 pitches) standard deviation $\sigma_{\text{pit}, 2024}$ (preventing in-sample variance inflation while keeping 2025–2026 strictly untouched):
+$$\text{Stuff+}_i = 100 + 10 \cdot \frac{\hat{r}_i - \mu_{2024}}{\sigma_{\text{pit}, 2024}}$$
 So `100` = MLB average pitcher, `110` = +1 SD above average, and `10` points = 1 pitcher-level SD (matching industry Stuff+ conventions).
 
 ---
 
 ## 2. Input Features & Data Lake Query
 
-All extraction reads zero-copy from Silver `v_statcast_features` (ZSTD sorted Parquet, `2015–2026`, 9.17M total pitches; 8.67M valid kinematics + run value) with per-pitcher-season fastball anchor baselines computed **strictly within-season / expanding prior-to-date** (zero future leakage):
+All modeling extraction reads zero-copy from Silver `v_statcast_features` + `v_statcast_tunneling` (ADR-001 ZSTD sorted Parquet, strictly Regular Season `game_type = 'R'`, `2015–2026`, `8,105,884` valid pitches; Silver `v_statcast_tunneling` itself preserves full-population `2008–2026` across all game types per ADR-002) with per-pitcher-season fastball anchor baselines computed **strictly within-season / expanding prior-to-date** (zero future leakage):
 
 ```sql
 WITH fb_anchor AS (
@@ -57,7 +58,7 @@ WITH fb_anchor AS (
       OVER (PARTITION BY pitcher, game_year ORDER BY game_date, game_pk, at_bat_number, pitch_number
             ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) AS pitcher_fb_hb_to_date
   FROM v_statcast_features
-  WHERE game_year >= 2015
+  WHERE game_year BETWEEN 2015 AND 2026 AND game_type = 'R'
 )
 -- Joined by immutable composite key (game_pk, at_bat_number, pitch_number)
 -- to v_statcast_features and sql/02_pitch_tunneling.sql
@@ -67,7 +68,7 @@ WITH fb_anchor AS (
 | Block | Features | Used In |
 | :--- | :--- | :--- |
 | **A. Physical Stuff** | `release_speed`, `effective_speed`, `release_spin_rate`, `spin_axis`, `ivb_in`, `hb_glove_in`, `hb_away_in`, `release_pos_x_arm`, `release_pos_z`, `release_extension`, `arm_angle_deg` (NA-native in TrackMan), `delta_fb_velo`, `delta_fb_ivb`, `delta_fb_hb`, `pitch_type` (one-hot/integer), `is_same_hand`, `p_throws`, `stand` | Stuff+, Pitching+ |
-| **B. Command & Context** | `plate_x_norm`, `plate_z`, `sz_norm_z = (plate_z - sz_bot) / NULLIF(sz_top - sz_bot, 0)`, `vaa`, `haa_away`, `balls`, `strikes`, `outs_when_up`, `n_thruorder_pitcher` | Location+, Pitching+ |
+| **B. Command & Context** | `plate_x_norm`, `plate_z`, `sz_norm_z = (plate_z - sz_bot) / NULLIF(sz_top - sz_bot, 0)`, `balls`, `strikes`, `outs_when_up`, `n_thruorder_pitcher` (+ `vaa`, `haa_away` in `Pitching+`; omitted from `Location+` to maintain orthogonality to physical release/IVB) | Location+ (pure command), Pitching+ (full) |
 | **C. Sequence Tunneling** | `tunnel_dist_in`, `plate_sep_in`, `post_tunnel_break_in`, `break_to_tunnel_ratio`, `delta_velo_mph`, `delta_flight_ms`, `is_repeat_pitch` (NA on pitch 1 of PA or pitcher change) | Tunnel+ / Pitching+ |
 
 ---
@@ -78,17 +79,17 @@ WITH fb_anchor AS (
 - **Target:** `y = pitcher_run_exp` (continuous; positive = pitcher-favorable run value per pitch).
 - **Primary Loss:** Squared Error (`reg:squarederror`, **RMSE** and out-of-sample $R^2$ in runs/100 pitches).
 - **Secondary Diagnostic Target (Deception / Whiff Lift):** Binary `is_whiff` conditioned on `is_swing = 1`, evaluated with **Log-Loss**, **Brier Score**, and **ROC AUC** specifically to isolate the incremental value of Commit-Point Tunneling (Block C) on swing-and-miss deception.
-- **Downstream True-Talent Stability Metric:** Pitcher-level year-over-year (2024 → 2025, min 300 pitches) Pearson $r$ and predictive correlation with out-of-sample pitcher `K%`, `CSW%`, and `FIP` (validating that Stuff+ stabilizes faster than raw ERA/wOBA).
+- **Downstream True-Talent Stability Metric:** Pitcher-level year-over-year (2024 → 2025, min 400 regular-season pitches) Pearson $r$ and predictive correlation with out-of-sample pitcher `K%`, `CSW%`, and `FIP` (validating that Stuff+ stabilizes faster than raw ERA/wOBA).
 
 ---
 
 ## 4. Validation Strategy (Strict Chronological Splits)
 
 Zero future leakage across all training, early stopping, calibration, and fastball-anchor windows:
-- **Training Set:** `2015–2023` (`6,299,030` valid pitches across TrackMan + Hawk-Eye).
-  - *Ablation Branch (Hawk-Eye Only):* Train `2020–2023` (`2,585,278` valid pitches, 90.7% `arm_angle_deg` coverage) to test whether TrackMan pre-2020 tracking shifts help or hurt 2024–2026 generalization.
-- **Validation / Early-Stopping & Calibration Set:** `2024` (`765,880` valid pitches). Used exclusively for `xgboost` early stopping, hyperparameter tuning, and Plus-scale $(\mu, \sigma)$ lock-in.
-- **Locked Out-of-Time Test Set:** `2025–2026` (`1,610,620` valid pitches). Untouched until final evaluation.
+- **Training Set:** `2015–2023` Regular Season (`5,972,773` valid pitches across TrackMan + Hawk-Eye).
+  - *Ablation Branch (Hawk-Eye Only):* Train `2020–2023` Regular Season (`2,398,611` valid pitches, Hawk-Eye optical tracking + `arm_angle_deg`) to test whether TrackMan pre-2020 tracking shifts help or hurt 2024–2026 generalization.
+- **Validation / Early-Stopping & Calibration Set:** `2024` Regular Season (`709,227` valid pitches). Used exclusively for `xgboost` early stopping, hyperparameter tuning, and Plus-scale $(\mu, \sigma)$ lock-in.
+- **Locked Out-of-Time Test Set:** `2025–2026` Regular Season (`1,423,884` valid pitches). Untouched until final evaluation.
 
 ---
 

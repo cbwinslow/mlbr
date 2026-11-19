@@ -28,8 +28,10 @@ build_lake_manifest <- function(lake = NULL) {
     size_mb <- round(sum(file.size(files)) / 1e6, 2)
     # Fast row estimation
     total_rows <- sum(vapply(files, function(f) {
-      tryCatch(as.integer(arrow::open_dataset(f)$num_rows), error = function(e) 0L)
-    }, integer(1), USE.NAMES = FALSE))
+      tryCatch(as.numeric(arrow::open_dataset(f)$num_rows), error = function(e) {
+        stop(sprintf("Failed reading Parquet schema/row count for %s: %s", f, conditionMessage(e)))
+      })
+    }, numeric(1), USE.NAMES = FALSE))
 
     sources_summary[[s_name]] <- list(
       source = s_name,
@@ -40,7 +42,8 @@ build_lake_manifest <- function(lake = NULL) {
   }
 
   # 2. Key views column catalogs & null profiles
-  key_views <- c("v_statcast", "v_statcast_features", "v_retrosheet_plays", "v_retrosheet_games",
+  key_views <- c("v_statcast", "v_statcast_features", "v_statcast_tunneling",
+                 "v_retrosheet_plays", "v_retrosheet_games",
                  "v_fangraphs_bat", "v_fangraphs_pitch", "v_chadwick_register",
                  "v_lahman_people", "v_mlbmeta_schedule")
 
@@ -107,6 +110,14 @@ build_lake_manifest <- function(lake = NULL) {
     franchise_resolution = list(
       description = "Resolve franchise codes across Retrosheet (CHA/CHN/NYA), Statcast (CWS/CHC/NYY), and BBRef (CHW/SDP)",
       r_helper = "team_crosswalk()"
+    ),
+    tunneling_join = list(
+      description = "1:1 join between Silver pitch features and commit-point tunneling metrics (pitch N >= 2 in same AB & pitcher)",
+      primary_table = "v_statcast_features",
+      join_key = "(game_pk, at_bat_number, pitch_number)",
+      target_table = "v_statcast_tunneling",
+      target_key = "(game_pk, at_bat_number, pitch_number)",
+      sql_template = "SELECT f.*, t.tunnel_dist_in, t.plate_sep_in, t.post_tunnel_break_in, t.break_to_tunnel_ratio, t.delta_velo_mph, t.delta_flight_ms FROM v_statcast_features f LEFT JOIN v_statcast_tunneling t USING (game_pk, at_bat_number, pitch_number)"
     )
   )
 
@@ -167,7 +178,7 @@ audit_lake_semantic <- function(lake = NULL) {
   tests[[1]] <- data.frame(
     category = "Crosswalk",
     test = "2024-2026 Player ID Resolution Rate",
-    status = if (match_pct >= 99.5) "PASS" else "FAIL",
+    status = if (!is.na(match_pct) && is.finite(match_pct) && match_pct >= 99.5) "PASS" else "FAIL",
     detail = sprintf("%s / %s players matched to Chadwick (%0.2f%%)",
                      format(res1$matched_players, big.mark=","),
                      format(res1$total_players, big.mark=","),
@@ -191,7 +202,7 @@ audit_lake_semantic <- function(lake = NULL) {
   tests[[2]] <- data.frame(
     category = "Physics Continuity",
     test = "Fastball Velocity Calibration Drift (<1.0 mph YoY)",
-    status = if (max_drift < 1.0) "PASS" else "FAIL",
+    status = if (!is.na(max_drift) && is.finite(max_drift) && max_drift < 1.0) "PASS" else "FAIL",
     detail = sprintf("Max YoY velo shift: %0.2f mph (Range: %0.2f - %0.2f mph)",
                      max_drift, min(res2$avg_velo), max(res2$avg_velo)),
     stringsAsFactors = FALSE
@@ -201,14 +212,14 @@ audit_lake_semantic <- function(lake = NULL) {
   cat("   [3/5] Auditing League Whiff Rate Calibration (20-30%)...\n")
   res3 <- DBI::dbGetQuery(con, "
     SELECT
-      round(avg(case when description in ('swinging_strike', 'swinging_strike_blocked', 'missed_bunt') then 1.0 else 0.0 end) * 100, 2) as whiff_pct
+      round(avg(case when description in ('swinging_strike', 'swinging_strike_blocked', 'foul_tip') then 1.0 else 0.0 end) * 100, 2) as whiff_pct
     FROM v_statcast
     WHERE game_date >= '2023-01-01'
   ")
   tests[[3]] <- data.frame(
     category = "Sabermetric Calibration",
     test = "League-wide Whiff Rate Bounds (20% - 30%)",
-    status = if (res3$whiff_pct >= 8.0 && res3$whiff_pct <= 15.0) "PASS" else "FAIL",
+    status = if (nrow(res3) > 0 && !is.na(res3$whiff_pct) && res3$whiff_pct >= 8.0 && res3$whiff_pct <= 15.0) "PASS" else "FAIL",
     detail = sprintf("Observed whiff rate across all pitches: %0.2f%% (Swings-only: ~24%%)", res3$whiff_pct),
     stringsAsFactors = FALSE
   )
@@ -224,7 +235,7 @@ audit_lake_semantic <- function(lake = NULL) {
   tests[[4]] <- data.frame(
     category = "Physics Bounds",
     test = "Plausible Strike Zone Trajectory Window",
-    status = if (res4$valid_pct >= 90.0) "PASS" else "FAIL",
+    status = if (nrow(res4) > 0 && !is.na(res4$valid_pct) && res4$valid_pct >= 90.0) "PASS" else "FAIL",
     detail = sprintf("%0.2f%% of tracked pitches fall within standard +-3ft x and 0.5-5.5ft z", res4$valid_pct),
     stringsAsFactors = FALSE
   )
@@ -240,7 +251,7 @@ audit_lake_semantic <- function(lake = NULL) {
   tests[[5]] <- data.frame(
     category = "Retrosheet Logic",
     test = "State Invariant: Outs Count strictly 0, 1, or 2 at play start",
-    status = if (res5$invalid_outs == 0) "PASS" else "FAIL",
+    status = if (nrow(res5) > 0 && !is.na(res5$invalid_outs) && res5$invalid_outs == 0) "PASS" else "FAIL",
     detail = sprintf("%d plays with invalid initial outs count (0 expected)", res5$invalid_outs),
     stringsAsFactors = FALSE
   )
@@ -284,7 +295,7 @@ generate_agent_manifest <- function(lake = NULL, out_dir = NULL) {
     )
   )
   compact_path <- file.path(out_dir, "agent_context.json")
-  jsonlite::write_json(compact_context, compact_path, pretty = TRUE, auto_unbox = TRUE)
+  jsonlite::write_json(compact_context, compact_path, pretty = TRUE, auto_unbox = TRUE, digits = 6)
   cat(sprintf("-> Wrote compact agent context: %s (%0.1f KB)\n", compact_path, file.info(compact_path)$size / 1024))
 
   # 3. Generate Standalone LAKE_AGENT_PROMPT.md
@@ -306,6 +317,7 @@ con <- mlbr::lake_duckdb()
 # - v_chadwick_register     (527,990 player ID crosswalks)
 # - v_lahman_people         (Historical biographical registry)
 # - v_statcast_features     (14.64M Silver physics/platoon/outcome rows, ZSTD Parquet)
+# - v_statcast_tunneling    (10.2M Silver commit-point y=23.8ft tunneling pairs, ZSTD Parquet)
 # - v_mlbmeta_schedule      (Official MLB schedule 2008-2026)
 ```
 
