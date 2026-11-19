@@ -53,6 +53,8 @@ The `mlbr` workspace on `cbwdellr720` is a comprehensive, production-grade Saber
 - `models/`: Self-contained, reproducible model training and exploratory research scripts in R, including saved figure artifacts (`.png`, `.rds`, `.parquet`).
 - `workbooks/`: Student-facing interactive lab workbooks for RStudio Server (`lab01_aerodynamics_workbook.R`, etc.).
 - `specs/`: Engineering and sabermetric model specifications following SDD principles and Q-CRISP.
+- `DECISIONS.md`: Architecture Decision Records (ADR-001+) documenting settled storage, modeling, and validation choices.
+- `.agents/`: Project-scoped Antigravity subagents (`agents/`), progressive skills (`skills/`), and deterministic guardrails (`hooks.json`).
 - `pkg/mlbr/`: The core R package. Must pass `R CMD check` with 0 ERRORS, 0 WARNINGS, and 0 code NOTEs.
 - `site/`: Quarto multi-page documentation, interactive data dictionary, and analysis gallery website, outputting to `site/docs/`.
 - Temporal Leakage Rule: NEVER train on future game dates to predict the past. Validation splits must be strictly chronological.
