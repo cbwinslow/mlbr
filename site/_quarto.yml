@@ -71,6 +71,8 @@ website:
               href: analyses/02_platoon_physics.qmd
             - text: "Study 03: Pitch Tunneling & Stuff+"
               href: analyses/03_tunneling_stuff_plus.qmd
+            - text: "Study 04: Player Projections & Aging"
+              href: analyses/04_player_projections.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

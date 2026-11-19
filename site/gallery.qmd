@@ -12,7 +12,21 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 ## Machine Learning & Classification
 
+```{=html}
 <div class="gallery-grid">
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge ml">Q-CRISP Study 04</span>
+    <span class="gallery-badge">Tier 2 Projections</span>
+    <h4><a href="analyses/04_player_projections.html">Player Projections, Aging Curves &amp; Physics Priors</a></h4>
+    <p>Chronological True-Talent Marcel + Zero-Sum Delta-Method Aging + Stage-2 Residual <code>mlbr Stuff+</code>, <code>Pulled Air%</code>, <code>Zone-Chase Selectivity</code>, and 80% uncertainty bands across 2002–2027.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Locked 2025 FIP 0.772 | wOBA 0.0312 | 80% CI Coverage 81–83% | Interactive Plotly</small>
+  </div>
+</div>
 
 <div class="gallery-card">
   <div>
@@ -54,11 +68,13 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 </div>
 
 </div>
+```
 
 ---
 
 ## Empirical Sabermetrics & Non-Linear Surfaces
 
+```{=html}
 <div class="gallery-grid">
 
 <div class="gallery-card">
@@ -101,3 +117,4 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 </div>
 
 </div>
+```

@@ -472,6 +472,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Study 03: Pitch Tunneling &amp; Stuff+</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -559,84 +565,105 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="machine-learning-classification" class="level2">
 <h2 class="anchored" data-anchor-id="machine-learning-classification">Machine Learning &amp; Classification</h2>
 <div class="gallery-grid">
+
 <div class="gallery-card">
-<div>
-<pre><code>&lt;span class="gallery-badge ml"&gt;Q-CRISP Study 03&lt;/span&gt;
-&lt;span class="gallery-badge"&gt;XGBoost + Tunneling&lt;/span&gt;
-&lt;h4&gt;&lt;a href="analyses/03_tunneling_stuff_plus.html"&gt;Commit-Point Pitch Tunneling &amp;amp; Stuff+ / Pitching+&lt;/a&gt;&lt;/h4&gt;
-&lt;p&gt;Exact &lt;code&gt;y₀ = 50 ft → 23.8 ft&lt;/code&gt; commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost &lt;code&gt;Stuff+&lt;/code&gt;, orthogonal &lt;code&gt;Location+&lt;/code&gt;, and &lt;code&gt;Pitching+Tunnel&lt;/code&gt; trained on 8.11M regular-season pitches.&lt;/p&gt;</code></pre>
+  <div>
+    <span class="gallery-badge ml">Q-CRISP Study 04</span>
+    <span class="gallery-badge">Tier 2 Projections</span>
+    <h4 class="anchored"><a href="analyses/04_player_projections.html">Player Projections, Aging Curves &amp; Physics Priors</a></h4>
+    <p>Chronological True-Talent Marcel + Zero-Sum Delta-Method Aging + Stage-2 Residual <code>mlbr Stuff+</code>, <code>Pulled Air%</code>, <code>Zone-Chase Selectivity</code>, and 80% uncertainty bands across 2002–2027.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Locked 2025 FIP 0.772 | wOBA 0.0312 | 80% CI Coverage 81–83% | Interactive Plotly</small>
+  </div>
 </div>
-<div>
-<pre><code>&lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;
-&lt;small class="text-muted"&gt;Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly&lt;/small&gt;</code></pre>
-</div>
-</div>
+
 <div class="gallery-card">
-<div>
-<pre><code>&lt;span class="gallery-badge ml"&gt;Unsupervised ML&lt;/span&gt;
-&lt;span class="gallery-badge"&gt;Statcast&lt;/span&gt;
-&lt;h4&gt;&lt;a href="analyses/pitch_clustering.html"&gt;Unsupervised Pitch Clustering&lt;/a&gt;&lt;/h4&gt;
-&lt;p&gt;K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (&lt;code&gt;pfx_x&lt;/code&gt;, &lt;code&gt;pfx_z&lt;/code&gt;, velocity, spin). Repertoire discovery without human pitch-tag bias.&lt;/p&gt;</code></pre>
+  <div>
+    <span class="gallery-badge ml">Q-CRISP Study 03</span>
+    <span class="gallery-badge">XGBoost + Tunneling</span>
+    <h4 class="anchored"><a href="analyses/03_tunneling_stuff_plus.html">Commit-Point Pitch Tunneling &amp; Stuff+ / Pitching+</a></h4>
+    <p>Exact <code>y₀ = 50 ft → 23.8 ft</code> commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost <code>Stuff+</code>, orthogonal <code>Location+</code>, and <code>Pitching+Tunnel</code> trained on 8.11M regular-season pitches.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly</small>
+  </div>
 </div>
-<div>
-<pre><code>&lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;
-&lt;small class="text-muted"&gt;Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics&lt;/small&gt;</code></pre>
-</div>
-</div>
+
 <div class="gallery-card">
-<div>
-<pre><code>&lt;span class="gallery-badge ml"&gt;Supervised ML&lt;/span&gt;
-&lt;span class="gallery-badge"&gt;tidymodels&lt;/span&gt;
-&lt;h4&gt;&lt;a href="analyses/pitch_classification.html"&gt;Pitch Type Classification with Random Forest&lt;/a&gt;&lt;/h4&gt;
-&lt;p&gt;Multi-class classification using &lt;code&gt;ranger&lt;/code&gt; and &lt;code&gt;tidymodels&lt;/code&gt; to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.&lt;/p&gt;</code></pre>
+  <div>
+    <span class="gallery-badge ml">Unsupervised ML</span>
+    <span class="gallery-badge">Statcast</span>
+    <h4 class="anchored"><a href="analyses/pitch_clustering.html">Unsupervised Pitch Clustering</a></h4>
+    <p>K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (<code>pfx_x</code>, <code>pfx_z</code>, velocity, spin). Repertoire discovery without human pitch-tag bias.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics</small>
+  </div>
 </div>
-<div>
-<pre><code>&lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;
-&lt;small class="text-muted"&gt;Algorithm: Random Forest (ranger) | Metrics: Accuracy &amp; ROC-AUC&lt;/small&gt;</code></pre>
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge ml">Supervised ML</span>
+    <span class="gallery-badge">tidymodels</span>
+    <h4 class="anchored"><a href="analyses/pitch_classification.html">Pitch Type Classification with Random Forest</a></h4>
+    <p>Multi-class classification using <code>ranger</code> and <code>tidymodels</code> to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Algorithm: Random Forest (ranger) | Metrics: Accuracy &amp; ROC-AUC</small>
+  </div>
 </div>
-</div>
+
 </div>
 <hr>
 </section>
 <section id="empirical-sabermetrics-non-linear-surfaces" class="level2">
 <h2 class="anchored" data-anchor-id="empirical-sabermetrics-non-linear-surfaces">Empirical Sabermetrics &amp; Non-Linear Surfaces</h2>
 <div class="gallery-grid">
+
 <div class="gallery-card">
-<div>
-<pre><code>&lt;span class="gallery-badge sabermetrics"&gt;Q-CRISP Study 02&lt;/span&gt;
-&lt;span class="gallery-badge"&gt;Platoon Physics&lt;/span&gt;
-&lt;h4&gt;&lt;a href="analyses/02_platoon_physics.html"&gt;4-Quadrant Platoon Physics &amp;amp; PVI&lt;/a&gt;&lt;/h4&gt;
-&lt;p&gt;Full-population RvR, RvL, LvL, and LvR analysis across 14.64M pitches: batter-perspective horizontal break (&lt;code&gt;hb_away_in&lt;/code&gt;), CSW%, xwOBA, TTO decay, and Pitcher Platoon Vulnerability Index.&lt;/p&gt;</code></pre>
+  <div>
+    <span class="gallery-badge sabermetrics">Q-CRISP Study 02</span>
+    <span class="gallery-badge">Platoon Physics</span>
+    <h4 class="anchored"><a href="analyses/02_platoon_physics.html">4-Quadrant Platoon Physics &amp; PVI</a></h4>
+    <p>Full-population RvR, RvL, LvL, and LvR analysis across 14.64M pitches: batter-perspective horizontal break (<code>hb_away_in</code>), CSW%, xwOBA, TTO decay, and Pitcher Platoon Vulnerability Index.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Out-of-Time CSW% r = 0.886 | xwOBA r = 0.934 | Interactive Plotly</small>
+  </div>
 </div>
-<div>
-<pre><code>&lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;
-&lt;small class="text-muted"&gt;Out-of-Time CSW% r = 0.886 | xwOBA r = 0.934 | Interactive Plotly&lt;/small&gt;</code></pre>
-</div>
-</div>
+
 <div class="gallery-card">
-<div>
-<pre><code>&lt;span class="gallery-badge sabermetrics"&gt;Sabermetrics&lt;/span&gt;
-&lt;span class="gallery-badge"&gt;GAM / LOESS&lt;/span&gt;
-&lt;h4&gt;&lt;a href="analyses/xwoba_surface.html"&gt;Non-Linear xwOBA &amp; Barrel Landscape&lt;/a&gt;&lt;/h4&gt;
-&lt;p&gt;Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast "Barrels".&lt;/p&gt;</code></pre>
+  <div>
+    <span class="gallery-badge sabermetrics">Sabermetrics</span>
+    <span class="gallery-badge">GAM / LOESS</span>
+    <h4 class="anchored"><a href="analyses/xwoba_surface.html">Non-Linear xwOBA &amp; Barrel Landscape</a></h4>
+    <p>Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast "Barrels".</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast</small>
+  </div>
 </div>
-<div>
-<pre><code>&lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;
-&lt;small class="text-muted"&gt;Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast&lt;/small&gt;</code></pre>
-</div>
-</div>
+
 <div class="gallery-card">
-<div>
-<pre><code>&lt;span class="gallery-badge sabermetrics"&gt;Sabermetrics&lt;/span&gt;
-&lt;span class="gallery-badge"&gt;Retrosheet&lt;/span&gt;
-&lt;h4&gt;&lt;a href="analyses/run_expectancy.html"&gt;Run Expectancy RE24 Matrix&lt;/a&gt;&lt;/h4&gt;
-&lt;p&gt;Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.&lt;/p&gt;</code></pre>
+  <div>
+    <span class="gallery-badge sabermetrics">Sabermetrics</span>
+    <span class="gallery-badge">Retrosheet</span>
+    <h4 class="anchored"><a href="analyses/run_expectancy.html">Run Expectancy RE24 Matrix</a></h4>
+    <p>Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025</small>
+  </div>
 </div>
-<div>
-<pre><code>&lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;
-&lt;small class="text-muted"&gt;Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025&lt;/small&gt;</code></pre>
-</div>
-</div>
+
 </div>
 
 
@@ -1109,109 +1136,126 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Analyses Gallery"</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Machine learning, statistical modeling, and empirical sabermetrics gallery"</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>Inspired by scikit-learn's example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the <span class="in">`mlbr`</span> data lake.</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Machine Learning &amp; Classification</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-grid"</span><span class="dt">&gt;</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-card"</span><span class="dt">&gt;</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge ml"</span><span class="dt">&gt;</span>Q-CRISP Study 03<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge"</span><span class="dt">&gt;</span>XGBoost + Tunneling<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">h4</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"analyses/03_tunneling_stuff_plus.html"</span><span class="dt">&gt;</span>Commit-Point Pitch Tunneling <span class="dv">&amp;amp;</span> Stuff+ / Pitching+<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">h4</span><span class="dt">&gt;</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Exact <span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>y₀ = 50 ft → 23.8 ft<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span> commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost <span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>Stuff+<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span>, orthogonal <span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>Location+<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span>, and <span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>Pitching+Tunnel<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span> trained on 8.11M regular-season pitches.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">hr</span><span class="ot"> style</span><span class="op">=</span><span class="st">"margin: 0.75rem 0; border-color: #f1f5f9;"</span><span class="dt">&gt;</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">small</span><span class="ot"> class</span><span class="op">=</span><span class="st">"text-muted"</span><span class="dt">&gt;</span>Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly<span class="dt">&lt;/</span><span class="kw">small</span><span class="dt">&gt;</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-card"</span><span class="dt">&gt;</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge ml"</span><span class="dt">&gt;</span>Unsupervised ML<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge"</span><span class="dt">&gt;</span>Statcast<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">h4</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"analyses/pitch_clustering.html"</span><span class="dt">&gt;</span>Unsupervised Pitch Clustering<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">h4</span><span class="dt">&gt;</span></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (<span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>pfx_x<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span>, <span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>pfx_z<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span>, velocity, spin). Repertoire discovery without human pitch-tag bias.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">hr</span><span class="ot"> style</span><span class="op">=</span><span class="st">"margin: 0.75rem 0; border-color: #f1f5f9;"</span><span class="dt">&gt;</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">small</span><span class="ot"> class</span><span class="op">=</span><span class="st">"text-muted"</span><span class="dt">&gt;</span>Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics<span class="dt">&lt;/</span><span class="kw">small</span><span class="dt">&gt;</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-card"</span><span class="dt">&gt;</span></span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge ml"</span><span class="dt">&gt;</span>Supervised ML<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge"</span><span class="dt">&gt;</span>tidymodels<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">h4</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"analyses/pitch_classification.html"</span><span class="dt">&gt;</span>Pitch Type Classification with Random Forest<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">h4</span><span class="dt">&gt;</span></span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Multi-class classification using <span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>ranger<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span> and <span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>tidymodels<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span> to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">hr</span><span class="ot"> style</span><span class="op">=</span><span class="st">"margin: 0.75rem 0; border-color: #f1f5f9;"</span><span class="dt">&gt;</span></span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">small</span><span class="ot"> class</span><span class="op">=</span><span class="st">"text-muted"</span><span class="dt">&gt;</span>Algorithm: Random Forest (ranger) | Metrics: Accuracy &amp; ROC-AUC<span class="dt">&lt;/</span><span class="kw">small</span><span class="dt">&gt;</span></span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Empirical Sabermetrics &amp; Non-Linear Surfaces</span></span>
-<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-grid"</span><span class="dt">&gt;</span></span>
-<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-card"</span><span class="dt">&gt;</span></span>
-<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge sabermetrics"</span><span class="dt">&gt;</span>Q-CRISP Study 02<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge"</span><span class="dt">&gt;</span>Platoon Physics<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">h4</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"analyses/02_platoon_physics.html"</span><span class="dt">&gt;</span>4-Quadrant Platoon Physics <span class="dv">&amp;amp;</span> PVI<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">h4</span><span class="dt">&gt;</span></span>
-<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Full-population RvR, RvL, LvL, and LvR analysis across 14.64M pitches: batter-perspective horizontal break (<span class="dt">&lt;</span><span class="kw">code</span><span class="dt">&gt;</span>hb_away_in<span class="dt">&lt;/</span><span class="kw">code</span><span class="dt">&gt;</span>), CSW%, xwOBA, TTO decay, and Pitcher Platoon Vulnerability Index.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">hr</span><span class="ot"> style</span><span class="op">=</span><span class="st">"margin: 0.75rem 0; border-color: #f1f5f9;"</span><span class="dt">&gt;</span></span>
-<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">small</span><span class="ot"> class</span><span class="op">=</span><span class="st">"text-muted"</span><span class="dt">&gt;</span>Out-of-Time CSW% r = 0.886 | xwOBA r = 0.934 | Interactive Plotly<span class="dt">&lt;/</span><span class="kw">small</span><span class="dt">&gt;</span></span>
-<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-card"</span><span class="dt">&gt;</span></span>
-<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge sabermetrics"</span><span class="dt">&gt;</span>Sabermetrics<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge"</span><span class="dt">&gt;</span>GAM / LOESS<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">h4</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"analyses/xwoba_surface.html"</span><span class="dt">&gt;</span>Non-Linear xwOBA &amp; Barrel Landscape<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">h4</span><span class="dt">&gt;</span></span>
-<span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast "Barrels".<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-84"><a href="#cb13-84" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-85"><a href="#cb13-85" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">hr</span><span class="ot"> style</span><span class="op">=</span><span class="st">"margin: 0.75rem 0; border-color: #f1f5f9;"</span><span class="dt">&gt;</span></span>
-<span id="cb13-86"><a href="#cb13-86" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">small</span><span class="ot"> class</span><span class="op">=</span><span class="st">"text-muted"</span><span class="dt">&gt;</span>Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast<span class="dt">&lt;/</span><span class="kw">small</span><span class="dt">&gt;</span></span>
-<span id="cb13-87"><a href="#cb13-87" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-88"><a href="#cb13-88" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-89"><a href="#cb13-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-card"</span><span class="dt">&gt;</span></span>
-<span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge sabermetrics"</span><span class="dt">&gt;</span>Sabermetrics<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"gallery-badge"</span><span class="dt">&gt;</span>Retrosheet<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-94"><a href="#cb13-94" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">h4</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"analyses/run_expectancy.html"</span><span class="dt">&gt;</span>Run Expectancy RE24 Matrix<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">h4</span><span class="dt">&gt;</span></span>
-<span id="cb13-95"><a href="#cb13-95" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">hr</span><span class="ot"> style</span><span class="op">=</span><span class="st">"margin: 0.75rem 0; border-color: #f1f5f9;"</span><span class="dt">&gt;</span></span>
-<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">small</span><span class="ot"> class</span><span class="op">=</span><span class="st">"text-muted"</span><span class="dt">&gt;</span>Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025<span class="dt">&lt;/</span><span class="kw">small</span><span class="dt">&gt;</span></span>
-<span id="cb13-100"><a href="#cb13-100" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-101"><a href="#cb13-101" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-102"><a href="#cb13-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-103"><a href="#cb13-103" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Analyses Gallery"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Machine learning, statistical modeling, and empirical sabermetrics gallery"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Inspired by scikit-learn's example gallery, this collection showcases reproducible, publication-ready machine learning workflows, non-linear regression models, and sabermetric analyses built on top of the <span class="in">`mlbr`</span> data lake.</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Machine Learning &amp; Classification</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-grid"&gt;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-card"&gt;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge ml"&gt;Q-CRISP Study 04&lt;/span&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge"&gt;Tier 2 Projections&lt;/span&gt;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;h4&gt;&lt;a href="analyses/04_player_projections.html"&gt;Player Projections, Aging Curves &amp;amp; Physics Priors&lt;/a&gt;&lt;/h4&gt;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p&gt;Chronological True-Talent Marcel + Zero-Sum Delta-Method Aging + Stage-2 Residual &lt;code&gt;mlbr Stuff+&lt;/code&gt;, &lt;code&gt;Pulled Air%&lt;/code&gt;, &lt;code&gt;Zone-Chase Selectivity&lt;/code&gt;, and 80% uncertainty bands across 2002–2027.&lt;/p&gt;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;small class="text-muted"&gt;Locked 2025 FIP 0.772 | wOBA 0.0312 | 80% CI Coverage 81–83% | Interactive Plotly&lt;/small&gt;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-card"&gt;</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge ml"&gt;Q-CRISP Study 03&lt;/span&gt;</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge"&gt;XGBoost + Tunneling&lt;/span&gt;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;h4&gt;&lt;a href="analyses/03_tunneling_stuff_plus.html"&gt;Commit-Point Pitch Tunneling &amp;amp; Stuff+ / Pitching+&lt;/a&gt;&lt;/h4&gt;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p&gt;Exact &lt;code&gt;y₀ = 50 ft → 23.8 ft&lt;/code&gt; commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost &lt;code&gt;Stuff+&lt;/code&gt;, orthogonal &lt;code&gt;Location+&lt;/code&gt;, and &lt;code&gt;Pitching+Tunnel&lt;/code&gt; trained on 8.11M regular-season pitches.&lt;/p&gt;</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;small class="text-muted"&gt;Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly&lt;/small&gt;</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-card"&gt;</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge ml"&gt;Unsupervised ML&lt;/span&gt;</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge"&gt;Statcast&lt;/span&gt;</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;h4&gt;&lt;a href="analyses/pitch_clustering.html"&gt;Unsupervised Pitch Clustering&lt;/a&gt;&lt;/h4&gt;</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p&gt;K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (&lt;code&gt;pfx_x&lt;/code&gt;, &lt;code&gt;pfx_z&lt;/code&gt;, velocity, spin). Repertoire discovery without human pitch-tag bias.&lt;/p&gt;</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;small class="text-muted"&gt;Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics&lt;/small&gt;</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-card"&gt;</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge ml"&gt;Supervised ML&lt;/span&gt;</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge"&gt;tidymodels&lt;/span&gt;</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;h4&gt;&lt;a href="analyses/pitch_classification.html"&gt;Pitch Type Classification with Random Forest&lt;/a&gt;&lt;/h4&gt;</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p&gt;Multi-class classification using &lt;code&gt;ranger&lt;/code&gt; and &lt;code&gt;tidymodels&lt;/code&gt; to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.&lt;/p&gt;</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;small class="text-muted"&gt;Algorithm: Random Forest (ranger) | Metrics: Accuracy &amp; ROC-AUC&lt;/small&gt;</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="fu">## Empirical Sabermetrics &amp; Non-Linear Surfaces</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-grid"&gt;</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-card"&gt;</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge sabermetrics"&gt;Q-CRISP Study 02&lt;/span&gt;</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge"&gt;Platoon Physics&lt;/span&gt;</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;h4&gt;&lt;a href="analyses/02_platoon_physics.html"&gt;4-Quadrant Platoon Physics &amp;amp; PVI&lt;/a&gt;&lt;/h4&gt;</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p&gt;Full-population RvR, RvL, LvL, and LvR analysis across 14.64M pitches: batter-perspective horizontal break (&lt;code&gt;hb_away_in&lt;/code&gt;), CSW%, xwOBA, TTO decay, and Pitcher Platoon Vulnerability Index.&lt;/p&gt;</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;small class="text-muted"&gt;Out-of-Time CSW% r = 0.886 | xwOBA r = 0.934 | Interactive Plotly&lt;/small&gt;</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-card"&gt;</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge sabermetrics"&gt;Sabermetrics&lt;/span&gt;</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge"&gt;GAM / LOESS&lt;/span&gt;</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;h4&gt;&lt;a href="analyses/xwoba_surface.html"&gt;Non-Linear xwOBA &amp; Barrel Landscape&lt;/a&gt;&lt;/h4&gt;</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p&gt;Fitting a 2D Generalized Additive Model (GAM) thin-plate spline over Exit Velocity and Launch Angle to map the continuous probability landscape of hits, extra bases, and Statcast "Barrels".&lt;/p&gt;</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;small class="text-muted"&gt;Model: 2D Thin-Plate Spline (mgcv) | Batted Balls: Statcast&lt;/small&gt;</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="gallery-card"&gt;</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge sabermetrics"&gt;Sabermetrics&lt;/span&gt;</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;span class="gallery-badge"&gt;Retrosheet&lt;/span&gt;</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;h4&gt;&lt;a href="analyses/run_expectancy.html"&gt;Run Expectancy RE24 Matrix&lt;/a&gt;&lt;/h4&gt;</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p&gt;Empirical calculation of the 24 base-out run expectancy matrix directly from 23.8 million Retrosheet play events. Inning state transitions, run values per event, and game leverage indexing.&lt;/p&gt;</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div&gt;</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;hr style="margin: 0.75rem 0; border-color: #f1f5f9;"&gt;</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;small class="text-muted"&gt;Dataset: 23.8M Retrosheet Plays | Coverage: 1871–2025&lt;/small&gt;</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

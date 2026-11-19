@@ -33,6 +33,7 @@
     - `01_pitch_quality_eda.qmd`: Study 01 — Aerodynamics, VAA/HAA, and whiff lift.
     - `02_platoon_physics.qmd`: Study 02 — 4-Quadrant Platoon Physics, break symmetry, and PVI.
     - `03_tunneling_stuff_plus.qmd`: Study 03 — Exact commit-point pitch tunneling (`v_statcast_tunneling`), Stuff+/Location+/Pitching+, and stabilization curves.
+    - `04_player_projections.qmd`: Study 04 — Tier 2 Chronological True-Talent Player Projections (Marcel, Zero-Sum Delta-Method Aging, Stage-2 Residual Physics & 80% Uncertainty Bands).
 - Build command: `quarto render site/` from project root.
 
 ## Verification
