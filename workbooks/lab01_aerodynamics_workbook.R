@@ -1,7 +1,7 @@
 # ==============================================================================
 # mlbr Student Work-Along Lab 01: Aerodynamics, Trajectory Math & VAA
 # ==============================================================================
-# Companion to: workbooks/lab01_aerodynamics_workbook.qmd
+# Companion to: site/workbooks/lab01_aerodynamics_workbook.qmd
 # Instructions:
 #   Open this file in RStudio Server (http://192.168.10.1:8787).
 #   Execute line-by-line using Ctrl + Enter to observe how the data transforms.

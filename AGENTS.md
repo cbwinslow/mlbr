@@ -51,7 +51,7 @@ The `mlbr` workspace on `cbwdellr720` is a comprehensive, production-grade Saber
 - `experiments/`: Curated experiment registry (`registry.json`, `README.md`) tracking all hypotheses, equations, metrics, and validation status.
 - `sql/`: Reusable, standalone, pure DuckDB SQL scripts for feature materialization and queries.
 - `models/`: Self-contained, reproducible model training and exploratory research scripts in R, including saved figure artifacts (`.png`, `.rds`, `.parquet`).
-- `workbooks/`: Student-facing interactive lab workbooks for RStudio Server (`lab01_aerodynamics_workbook.R`, etc.).
+- `workbooks/`: Student-facing interactive RStudio Server code-along scripts (`lab01`–`lab04_*.R`). **Mandatory 1:1 Parity Rule:** Every numbered Q-CRISP study (`site/analyses/0X_*.qmd`) MUST ship with a matching runnable `workbooks/lab0X_*.R` AND companion published walkthrough `site/workbooks/lab0X_*.qmd` wired into `site/_quarto.yml` (verified mechanically by `R/generate_agent_manifest.R`).
 - `specs/`: Engineering and sabermetric model specifications following SDD principles and Q-CRISP.
 - `DECISIONS.md`: Architecture Decision Records (ADR-001+) documenting settled storage, modeling, and validation choices.
 - `.agents/`: Project-scoped Antigravity subagents (`agents/`), progressive skills (`skills/`), and deterministic guardrails (`hooks.json`).
@@ -63,7 +63,7 @@ The `mlbr` workspace on `cbwdellr720` is a comprehensive, production-grade Saber
 1. Re-check changed paths against the DOX chain.
 2. Run data proof suite: `Rscript R/proof_lake.R` (all 28 invariant checks must pass).
 3. Run crosswalk proof suite: `Rscript -e "mlbr::proof_crosswalks()"`.
-4. Run semantic agent manifest audit: `Rscript R/generate_agent_manifest.R`.
+4. Run semantic & workbook-parity manifest audit: `Rscript R/generate_agent_manifest.R` (verifies all 5 lake semantic invariants + 1:1 Study ↔ Work-Along Lab parity).
 5. If R package modified: `R CMD INSTALL pkg/mlbr` and verify views with `mlbr::lake_duckdb()`.
 6. If site modified: `quarto render site/` (verify exit code 0 and output in `site/docs/`).
 7. Update nearest owning `AGENTS.md` and refresh Child DOX Index.

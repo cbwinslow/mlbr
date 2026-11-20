@@ -439,6 +439,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Lab 01: Aerodynamics &amp; Trajectory Math</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workbooks/lab02_platoon_physics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 02: 4-Quadrant Platoon Physics &amp; PVI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workbooks/lab03_tunneling_stuff_plus_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 03: Pitch Tunneling &amp; Stuff+ / Loc+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workbooks/lab04_player_projections_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -579,7 +597,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>mlbr</code> is a production-grade analytical platform and R package designed for large-scale baseball analytics, empirical sabermetrics, and machine learning. Built on top of <strong>cbwdellr720</strong> (40 Xeon cores, 125 GB RAM, high-speed NVMe/HDD storage), <code>mlbr</code> unifies:</p>
 <ul>
 <li><strong>150+ Years of Retrosheet Play-by-Play (1871–2025)</strong>: Every pitch, hit, out, substitution, and umpire event parsed directly via Chadwick C tools.</li>
-<li><strong>Complete Statcast Pitch Tracking (2008–2025)</strong>: Per-pitch Hawkeye/PITCHf/x metrics (velocities, spin rates, release coordinates, 3D break profiles).</li>
+<li><strong>Complete Statcast Pitch Tracking (2008–2026)</strong>: Per-pitch Hawkeye/PITCHf/x metrics (velocities, spin rates, release coordinates, 3D break profiles).</li>
 <li><strong>Comprehensive FanGraphs Historical Records (1901–2025)</strong>: Advanced leaderboards, Stuff+, PitchingBot, Gut constants, and park factors.</li>
 <li><strong>Chadwick Bureau Register</strong>: Universal cross-identifier mapping covering &gt;527,000 players across MLB, MiLB, Retrosheet, Baseball-Reference, and Fangraphs.</li>
 <li><strong>NCAA &amp; Minor League (MiLB) Data</strong>: Extended feeder systems and collegiate play tracking.</li>
@@ -731,9 +749,9 @@ retrosheet_raw        0              0        0.0</code></pre>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">lake_duckdb</span>()</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Query pitch velocity distribution</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>top_heat <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"statcast"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>top_heat <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"v_statcast_features"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(release_speed <span class="sc">&gt;</span> <span class="dv">102</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">pitcher_name =</span> player_name, pitch_type, release_speed, release_spin_rate) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(pitcher, pitch_type, release_speed, ivb_in, vaa, release_spin_rate) <span class="sc">%&gt;%</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(release_speed)) <span class="sc">%&gt;%</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
@@ -752,9 +770,10 @@ retrosheet_raw        0              0        0.0</code></pre>
 <h2 class="anchored" data-anchor-id="machine-learning-sabermetric-analyses">Machine Learning &amp; Sabermetric Analyses</h2>
 <p>Explore our interactive research gallery:</p>
 <ul>
-<li><a href="analyses/01_pitch_quality_eda.html"><strong>Q-CRISP Study 01: Aerodynamics &amp; Approach Angles</strong></a>: Full-population VAA/HAA trajectory physics across 14.64M pitches.</li>
-<li><a href="analyses/02_platoon_physics.html"><strong>Q-CRISP Study 02: 4-Quadrant Platoon Physics &amp; PVI</strong></a>: <code>RvR</code>/<code>RvL</code>/<code>LvL</code>/<code>LvR</code> mechanics, <code>hb_away_in</code>, starter TTO decay, and Pitcher PVI.</li>
-<li><a href="workbooks/lab01_aerodynamics_workbook.html"><strong>Student Lab 01: Aerodynamics &amp; Trajectory Math</strong></a>: Hands-on RStudio workbook with Dark Cyber diagnostics.</li>
+<li><a href="analyses/01_pitch_quality_eda.html"><strong>Q-CRISP Study 01: Aerodynamics &amp; Approach Angles</strong></a> | <a href="workbooks/lab01_aerodynamics_workbook.html"><strong>Lab 01</strong></a>: Full-population VAA/HAA trajectory physics across 14.64M pitches.</li>
+<li><a href="analyses/02_platoon_physics.html"><strong>Q-CRISP Study 02: 4-Quadrant Platoon Physics &amp; PVI</strong></a> | <a href="workbooks/lab02_platoon_physics_workbook.html"><strong>Lab 02</strong></a>: <code>RvR</code>/<code>RvL</code>/<code>LvL</code>/<code>LvR</code> mechanics, <code>hb_away_in</code>, starter TTO decay, and Pitcher PVI.</li>
+<li><a href="analyses/03_tunneling_stuff_plus.html"><strong>Q-CRISP Study 03: Pitch Tunneling &amp; Stuff+ / Pitching+</strong></a> | <a href="workbooks/lab03_tunneling_stuff_plus_workbook.html"><strong>Lab 03</strong></a>: Exact <code>y0 = 50 -&gt; 23.8 ft</code> commit-point tunneling (10.20M pairs) &amp; chronological XGBoost <code>Stuff+</code>/<code>Location+</code>.</li>
+<li><a href="analyses/04_player_projections.html"><strong>Q-CRISP Study 04: Player Projections, Aging &amp; Physics Priors</strong></a> | <a href="workbooks/lab04_player_projections_workbook.html"><strong>Lab 04</strong></a>: Chronological Marcel, midpoint Delta-Method aging, <code>Pulled Air%</code>, <code>Zone-Chase (Z-O%)</code>, and 80% uncertainty bands (<code>2002–2027</code>).</li>
 <li><a href="analyses/pitch_clustering.html"><strong>Unsupervised Pitch Clustering</strong></a>: K-Means &amp; GMM movement classification.</li>
 <li><a href="analyses/pitch_classification.html"><strong>Pitch Classification with Random Forest</strong></a>: Predicting pitch type from flight dynamics using <code>tidymodels</code>.</li>
 <li><a href="analyses/xwoba_surface.html"><strong>Non-linear xwOBA &amp; Barrel Landscape</strong></a>: 2D GAM surface across Exit Velocity &amp; Launch Angle.</li>
@@ -1249,7 +1268,7 @@ retrosheet_raw        0              0        0.0</code></pre>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="in">`mlbr`</span> is a production-grade analytical platform and R package designed for large-scale baseball analytics, empirical sabermetrics, and machine learning. Built on top of **cbwdellr720** (40 Xeon cores, 125 GB RAM, high-speed NVMe/HDD storage), <span class="in">`mlbr`</span> unifies:</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**150+ Years of Retrosheet Play-by-Play (1871–2025)**: Every pitch, hit, out, substitution, and umpire event parsed directly via Chadwick C tools.</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Complete Statcast Pitch Tracking (2008–2025)**: Per-pitch Hawkeye/PITCHf/x metrics (velocities, spin rates, release coordinates, 3D break profiles).</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Complete Statcast Pitch Tracking (2008–2026)**: Per-pitch Hawkeye/PITCHf/x metrics (velocities, spin rates, release coordinates, 3D break profiles).</span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Comprehensive FanGraphs Historical Records (1901–2025)**: Advanced leaderboards, Stuff+, PitchingBot, Gut constants, and park factors.</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Chadwick Bureau Register**: Universal cross-identifier mapping covering &gt;527,000 players across MLB, MiLB, Retrosheet, Baseball-Reference, and Fangraphs.</span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**NCAA &amp; Minor League (MiLB) Data**: Extended feeder systems and collegiate play tracking.</span>
@@ -1329,9 +1348,9 @@ retrosheet_raw        0              0        0.0</code></pre>
 <span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">lake_duckdb</span>()</span>
 <span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Query pitch velocity distribution</span></span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>top_heat <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"statcast"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>top_heat <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con, <span class="st">"v_statcast_features"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(release_speed <span class="sc">&gt;</span> <span class="dv">102</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">pitcher_name =</span> player_name, pitch_type, release_speed, release_spin_rate) <span class="sc">%&gt;%</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(pitcher, pitch_type, release_speed, ivb_in, vaa, release_spin_rate) <span class="sc">%&gt;%</span></span>
 <span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(release_speed)) <span class="sc">%&gt;%</span></span>
 <span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
@@ -1354,13 +1373,14 @@ retrosheet_raw        0              0        0.0</code></pre>
 <span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>Explore our interactive research gallery:</span>
 <span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Q-CRISP Study 01: Aerodynamics &amp; Approach Angles**</span><span class="co">](analyses/01_pitch_quality_eda.html)</span>: Full-population VAA/HAA trajectory physics across 14.64M pitches.</span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Q-CRISP Study 02: 4-Quadrant Platoon Physics &amp; PVI**</span><span class="co">](analyses/02_platoon_physics.html)</span>: <span class="in">`RvR`</span>/<span class="in">`RvL`</span>/<span class="in">`LvL`</span>/<span class="in">`LvR`</span> mechanics, <span class="in">`hb_away_in`</span>, starter TTO decay, and Pitcher PVI.</span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Student Lab 01: Aerodynamics &amp; Trajectory Math**</span><span class="co">](workbooks/lab01_aerodynamics_workbook.html)</span>: Hands-on RStudio workbook with Dark Cyber diagnostics.</span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Unsupervised Pitch Clustering**</span><span class="co">](analyses/pitch_clustering.html)</span>: K-Means &amp; GMM movement classification.</span>
-<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Pitch Classification with Random Forest**</span><span class="co">](analyses/pitch_classification.html)</span>: Predicting pitch type from flight dynamics using <span class="in">`tidymodels`</span>.</span>
-<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Non-linear xwOBA &amp; Barrel Landscape**</span><span class="co">](analyses/xwoba_surface.html)</span>: 2D GAM surface across Exit Velocity &amp; Launch Angle.</span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Run Expectancy Matrix (RE24)**</span><span class="co">](analyses/run_expectancy.html)</span>: Empirical 24-state transition valuation from 23.8M plays.</span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Q-CRISP Study 01: Aerodynamics &amp; Approach Angles**</span><span class="co">](analyses/01_pitch_quality_eda.html)</span> | <span class="co">[</span><span class="ot">**Lab 01**</span><span class="co">](workbooks/lab01_aerodynamics_workbook.html)</span>: Full-population VAA/HAA trajectory physics across 14.64M pitches.</span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Q-CRISP Study 02: 4-Quadrant Platoon Physics &amp; PVI**</span><span class="co">](analyses/02_platoon_physics.html)</span> | <span class="co">[</span><span class="ot">**Lab 02**</span><span class="co">](workbooks/lab02_platoon_physics_workbook.html)</span>: <span class="in">`RvR`</span>/<span class="in">`RvL`</span>/<span class="in">`LvL`</span>/<span class="in">`LvR`</span> mechanics, <span class="in">`hb_away_in`</span>, starter TTO decay, and Pitcher PVI.</span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Q-CRISP Study 03: Pitch Tunneling &amp; Stuff+ / Pitching+**</span><span class="co">](analyses/03_tunneling_stuff_plus.html)</span> | <span class="co">[</span><span class="ot">**Lab 03**</span><span class="co">](workbooks/lab03_tunneling_stuff_plus_workbook.html)</span>: Exact <span class="in">`y0 = 50 -&gt; 23.8 ft`</span> commit-point tunneling (10.20M pairs) &amp; chronological XGBoost <span class="in">`Stuff+`</span>/<span class="in">`Location+`</span>.</span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Q-CRISP Study 04: Player Projections, Aging &amp; Physics Priors**</span><span class="co">](analyses/04_player_projections.html)</span> | <span class="co">[</span><span class="ot">**Lab 04**</span><span class="co">](workbooks/lab04_player_projections_workbook.html)</span>: Chronological Marcel, midpoint Delta-Method aging, <span class="in">`Pulled Air%`</span>, <span class="in">`Zone-Chase (Z-O%)`</span>, and 80% uncertainty bands (<span class="in">`2002–2027`</span>).</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Unsupervised Pitch Clustering**</span><span class="co">](analyses/pitch_clustering.html)</span>: K-Means &amp; GMM movement classification.</span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Pitch Classification with Random Forest**</span><span class="co">](analyses/pitch_classification.html)</span>: Predicting pitch type from flight dynamics using <span class="in">`tidymodels`</span>.</span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Non-linear xwOBA &amp; Barrel Landscape**</span><span class="co">](analyses/xwoba_surface.html)</span>: 2D GAM surface across Exit Velocity &amp; Launch Angle.</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Run Expectancy Matrix (RE24)**</span><span class="co">](analyses/run_expectancy.html)</span>: Empirical 24-state transition valuation from 23.8M plays.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

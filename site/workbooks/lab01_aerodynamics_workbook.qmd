@@ -171,7 +171,13 @@ This figure contrasts the simulated parabolic flight path of **Paul Skenes** (lo
 
 ---
 
-## 5. Next Steps: Lab 02 Pitch Tunneling & Commitment Geometry
+## 5. Next Steps: Continue the Mentorship Track (Labs 02 → 04)
+
+- [**Lab 02: 4-Quadrant Platoon Physics, Break Symmetry & PVI**](lab02_platoon_physics_workbook.html)
+- [**Lab 03: Commit-Point Pitch Tunneling & Stuff+ / Location+**](lab03_tunneling_stuff_plus_workbook.html)
+- [**Lab 04: Marcel Projections, Delta-Method Aging & Physics Priors**](lab04_player_projections_workbook.html)
+
+### Preview of Tunneling Commitment Geometry (Covered in Full in Lab 03)
 
 Now that we have mastered single-pitch trajectory aerodynamics, we advance to **multi-pitch sequencing**:
 

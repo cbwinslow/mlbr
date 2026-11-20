@@ -30,12 +30,19 @@ data/
 │   ├── mlbmeta/         # Schedules, drafts, parks
 │   ├── mlb_lineups/     # Live/pre-game MLB Stats API probable pitchers & lineups
 │   └── markets/         # Read-only Polymarket & Kalshi ZSTD order-book snapshots
-├── features/            # SILVER TIER: Full-population physics & outcome features
-│   └── statcast_features/  # 14.64M rows, ZSTD Sorted Parquet, partitioned by game_year (1.4 GB)
-└── processed/           # GOLD TIER: Aggregated matrices, PVI, TTO & model outputs
+├── features/            # SILVER TIER: Full-population ADR-001 ZSTD Sorted Parquet
+│   ├── statcast_features/  # 14.64M pitches (2008-2026), partitioned by game_year (1.4 GB)
+│   └── statcast_tunneling/ # 10.20M sequential pairs (y0=50->23.8 ft), ZSTD Sorted Parquet
+└── processed/           # GOLD TIER: Aggregated matrices, Stuff+, Projections & Backtests
     ├── platoon_quadrant_arsenal.parquet
     ├── pitcher_pvi_2024_2026.parquet
-    └── starter_tto_platoon_2020_2026.parquet
+    ├── starter_tto_platoon_2020_2026.parquet
+    ├── pitcher_stuff_plus.parquet                 # 4,902 pitcher-seasons (eval_split guarded)
+    ├── stuff_plus_{model_ablation,whiff_ablation,yoy_validity,stabilization_curve,feature_importance}.parquet
+    ├── pitcher_projections_true_talent.parquet    # 14,263 rows (2016-2027) + 80% CIs
+    ├── batter_projections_true_talent.parquet     # 10,335 rows (2016-2027) + 80% CIs
+    ├── projections_aging_curves.parquet           # Survivor-bias-corrected Delta-Method curves
+    └── projections_backtest_metrics.parquet       # Strict 4-track chronological OOS benchmarks
 ```
 
 ---

@@ -1,6 +1,6 @@
 # mlbr: Interactive Learning & Development Guide
 
-Welcome! This guide is your home base for learning how the `mlbr` data lake, R package, DuckDB zero-copy queries, and machine learning pipelines work from first principles.
+Welcome! This guide is your hands-on home base for working along with the `mlbr` data lake, DuckDB zero-copy views, Q-CRISP studies, and Student Work-Along Labs in RStudio Server.
 
 ---
 
@@ -8,103 +8,68 @@ Welcome! This guide is your home base for learning how the `mlbr` data lake, R p
 
 | Service | Address | Notes |
 |---|---|---|
-| **RStudio Server** | [http://192.168.10.1:8787](http://192.168.10.1:8787) | Your primary interactive coding environment. Open `mlbr.Rproj`. |
-| **Documentation & Analysis Site** | [http://192.168.10.1:8088](http://192.168.10.1:8088) | Live local preview of your Quarto site with all charts & tables. |
-| **Active Project Path** | `/mnt/storage/Rprojects/mlbr` | Root workspace directory on `cbwdellr720`. |
-| **Data Lake Storage** | `/mnt/storage/Rprojects/mlbr/data/raw/` | Partitioned Apache Parquet datasets (34M+ rows). |
+| **RStudio Server** | [http://192.168.10.1:8787](http://192.168.10.1:8787) | Primary interactive coding environment. Open `mlbr.Rproj`. |
+| **Local Documentation & Gallery** | [http://192.168.10.1:8088](http://192.168.10.1:8088) | Live local preview served directly from `/mnt/storage/Rprojects/mlbr/site/docs/`. |
+| **GitHub Pages Research Site** | [https://cbwinslow.github.io/mlbr/](https://cbwinslow.github.io/mlbr/) | Public auto-deployed Quarto site from `site/docs/`. |
+| **Canonical Project Root** | `/mnt/storage/Rprojects/mlbr` | Single canonical workspace on `cbwdellr720` (40 cores, 125 GB RAM). |
 
 ---
 
-## 2. The Mental Model: How It All Fits Together
+## 2. Two-Track Workflow: Studies vs. Work-Along Labs
 
+Every numbered Q-CRISP study ships with **1:1 paired deliverables** (enforced mechanically by `R/generate_agent_manifest.R`):
+
+| Level | Q-CRISP Study (`site/analyses/`) | Work-Along Lab (`workbooks/` → `site/workbooks/`) | Key Concepts & Gold Tables |
+|:---:|:---|:---|:---|
+| **1** | `01_pitch_quality_eda.qmd` (`EXP-001`) | `workbooks/lab01_aerodynamics_workbook.R` | Trajectory physics, VAA/HAA, IVB, `v_statcast_features` (`14.64M` pitches) |
+| **1** | `02_platoon_physics.qmd` (`EXP-002`) | `workbooks/lab02_platoon_physics_workbook.R` | `RvR`/`RvL`/`LvL`/`LvR`, `hb_away_in`, TTO decay, Pitcher `PVI` |
+| **1** | `03_tunneling_stuff_plus.qmd` (`EXP-003`) | `workbooks/lab03_tunneling_stuff_plus_workbook.R` | `y0 = 50 -> 23.8 ft` tunneling (`v_statcast_tunneling`, `10.20M` pairs), `Stuff+`/`Location+`/`Pitching+` |
+| **2** | `04_player_projections.qmd` (`EXP-004`) | `workbooks/lab04_player_projections_workbook.R` | `IP_true`, Tango Marcel, Delta-Method aging, `Pulled Air%`, `Zone-Chase (Z-O%)`, 80% CIs (`2016–2027`) |
+
+---
+
+## 3. Quickstart: Zero-Copy DuckDB Over the Full Lake
+
+Open RStudio Server (`http://192.168.10.1:8787`), open `mlbr.Rproj`, and run:
+
+```r
+library(mlbr)
+library(DBI)
+library(dplyr)
+
+con <- lake_duckdb() # Mounts all 16 Bronze + Silver zero-copy views in ~15 ms
+
+# Example 1: Query 2025 Regular-Season Four-Seam VAA & Whiff% from Silver (14.64M rows)
+tbl(con, "v_statcast_features") %>%
+  filter(game_type == "R", game_year == 2025, pitch_type == "FF", is_swing == 1) %>%
+  summarise(swings = n(), mean_velo = mean(release_speed, na.rm = TRUE),
+            mean_vaa = mean(vaa, na.rm = TRUE), whiff_pct = mean(is_whiff, na.rm = TRUE)) %>%
+  collect()
+
+# Example 2: Inspect tightest Fastball -> Sweeper tunnels from Silver (10.20M pairs)
+tbl(con, "v_statcast_tunneling") %>%
+  filter(game_type == "R", game_year == 2025, prev_pitch_type == "FF", pitch_type == "ST") %>%
+  summarise(pairs = n(), mean_tunnel_in = mean(tunnel_dist_in, na.rm = TRUE),
+            mean_btr = mean(break_to_tunnel_ratio, na.rm = TRUE)) %>%
+  collect()
+
+DBI::dbDisconnect(con, shutdown = TRUE)
 ```
-                  ┌───────────────────────────────┐
-                  │ 1. Raw Parquet Files on Disk  │
-                  │    (data/raw/<source>/*.parquet)
-                  └───────────────┬───────────────┘
-                                  │
-                                  ▼
-                  ┌───────────────────────────────┐
-                  │ 2. DuckDB Zero-Copy Engine    │
-                  │    - Direct pointer to files  │
-                  │    - No bulk import into RAM  │
-                  │    - SIMD vectorized queries  │
-                  └───────────────┬───────────────┘
-                                  │
-                                  ▼
-                  ┌───────────────────────────────┐
-                  │ 3. mlbr R Package             │
-                  │    - LakeManager (R6)         │
-                  │    - lake_duckdb(), proof()   │
-                  │    - dplyr / dbplyr integration│
-                  └───────────────┬───────────────┘
-                                  │
-                                  ▼
-                  ┌───────────────────────────────┐
-                  │ 4. Quarto Analytics Gallery   │
-                  │    - site/*.qmd files         │
-                  │    - Compiles to site/docs/   │
-                  │    - Published at :8088       │
-                  └───────────────────────────────┘
+
+---
+
+## 4. Verification & Rebuild Cheatsheet
+
+```bash
+# 28-point data lake invariant suite
+Rscript R/proof_lake.R
+
+# Universal player/team/game crosswalk checks (5/5)
+Rscript -e "mlbr::proof_crosswalks()"
+
+# Semantic invariants + 1:1 Study <-> Work-Along Lab parity check (6/6)
+Rscript R/generate_agent_manifest.R
+
+# Rebuild Quarto site into site/docs/ (served live at :8088 and GitHub Pages)
+quarto render site/
 ```
-
----
-
-## 3. Learning Milestones (Step-by-Step)
-
-### Milestone 1: Your First Zero-Copy Query
-*Goal: Understand how DuckDB queries 34M rows in milliseconds without running out of RAM.*
-1. Open RStudio Server at `http://192.168.10.1:8787`.
-2. Open `mlbr.Rproj`.
-3. In the R console, connect to the lake:
-   ```r
-   library(mlbr)
-   library(dplyr)
-   
-   con <- lake_duckdb()
-   ```
-4. Query the fastest pitches in baseball history using `dplyr`:
-   ```r
-   tbl(con, "statcast") %>%
-     filter(release_speed > 103) %>%
-     select(player_name, pitch_type, release_speed, game_date) %>%
-     arrange(desc(release_speed)) %>%
-     head(10) %>%
-     collect()
-   ```
-
-### Milestone 2: Exploring Historical Retrosheet Plays
-*Goal: Query 150+ years of baseball history (1871–2025).*
-1. Query Barry Bonds' home runs in 2001 or Shohei Ohtani's 50/50 season in 2024 directly from play-by-play.
-2. Inspect the base-out state codes: `BASE1_RUN_ID`, `BASE2_RUN_ID`, `BASE3_RUN_ID`.
-
-### Milestone 3: Building a New Analysis Page
-*Goal: Create your own custom Quarto study in `site/analyses/`.*
-1. Create a new file: `site/analyses/my_study.qmd`.
-2. Write a question (e.g. "Do left-handed batters perform better against right-handed sinkers?").
-3. Write the DuckDB query + ggplot2 chart.
-4. Run `cd /mnt/storage/Rprojects/mlbr/site && quarto render my_study.qmd`.
-5. View it live in your browser at `http://192.168.10.1:8088/analyses/my_study.html`!
-
-### Milestone 4: Expanding the `mlbr` Package
-*Goal: Add your own custom R function to `pkg/mlbr/R/`.*
-1. Add a new helper (e.g. `calculate_woba(df)` or `pitch_arsenal(player_id)`).
-2. Add roxygen2 tags (`#' @export`, `#' @param`).
-3. Reinstall and run tests (`proof_lake()`).
-
----
-
-## 4. Helpful Cheatsheet Commands
-
-- **Check Data Lake Ingest Progress:**
-  ```bash
-  tail -n 15 /tmp/baseball-ingest.log
-  ```
-- **Run the 28-Point Invariant Proof Suite:**
-  ```r
-  mlbr::proof_lake()
-  ```
-- **Recompile the Documentation Site:**
-  ```bash
-  cd /mnt/storage/Rprojects/mlbr/site && quarto render
-  ```

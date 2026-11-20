@@ -32,7 +32,7 @@ Rather than importing 41+ million records into memory or maintaining complex dat
 
 ```r
 library(mlbr)
-con <- lake_duckdb() # Mounts 15 zero-copy views in ~15 milliseconds
+con <- lake_duckdb() # Mounts 16 zero-copy views in ~15 milliseconds
 
 # Query millions of pitches in sub-second time
 tbl(con, "v_statcast") %>%
@@ -49,7 +49,8 @@ tbl(con, "v_statcast") %>%
 * `v_chadwick_register` — Universal player ID mapping (`key_mlbam`, `key_retro`, `key_bbref`, `key_fangraphs`)
 * `v_lahman_people`, `v_lahman_batting`, `v_lahman_pitching` — Biographical and historical tables
 * `v_mlbmeta_schedule` — Official MLB game schedule (2008–2026)
-* `v_statcast_features` — Silver-tier materialized physics, platoon coordinates, CSW/chase flags, and xwOBA (`14.64M` pitches, ZSTD Sorted Parquet)
+* `v_statcast_features` — Silver-tier materialized physics, platoon coordinates, CSW/chase flags, and xwOBA (`14.64M` pitches, ADR-001 ZSTD Sorted Parquet)
+* `v_statcast_tunneling` — Silver-tier exact `y0 = 50 -> 23.8 ft` commit-point tunneling pairs, `tunnel_dist_in`, and `break_to_tunnel_ratio` (`10.20M` pairs, ADR-001 ZSTD Sorted Parquet)
 
 ---
 
@@ -111,5 +112,13 @@ Automated manifests are kept continuously synchronized in `data/manifest/`:
 Modeling scripts are organized in `models/`:
 * `models/01_eda_feature_expansion.R` — Study 01: Trajectory Aerodynamics, VAA/HAA & Whiff Lift (`EXP-001`).
 * `models/02_platoon_splits_analysis.R` — Study 02: 4-Quadrant Platoon Physics, `hb_away_in`, Starter TTO Decay & Pitcher PVI (`EXP-002`).
-* `models/01_whiff_model.R` — Expected Whiff Probability (`xWhiff`) baseline modeling.
+* `models/03_tunneling_stuff_plus.R` — Study 03: Exact Commit-Point Pitch Tunneling & Chronological XGBoost `Stuff+`/`Location+`/`Pitching+` (`EXP-003`).
+* `models/04_player_projections_marcel_aging.R` — Study 04: Tier 2 Chronological True-Talent Player Projections, Midpoint Delta-Method Aging, Physics Priors & 80% Uncertainty Bands (`EXP-004`).
+
+### Student Work-Along Labs (1:1 Parity with Q-CRISP Studies)
+Interactive RStudio Server code-along scripts live in `workbooks/` with companion rendered Quarto guides in `site/workbooks/` (compiled to `site/docs/`):
+* `workbooks/lab01_aerodynamics_workbook.R` → `site/workbooks/lab01_aerodynamics_workbook.qmd`
+* `workbooks/lab02_platoon_physics_workbook.R` → `site/workbooks/lab02_platoon_physics_workbook.qmd`
+* `workbooks/lab03_tunneling_stuff_plus_workbook.R` → `site/workbooks/lab03_tunneling_stuff_plus_workbook.qmd`
+* `workbooks/lab04_player_projections_workbook.R` → `site/workbooks/lab04_player_projections_workbook.qmd`
 * Interactive execution in RStudio Server: [http://192.168.10.1:8787](http://192.168.10.1:8787).

@@ -25,6 +25,7 @@ Every figure saved to `models/` (and `site/assets/` as needed) MUST preserve:
 
 ## 4. Registry, Manifest & Site Closeout
 1. Log all findings (including negative/rejected results) via `mlbr::lake_log_experiment()` into `experiments/registry.json`.
-2. Sync manifests: `Rscript R/generate_agent_manifest.R`.
-3. Render site: `quarto render site/` and confirm exit code 0.
-4. Run `mlbr-study-reviewer` and `mlbr-verifier` before committing.
+2. **1:1 Student Work-Along Lab Parity (MANDATORY):** For every numbered Q-CRISP study `site/analyses/<NN>_*.qmd`, author and execute a runnable `workbooks/lab<NN>_*.R` (with first-principles math, DuckDB SQL, Dark Cyber chart, and 3 mentor checkpoints) plus companion `site/workbooks/lab<NN>_*.qmd` wired into `site/_quarto.yml`.
+3. Sync manifests & verify 1:1 lab parity: `Rscript R/generate_agent_manifest.R`.
+4. Render site: `quarto render site/` and confirm exit code 0.
+5. Run `mlbr-study-reviewer` and `mlbr-verifier` before committing.

@@ -106,7 +106,7 @@ To prevent loss of discoveries, ungrounded code drift, and duplicated effort:
 * `experiments/`: Experiment registry (`registry.json`, `README.md`).
 * `sql/`: Standalone, reusable, pure DuckDB SQL scripts (`01_statcast_features.sql`, `02_pitch_tunneling.sql`).
 * `models/`: Self-contained, reproducible R model training and research scripts, along with saved figure assets (`.png`, `.rds`, `.parquet`).
-* `workbooks/`: Interactive student lab workbooks for RStudio Server (`lab01_aerodynamics_workbook.R`).
+* `workbooks/`: Interactive student RStudio Server code-along scripts (`lab01`–`lab04_*.R`). **1:1 Parity Mandate:** Every numbered Q-CRISP study in `site/analyses/0X_*.qmd` MUST have a companion runnable `workbooks/lab0X_*.R` and rendered guide in `site/workbooks/lab0X_*.qmd` (enforced by `R/generate_agent_manifest.R`).
 * `specs/`: Mathematical and system architecture specifications (SDD / Q-CRISP).
 * `pkg/mlbr/`: The core R package. Must pass clean build and installation.
 * `site/`: Quarto multi-page research gallery and documentation (`site/analyses/`, `site/workbooks/`), deployed via GitHub Pages.

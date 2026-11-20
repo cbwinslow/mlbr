@@ -1387,6 +1387,8 @@ run_exp004 <- function() {
       mu_j <- sum(w_tr[ok_j] * v_tr[ok_j]) / sum(w_tr[ok_j])
       if (any(!ok_j)) { n_imp_tr <- n_imp_tr + sum(!ok_j); v_tr[!ok_j] <- mu_j }
       bad_te <- !is.finite(v_te)
+      assert_true(mean(bad_te) <= max_imp_frac,
+                  sprintf("Sensor %s test missingness %.1f%% exceeds limit", fc, 100 * mean(bad_te)))
       if (any(bad_te)) { n_imp_te <- n_imp_te + sum(bad_te); v_te[bad_te] <- mu_j }
       X_tr[, j] <- v_tr; X_te[, j] <- v_te
     }
@@ -1444,12 +1446,17 @@ run_exp004 <- function() {
   }
   cat(sprintf("   Stage-1 Ridge total imputed cells across all folds/metrics: train=%d, test=%d\n", tot_imp_tr, tot_imp_te))
 
+  tot_s2_imp_tr <- 0L; tot_s2_imp_te <- 0L
   tr_bt <- bat_panel[projection_year == 2024L & !is.na(actual_pa) & actual_pa >= 50 & has_t1_battrack == 1L]
   for (yr in 2025L:2026L) {
     te_idx <- which(bat_panel$projection_year == yr); te_bt <- bat_panel[te_idx]
+    act_bt <- which(te_bt$has_t1_battrack == 1L)
     for (m in c("woba", "iso", "k_pct", "bb_pct")) {
-      res_bt <- fit_predict_residual_ridge(tr_bt, te_bt, paste0("m4_", m), paste0("actual_", m), bat_wcol[[m]], bat_sensor_cols, seed_val = 4040L + yr)
-      bat_panel[te_idx, (paste0("m4_battrack_", m)) := fifelse(te_bt$has_t1_battrack == 1L, res_bt$pred, te_bt[[paste0("m4_", m)]])]
+      base_v <- te_bt[[paste0("m4_", m)]]
+      res_bt <- fit_predict_residual_ridge(tr_bt, te_bt[act_bt], paste0("m4_", m), paste0("actual_", m), bat_wcol[[m]], bat_sensor_cols, seed_val = 4040L + yr)
+      tot_s2_imp_tr <- tot_s2_imp_tr + res_bt$n_imp_tr; tot_s2_imp_te <- tot_s2_imp_te + res_bt$n_imp_te
+      out_v <- base_v; out_v[act_bt] <- res_bt$pred
+      bat_panel[te_idx, (paste0("m4_battrack_", m)) := out_v]
     }
   }
 
@@ -1458,14 +1465,22 @@ run_exp004 <- function() {
   pitch_stuff_fits <- list()
   for (yr in 2025L:2026L) {
     te_idx <- which(pitch_panel$projection_year == yr); te_sp <- pitch_panel[te_idx]
+    act_sp <- which(te_sp$has_t1_stuff == 1L)
+    act_fg <- which(te_sp$has_t1_fg_stuff == 1L)
     for (m in pitch_mets) {
-      res_sp <- fit_predict_residual_ridge(tr_sp_24, te_sp, paste0("m4_sc_", m), paste0("actual_", m), pitch_wcol[[m]], pitch_stuff_sensors, seed_val = 5050L + yr)
-      res_fg <- fit_predict_residual_ridge(tr_fg_24, te_sp, paste0("m4_sc_", m), paste0("actual_", m), pitch_wcol[[m]], pitch_fg_stuff_sensors, seed_val = 6060L + yr)
-      pitch_panel[te_idx, (paste0("m4_stuff_", m))   := fifelse(te_sp$has_t1_stuff == 1L,    res_sp$pred, te_sp[[paste0("m4_sc_", m)]])]
-      pitch_panel[te_idx, (paste0("m4_fgstuff_", m)) := fifelse(te_sp$has_t1_fg_stuff == 1L, res_fg$pred, te_sp[[paste0("m4_sc_", m)]])]
+      base_v <- te_sp[[paste0("m4_sc_", m)]]
+      res_sp <- fit_predict_residual_ridge(tr_sp_24, te_sp[act_sp], paste0("m4_sc_", m), paste0("actual_", m), pitch_wcol[[m]], pitch_stuff_sensors, seed_val = 5050L + yr)
+      res_fg <- fit_predict_residual_ridge(tr_fg_24, te_sp[act_fg], paste0("m4_sc_", m), paste0("actual_", m), pitch_wcol[[m]], pitch_fg_stuff_sensors, seed_val = 6060L + yr)
+      tot_s2_imp_tr <- tot_s2_imp_tr + res_sp$n_imp_tr + res_fg$n_imp_tr
+      tot_s2_imp_te <- tot_s2_imp_te + res_sp$n_imp_te + res_fg$n_imp_te
+      out_sp <- base_v; out_sp[act_sp] <- res_sp$pred
+      out_fg <- base_v; out_fg[act_fg] <- res_fg$pred
+      pitch_panel[te_idx, (paste0("m4_stuff_", m))   := out_sp]
+      pitch_panel[te_idx, (paste0("m4_fgstuff_", m)) := out_fg]
       if (yr == 2025L) pitch_stuff_fits[[m]] <- list(coef = res_sp$coef, mu_vec = res_sp$mu_vec)
     }
   }
+  cat(sprintf("   Stage-2 Residual Ridge total imputed cells (active sensor slices): train=%d, test=%d\n", tot_s2_imp_tr, tot_s2_imp_te))
 
   for (m in pitch_mets) {
     pitch_panel[, paste0("proj_", m) := fifelse(
@@ -1542,12 +1557,14 @@ run_exp004 <- function() {
     by = "pitcher_mlbam", all.x = TRUE
   )
   tr_sp_25_pure <- pitch_panel[projection_year == 2025L & !is.na(actual_tbf) & actual_tbf >= 50 & has_t1_stuff == 1L]
-  res_p26_k_pure  <- fit_predict_residual_ridge(tr_sp_25_pure, p26_oos, "m4_sc_k_pct",  "actual_k_pct",  "actual_tbf", pitch_stuff_sensors, seed_val = 7071L)
-  res_p26_bb_pure <- fit_predict_residual_ridge(tr_sp_25_pure, p26_oos, "m4_sc_bb_pct", "actual_bb_pct", "actual_tbf", pitch_stuff_sensors, seed_val = 7072L)
-  p26_oos[, `:=`(
-    m4_stuff_pureoos_k_pct  = fifelse(has_t1_stuff == 1L, res_p26_k_pure$pred, m4_sc_k_pct),
-    m4_stuff_pureoos_bb_pct = fifelse(has_t1_stuff == 1L, res_p26_bb_pure$pred, m4_sc_bb_pct)
-  )]
+  act_p26 <- which(p26_oos$has_t1_stuff == 1L)
+  res_p26_k_pure  <- fit_predict_residual_ridge(tr_sp_25_pure, p26_oos[act_p26], "m4_sc_k_pct",  "actual_k_pct",  "actual_tbf", pitch_stuff_sensors, seed_val = 7071L)
+  res_p26_bb_pure <- fit_predict_residual_ridge(tr_sp_25_pure, p26_oos[act_p26], "m4_sc_bb_pct", "actual_bb_pct", "actual_tbf", pitch_stuff_sensors, seed_val = 7072L)
+  cat(sprintf("   Track 4 PureOOSCal Stage-2 imputed cells: train=%d, test=%d\n",
+              res_p26_k_pure$n_imp_tr + res_p26_bb_pure$n_imp_tr, res_p26_k_pure$n_imp_te + res_p26_bb_pure$n_imp_te))
+  out_k_p <- p26_oos$m4_sc_k_pct;  out_k_p[act_p26]  <- res_p26_k_pure$pred
+  out_b_p <- p26_oos$m4_sc_bb_pct; out_b_p[act_p26]  <- res_p26_bb_pure$pred
+  p26_oos[, `:=`(m4_stuff_pureoos_k_pct = out_k_p, m4_stuff_pureoos_bb_pct = out_b_p)]
 
   b26_oos <- merge(
     bat_panel[projection_year == 2026L],

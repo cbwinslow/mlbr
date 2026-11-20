@@ -188,7 +188,7 @@
     "tier": 2,
     "tier_name": "Level 2: Player Projections",
     "status": "VALIDATED",
-    "updated_at": "2026-11-19 09:14:22 UTC",
+    "updated_at": "2026-11-20 00:15:41 UTC",
     "summary": "Built audit-hardened Tier 2 chronological true-talent projection engine for MLB pitchers and batters across 2002-2027 (10-year rolling Tango Marcel vs. Midpoint Delta-Method Aging 2016-2025, 7-year Statcast Physics 2019-2025, locked 2024->2025 FanGraphs OOS with Stage-2 Residual mlbr Stuff+ and Hawk-Eye Bat Tracking, and secondary 2025->2026 Regular-Season Statcast OOS). Introduced Pulled Air-Ball%, Zone-Chase Selectivity (Z-O Swing%, SEAGER-inspired proxy), Sweet-Spot%, Fastball Velocity Momentum, sum-before-shrink seasonal PVI, and exposure-calibrated 80% uncertainty bands.",
     "hypotheses": [
       "Era-adjusted sum-before-divide Tango Marcel with component-specific pre-2016 reliability M strictly beats naive prior-year persistence across every pitching and batting metric.",

@@ -34,11 +34,12 @@
     - `02_platoon_physics.qmd`: Study 02 — 4-Quadrant Platoon Physics, break symmetry, and PVI.
     - `03_tunneling_stuff_plus.qmd`: Study 03 — Exact commit-point pitch tunneling (`v_statcast_tunneling`), Stuff+/Location+/Pitching+, and stabilization curves.
     - `04_player_projections.qmd`: Study 04 — Tier 2 Chronological True-Talent Player Projections (Marcel, Zero-Sum Delta-Method Aging, Stage-2 Residual Physics & 80% Uncertainty Bands).
+  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab04`).
 - Build command: `quarto render site/` from project root.
 
 ## Verification
 - Test compilation: `cd /mnt/storage/Rprojects/mlbr && quarto render site/` must execute with exit code 0.
-- Verify output: Check that `/mnt/storage/Rprojects/mlbr/docs/index.html` and analysis HTML files exist and render without markdown/code syntax errors.
+- Verify output: Check that `/mnt/storage/Rprojects/mlbr/site/docs/index.html` and analysis HTML files exist and render without markdown/code syntax errors.
 
 ## Child DOX Index
 None.
