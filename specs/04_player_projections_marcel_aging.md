@@ -302,3 +302,22 @@ To expand how `mlbr` measures true-talent player performance beyond standard box
 - **Midpoint Delta-Method Spline & Linear Boundary Extrapolation:** Splines fit against exact transition midpoint `age_mid = age - 0.5` (`knots = c(24.5, 30.5)`) with linear marginal-slope extrapolation below age 21 and above age 39 (preventing zero-sum aging sign inversions on age 40+ veterans).
 - **Sum-Before-Shrink Multi-Year PVI & Dedicated Sensor Masks:** Pools raw seasonal `PVI_xwoba` / `PVI_csw` across lags weighted by `w_yr * pvi_n_eff` before single-pass shrinkage (`M = 800`), and isolates `Ref_FG_StuffPlus` on its own `has_t1_fg_stuff` availability mask.
 - **Single-Pass Live `2027` Bayesian Updates:** Applies Stage-2 residual `Stuff+` updates (centered on training `mu_vec`) and 1-year zero-sum aging strictly once; re-centers 2026 Statcast batter `wOBA`/`OBP`/`SLG`/`ISO` to 2025 FanGraphs scale; retains injured 2026 players with explicit `played_2026` provenance flag.
+
+### 7.3 Level 2.5 Decomposed Pitching+ & Batter Process Engine Integration (Study 05)
+- **Markov-Decomposed Pitching+ Priors (`decomp_stuff_plus`, `decomp_loc_plus`, `decomp_pitch_plus`, `decomp_ptun_plus`):**
+  Integrates 5-head decomposed physical sensors (`p(called_strike)`, `p(swing)`, `p(whiff | swing)`, `p(foul | contact)`, `E[xwOBA | BIP]`) from Study 05 to isolate pure command and pitcher decision-making independent of base-out variance.
+- **Batter Process Engine Priors (`decision_plus`, `bat_control_plus`, `contact_plus`, `batter_process_plus`):**
+  Integrates pitch-level swing decisions (take/swing equity relative to count and pitch quality), bat control (squared-up contact rate), and pure contact efficiency from Study 05.
+- **Harmonized Sensor Mask Protocol:**
+  Both training (`tr_sp_all`) and evaluation cohorts are harmonized on `(has_t1_stuff == 1L | has_t1_decomp == 1L)` ensuring symmetric model coverage across all modern Statcast eras without sensor dropouts.
+
+### 7.4 Full-Spectrum True-Talent WAR Accounting & Defensive Run Isolation
+- **Pure Fielding vs Positional Runs:**
+  In FanGraphs accounting, $\text{Defense} = \text{Fielding} + \text{Positional}$. To prevent double-counting positional runs while honoring exact FanGraphs WAR accounting, the model extracts pure fielding runs `b.Fielding AS fld_runs` and projects `proj_fld_runs`, `proj_pos_runs`, and `proj_bsr_runs` independently via playing-time-weighted Marcel shrinkage ($M = 1200\text{ PA}$ for fielding, $M = 300\text{ PA}$ for position, $M = 600\text{ PA}$ for baserunning).
+- **Exact True-Talent WAR Formulation:**
+  $$\text{proj\_def\_runs} = \text{proj\_fld\_runs} + \text{proj\_pos\_runs}$$
+  $$\text{proj\_war} = \frac{\text{proj\_wraa} + \text{proj\_bsr\_runs} + \text{proj\_fld\_runs} + \text{proj\_pos\_runs} + \text{proj\_repl\_runs}}{9.77}$$
+  $$\text{proj\_repl\_runs} = \left(\frac{\text{proj\_pa}}{600}\right) \times 20.0, \qquad \text{proj\_wraa} = \left(\frac{\text{proj\_woba} - \mu_{\text{lg}}^{\text{wOBA}}}{1.15}\right) \times \text{proj\_pa}$$
+- **Pitcher True-Talent WAR:**
+  $$\text{proj\_rar} = \left(\mu_{\text{lg}}^{\text{ERA}} - \text{proj\_fip} + \text{Role\_Adj}\right) \times \frac{\text{proj\_ip}}{9.0}, \qquad \text{proj\_war} = \frac{\text{proj\_rar}}{9.77}$$
+  where $\text{Role\_Adj} = +0.38\text{ runs/9}$ for Starting Pitchers, $+0.47\text{ runs/9}$ for Relief Pitchers.

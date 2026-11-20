@@ -469,7 +469,12 @@ run_exp004 <- function() {
       CAST(b.AvgBatSpeed AS DOUBLE) AS avg_bat_speed, CAST(b.FastSwing_pct AS DOUBLE) AS fast_swing_pct,
       CAST(b.SwingLength AS DOUBLE) AS swing_length,
       CAST(b.SquaredUpSwing_pct AS DOUBLE) AS squared_up_swing_pct,
-      CAST(b.BlastSwing_pct AS DOUBLE) AS blast_swing_pct
+      CAST(b.BlastSwing_pct AS DOUBLE) AS blast_swing_pct,
+      CAST(b.Fielding AS DOUBLE) AS fld_runs,
+      CAST(b.Defense AS DOUBLE) AS def_runs,
+      CAST(b.wBsR AS DOUBLE) AS bsr_runs,
+      CAST(b.\"Positional\" AS DOUBLE) AS pos_runs,
+      CAST(b.WAR AS DOUBLE) AS fg_war
     FROM v_fangraphs_bat b
     LEFT JOIN cw ON CAST(b.xMLBAMID AS INTEGER) = CAST(cw.key_mlbam AS INTEGER)
     WHERE b.Season BETWEEN 2002 AND 2025 AND b.PA > 0
@@ -674,16 +679,50 @@ run_exp004 <- function() {
   fg_pitch <- merge(fg_pitch,
                     sc_spray_pitch[, .(game_year, pitcher_mlbam, n_bip_allowed_spray, pulled_air_allowed_pct)],
                     by = c("game_year", "pitcher_mlbam"), all.x = TRUE)
+  decomp_p_path <- file.path(processed_dir, "pitcher_decomp_pitching_plus.parquet")
+  assert_true(file.exists(decomp_p_path), "Missing Gold pitcher_decomp_pitching_plus.parquet")
+  gold_decomp_p <- as.data.table(arrow::read_parquet(decomp_p_path))
+  setnames(gold_decomp_p, "pitcher", "pitcher_mlbam")
+  gold_decomp_p[, `:=`(pitcher_mlbam = as.integer(pitcher_mlbam), game_year = as.integer(game_year))]
+  assert_true(all(gold_decomp_p[game_year <= 2023L]$eval_split == "train_insample"), "decomp eval_split violation 2020-2023")
+  assert_true(all(gold_decomp_p[game_year == 2024L]$eval_split == "val_calibration"), "decomp eval_split violation 2024")
+  assert_true(all(gold_decomp_p[game_year >= 2025L]$eval_split == "test_oos"), "decomp eval_split violation 2025-2026")
+
+  bat_proc_path <- file.path(processed_dir, "batter_process_metrics.parquet")
+  assert_true(file.exists(bat_proc_path), "Missing Gold batter_process_metrics.parquet")
+  gold_bat_proc <- as.data.table(arrow::read_parquet(bat_proc_path))
+  setnames(gold_bat_proc, "batter", "batter_mlbam")
+  gold_bat_proc[, `:=`(batter_mlbam = as.integer(batter_mlbam), game_year = as.integer(game_year))]
+  assert_true(all(gold_bat_proc[game_year <= 2023L]$eval_split == "train_insample"), "process eval_split violation 2020-2023")
+  assert_true(all(gold_bat_proc[game_year == 2024L]$eval_split == "val_calibration"), "process eval_split violation 2024")
+  assert_true(all(gold_bat_proc[game_year >= 2025L]$eval_split == "test_oos"), "process eval_split violation 2025-2026")
+
+  fg_pitch <- merge(fg_pitch,
+                    gold_decomp_p[, .(game_year, pitcher_mlbam,
+                                      decomp_stuff_plus, decomp_location_plus,
+                                      decomp_pitching_plus, decomp_pitching_tunnel_plus,
+                                      decomp_n_pitches = n_pitches)],
+                    by = c("game_year", "pitcher_mlbam"), all.x = TRUE)
   fg_pitch <- merge(fg_pitch,
                     gold_sp[, .(game_year, pitcher_mlbam, stuff_plus, location_plus, pitching_plus,
                                 pitching_tunnel_plus, mean_velo_mph, agg_break_tunnel_ratio,
                                 sp_n_pitches = n_pitches, sp_eval_split = eval_split)],
                     by = c("game_year", "pitcher_mlbam"), all.x = TRUE)
   fg_bat <- merge(fg_bat,
+                  gold_bat_proc[, .(game_year, batter_mlbam,
+                                    decision_plus, bat_control_plus,
+                                    contact_plus, batter_process_plus,
+                                    bp_n_pitches = n_pitches)],
+                  by = c("game_year", "batter_mlbam"), all.x = TRUE)
+  fg_bat <- merge(fg_bat,
                   sc_spray_bat[, .(game_year, batter_mlbam, n_bip_spray, pulled_air_pct, sweet_spot_pct)],
                   by = c("game_year", "batter_mlbam"), all.x = TRUE)
 
   # Fail-fast join-rate assertions across all Statcast/Gold joins
+  decomp_join_rate <- fg_pitch[game_year >= 2020L & tbf >= 50, mean(!is.na(decomp_location_plus))]
+  proc_join_rate   <- fg_bat[game_year >= 2020L & pa >= 50, mean(!is.na(decision_plus))]
+  assert_true(decomp_join_rate > 0.995 && proc_join_rate > 0.995,
+              sprintf("Decomp/Process join-rate gate failed: decomp=%.4f proc=%.4f", decomp_join_rate, proc_join_rate))
   sp_join_rate   <- fg_pitch[game_year >= 2020L & tbf >= 50, mean(!is.na(stuff_plus))]
   pvi_join_rate  <- fg_pitch[game_year >= 2015L & tbf >= 50, mean(!is.na(sc_n_pitches))]
   pspr_join_rate <- fg_pitch[game_year >= 2015L & tbf >= 50, mean(!is.na(pulled_air_allowed_pct))]
@@ -749,7 +788,11 @@ run_exp004 <- function() {
     lg_batspeed   = w_mean_safe(avg_bat_speed, pa),
     lg_blast      = w_mean_safe(blast_swing_pct, pa),
     lg_sq_swing   = w_mean_safe(squared_up_swing_pct, pa),
-    lg_swing_len  = w_mean_safe(swing_length, pa)
+    lg_swing_len  = w_mean_safe(swing_length, pa),
+    lg_fld_runs   = w_mean_safe(fld_runs / pmax(pa, 1), pa),
+    lg_def_runs   = w_mean_safe(def_runs / pmax(pa, 1), pa),
+    lg_bsr_runs   = w_mean_safe(bsr_runs / pmax(pa, 1), pa),
+    lg_pos_runs   = w_mean_safe(pos_runs / pmax(pa, 1), pa)
   ), by = game_year]
 
   fg_pitch <- merge(fg_pitch, lg_pitch, by = c("game_year", "role"), all.x = TRUE)
@@ -907,7 +950,12 @@ run_exp004 <- function() {
       t1_tunnel_raw = fifelse(any(lag_k == 1L & is.finite(pitching_tunnel_plus)), pitching_tunnel_plus[lag_k == 1L][1], NA_real_),
       t1_fg_stuff   = fifelse(any(lag_k == 1L & is.finite(fg_stuff_plus)), fg_stuff_plus[lag_k == 1L][1], NA_real_),
       t1_fg_loc     = fifelse(any(lag_k == 1L & is.finite(fg_location_plus)), fg_location_plus[lag_k == 1L][1], NA_real_),
-      t1_fg_pitch   = fifelse(any(lag_k == 1L & is.finite(fg_pitching_plus)), fg_pitching_plus[lag_k == 1L][1], NA_real_)
+      t1_fg_pitch   = fifelse(any(lag_k == 1L & is.finite(fg_pitching_plus)), fg_pitching_plus[lag_k == 1L][1], NA_real_),
+      t1_decomp_pitches   = sum(fifelse(lag_k == 1L & is.finite(decomp_location_plus), decomp_n_pitches, 0), na.rm = TRUE),
+      t1_decomp_stuff_raw = fifelse(any(lag_k == 1L & is.finite(decomp_stuff_plus)), decomp_stuff_plus[lag_k == 1L][1], NA_real_),
+      t1_decomp_loc_raw   = fifelse(any(lag_k == 1L & is.finite(decomp_location_plus)), decomp_location_plus[lag_k == 1L][1], NA_real_),
+      t1_decomp_pitch_raw = fifelse(any(lag_k == 1L & is.finite(decomp_pitching_plus)), decomp_pitching_plus[lag_k == 1L][1], NA_real_),
+      t1_decomp_ptun_raw  = fifelse(any(lag_k == 1L & is.finite(decomp_pitching_tunnel_plus)), decomp_pitching_tunnel_plus[lag_k == 1L][1], NA_real_)
     ), by = pitcher_mlbam]
 
     agg[, `:=`(
@@ -965,7 +1013,12 @@ run_exp004 <- function() {
       fg_stuff_t1     = 100.0 + fifelse(is.finite(t1_fg_stuff),   (t1_fg_stuff   - 100.0) * (t1_fg_pitches / (t1_fg_pitches + 250.0)), 0.0),
       fg_loc_t1       = 100.0 + fifelse(is.finite(t1_fg_loc),     (t1_fg_loc     - 100.0) * (t1_fg_pitches / (t1_fg_pitches + 450.0)), 0.0),
       fg_pitch_t1     = 100.0 + fifelse(is.finite(t1_fg_pitch),   (t1_fg_pitch   - 100.0) * (t1_fg_pitches / (t1_fg_pitches + 300.0)), 0.0),
+      decomp_stuff_plus_t1 = 100.0 + fifelse(is.finite(t1_decomp_stuff_raw), (t1_decomp_stuff_raw - 100.0) * (t1_decomp_pitches / (t1_decomp_pitches + 250.0)), 0.0),
+      decomp_loc_plus_t1   = 100.0 + fifelse(is.finite(t1_decomp_loc_raw),   (t1_decomp_loc_raw   - 100.0) * (t1_decomp_pitches / (t1_decomp_pitches + 350.0)), 0.0),
+      decomp_pitch_plus_t1 = 100.0 + fifelse(is.finite(t1_decomp_pitch_raw), (t1_decomp_pitch_raw - 100.0) * (t1_decomp_pitches / (t1_decomp_pitches + 250.0)), 0.0),
+      decomp_ptun_plus_t1  = 100.0 + fifelse(is.finite(t1_decomp_ptun_raw),  (t1_decomp_ptun_raw  - 100.0) * (t1_decomp_pitches / (t1_decomp_pitches + 250.0)), 0.0),
       has_t1_stuff    = as.integer(is.finite(t1_stuff_raw)),
+      has_t1_decomp   = as.integer(is.finite(t1_decomp_loc_raw)),
       has_t1_fg_stuff = as.integer(is.finite(t1_fg_stuff))
     )]
 
@@ -1088,6 +1141,19 @@ run_exp004 <- function() {
       w_pull_air    = sum(w_yr * fifelse(is.finite(pulled_air_pct) & is.finite(lg_pull_air), n_bip_spray, 0)),
       ex_sweet      = sum(w_yr * n_bip_spray * (sweet_spot_pct - lg_sweet), na.rm = TRUE),
       w_sweet       = sum(w_yr * fifelse(is.finite(sweet_spot_pct) & is.finite(lg_sweet), n_bip_spray, 0)),
+      ex_fld_runs = sum(w_yr * pa * (fld_runs / pa - lg_fld_runs), na.rm = TRUE),
+      w_fld_runs  = sum(w_yr * pa * as.numeric(is.finite(fld_runs))),
+      ex_def_runs = sum(w_yr * pa * (def_runs / pa - lg_def_runs), na.rm = TRUE),
+      w_def_runs  = sum(w_yr * pa * as.numeric(is.finite(def_runs))),
+      ex_bsr_runs = sum(w_yr * pa * (bsr_runs / pa - lg_bsr_runs), na.rm = TRUE),
+      w_bsr_runs  = sum(w_yr * pa * as.numeric(is.finite(bsr_runs))),
+      ex_pos_runs = sum(w_yr * pa * (pos_runs / pa - lg_pos_runs), na.rm = TRUE),
+      w_pos_runs  = sum(w_yr * pa * as.numeric(is.finite(pos_runs))),
+      t1_bp_pitches       = sum(fifelse(lag_k == 1L & is.finite(decision_plus), bp_n_pitches, 0), na.rm = TRUE),
+      t1_decision_raw     = fifelse(any(lag_k == 1L & is.finite(decision_plus)), decision_plus[lag_k == 1L][1], NA_real_),
+      t1_bat_ctrl_raw     = fifelse(any(lag_k == 1L & is.finite(bat_control_plus)), bat_control_plus[lag_k == 1L][1], NA_real_),
+      t1_contact_raw      = fifelse(any(lag_k == 1L & is.finite(contact_plus)), contact_plus[lag_k == 1L][1], NA_real_),
+      t1_process_raw      = fifelse(any(lag_k == 1L & is.finite(batter_process_plus)), batter_process_plus[lag_k == 1L][1], NA_real_),
       t1_batspeed   = fifelse(any(lag_k == 1L & is.finite(avg_bat_speed)), avg_bat_speed[lag_k == 1L][1], NA_real_),
       t1_blast      = fifelse(any(lag_k == 1L & is.finite(blast_swing_pct)), blast_swing_pct[lag_k == 1L][1], NA_real_),
       t1_sq_swing   = fifelse(any(lag_k == 1L & is.finite(squared_up_swing_pct)), squared_up_swing_pct[lag_k == 1L][1], NA_real_),
@@ -1142,6 +1208,15 @@ run_exp004 <- function() {
       zone_chase_prior = a_zone_chase + ex_zone_chase / (w_zone_chase + 350),
       pull_air_prior   = a_pull_air   + ex_pull_air   / (w_pull_air + 350),
       sweet_prior      = a_sweet      + ex_sweet      / (w_sweet + 450),
+      decision_plus_t1    = 100.0 + fifelse(is.finite(t1_decision_raw), (t1_decision_raw - 100.0) * (t1_bp_pitches / (t1_bp_pitches + 250.0)), 0.0),
+      bat_control_plus_t1 = 100.0 + fifelse(is.finite(t1_bat_ctrl_raw), (t1_bat_ctrl_raw - 100.0) * (t1_bp_pitches / (t1_bp_pitches + 250.0)), 0.0),
+      contact_plus_t1     = 100.0 + fifelse(is.finite(t1_contact_raw),  (t1_contact_raw  - 100.0) * (t1_bp_pitches / (t1_bp_pitches + 300.0)), 0.0),
+      process_plus_t1     = 100.0 + fifelse(is.finite(t1_process_raw),  (t1_process_raw  - 100.0) * (t1_bp_pitches / (t1_bp_pitches + 250.0)), 0.0),
+      has_t1_process      = as.integer(is.finite(t1_decision_raw)),
+      proj_fld_runs       = (lg_anchor$lg_fld_runs + ex_fld_runs / (w_fld_runs + 1200.0)) * proj_pa,
+      proj_bsr_runs       = (lg_anchor$lg_bsr_runs + ex_bsr_runs / (w_bsr_runs + 600.0)) * proj_pa,
+      proj_pos_runs       = (lg_anchor$lg_pos_runs + ex_pos_runs / (w_pos_runs + 300.0)) * proj_pa,
+      proj_def_runs       = (lg_anchor$lg_fld_runs + ex_fld_runs / (w_fld_runs + 1200.0)) * proj_pa + (lg_anchor$lg_pos_runs + ex_pos_runs / (w_pos_runs + 300.0)) * proj_pa,
       batspeed_t1      = a_batspeed   + fifelse(is.finite(t1_batspeed),  (t1_batspeed  - a_batspeed)  * (pa_t1 / (pa_t1 + 50)),  0.0),
       blast_t1         = a_blast      + fifelse(is.finite(t1_blast),     (t1_blast     - a_blast)     * (pa_t1 / (pa_t1 + 150)), 0.0),
       sq_swing_t1      = a_sq_swing   + fifelse(is.finite(t1_sq_swing),  (t1_sq_swing  - a_sq_swing)  * (pa_t1 / (pa_t1 + 150)), 0.0),
@@ -1421,10 +1496,11 @@ run_exp004 <- function() {
     "gb_prior", "hh_prior", "barrel_prior", "xera_prior",
     "pull_air_prior", "pvi_xwoba_prior", "pvi_csw_prior", "age_proj", "age_over28"
   )
-  pitch_stuff_sensors    <- c("stuff_plus_t1", "loc_plus_t1", "pitch_plus_t1", "tunnel_plus_t1")
+  pitch_stuff_sensors    <- c("stuff_plus_t1", "decomp_loc_plus_t1", "decomp_pitch_plus_t1", "decomp_ptun_plus_t1", "tunnel_plus_t1")
   pitch_fg_stuff_sensors <- c("fg_stuff_t1", "fg_loc_t1", "fg_pitch_t1")
+  bat_process_sensors    <- c("decision_plus_t1", "bat_control_plus_t1", "contact_plus_t1", "process_plus_t1")
 
-  for (m in bat_mets)   bat_panel[, c(paste0("m4_", m), paste0("m4_battrack_", m)) := NA_real_]
+  for (m in bat_mets)   bat_panel[, c(paste0("m4_", m), paste0("m4_process_", m), paste0("m4_battrack_", m)) := NA_real_]
   for (m in pitch_mets) pitch_panel[, c(paste0("m4_sc_", m), paste0("m4_stuff_", m), paste0("m4_fgstuff_", m)) := NA_real_]
 
   tot_imp_tr <- 0L; tot_imp_te <- 0L
@@ -1447,30 +1523,53 @@ run_exp004 <- function() {
   cat(sprintf("   Stage-1 Ridge total imputed cells across all folds/metrics: train=%d, test=%d\n", tot_imp_tr, tot_imp_te))
 
   tot_s2_imp_tr <- 0L; tot_s2_imp_te <- 0L
+
+  # Batter Stage-2 Process Ridge across 2021-2026
+  tr_bp_all <- bat_panel[projection_year >= 2021L & !is.na(actual_pa) & actual_pa >= 50 & has_t1_process == 1L]
+  for (yr in 2022L:2026L) {
+    tr_bp <- tr_bp_all[projection_year <= (yr - 1L)]
+    te_idx <- which(bat_panel$projection_year == yr); te_bp <- bat_panel[te_idx]
+    act_bp <- which(te_bp$has_t1_process == 1L)
+    if (nrow(tr_bp) >= 50L && length(act_bp) > 0L) {
+      for (m in c("woba", "iso", "k_pct", "bb_pct")) {
+        base_v <- te_bp[[paste0("m4_", m)]]
+        res_bp <- fit_predict_residual_ridge(tr_bp, te_bp[act_bp], paste0("m4_", m), paste0("actual_", m),
+                                             bat_wcol[[m]], bat_process_sensors, seed_val = 3030L + yr)
+        tot_s2_imp_tr <- tot_s2_imp_tr + res_bp$n_imp_tr; tot_s2_imp_te <- tot_s2_imp_te + res_bp$n_imp_te
+        out_v <- base_v; out_v[act_bp] <- res_bp$pred
+        bat_panel[te_idx, (paste0("m4_process_", m)) := out_v]
+      }
+    }
+  }
+
   tr_bt <- bat_panel[projection_year == 2024L & !is.na(actual_pa) & actual_pa >= 50 & has_t1_battrack == 1L]
   for (yr in 2025L:2026L) {
     te_idx <- which(bat_panel$projection_year == yr); te_bt <- bat_panel[te_idx]
     act_bt <- which(te_bt$has_t1_battrack == 1L)
     for (m in c("woba", "iso", "k_pct", "bb_pct")) {
-      base_v <- te_bt[[paste0("m4_", m)]]
-      res_bt <- fit_predict_residual_ridge(tr_bt, te_bt[act_bt], paste0("m4_", m), paste0("actual_", m), bat_wcol[[m]], bat_sensor_cols, seed_val = 4040L + yr)
+      base_v <- fifelse(is.finite(te_bt[[paste0("m4_process_", m)]]), te_bt[[paste0("m4_process_", m)]], te_bt[[paste0("m4_", m)]])
+      res_bt <- fit_predict_residual_ridge(tr_bt, te_bt[act_bt], paste0("m4_", m), paste0("actual_", m),
+                                           bat_wcol[[m]], bat_sensor_cols, seed_val = 4040L + yr)
       tot_s2_imp_tr <- tot_s2_imp_tr + res_bt$n_imp_tr; tot_s2_imp_te <- tot_s2_imp_te + res_bt$n_imp_te
       out_v <- base_v; out_v[act_bt] <- res_bt$pred
       bat_panel[te_idx, (paste0("m4_battrack_", m)) := out_v]
     }
   }
 
-  tr_sp_24 <- pitch_panel[projection_year == 2024L & !is.na(actual_tbf) & actual_tbf >= 50 & has_t1_stuff == 1L]
-  tr_fg_24 <- pitch_panel[projection_year == 2024L & !is.na(actual_tbf) & actual_tbf >= 50 & has_t1_fg_stuff == 1L]
+  tr_sp_all <- pitch_panel[projection_year >= 2021L & !is.na(actual_tbf) & actual_tbf >= 50 & (has_t1_stuff == 1L | has_t1_decomp == 1L)]
+  tr_fg_24  <- pitch_panel[projection_year == 2024L & !is.na(actual_tbf) & actual_tbf >= 50 & has_t1_fg_stuff == 1L]
   pitch_stuff_fits <- list()
   for (yr in 2025L:2026L) {
+    tr_sp <- tr_sp_all[projection_year <= (yr - 1L)]
     te_idx <- which(pitch_panel$projection_year == yr); te_sp <- pitch_panel[te_idx]
-    act_sp <- which(te_sp$has_t1_stuff == 1L)
+    act_sp <- which(te_sp$has_t1_stuff == 1L | te_sp$has_t1_decomp == 1L)
     act_fg <- which(te_sp$has_t1_fg_stuff == 1L)
     for (m in pitch_mets) {
       base_v <- te_sp[[paste0("m4_sc_", m)]]
-      res_sp <- fit_predict_residual_ridge(tr_sp_24, te_sp[act_sp], paste0("m4_sc_", m), paste0("actual_", m), pitch_wcol[[m]], pitch_stuff_sensors, seed_val = 5050L + yr)
-      res_fg <- fit_predict_residual_ridge(tr_fg_24, te_sp[act_fg], paste0("m4_sc_", m), paste0("actual_", m), pitch_wcol[[m]], pitch_fg_stuff_sensors, seed_val = 6060L + yr)
+      res_sp <- fit_predict_residual_ridge(tr_sp, te_sp[act_sp], paste0("m4_sc_", m), paste0("actual_", m),
+                                           pitch_wcol[[m]], pitch_stuff_sensors, seed_val = 5050L + yr)
+      res_fg <- fit_predict_residual_ridge(tr_fg_24, te_sp[act_fg], paste0("m4_sc_", m), paste0("actual_", m),
+                                           pitch_wcol[[m]], pitch_fg_stuff_sensors, seed_val = 6060L + yr)
       tot_s2_imp_tr <- tot_s2_imp_tr + res_sp$n_imp_tr + res_fg$n_imp_tr
       tot_s2_imp_te <- tot_s2_imp_te + res_sp$n_imp_te + res_fg$n_imp_te
       out_sp <- base_v; out_sp[act_sp] <- res_sp$pred
@@ -1490,9 +1589,27 @@ run_exp004 <- function() {
   }
   pitch_panel[, proj_fip_comp := (13.0 * proj_hr9 + 3.0 * (proj_bb_pct + m_hbp_pct) * anchor_tbf_ip * 9.0 -
                                   2.0 * proj_k_pct * anchor_tbf_ip * 9.0) / 9.0 + anchor_cfip]
-  for (m in bat_mets) {
+  pitch_panel[, `:=`(
+    proj_rar = (b0_era - proj_fip + fifelse(proj_role == "SP", 0.38, 0.47)) * (proj_ip / 9.0)
+  )]
+  pitch_panel[, proj_war := proj_rar / 9.77]
+
+  for (m in c("woba", "iso", "k_pct", "bb_pct")) {
+    bat_panel[, paste0("proj_", m) := fifelse(
+      is.finite(get(paste0("m4_battrack_", m))), get(paste0("m4_battrack_", m)),
+      fifelse(is.finite(get(paste0("m4_process_", m))), get(paste0("m4_process_", m)),
+      fifelse(is.finite(get(paste0("m4_", m))), get(paste0("m4_", m)), get(paste0("b3_", m))))
+    )]
+  }
+  for (m in setdiff(bat_mets, c("woba", "iso", "k_pct", "bb_pct"))) {
     bat_panel[, paste0("proj_", m) := fifelse(is.finite(get(paste0("m4_", m))), get(paste0("m4_", m)), get(paste0("b3_", m)))]
   }
+  bat_panel[, `:=`(
+    proj_wraa = ((proj_woba - b0_woba) / 1.15) * proj_pa,
+    proj_repl_runs = (proj_pa / 600.0) * 20.0
+  )]
+  bat_panel[, proj_war := (proj_wraa + proj_bsr_runs + proj_fld_runs + proj_pos_runs + proj_repl_runs) / 9.77]
+  bat_panel[, proj_def_runs := proj_fld_runs + proj_pos_runs]
 
   # ============================================================================
   # 5C. EXPOSURE-CALIBRATED 80% UNCERTAINTY BANDS (STRICTLY <= 2024)
@@ -1556,8 +1673,8 @@ run_exp004 <- function() {
                                       sc26_xwoba = sc_xwoba_allowed)],
     by = "pitcher_mlbam", all.x = TRUE
   )
-  tr_sp_25_pure <- pitch_panel[projection_year == 2025L & !is.na(actual_tbf) & actual_tbf >= 50 & has_t1_stuff == 1L]
-  act_p26 <- which(p26_oos$has_t1_stuff == 1L)
+  tr_sp_25_pure <- pitch_panel[projection_year == 2025L & !is.na(actual_tbf) & actual_tbf >= 50 & (has_t1_stuff == 1L | has_t1_decomp == 1L)]
+  act_p26 <- which(p26_oos$has_t1_stuff == 1L | p26_oos$has_t1_decomp == 1L)
   res_p26_k_pure  <- fit_predict_residual_ridge(tr_sp_25_pure, p26_oos[act_p26], "m4_sc_k_pct",  "actual_k_pct",  "actual_tbf", pitch_stuff_sensors, seed_val = 7071L)
   res_p26_bb_pure <- fit_predict_residual_ridge(tr_sp_25_pure, p26_oos[act_p26], "m4_sc_bb_pct", "actual_bb_pct", "actual_tbf", pitch_stuff_sensors, seed_val = 7072L)
   cat(sprintf("   Track 4 PureOOSCal Stage-2 imputed cells: train=%d, test=%d\n",
@@ -1605,6 +1722,14 @@ run_exp004 <- function() {
                sc26_hr_per_bf = sc_hr_per_bf, sc26_fbv = sc_fbv, sc26_pull_air,
                sc26_pvi_n = pvi_n_eff, sc26_pvi_xwoba = pvi_xwoba_raw, sc26_pvi_csw = pvi_csw_raw)],
     by = "pitcher_mlbam", all = TRUE
+  )
+  decomp_2026 <- gold_decomp_p[game_year == 2026L]
+  live_p27_base <- merge(
+    live_p27_base,
+    decomp_2026[, .(pitcher_mlbam, decomp26_stuff = decomp_stuff_plus, decomp26_loc = decomp_location_plus,
+                    decomp26_pitch = decomp_pitching_plus, decomp26_ptun = decomp_pitching_tunnel_plus,
+                    decomp26_n = n_pitches)],
+    by = "pitcher_mlbam", all.x = TRUE
   )
   live_p27_base <- merge(
     live_p27_base,
@@ -1666,7 +1791,9 @@ run_exp004 <- function() {
     sc26_tbf_hbp    = fifelse(played_2026 == 1L & is.finite(sc26_hbp_pct), sc26_tbf, 0.0),
     sc26_ip_hr      = fifelse(played_2026 == 1L & is.finite(sc26_hr_per_bf), sc26_tbf / anchor_tbf_ip, 0.0),
     sp26_n_clean    = fifelse(is.finite(sp26_n), sp26_n, 0.0),
+    decomp26_n_clean = fifelse(is.finite(decomp26_n), decomp26_n, fifelse(is.finite(sp26_n), sp26_n, 0.0)),
     has_t1_stuff    = as.integer(played_2026 == 1L & is.finite(sp26_stuff)),
+    has_t1_decomp   = as.integer(played_2026 == 1L & is.finite(decomp26_loc)),
     has_t1_fg_stuff = 0L,
     proj_tbf = fifelse(proj_role == "SP",
                        0.50 * fifelse(played_2026 == 1L, sc26_tbf, 0.0) + 0.10 * fifelse(is.finite(tbf_2025), tbf_2025, 0.0) + 220,
@@ -1679,6 +1806,10 @@ run_exp004 <- function() {
     loc_plus_t1    = 100.0 + fifelse(has_t1_stuff == 1L, (sp26_loc    - 100.0) * (sp26_n_clean / (sp26_n_clean + 450.0)), 0.0),
     pitch_plus_t1  = 100.0 + fifelse(has_t1_stuff == 1L, (sp26_pitch  - 100.0) * (sp26_n_clean / (sp26_n_clean + 300.0)), 0.0),
     tunnel_plus_t1 = 100.0 + fifelse(has_t1_stuff == 1L, (sp26_tunnel - 100.0) * (sp26_n_clean / (sp26_n_clean + 300.0)), 0.0),
+    decomp_stuff_plus_t1 = 100.0 + fifelse((has_t1_stuff == 1L | has_t1_decomp == 1L) & is.finite(decomp26_stuff), (decomp26_stuff - 100.0) * (decomp26_n_clean / (decomp26_n_clean + 250.0)), 0.0),
+    decomp_loc_plus_t1   = 100.0 + fifelse((has_t1_stuff == 1L | has_t1_decomp == 1L) & is.finite(decomp26_loc),   (decomp26_loc   - 100.0) * (decomp26_n_clean / (decomp26_n_clean + 350.0)), 0.0),
+    decomp_pitch_plus_t1 = 100.0 + fifelse((has_t1_stuff == 1L | has_t1_decomp == 1L) & is.finite(decomp26_pitch), (decomp26_pitch - 100.0) * (decomp26_n_clean / (decomp26_n_clean + 250.0)), 0.0),
+    decomp_ptun_plus_t1  = 100.0 + fifelse((has_t1_stuff == 1L | has_t1_decomp == 1L) & is.finite(decomp26_ptun),  (decomp26_ptun  - 100.0) * (decomp26_n_clean / (decomp26_n_clean + 250.0)), 0.0),
     fbv_prior = fifelse(played_2026 == 1L & is.finite(sc26_fbv), sc26_fbv, fifelse(is.finite(prior_fbv), prior_fbv, b0_fbv)),
     pull_air_prior = fifelse(played_2026 == 1L & is.finite(sc26_pull_air), sc26_pull_air, fifelse(is.finite(prior_pull_air), prior_pull_air, b0_pull_air)),
     pvi_xwoba_prior = fifelse(played_2026 == 1L & is.finite(sc26_pvi_xwoba) & sc26_pvi_n > 0,
@@ -1711,11 +1842,13 @@ run_exp004 <- function() {
   # Single-pass Stage-2 residual helper centered on exact training mu_vec (ZERO double-counting!)
   sp26_delta <- function(fit_obj) {
     co <- fit_obj$coef; mu <- fit_obj$mu_vec
-    d <- co[["stuff_plus_t1"]]  * (live_p27_base$stuff_plus_t1  - mu[["stuff_plus_t1"]]) +
-         co[["loc_plus_t1"]]    * (live_p27_base$loc_plus_t1    - mu[["loc_plus_t1"]]) +
-         co[["pitch_plus_t1"]]  * (live_p27_base$pitch_plus_t1  - mu[["pitch_plus_t1"]]) +
-         co[["tunnel_plus_t1"]] * (live_p27_base$tunnel_plus_t1 - mu[["tunnel_plus_t1"]])
-    fifelse(live_p27_base$has_t1_stuff == 1L, d, 0.0)
+    d <- rep(0.0, nrow(live_p27_base))
+    for (nm in names(co)) {
+      if (nm %in% names(live_p27_base) && is.finite(mu[[nm]])) {
+        d <- d + co[[nm]] * (live_p27_base[[nm]] - mu[[nm]])
+      }
+    }
+    fifelse(live_p27_base$has_t1_stuff == 1L | live_p27_base$has_t1_decomp == 1L, d, 0.0)
   }
 
   # Step 1: Unadjusted Bayesian base component updates (consistent TBF / IP scales!)
@@ -1749,8 +1882,10 @@ run_exp004 <- function() {
     proj_fip_lo80   = pmax(proj_fip - z80 * se_fip_proj, 1.50),
     proj_fip_hi80   = proj_fip + z80 * se_fip_proj,
     proj_siera_lo80 = pmax(proj_siera - z80 * se_siera_proj, 1.50),
-    proj_siera_hi80 = proj_siera + z80 * se_siera_proj
+    proj_siera_hi80 = proj_siera + z80 * se_siera_proj,
+    proj_rar        = (b0_era - proj_fip + fifelse(proj_role == "SP", 0.38, 0.47)) * (proj_ip / 9.0)
   )]
+  live_p27_base[, proj_war := proj_rar / 9.77]
 
   # --- Live 2027 Batter Projections (re-centered to FG scale, retains injured players, full OBP/SLG/ISO!) ---
   sc_b26_all <- merge(sc_bat_2026, sc_spray_bat[game_year == 2026L], by = c("game_year", "batter_mlbam"), all.x = TRUE)
@@ -1775,6 +1910,7 @@ run_exp004 <- function() {
       age_2026 = age_proj, proj_pa_26 = proj_pa, pa_2025 = pa_t1,
       prior_woba = proj_woba, prior_k_pct = proj_k_pct, prior_bb_pct = proj_bb_pct,
       prior_iso = proj_iso, prior_obp = proj_obp, prior_slg = proj_slg,
+      prior_fld = proj_fld_runs, prior_def = proj_def_runs, prior_bsr = proj_bsr_runs, prior_pos = proj_pos_runs,
       prior_xwoba = xwoba_prior, prior_hh = hh_prior, prior_ev90 = ev90_prior,
       prior_pull_air = pull_air_prior, prior_sweet = sweet_prior,
       prior_zone_chase = zone_chase_prior, prior_batspeed = batspeed_t1
@@ -1785,6 +1921,14 @@ run_exp004 <- function() {
                    sc26_hh = sc_hard_hit_pct, sc26_ev90 = sc_ev90, sc26_pull_air = pulled_air_pct,
                    sc26_sweet = sweet_spot_pct, sc26_zone_chase = sc_zone_chase, sc26_batspeed = sc_bat_speed)],
     by = "batter_mlbam", all = TRUE
+  )
+  proc_2026 <- gold_bat_proc[game_year == 2026L]
+  live_b27_base <- merge(
+    live_b27_base,
+    proc_2026[, .(batter_mlbam, proc26_dec = decision_plus, proc26_ctrl = bat_control_plus,
+                  proc26_contact = contact_plus, proc26_total = batter_process_plus,
+                  proc26_n = n_pitches)],
+    by = "batter_mlbam", all.x = TRUE
   )
   live_b27_base <- merge(live_b27_base, cw_meta, by.x = "batter_mlbam", by.y = "mlbam", all.x = TRUE)
   live_b27_base[, played_2026 := as.integer(fifelse(!is.na(sc26_pa) & sc26_pa > 0, 1L, 0L))]
@@ -1799,13 +1943,22 @@ run_exp004 <- function() {
     birth_month = fifelse(!is.na(birth_month), birth_month, cw_bm),
     last_year = fifelse(played_2026 == 1L, 2026L, 2025L),
     pa_t1 = fifelse(played_2026 == 1L, sc26_pa, 0.0),
-    has_t1_battrack = as.integer(played_2026 == 1L & is.finite(sc26_batspeed))
+    has_t1_battrack = as.integer(played_2026 == 1L & is.finite(sc26_batspeed)),
+    proj_pa = 0.50 * fifelse(played_2026 == 1L, sc26_pa, 0.0) + 0.10 * fifelse(is.finite(pa_2025), pa_2025, 0.0) + 200.0
   )]
   live_b27_base[, `:=`(
     age_proj = fifelse(!is.na(birth_year) & !is.na(birth_month),
                        2027L - birth_year - as.integer(birth_month >= 7L),
                        fifelse(is.finite(age_2026), age_2026 + 1.0, 26.0)),
-    proj_pa = 0.50 * fifelse(played_2026 == 1L, sc26_pa, 0.0) + 0.10 * fifelse(is.finite(pa_2025), pa_2025, 0.0) + 200.0,
+    decision_plus_t1    = 100.0 + fifelse(played_2026 == 1L & is.finite(proc26_dec), (proc26_dec - 100.0) * (proc26_n / (proc26_n + 250.0)), 0.0),
+    bat_control_plus_t1 = 100.0 + fifelse(played_2026 == 1L & is.finite(proc26_ctrl), (proc26_ctrl - 100.0) * (proc26_n / (proc26_n + 250.0)), 0.0),
+    contact_plus_t1     = 100.0 + fifelse(played_2026 == 1L & is.finite(proc26_contact), (proc26_contact - 100.0) * (proc26_n / (proc26_n + 300.0)), 0.0),
+    process_plus_t1     = 100.0 + fifelse(played_2026 == 1L & is.finite(proc26_total), (proc26_total - 100.0) * (proc26_n / (proc26_n + 250.0)), 0.0),
+    has_t1_process      = as.integer(played_2026 == 1L & is.finite(proc26_dec)),
+    proj_fld_runs       = fifelse(!is.na(prior_fld), (prior_fld / pmax(proj_pa_26, 50.0)) * 0.90 * proj_pa, 0.0),
+    proj_bsr_runs       = fifelse(!is.na(prior_bsr), (prior_bsr / pmax(proj_pa_26, 50.0)) * 0.90 * proj_pa, 0.0),
+    proj_pos_runs       = fifelse(!is.na(prior_pos), (prior_pos / pmax(proj_pa_26, 50.0)) * proj_pa, 0.0),
+    proj_def_runs       = fifelse(!is.na(prior_fld), (prior_fld / pmax(proj_pa_26, 50.0)) * 0.90 * proj_pa, 0.0) + fifelse(!is.na(prior_pos), (prior_pos / pmax(proj_pa_26, 50.0)) * proj_pa, 0.0),
     prior_woba_use = fifelse(is.finite(prior_woba), prior_woba, lg25_b$lg_woba),
     prior_k_use    = fifelse(is.finite(prior_k_pct), prior_k_pct, lg25_b$lg_k_pct),
     prior_bb_use   = fifelse(is.finite(prior_bb_pct), prior_bb_pct, lg25_b$lg_bb_pct),
@@ -1854,8 +2007,12 @@ run_exp004 <- function() {
   live_b27_base[, se_woba_proj := sqrt(u_b_woba$sig_skill^2 + u_b_woba$sig_noise^2 / pmax(proj_pa, 50))]
   live_b27_base[, `:=`(
     proj_woba_lo80 = pmax(proj_woba - z80 * se_woba_proj, 0.150),
-    proj_woba_hi80 = pmin(proj_woba + z80 * se_woba_proj, 0.550)
+    proj_woba_hi80 = pmin(proj_woba + z80 * se_woba_proj, 0.550),
+    proj_wraa      = ((proj_woba - lg25_b$lg_woba) / 1.15) * proj_pa,
+    proj_repl_runs = (proj_pa / 600.0) * 20.0
   )]
+  live_b27_base[, proj_war := (proj_wraa + proj_bsr_runs + proj_fld_runs + proj_pos_runs + proj_repl_runs) / 9.77]
+  live_b27_base[, proj_def_runs := proj_fld_runs + proj_pos_runs]
 
   # ============================================================================
   # 6. CHRONOLOGICAL EVALUATION TABLE (FAIL-FAST COHORT INTEGRITY)
@@ -2041,6 +2198,7 @@ run_exp004 <- function() {
     "m4_sc_fip", "m4_sc_siera", "m4_stuff_fip", "m4_stuff_siera",
     "age_delta_k_pct", "age_delta_bb_pct", "age_delta_fip", "age_delta_siera",
     "stuff_plus_t1", "loc_plus_t1", "pitch_plus_t1", "tunnel_plus_t1",
+    "decomp_stuff_plus_t1", "decomp_loc_plus_t1", "decomp_pitch_plus_t1", "decomp_ptun_plus_t1", "has_t1_decomp", "proj_war",
     "pvi_xwoba_prior", "pvi_csw_prior", "fbv_prior", "delta_fbv_prior", "pull_air_prior",
     "obs_t1_era", "obs_t1_fip", "obs_t1_siera", "b1_era", "b1_fip", "b1_siera", "b1_k_pct", "b1_bb_pct",
     "actual_tbf", "actual_ip", "actual_k_pct", "actual_bb_pct", "actual_hr9",
@@ -2063,6 +2221,8 @@ run_exp004 <- function() {
     "age_delta_woba", "age_delta_k_pct", "age_delta_bb_pct", "age_delta_iso",
     "xwoba_prior", "xwoba_gap_prior", "barrel_prior", "hh_prior", "ev90_prior",
     "pull_air_prior", "sweet_prior", "oswing_prior", "zcon_prior", "swstr_prior", "zone_chase_prior",
+    "decision_plus_t1", "bat_control_plus_t1", "contact_plus_t1", "process_plus_t1", "has_t1_process",
+    "proj_fld_runs", "proj_pos_runs", "proj_def_runs", "proj_bsr_runs", "proj_wraa", "proj_repl_runs", "proj_war",
     "batspeed_t1", "blast_t1", "obs_t1_woba", "b1_woba", "b1_k_pct", "b1_bb_pct", "b1_iso",
     "actual_pa", "actual_ab", "actual_woba", "actual_k_pct", "actual_bb_pct",
     "actual_iso", "actual_obp", "actual_slg", "eval_split", "model_version"
@@ -2078,11 +2238,11 @@ run_exp004 <- function() {
   assert_true(nrow(unique(bat_gold, by = c("projection_year", "batter_mlbam"))) == nrow(bat_gold), "Dup bat_gold key")
   for (col in c("age_proj", "proj_tbf", "proj_ip", "proj_k_pct", "proj_bb_pct", "proj_hr9",
                 "proj_fip", "proj_fip_comp", "proj_siera", "proj_era",
-                "proj_fip_lo80", "proj_fip_hi80", "proj_siera_lo80", "proj_siera_hi80")) {
+                "proj_fip_lo80", "proj_fip_hi80", "proj_siera_lo80", "proj_siera_hi80", "proj_war")) {
     assert_true(all(is.finite(pitch_gold[[col]])), sprintf("Non-finite values in pitch_gold$%s", col))
   }
   for (col in c("age_proj", "proj_pa", "proj_woba", "proj_woba_lo80", "proj_woba_hi80",
-                "proj_k_pct", "proj_bb_pct", "proj_iso", "proj_obp", "proj_slg")) {
+                "proj_k_pct", "proj_bb_pct", "proj_iso", "proj_obp", "proj_slg", "proj_war")) {
     assert_true(all(is.finite(bat_gold[[col]])), sprintf("Non-finite values in bat_gold$%s", col))
   }
   # Verify Age 40+ monotonicity (no aging inversion!)

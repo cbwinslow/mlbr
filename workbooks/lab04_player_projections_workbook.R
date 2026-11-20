@@ -125,7 +125,13 @@ run_lab04 <- function() {
 
   # Load Gold EXP-004 Tables
   proc <- file.path(lake, "data/processed")
-  pg <- as.data.frame(arrow::read_parquet(file.path(proc, "pitcher_projections_true_talent.parquet")))
+  p_path <- file.path(proc, "pitcher_projections_true_talent.parquet")
+  b_path <- file.path(proc, "batter_projections_true_talent.parquet")
+  m_path <- file.path(proc, "projections_backtest_metrics.parquet")
+  if (!file.exists(p_path) || !file.exists(b_path) || !file.exists(m_path)) {
+    stop("Missing required Gold projection parquet files in data/processed/. Please run 'Rscript models/04_player_projections_marcel_aging.R' first.")
+  }
+  pg <- as.data.frame(arrow::read_parquet(p_path))
   bg <- as.data.frame(arrow::read_parquet(file.path(proc, "batter_projections_true_talent.parquet")))
   bm <- as.data.frame(arrow::read_parquet(file.path(proc, "projections_backtest_metrics.parquet")))
 
@@ -140,6 +146,16 @@ run_lab04 <- function() {
   sp26 <- pg[pg$projection_year == 2026L & pg$proj_role == "SP" & pg$tbf_t1 >= 50 & pg$proj_tbf >= 550, ]
   sp26 <- sp26[order(sp26$proj_fip), ]
   print(head(sp26[, c("player_name", "team_prev", "age_proj", "obs_t1_era", "proj_fip", "proj_fip_lo80", "proj_fip_hi80", "stuff_plus_t1")], 8), row.names = FALSE)
+
+  cat("\nTop 5 Projected 2026 Pitchers by True-Talent WAR (with Decomposed Pitching+ Priors):\n")
+  sp_war <- pg[pg$projection_year == 2026L & pg$proj_role == "SP" & pg$tbf_t1 >= 50 & pg$proj_tbf >= 550, ]
+  sp_war <- head(sp_war[order(-sp_war$proj_war), ], 5)
+  print(sp_war[, c("player_name", "team_prev", "age_proj", "proj_ip", "proj_fip", "proj_war", "decomp_loc_plus_t1", "decomp_pitch_plus_t1")], row.names = FALSE)
+
+  cat("\nTop 5 Projected 2026 Batters by True-Talent WAR (Full-Spectrum Offense, Defense & Baserunning):\n")
+  bat_war <- bg[bg$projection_year == 2026L & bg$pa_t1 >= 50 & bg$proj_pa >= 500, ]
+  bat_war <- head(bat_war[order(-bat_war$proj_war), ], 5)
+  print(bat_war[, c("player_name", "team_prev", "age_proj", "proj_pa", "proj_woba", "proj_war", "decision_plus_t1", "proj_def_runs", "proj_bsr_runs")], row.names = FALSE)
 
   # ----------------------------------------------------------------------------
   # Part 3: Dark Cyber Uncertainty Band Diagnostic Chart (4-Asset Preservation)
@@ -173,3 +189,6 @@ run_lab04()
 # CHECKPOINT 3: Filter `pitcher_projections_true_talent.parquet` to
 #   `projection_year == 2027L & played_2026 == 0L` (injured/missed-2026 pitchers).
 #   Inspect how their 2027 projections decay by age without double-counting priors.
+# CHECKPOINT 4: Inspect `proj_war` vs `proj_woba` for batters with positive vs negative
+#   defensive runs (`proj_def_runs`). Why does an elite defensive shortstop like Bobby Witt Jr.
+#   rank near the top of True-Talent WAR despite a lower raw wOBA than pure DHs?

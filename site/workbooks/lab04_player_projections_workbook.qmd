@@ -56,6 +56,19 @@ Part 2 calculates **`Pulled Air-Ball%`** (`LA >= 10°`, spray `< -15°` RHB / `>
 
 Adding spray physics (`Pulled Air%`), `EV90`, and `Zone-Chase Selectivity (Z-O%)` slashes locked `2025` Batter `wOBA` wRMSE from `0.03215` (true Tango `B2`) to **`0.03121`** ($p_{\text{beat}} = 0.995$), while `M4_Component_FIP` slashes Pitcher `FIP` wRMSE from `0.80631` to **`0.77185`** ($p_{\text{beat}} = 0.995$).
 
+### Full-Spectrum True-Talent WAR Valuation (Level 2 Completion)
+By combining Marcel + Aging offensive projections with defensive runs (`proj_def_runs`), baserunning runs (`proj_bsr_runs`), and positional adjustments (`proj_pos_runs`), `mlbr` derives complete True-Talent WAR:
+
+$$\text{WAR}^{\text{True-Talent}} = \frac{\text{wRAA} + \text{BsR} + \text{Def} + \text{Pos} + \text{Repl}}{9.77}$$
+
+| Rank | Batter (`2026`) | Pos | Proj PA | Proj wOBA | **True-Talent WAR** | Def Runs | Bsr Runs | Pos Runs |
+|---:|:---|:---|---:|---:|---:|---:|---:|---:|
+| 1 | **Bobby Witt Jr.** | SS | 614 | .380 | **7.93** | +14.5 | +1.4 | +5.4 |
+| 2 | **Aaron Judge** | OF | 610 | .432 | **7.28** | -5.5 | -0.4 | -6.5 |
+| 3 | **Cal Raleigh** | C | 615 | .347 | **6.05** | +14.8 | -0.2 | +5.9 |
+| 4 | **Juan Soto** | OF | 629 | .403 | **5.69** | -8.8 | +0.8 | -6.4 |
+| 5 | **Gunnar Henderson** | SS | 597 | .364 | **5.57** | +2.2 | +1.2 | +4.5 |
+
 ---
 
 ## 3. Dark Cyber Visual Diagnostic
@@ -73,5 +86,6 @@ Inspect the interactive Pitcher & Batter Plotly frontiers (with Live `2027` hove
 1. **Checkpoint 1 — Metric-Specific Reliability (`M`):** Change `M` in Part 1B from `2200` (`wOBA`) to `250` (`K%`). Compare the rookie's trust weight and explain why strikeout rates stabilize ~9× faster than overall batting value.
 2. **Checkpoint 2 — Survivorship Bias in Aging Curves:** Load `data/processed/projections_aging_curves.parquet` and plot `cum_delta_smooth` vs. `naive_centered` for `group == "SP"`, `metric == "FBv (mph)"`. Verify the `-5.12 mph` vs. `-2.68 mph` survivorship gap at Age 38.
 3. **Checkpoint 3 — Injured / Missed-2026 Retention (`played_2026 == 0`):** Filter `data/processed/pitcher_projections_true_talent.parquet` to `projection_year == 2027L & played_2026 == 0L` and examine how injured pitchers retain regressed aging-adjusted priors without double-counting.
+4. **Checkpoint 4 — Full-Spectrum True-Talent WAR & Defense:** Inspect `proj_war` vs `proj_woba` for batters with positive vs negative defensive runs (`proj_def_runs`). Why does an elite defensive shortstop like Bobby Witt Jr. (+14.5 Def runs, +5.4 Pos runs) surpass pure designated hitters and corner outfielders in overall True-Talent WAR despite a lower raw wOBA (.380 vs .432)?
 
 *Next Lab:* [**Lab 05: Markov Decomposed Pitching+ & Swing Decisions**](lab05_decomposed_pitching_decisions_workbook.html)

@@ -9,6 +9,7 @@ This curated registry catalogs all verified mathematical models, empirical formu
 | **[EXP-003-TUNNELING-STUFF-PLUS](registry.json)** | 1 | Commit-Point Pitch Tunneling & Platoon-Conditioned Stuff+ / Location+ / Pitching+ | `VALIDATED` | `commit_time_t_dec`: (-sqrt(vy0^2 + 2*ay*(23.8 - 50.0)) -... | 2026-11-19 |
 | **[EXP-005-DECOMPOSED-PITCHING-DECISIONS](registry.json)** | 1 | Context-Neutral Markov Decomposed Pitching+ & Pitch-Level Batter Process Engine (Decision+, BatControl+, Contact+) | `VALIDATED` | `bip_rv_map`: delta_run_exp ~ factor(count_id) + 0.8593 *... | 2026-11-20 |
 | **[EXP-004-PLAYER-PROJECTIONS](registry.json)** | 2 | Chronological True-Talent Player Projections: Marcel, Delta-Method Aging & Tier 1 Physics Priors | `VALIDATED` | `exact_ip_true`: FLOOR(IP) + ROUND((IP - FLOOR(IP)) * 10)... | 2026-11-20 |
+| **[EXP-006-BALLPARK-FACTORS](registry.json)** | 3 | Empirical Multi-Year Regressed Ballpark Factors & Handedness Asymmetry | `VALIDATED` | `raw_scoring_ratio`: (r_home / g_home) / (r_road / g_road) | 2026-11-20 |
 
 ---
 *Maintained by mlbr::lake_log_experiment()*

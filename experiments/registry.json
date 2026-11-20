@@ -269,7 +269,7 @@
     "tier": 2,
     "tier_name": "Level 2: Player Projections",
     "status": "VALIDATED",
-    "updated_at": "2026-11-20 00:15:41 UTC",
+    "updated_at": "2026-11-20 06:45:48 UTC",
     "summary": "Built audit-hardened Tier 2 chronological true-talent projection engine for MLB pitchers and batters across 2002-2027 (10-year rolling Tango Marcel vs. Midpoint Delta-Method Aging 2016-2025, 7-year Statcast Physics 2019-2025, locked 2024->2025 FanGraphs OOS with Stage-2 Residual mlbr Stuff+ and Hawk-Eye Bat Tracking, and secondary 2025->2026 Regular-Season Statcast OOS). Introduced Pulled Air-Ball%, Zone-Chase Selectivity (Z-O Swing%, SEAGER-inspired proxy), Sweet-Spot%, Fastball Velocity Momentum, sum-before-shrink seasonal PVI, and exposure-calibrated 80% uncertainty bands.",
     "hypotheses": [
       "Era-adjusted sum-before-divide Tango Marcel with component-specific pre-2016 reliability M strictly beats naive prior-year persistence across every pitching and batting metric.",
@@ -292,16 +292,16 @@
       "pitcher_2025_b2_fip_rmse": 0.806312,
       "pitcher_2025_b3_fip_rmse": 0.817993,
       "pitcher_2025_m4_sc_fip_rmse": 0.775056,
-      "pitcher_2025_m4_stuff_fip_rmse": 0.774124,
-      "pitcher_2025_m4_comp_fip_rmse": 0.771846,
+      "pitcher_2025_m4_stuff_fip_rmse": 0.77374,
+      "pitcher_2025_m4_comp_fip_rmse": 0.770619,
       "pitcher_2025_fg_stuff_fip_rmse": 0.773969,
       "pitcher_2025_b2_siera_rmse": 0.539962,
-      "pitcher_2025_m4_stuff_siera_rmse": 0.525791,
+      "pitcher_2025_m4_stuff_siera_rmse": 0.523241,
       "pitcher_2025_b2_kpct_rmse": 0.038061,
       "pitcher_2025_m4_sc_kpct_rmse": 0.03723,
-      "pitcher_2025_m4_stuff_kpct_rmse": 0.03723,
+      "pitcher_2025_m4_stuff_kpct_rmse": 0.037151,
       "pitcher_2025_b2_bbpct_rmse": 0.019805,
-      "pitcher_2025_m4_stuff_bbpct_rmse": 0.019689,
+      "pitcher_2025_m4_stuff_bbpct_rmse": 0.019708,
       "batter_2025_b1_woba_rmse": 0.044406,
       "batter_2025_b2_woba_rmse": 0.032152,
       "batter_2025_b3_woba_rmse": 0.032399,
@@ -314,14 +314,14 @@
       "batter_2025_m4_kpct_rmse": 0.037091,
       "batter_2025_m4_battrack_kpct_rmse": 0.036908,
       "pitcher_2026_sc_b2_kpct_rmse": 0.039423,
-      "pitcher_2026_sc_m4_kpct_rmse": 0.037104,
-      "pitcher_2026_sc_pureoos_kpct_rmse": 0.036877,
+      "pitcher_2026_sc_m4_kpct_rmse": 0.036468,
+      "pitcher_2026_sc_pureoos_kpct_rmse": 0.036743,
       "pitcher_2026_sc_b2_bbpct_rmse": 0.020605,
-      "pitcher_2026_sc_m4_bbpct_rmse": 0.020979,
+      "pitcher_2026_sc_m4_bbpct_rmse": 0.020985,
       "batter_2026_sc_b2_xwoba_rmse": 0.027761,
       "batter_2026_sc_m4_xwoba_rmse": 0.025695,
       "cov80_pitcher_fip_2025": 0.8279,
-      "cov80_batter_woba_2025": 0.8142,
+      "cov80_batter_woba_2025": 0.8068,
       "gold_pitcher_rows": 14263,
       "gold_batter_rows": 10335
     },
@@ -360,6 +360,56 @@
       "gold_batter_projections": "data/processed/batter_projections_true_talent.parquet",
       "gold_aging_curves": "data/processed/projections_aging_curves.parquet",
       "gold_backtest_metrics": "data/processed/projections_backtest_metrics.parquet"
+    }
+  },
+  {
+    "id": "EXP-006-BALLPARK-FACTORS",
+    "title": "Empirical Multi-Year Regressed Ballpark Factors & Handedness Asymmetry",
+    "tier": 3,
+    "tier_name": "Level 3: Team BaseRuns & Run Environment",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-20 06:37:09 UTC",
+    "summary": "Derived 24-year empirical multi-year regressed ballpark factors (2002-2025) across 720 park-seasons using zero-copy DuckDB queries on v_retrosheet_games and v_retrosheet_plays (16.2M+ plate appearances with BAT_EVENT_FL = 'T'). Employs 3-year weighted (3/2/1) rolling window with empirical Bayes shrinkage (M = 40 games for runs, M = 1500 PAs for HR, M = 800 PAs for handedness HR splits, M = 2000 PAs for SO, BB, BABIP). Enriched with physical ballpark geometry, roof type, and elevation.",
+    "hypotheses": [
+      "Single-season park scoring ratios suffer extreme small-sample noise and require 3-year weighted empirical shrinkage (M = 40 games for runs).",
+      "Home run environmental factors exhibit sharp batter handedness asymmetry governed by asymmetric outfield fence distances and heights (e.g. Yankee Stadium short porch vs. Oracle Park deep right-center triples alley).",
+      "Elevation produces a persistent, non-regressing run and batted-ball trajectory lift (Coors Field ~122 run factor across all eras)."
+    ],
+    "formulas": {
+      "raw_scoring_ratio": "(r_home / g_home) / (r_road / g_road)",
+      "park_factor_30_teams": "(30.0 * ratio) / (29.0 + ratio) * 100.0",
+      "empirical_bayes_smoothing": "(cnt + 2.0 * prior_rate) / (denom + 2.0)",
+      "three_year_shrinkage": "100.0 + (w_val - 100.0) * (tot_denom / (tot_denom + M))"
+    },
+    "metrics": {
+      "n_park_seasons": 720,
+      "seasons_covered": "2002-2025",
+      "coors_pf_runs_2024": 121.59,
+      "great_american_pf_hr_2024": 132.14,
+      "oracle_pf_hr_2024": 79.79,
+      "yankee_pf_hr_lhb_2024": 121.92,
+      "yankee_pf_hr_rhb_2024": 113
+    },
+    "features": [
+      "pf_runs",
+      "pf_runs_raw",
+      "pf_hr",
+      "pf_hr_raw",
+      "pf_hr_rhb",
+      "pf_hr_lhb",
+      "pf_so",
+      "pf_bb",
+      "pf_babip",
+      "elevation_ft",
+      "roof_type",
+      "azimuth_deg"
+    ],
+    "artifacts": {
+      "spec": "specs/06_ballpark_factors.md",
+      "script": "models/06_ballpark_factors_empirical.R",
+      "gold_table": "data/processed/ballpark_factors_2002_2025.parquet",
+      "figure_pf01": "models/pf01_park_factor_runs_scatter.png",
+      "figure_pf02": "models/pf02_handedness_hr_asymmetry.png"
     }
   }
 ]

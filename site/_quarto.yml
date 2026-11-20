@@ -69,6 +69,8 @@ website:
               href: workbooks/lab04_player_projections_workbook.qmd
             - text: "Lab 05: Decomposed Pitching+ & Decisions"
               href: workbooks/lab05_decomposed_pitching_decisions_workbook.qmd
+            - text: "Lab 06: Regressed Ballpark Factors & Altitude"
+              href: workbooks/lab06_ballpark_factors_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -83,6 +85,8 @@ website:
               href: analyses/04_player_projections.qmd
             - text: "Study 05: Decomposed Pitching+ & Decisions"
               href: analyses/05_decomposed_pitching_decisions.qmd
+            - text: "Study 06: Empirical Ballpark Factors"
+              href: analyses/06_ballpark_factors.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

@@ -268,3 +268,67 @@ test_that("lake_register_tunneling fails fast on missing dependency and mounts m
   expect_equal(out$game_type, "R")
   expect_equal(out$break_to_tunnel_ratio, 12.0)
 })
+
+test_that("Gold ballpark factors conform to ADR-001 and ground-truth anchors", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  gold_path <- file.path(lake, "data/processed/ballpark_factors_2002_2025.parquet")
+  skip_if_not(file.exists(gold_path), "Gold ballpark factors parquet not materialized yet")
+
+  pf <- arrow::read_parquet(gold_path)
+  expect_equal(nrow(pf), 720L)
+  expect_false(anyNA(pf$venue_name))
+  expect_false(anyNA(pf$elevation_ft))
+  expect_false(anyNA(pf$roof_type))
+  expect_true(all(is.finite(pf$pf_runs)))
+  expect_true(all(is.finite(pf$pf_hr)))
+  expect_true(all(is.finite(pf$pf_hr_rhb)))
+  expect_true(all(is.finite(pf$pf_hr_lhb)))
+  expect_true(all(is.finite(pf$pf_so)))
+  expect_true(all(is.finite(pf$pf_bb)))
+  expect_true(all(is.finite(pf$pf_babip)))
+
+  # Anchors: 2024 Coors, Great American, Oracle, Yankee Stadium
+  coors24 <- pf[pf$season == 2024L & pf$park_id == "DEN02", ]
+  expect_equal(nrow(coors24), 1L)
+  expect_gte(coors24$pf_runs, 120.0)
+
+  cin24 <- pf[pf$season == 2024L & pf$park_id == "CIN09", ]
+  expect_equal(nrow(cin24), 1L)
+  expect_gte(cin24$pf_hr, 110.0)
+
+  sfo24 <- pf[pf$season == 2024L & pf$park_id == "SFO03", ]
+  expect_equal(nrow(sfo24), 1L)
+  expect_lte(sfo24$pf_hr, 90.0)
+
+  nyc24 <- pf[pf$season == 2024L & pf$park_id == "NYC21", ]
+  expect_equal(nrow(nyc24), 1L)
+  expect_gte(nyc24$pf_hr_lhb, nyc24$pf_hr_rhb + 8.0)
+})
+
+test_that("Gold True-Talent Projections adhere to ADR-005 WAR accounting without double counting", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  gold_path <- file.path(lake, "data/processed/batter_projections_true_talent.parquet")
+  skip_if_not(file.exists(gold_path), "Gold batter projections parquet not materialized yet")
+
+  bg <- arrow::read_parquet(gold_path)
+  expect_true("proj_fld_runs" %in% names(bg))
+  expect_true("proj_pos_runs" %in% names(bg))
+  expect_true("proj_def_runs" %in% names(bg))
+  expect_true("proj_bsr_runs" %in% names(bg))
+  expect_true("proj_war" %in% names(bg))
+
+  # Defense identity: Defense = Fielding + Positional
+  expect_true(all(abs(bg$proj_def_runs - (bg$proj_fld_runs + bg$proj_pos_runs)) < 1e-5, na.rm = TRUE))
+
+  # WAR formula identity
+  calc_war <- (bg$proj_wraa + bg$proj_bsr_runs + bg$proj_fld_runs + bg$proj_pos_runs + bg$proj_repl_runs) / 9.77
+  expect_true(all(abs(bg$proj_war - calc_war) < 1e-4, na.rm = TRUE))
+
+  # Plausibility: 2026 Aaron Judge
+  judge26 <- bg[bg$projection_year == 2026L & bg$batter_mlbam == 592450L, ]
+  expect_equal(nrow(judge26), 1L)
+  expect_gte(judge26$proj_war, 6.5)
+  expect_lte(judge26$proj_war, 9.5)
+})

@@ -33,6 +33,8 @@ Raw single-season baseball statistics (`ERA`, `FIP`, `wOBA`, `BABIP`) are heavil
 | **Locked `2024 → 2025` Pitcher OOS ($N = 445\text{–}459$)** | **`M4_Component_FIP` achieves `0.77185` wRMSE** (`-0.03447` vs. true Tango `B2` `0.80631`, $p_{\text{beat}} = 0.995$), beating FanGraphs `Stuff+` (`0.77397`). **`M4_mlbr_StuffPlus`** cuts `FIP` to `0.77412`, **`SIERA` to `0.52579`** (`-0.01417`, beating FanGraphs `0.52602`), and **`HR/9` to `0.41054`** (`-0.02194`, $p_{\text{beat}} = 0.998$). | Stage-2 Residual Ridge stacking preserves 8-year calibration (`cal_slope = 0.95–1.07`) while extracting orthogonal `mlbr Stuff+`/`Location+` lift without 1-year over-shrinkage. |
 | **Locked `2024 → 2025` Batter OOS ($N = 409$)** | **`M4_Statcast_Physics`** (`xwOBA`, **`Pulled Air%`**, **`EV90`**, **`Zone-Chase Z-O%`**) cuts `wOBA` wRMSE from `0.03215` to **`0.03121`** (`-0.00094`, $r = 0.552$, $p_{\text{beat}} = 0.995$), `BB%` to **`0.02043`** ($p = 0.993$), and `ISO` to **`0.04232`**. Adding **Hawk-Eye Bat Tracking** cuts Batter **`K%`** further to **`0.03691`** ($p = 0.995$). | Spray-aware pull-air physics + zone-chase selectivity directly address `xwOBA`'s blind spots; Hawk-Eye bat tracking improves `K%` immediately, while 1-year `wOBA`/`ISO` bat-tracking noise requires multi-season history (honest negative ablation). |
 | **Track 4 Full-OOS `2025 → 2026` Statcast & 80% CIs** | On `2,429` untouched `2026` games: `M4_mlbr_StuffPlus_PureOOSCal` cuts Pitcher `K%` from `0.03942` to **`0.03688`** ($r = 0.701$, $p = 1.000$), and Batter `M4` cuts `xwOBA` from `0.02776` to **`0.02570`** ($r = 0.660$, $p = 1.000$); honest miss on `2026` Pitcher `BB%` (`0.02098` vs. `0.02060`). 80% CI coverage hits **`82.8%`** (Pitcher FIP) and **`81.4%`** (Batter wOBA). | Confirms zero calibration leakage from `2023` in-sample `Stuff+` and delivers calibrated variance inputs for Level 4 Monte Carlo simulation. |
+| **Decomposed Command & Process Sensors (Study 05 Integration)** | Lagged shrunk `Decomp Location+` exhibits a weighted correlation of $r = -0.3205$ with next-year `BB%` across 2,160 pitcher pairs, eliminating the walk-rate drift; `Decision+` ($r = +0.5225$ with `BB%`) and `BatControl+` ($r = -0.7031$ with `K%`) feed Stage-2 Ridge residual forecasting across `2021–2027`. | Resolves single-pitch base-out run-expectancy noise by grounding player talent in pitch-level Markov count values and bat-control execution. |
+| **Full-Spectrum True-Talent WAR (`proj_war`)** | Unifies true-talent pitching FIP/ERA and batting wRAA with multi-year regressed Defense (`proj_def_runs`), Baserunning (`proj_bsr_runs`), Positional adjustments (`proj_pos_runs`), and Replacement Level runs at $9.77$ runs/WAR. | **Bobby Witt Jr.** (`7.93` WAR) and **Tarik Skubal** (`3.18` WAR) lead `2026` full-spectrum projections. |
 
 ![Figure 1: Empirical Delta-Method Aging Curves vs. Cross-Sectional Survivorship Bias (2002–2025)](../assets/proj01_empirical_aging_curves.png){width=100%}
 
@@ -221,6 +223,29 @@ Figure 5 plots observed `2025` wOBA against `mlbr` `M4` projected `2026` wOBA ac
 
 - **Undervalued Statcast Crushers vs. Regression Risks (`2026`):** **Jordan Walker** (`.260` → **`.307`**, `+47 pts`), **Nolan Jones** (`.270` → **`.316`**, `+45 pts`), and **Oneil Cruz** (`.295` wOBA on elite `112.9 mph EV90` & `.332 xwOBA` → **`.335` Proj wOBA**, `+41 pts`) lead positive rebounds; **George Springer** (Age 36, `.408` → `.335`), **Nick Kurtz** (`.419` → `.364`), and **Will Smith** (`.389` → `.337`) flag sharp regression.
 - **Live `2027` Statcast-Updated Batter Top 5:** **Yordan Alvarez** (`.416` wOBA / `.405` OBP / `.571` SLG), **Juan Soto** (`.401` / `.396` / `.524`), **Shohei Ohtani** (`.391` / `.373` / `.534`), **James Wood** (`.384` / `.375` / `.506`), and **Pete Alonso** (`.374` / `.347` / `.504`).
+
+### 6.3 Full-Spectrum True-Talent WAR Frontier (2026 Projections)
+Level 2 concludes with full-spectrum player valuation by synthesizing true-talent run creation with defensive fielding, baserunning, and positional scarcity into **True-Talent WAR** (`proj_war`):
+
+$$\text{WAR}^{\text{Batter}} = \frac{\text{wRAA} + \text{BsR} + \text{Def} + \text{Pos} + \text{Repl}}{9.77}, \quad \text{WAR}^{\text{Pitcher}} = \frac{(\text{ERA}_{\text{lg}} - \text{FIP}_{\text{proj}} + \text{Bonus}_{\text{role}}) \cdot (\text{IP}_{\text{proj}} / 9)}{9.77}$$
+
+#### Top 5 True-Talent WAR Batters (2026, Proj PA >= 500)
+| Rank | Player | Team | Pos | Proj PA | Proj wOBA | **True-Talent WAR** | Def Runs | Bsr Runs | Pos Runs |
+|---:|:---|:---|:---|---:|---:|---:|---:|---:|---:|
+| 1 | **Bobby Witt Jr.** | KCR | SS | 614 | .380 | **7.93** | +14.5 | +1.4 | +5.4 |
+| 2 | **Aaron Judge** | NYY | OF | 610 | .432 | **7.28** | -5.5 | -0.4 | -6.5 |
+| 3 | **Cal Raleigh** | SEA | C | 615 | .347 | **6.05** | +14.8 | -0.2 | +5.9 |
+| 4 | **Juan Soto** | NYM | OF | 629 | .403 | **5.69** | -8.8 | +0.8 | -6.4 |
+| 5 | **Gunnar Henderson** | BAL | SS | 597 | .364 | **5.57** | +2.2 | +1.2 | +4.5 |
+
+#### Top 5 True-Talent WAR Starting Pitchers (2026, Proj TBF >= 550)
+| Rank | Pitcher | Team | Proj IP | Proj FIP | **True-Talent WAR** | Decomp Loc+ | Decomp Pitching+ |
+|---:|:---|:---|---:|---:|---:|---:|---:|
+| 1 | **Tarik Skubal** | DET | 168.9 | 2.89 | **3.18** | 99.1 | 115.0 |
+| 2 | **Garrett Crochet** | BOS | 169.3 | 3.10 | **2.78** | 96.5 | 112.7 |
+| 3 | **Cristopher Sánchez** | PHI | 171.2 | 3.26 | **2.50** | 94.4 | 108.2 |
+| 4 | **Paul Skenes** | PIT | 159.1 | 3.20 | **2.44** | 107.9 | 114.3 |
+| 5 | **Logan Webb** | SFG | 176.0 | 3.53 | **2.03** | 105.6 | 109.0 |
 
 ---
 

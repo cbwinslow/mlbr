@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge sabermetrics">Q-CRISP Study 06</span>
+    <span class="gallery-badge">Level 3 Foundation</span>
+    <h4><a href="analyses/06_ballpark_factors.html">Empirical Ballpark Factors &amp; Altitude Geometry</a></h4>
+    <p>3-year rolling regressed park factors across 24 seasons (2002–2025) for all 30 MLB venues from 62,598 Retrosheet games and 16.2M+ play events. Quantifies altitude elevation lift (Coors Field ~122), small-sample shrinkage (M = 40 games), and handedness home run wall asymmetry.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Dataset: 16.2M Retrosheet Plays | M = 40 Games / M = 1500 PA | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 05</span>
     <span class="gallery-badge">Markov + Decisions</span>
     <h4><a href="analyses/05_decomposed_pitching_decisions.html">Decomposed Pitching+ &amp; Batter Process Engine</a></h4>

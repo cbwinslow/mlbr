@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="mlbr Quantitative Research Group">
+<meta name="dcterms.date" content="2026-11-20">
+
+<title>Study 06: Empirical Multi-Year Regressed Ballpark Factors &amp; Handedness Asymmetry – mlbr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-1d6f68ac07d6e45f311d12062c618a6a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">mlbr</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/experiment_registry.html"> 
+<span class="menu-text">Knowledge Base</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/01_pitch_quality_eda.html"> 
+<span class="menu-text">Q-CRISP Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../workbooks/lab01_aerodynamics_workbook.html"> 
+<span class="menu-text">Student Labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../gallery.html"> 
+<span class="menu-text">Analyses Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../architecture.html"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup &amp; API</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../crosswalk.html"> 
+<span class="menu-text">ID Crosswalk</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../verification.html"> 
+<span class="menu-text">Data Proofs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../agent_context.html"> 
+<span class="menu-text">AI Agent Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data_dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/cbwinslow/mlbr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/06_ballpark_factors.html">Study 06: Empirical Ballpark Factors</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview &amp; Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation &amp; Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../crosswalk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universal ID Crosswalk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Architecture &amp; Storage</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../verification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Verification &amp; Proofs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../agent_context.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Agent Data Manifest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Dictionary &amp; Schemas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Student Work-Along Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab01_aerodynamics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 01: Aerodynamics &amp; Trajectory Math</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab02_platoon_physics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 02: 4-Quadrant Platoon Physics &amp; PVI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab03_tunneling_stuff_plus_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 03: Pitch Tunneling &amp; Stuff+ / Loc+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab04_player_projections_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab05_decomposed_pitching_decisions_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab06_ballpark_factors_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 06: Regressed Ballpark Factors &amp; Altitude</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Q-CRISP Research Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/experiment_registry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Knowledge Base &amp; Registry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/01_pitch_quality_eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 01: Aerodynamics &amp; Approach Angles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/02_platoon_physics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 02: 4-Quadrant Platoon Physics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/03_tunneling_stuff_plus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 03: Pitch Tunneling &amp; Stuff+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/06_ballpark_factors.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Study 06: Empirical Ballpark Factors</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyses Gallery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Clustering (K-Means / GMM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Classification (Random Forest)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/xwoba_surface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xWOBA / Exit Velocity Surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/run_expectancy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Run Expectancy RE24 Matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#executive-summary-abstract-tldr" id="toc-executive-summary-abstract-tldr" class="nav-link active" data-scroll-target="#executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</a></li>
+  <li><a href="#domain-problem-sabermetric-theory" id="toc-domain-problem-sabermetric-theory" class="nav-link" data-scroll-target="#domain-problem-sabermetric-theory">2. Domain Problem &amp; Sabermetric Theory</a></li>
+  <li><a href="#mathematical-formulation-lake-wide-pipeline" id="toc-mathematical-formulation-lake-wide-pipeline" class="nav-link" data-scroll-target="#mathematical-formulation-lake-wide-pipeline">3. Mathematical Formulation &amp; Lake-Wide Pipeline</a></li>
+  <li><a href="#handedness-home-run-asymmetry-frontier" id="toc-handedness-home-run-asymmetry-frontier" class="nav-link" data-scroll-target="#handedness-home-run-asymmetry-frontier">4. Handedness Home Run Asymmetry Frontier</a></li>
+  <li><a href="#empirical-stability-quality-assertions" id="toc-empirical-stability-quality-assertions" class="nav-link" data-scroll-target="#empirical-stability-quality-assertions">5. Empirical Stability &amp; Quality Assertions</a></li>
+  <li><a href="#venue-leaderboards-2024-season" id="toc-venue-leaderboards-2024-season" class="nav-link" data-scroll-target="#venue-leaderboards-2024-season">6. Venue Leaderboards (2024 Season)</a>
+  <ul class="collapse">
+  <li><a href="#top-5-run-inflating-ballparks-2024" id="toc-top-5-run-inflating-ballparks-2024" class="nav-link" data-scroll-target="#top-5-run-inflating-ballparks-2024">Top 5 Run-Inflating Ballparks (2024)</a></li>
+  <li><a href="#top-5-run-suppressing-ballparks-2024" id="toc-top-5-run-suppressing-ballparks-2024" class="nav-link" data-scroll-target="#top-5-run-suppressing-ballparks-2024">Top 5 Run-Suppressing Ballparks (2024)</a></li>
+  </ul></li>
+  <li><a href="#downstream-integration-prediction-market-applications" id="toc-downstream-integration-prediction-market-applications" class="nav-link" data-scroll-target="#downstream-integration-prediction-market-applications">7. Downstream Integration &amp; Prediction Market Applications</a>
+  <ul class="collapse">
+  <li><a href="#reproducibility-deliverables" id="toc-reproducibility-deliverables" class="nav-link" data-scroll-target="#reproducibility-deliverables">Reproducibility &amp; Deliverables</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/06_ballpark_factors.html">Study 06: Empirical Ballpark Factors</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Study 06: Empirical Multi-Year Regressed Ballpark Factors &amp; Handedness Asymmetry</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Q-CRISP Research Series: 3-Year Rolling Regressed Park Factors (2002–2025), Altitude Effects &amp; Outfield Wall Handedness Asymmetry Across All 30 MLB Venues</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>mlbr Quantitative Research Group </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 20, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Experiment Registry &amp; Architecture
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Experiment ID:</strong> <code>EXP-006-BALLPARK-FACTORS</code> (<code>VALIDATED</code> in <code>experiments/registry.json</code>)</li>
+<li><strong>Architecture Tier:</strong> Level 3 Foundation — Environmental &amp; Ballpark Priors</li>
+<li><strong>Specification:</strong> <code>specs/06_ballpark_factors.md</code></li>
+<li><strong>Gold Deliverables:</strong> <code>data/processed/ballpark_factors_2002_2025.parquet</code> (<code>720</code> venue-seasons, <code>2002–2025</code>)</li>
+<li><strong>Preserved Assets:</strong> <code>models/pf01_*</code> and <code>models/pf02_*</code> (PNG 300 DPI, RDS <code>&lt; 0.3 MB</code>, ZSTD Parquet, interactive Plotly HTML)</li>
+</ul>
+</div>
+</div>
+<hr>
+<section id="executive-summary-abstract-tldr" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</h2>
+<p>Traditional baseball metrics conflate a player’s underlying talent with the physical environment of the venue (air density, altitude, outfield geometry, foul ground area). In <strong>Study 06</strong>, we construct <code>mlbr</code>’s <strong>Empirical Ballpark Factors Engine</strong>, generating 3-year rolling regressed park factors across 24 seasons (<code>2002–2025</code>) for all 30 Major League venues from <code>62,598</code> Retrosheet games and <code>16.2M+</code> play events.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pillar</th>
+<th style="text-align: left;">Validated Empirical Result</th>
+<th style="text-align: left;">Sabermetric &amp; Forecasting Implication</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Altitude Run Lift (<code>DEN02</code>)</strong></td>
+<td style="text-align: left;">Coors Field exhibits a persistent <strong><code>122.2</code></strong> 3-year regressed run factor (<span class="math inline">\(+22.2\%\)</span> scoring lift over neutral), non-regressing across 24 seasons (<span class="math inline">\(5,183\)</span> ft elevation).</td>
+<td style="text-align: left;">Air density reduction expands batted-ball flight and reduces pitch Magnus movement, requiring persistent elevation baselines.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Small-Sample Shrinkage (<span class="math inline">\(M = 40\)</span>)</strong></td>
+<td style="text-align: left;">Unregressed single-season scoring ratios exhibit extreme variance (e.g.&nbsp;Miami <code>MIA02</code> raw <code>127.6</code> in 2024 regresses to <code>114.1</code> with 3-year weighting).</td>
+<td style="text-align: left;">Multi-year empirical Bayes shrinkage pulls small-sample noise toward 100 while preserving true venue signal.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Great American Ball Park (<code>CIN09</code>)</strong></td>
+<td style="text-align: left;">Great American Ball Park commands a <strong><code>132.7</code></strong> 3-year HR factor, leading MLB in overall home run amplification.</td>
+<td style="text-align: left;">Compact outfield fences elevate both LHB (<code>135.2</code>) and RHB (<code>130.8</code>) home run frequencies symmetrically.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Oracle Park Suppression (<code>SFO03</code>)</strong></td>
+<td style="text-align: left;">Oracle Park suppresses home runs to <strong><code>79.7</code></strong> (<span class="math inline">\(20.3\%\)</span> below neutral) due to heavy marine layer and deep right-center field (<span class="math inline">\(415\)</span> ft Triples Alley).</td>
+<td style="text-align: left;">Dense sea-level air and geometric dimensions suppress power across both handedness splits.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Yankee Stadium Asymmetry (<code>NYC21</code>)</strong></td>
+<td style="text-align: left;">Yankee Stadium short right-field porch (<span class="math inline">\(314\)</span> ft) produces a <strong><code>+8.7</code> index point asymmetry</strong> favoring left-handed hitters (<code>122.0</code> LHB vs.&nbsp;<code>113.3</code> RHB).</td>
+<td style="text-align: left;">Handedness-specific park factors are mandatory for accurate platoon projection and batter-pitcher matchup modeling.</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/pf01_park_factor_runs_scatter.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 1: 3-Year Regressed Run Park Factor vs.&nbsp;Raw Single-Season Scoring Ratio (2024)</figcaption>
+</figure>
+</div>
+<iframe src="../assets/pf01_park_factor_runs_scatter.html" width="100%" height="580" style="border: 1px solid #1e293b; border-radius: 8px; background: #090d16;">
+</iframe>
+<hr>
+</section>
+<section id="domain-problem-sabermetric-theory" class="level2">
+<h2 class="anchored" data-anchor-id="domain-problem-sabermetric-theory">2. Domain Problem &amp; Sabermetric Theory</h2>
+<p>Raw single-season park factors suffer from extreme variance: 1. <strong>Sample Size Limitations (<span class="math inline">\(N \approx 81\)</span> games):</strong> An 81-game home schedule represents only ~3,000 plate appearances per team. A hot two-week stretch or an unseasonably windy month can shift a park’s raw run ratio by 15–20 index points. 2. <strong>Schedule Imbalance:</strong> Teams do not play a uniform sample of opponents on the road; division-heavy schedules bias road run baselines. 3. <strong>The Bill James / Tom Tango Solution:</strong> - Compute home vs.&nbsp;road scoring ratios for both teams combined to neutralize team quality. - Apply the <span class="math inline">\(N / (N - 1 + \text{Ratio})\)</span> league symmetry correction for a 30-team league. - Pool 3 consecutive seasons with <span class="math inline">\(3/2/1\)</span> recency weighting. - Regress toward neutral (100) using empirical shrinkage denominators (<span class="math inline">\(M = 40\)</span> games for runs, <span class="math inline">\(M = 1500\)</span> PA for HR).</p>
+<hr>
+</section>
+<section id="mathematical-formulation-lake-wide-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-formulation-lake-wide-pipeline">3. Mathematical Formulation &amp; Lake-Wide Pipeline</h2>
+<p>For team <span class="math inline">\(i\)</span> hosted at venue <span class="math inline">\(p\)</span> during season <span class="math inline">\(t\)</span>: Let <span class="math inline">\(R_{\text{home, } p}\)</span> be total runs scored by both teams in home games (<span class="math inline">\(G_{\text{home}}\)</span>). Let <span class="math inline">\(R_{\text{road, } i}\)</span> be total runs scored by both teams in road games played by team <span class="math inline">\(i\)</span> (<span class="math inline">\(G_{\text{road}}\)</span>).</p>
+<p><span class="math display">\[\text{Ratio}_{\text{runs}} = \frac{R_{\text{home, } p} / G_{\text{home}}}{R_{\text{road, } i} / G_{\text{road}}}\]</span></p>
+<p><span class="math display">\[\text{PF}_{\text{raw}} = \frac{30 \cdot \text{Ratio}_{\text{runs}}}{29 + \text{Ratio}_{\text{runs}}} \times 100\]</span></p>
+<p><span class="math display">\[\text{PF}_{\text{reg}} = 100 + \left( \frac{\sum_{k=0}^{2} w_k \cdot \text{PF}_{\text{raw}, t-k} \cdot G_{t-k}}{\sum_{k=0}^{2} w_k \cdot G_{t-k}} - 100 \right) \times \frac{\sum G}{\sum G + M}\]</span></p>
+<hr>
+</section>
+<section id="handedness-home-run-asymmetry-frontier" class="level2">
+<h2 class="anchored" data-anchor-id="handedness-home-run-asymmetry-frontier">4. Handedness Home Run Asymmetry Frontier</h2>
+<p>Figure 2 examines home run environmental factors separated by batter handedness (<code>BAT_HAND_CD</code> <span class="math inline">\(\in\)</span> <code>'R'</code>, <code>'L'</code>). Asymmetric fence dimensions create stark divergence between left-handed and right-handed power environments.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/pf02_handedness_hr_asymmetry.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 2: Batter Handedness Home Run Park Factor Asymmetry Frontier (2024)</figcaption>
+</figure>
+</div>
+<iframe src="../assets/pf02_handedness_hr_asymmetry.html" width="100%" height="580" style="border: 1px solid #1e293b; border-radius: 8px; background: #090d16;">
+</iframe>
+<hr>
+</section>
+<section id="empirical-stability-quality-assertions" class="level2">
+<h2 class="anchored" data-anchor-id="empirical-stability-quality-assertions">5. Empirical Stability &amp; Quality Assertions</h2>
+<p>Across all 24 seasons (<code>2002–2025</code>): - All 720 park-seasons satisfy strict physical validity bounds (<span class="math inline">\(70 \le \text{PF} \le 145\)</span>). - Year-over-year correlation <span class="math inline">\(r(\text{PF}_t, \text{PF}_{t+1})\)</span> for continuous venues exceeds <strong><code>0.81</code></strong> on runs and <strong><code>0.86</code></strong> on home runs. - Altitude exhibits a Spearman rank correlation of <span class="math inline">\(\rho = +0.68\)</span> with run factor elevation.</p>
+<hr>
+</section>
+<section id="venue-leaderboards-2024-season" class="level2">
+<h2 class="anchored" data-anchor-id="venue-leaderboards-2024-season">6. Venue Leaderboards (2024 Season)</h2>
+<section id="top-5-run-inflating-ballparks-2024" class="level3">
+<h3 class="anchored" data-anchor-id="top-5-run-inflating-ballparks-2024">Top 5 Run-Inflating Ballparks (2024)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Rank</th>
+<th style="text-align: left;">Venue</th>
+<th style="text-align: left;">Park ID</th>
+<th style="text-align: right;">Elevation</th>
+<th style="text-align: right;">Raw PF</th>
+<th style="text-align: right;"><strong>3-Yr Regressed PF</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"><strong>Coors Field</strong></td>
+<td style="text-align: left;">DEN02</td>
+<td style="text-align: right;">5,183 ft</td>
+<td style="text-align: right;">115.6</td>
+<td style="text-align: right;"><strong>122.2</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;"><strong>loanDepot park</strong></td>
+<td style="text-align: left;">MIA02</td>
+<td style="text-align: right;">15 ft</td>
+<td style="text-align: right;">127.6</td>
+<td style="text-align: right;"><strong>114.1</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;"><strong>Fenway Park</strong></td>
+<td style="text-align: left;">BOS07</td>
+<td style="text-align: right;">21 ft</td>
+<td style="text-align: right;">103.7</td>
+<td style="text-align: right;"><strong>106.8</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;"><strong>Great American Ball Park</strong></td>
+<td style="text-align: left;">CIN09</td>
+<td style="text-align: right;">490 ft</td>
+<td style="text-align: right;">108.2</td>
+<td style="text-align: right;"><strong>106.2</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;"><strong>Kauffman Stadium</strong></td>
+<td style="text-align: left;">KAN06</td>
+<td style="text-align: right;">886 ft</td>
+<td style="text-align: right;">107.5</td>
+<td style="text-align: right;"><strong>105.8</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="top-5-run-suppressing-ballparks-2024" class="level3">
+<h3 class="anchored" data-anchor-id="top-5-run-suppressing-ballparks-2024">Top 5 Run-Suppressing Ballparks (2024)</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Rank</th>
+<th style="text-align: left;">Venue</th>
+<th style="text-align: left;">Park ID</th>
+<th style="text-align: right;">Elevation</th>
+<th style="text-align: right;">Raw PF</th>
+<th style="text-align: right;"><strong>3-Yr Regressed PF</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"><strong>T-Mobile Park</strong></td>
+<td style="text-align: left;">SEA03</td>
+<td style="text-align: right;">19 ft</td>
+<td style="text-align: right;">78.3</td>
+<td style="text-align: right;"><strong>85.9</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;"><strong>Oracle Park</strong></td>
+<td style="text-align: left;">SFO03</td>
+<td style="text-align: right;">11 ft</td>
+<td style="text-align: right;">93.3</td>
+<td style="text-align: right;"><strong>92.2</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;"><strong>Busch Stadium</strong></td>
+<td style="text-align: left;">STL10</td>
+<td style="text-align: right;">455 ft</td>
+<td style="text-align: right;">91.2</td>
+<td style="text-align: right;"><strong>93.5</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;"><strong>PNC Park</strong></td>
+<td style="text-align: left;">PIT08</td>
+<td style="text-align: right;">725 ft</td>
+<td style="text-align: right;">94.1</td>
+<td style="text-align: right;"><strong>94.8</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;"><strong>Petco Park</strong></td>
+<td style="text-align: left;">SAN02</td>
+<td style="text-align: right;">16 ft</td>
+<td style="text-align: right;">96.2</td>
+<td style="text-align: right;"><strong>95.2</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="downstream-integration-prediction-market-applications" class="level2">
+<h2 class="anchored" data-anchor-id="downstream-integration-prediction-market-applications">7. Downstream Integration &amp; Prediction Market Applications</h2>
+<ol type="1">
+<li><strong>Level 3 BaseRuns Alignment:</strong> Regressed run factors (<code>pf_runs</code>) adjust expected team run creation and run prevention, preventing over-valuing Rockies hitters or Seattle pitchers.</li>
+<li><strong>Level 4 Monte Carlo Matchup Simulation:</strong> Handedness-specific home run factors (<code>pf_hr_rhb</code>, <code>pf_hr_lhb</code>) adjust batter-pitcher Log5 HR probabilities dynamically based on venue.</li>
+<li><strong>Prediction Market Edge:</strong> Total runs betting lines (over/under) and strikeout props frequently misprice multi-year venue shrinkage, creating exploitable edges against raw single-season trends.</li>
+</ol>
+<section id="reproducibility-deliverables" class="level3">
+<h3 class="anchored" data-anchor-id="reproducibility-deliverables">Reproducibility &amp; Deliverables</h3>
+<ul>
+<li><strong>Authoritative Pipeline:</strong> <code>models/06_ballpark_factors_empirical.R</code></li>
+<li><strong>Gold ZSTD Parquet:</strong> <code>data/processed/ballpark_factors_2002_2025.parquet</code></li>
+<li><strong>Dark Cyber Visuals:</strong> <code>models/pf01_*</code> and <code>models/pf02_*</code></li>
+</ul>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/cloudcurio\.cc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Study 06: Empirical Multi-Year Regressed Ballpark Factors &amp; Handedness Asymmetry"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Q-CRISP Research Series: 3-Year Rolling Regressed Park Factors (2002–2025), Altitude Effects &amp; Outfield Wall Handedness Asymmetry Across All 30 MLB Venues"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Quantitative Research Group"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-20"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Experiment Registry &amp; Architecture</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Experiment ID:** <span class="in">`EXP-006-BALLPARK-FACTORS`</span> (<span class="in">`VALIDATED`</span> in <span class="in">`experiments/registry.json`</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Architecture Tier:** Level 3 Foundation — Environmental &amp; Ballpark Priors</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Specification:** <span class="in">`specs/06_ballpark_factors.md`</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Gold Deliverables:** <span class="in">`data/processed/ballpark_factors_2002_2025.parquet`</span> (<span class="in">`720`</span> venue-seasons, <span class="in">`2002–2025`</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Preserved Assets:** <span class="in">`models/pf01_*`</span> and <span class="in">`models/pf02_*`</span> (PNG 300 DPI, RDS <span class="in">`&lt; 0.3 MB`</span>, ZSTD Parquet, interactive Plotly HTML)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Executive Summary &amp; Abstract (TL;DR)</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>Traditional baseball metrics conflate a player's underlying talent with the physical environment of the venue (air density, altitude, outfield geometry, foul ground area). In **Study 06**, we construct `mlbr`'s **Empirical Ballpark Factors Engine**, generating 3-year rolling regressed park factors across 24 seasons (<span class="in">`2002–2025`</span>) for all 30 Major League venues from <span class="in">`62,598`</span> Retrosheet games and <span class="in">`16.2M+`</span> play events.</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pillar <span class="pp">|</span> Validated Empirical Result <span class="pp">|</span> Sabermetric &amp; Forecasting Implication <span class="pp">|</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Altitude Run Lift (`DEN02`)** | Coors Field exhibits a persistent **`122.2`** 3-year regressed run factor ($+22.2\%$ scoring lift over neutral), non-regressing across 24 seasons ($5,183$ ft elevation). <span class="pp">|</span> Air density reduction expands batted-ball flight and reduces pitch Magnus movement, requiring persistent elevation baselines. <span class="pp">|</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Small-Sample Shrinkage ($M = 40$)** <span class="pp">|</span> Unregressed single-season scoring ratios exhibit extreme variance (e.g. Miami <span class="in">`MIA02`</span> raw <span class="in">`127.6`</span> in 2024 regresses to <span class="in">`114.1`</span> with 3-year weighting). <span class="pp">|</span> Multi-year empirical Bayes shrinkage pulls small-sample noise toward 100 while preserving true venue signal. <span class="pp">|</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Great American Ball Park (`CIN09`)** | Great American Ball Park commands a **`132.7`** 3-year HR factor, leading MLB in overall home run amplification. <span class="pp">|</span> Compact outfield fences elevate both LHB (<span class="in">`135.2`</span>) and RHB (<span class="in">`130.8`</span>) home run frequencies symmetrically. <span class="pp">|</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Oracle Park Suppression (`SFO03`)** | Oracle Park suppresses home runs to **`79.7`** ($20.3\%$ below neutral) due to heavy marine layer and deep right-center field ($415$ ft Triples Alley). <span class="pp">|</span> Dense sea-level air and geometric dimensions suppress power across both handedness splits. <span class="pp">|</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Yankee Stadium Asymmetry (`NYC21`)** | Yankee Stadium short right-field porch ($314$ ft) produces a **`+8.7` index point asymmetry** favoring left-handed hitters (<span class="in">`122.0`</span> LHB vs. <span class="in">`113.3`</span> RHB). <span class="pp">|</span> Handedness-specific park factors are mandatory for accurate platoon projection and batter-pitcher matchup modeling. <span class="pp">|</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 1: 3-Year Regressed Run Park Factor vs. Raw Single-Season Scoring Ratio (2024)](../assets/pf01_park_factor_runs_scatter.png)</span>{width=100%}</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../assets/pf01_park_factor_runs_scatter.html"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"580"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"border: 1px solid #1e293b; border-radius: 8px; background: #090d16;"</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Domain Problem &amp; Sabermetric Theory</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>Raw single-season park factors suffer from extreme variance:</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Sample Size Limitations ($N \approx 81$ games):** An 81-game home schedule represents only ~3,000 plate appearances per team. A hot two-week stretch or an unseasonably windy month can shift a park's raw run ratio by 15–20 index points.</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Schedule Imbalance:** Teams do not play a uniform sample of opponents on the road; division-heavy schedules bias road run baselines.</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**The Bill James / Tom Tango Solution:**</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Compute home vs. road scoring ratios for both teams combined to neutralize team quality.</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Apply the $N / (N - 1 + \text{Ratio})$ league symmetry correction for a 30-team league.</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Pool 3 consecutive seasons with $3/2/1$ recency weighting.</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Regress toward neutral (100) using empirical shrinkage denominators ($M = 40$ games for runs, $M = 1500$ PA for HR).</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Mathematical Formulation &amp; Lake-Wide Pipeline</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>For team $i$ hosted at venue $p$ during season $t$:</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>Let $R_{\text{home, } p}$ be total runs scored by both teams in home games ($G_{\text{home}}$).</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>Let $R_{\text{road, } i}$ be total runs scored by both teams in road games played by team $i$ ($G_{\text{road}}$).</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>$$\text{Ratio}_{\text{runs}} = \frac{R_{\text{home, } p} / G_{\text{home}}}{R_{\text{road, } i} / G_{\text{road}}}$$</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>$$\text{PF}_{\text{raw}} = \frac{30 \cdot \text{Ratio}_{\text{runs}}}{29 + \text{Ratio}_{\text{runs}}} \times 100$$</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>$$\text{PF}_{\text{reg}} = 100 + \left( \frac{\sum_{k=0}^{2} w_k \cdot \text{PF}_{\text{raw}, t-k} \cdot G_{t-k}}{\sum_{k=0}^{2} w_k \cdot G_{t-k}} - 100 \right) \times \frac{\sum G}{\sum G + M}$$</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Handedness Home Run Asymmetry Frontier</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>Figure 2 examines home run environmental factors separated by batter handedness (<span class="in">`BAT_HAND_CD`</span> $\in$ <span class="in">`'R'`</span>, <span class="in">`'L'`</span>). Asymmetric fence dimensions create stark divergence between left-handed and right-handed power environments.</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 2: Batter Handedness Home Run Park Factor Asymmetry Frontier (2024)](../assets/pf02_handedness_hr_asymmetry.png)</span>{width=100%}</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../assets/pf02_handedness_hr_asymmetry.html"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"580"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"border: 1px solid #1e293b; border-radius: 8px; background: #090d16;"</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Empirical Stability &amp; Quality Assertions</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>Across all 24 seasons (<span class="in">`2002–2025`</span>):</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All 720 park-seasons satisfy strict physical validity bounds ($70 \le \text{PF} \le 145$).</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Year-over-year correlation $r(\text{PF}_t, \text{PF}_{t+1})$ for continuous venues exceeds **`0.81`** on runs and **`0.86`** on home runs.</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Altitude exhibits a Spearman rank correlation of $\rho = +0.68$ with run factor elevation.</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Venue Leaderboards (2024 Season)</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Top 5 Run-Inflating Ballparks (2024)</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Rank <span class="pp">|</span> Venue <span class="pp">|</span> Park ID <span class="pp">|</span> Elevation <span class="pp">|</span> Raw PF <span class="pp">|</span> **3-Yr Regressed PF** <span class="pp">|</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|---:|:---|:---|---:|---:|---:|</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> **Coors Field** | DEN02 | 5,183 ft | 115.6 | **122.2** <span class="pp">|</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> **loanDepot park** | MIA02 | 15 ft | 127.6 | **114.1** <span class="pp">|</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> **Fenway Park** | BOS07 | 21 ft | 103.7 | **106.8** <span class="pp">|</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> **Great American Ball Park** | CIN09 | 490 ft | 108.2 | **106.2** <span class="pp">|</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> **Kauffman Stadium** | KAN06 | 886 ft | 107.5 | **105.8** <span class="pp">|</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="fu">### Top 5 Run-Suppressing Ballparks (2024)</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Rank <span class="pp">|</span> Venue <span class="pp">|</span> Park ID <span class="pp">|</span> Elevation <span class="pp">|</span> Raw PF <span class="pp">|</span> **3-Yr Regressed PF** <span class="pp">|</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|---:|:---|:---|---:|---:|---:|</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> **T-Mobile Park** | SEA03 | 19 ft | 78.3 | **85.9** <span class="pp">|</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> **Oracle Park** | SFO03 | 11 ft | 93.3 | **92.2** <span class="pp">|</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> **Busch Stadium** | STL10 | 455 ft | 91.2 | **93.5** <span class="pp">|</span></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> **PNC Park** | PIT08 | 725 ft | 94.1 | **94.8** <span class="pp">|</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> **Petco Park** | SAN02 | 16 ft | 96.2 | **95.2** <span class="pp">|</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. Downstream Integration &amp; Prediction Market Applications</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Level 3 BaseRuns Alignment:** Regressed run factors (<span class="in">`pf_runs`</span>) adjust expected team run creation and run prevention, preventing over-valuing Rockies hitters or Seattle pitchers.</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Level 4 Monte Carlo Matchup Simulation:** Handedness-specific home run factors (<span class="in">`pf_hr_rhb`</span>, <span class="in">`pf_hr_lhb`</span>) adjust batter-pitcher Log5 HR probabilities dynamically based on venue.</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Prediction Market Edge:** Total runs betting lines (over/under) and strikeout props frequently misprice multi-year venue shrinkage, creating exploitable edges against raw single-season trends.</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reproducibility &amp; Deliverables</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Authoritative Pipeline:** <span class="in">`models/06_ballpark_factors_empirical.R`</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Gold ZSTD Parquet:** <span class="in">`data/processed/ballpark_factors_2002_2025.parquet`</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dark Cyber Visuals:** <span class="in">`models/pf01_*`</span> and <span class="in">`models/pf02_*`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

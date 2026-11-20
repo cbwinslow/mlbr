@@ -492,6 +492,12 @@ window.Quarto = {
  <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab06_ballpark_factors_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 06: Regressed Ballpark Factors &amp; Altitude</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -537,6 +543,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/06_ballpark_factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 06: Empirical Ballpark Factors</span></a>
   </div>
 </li>
       </ul>
@@ -598,7 +610,10 @@ window.Quarto = {
   <li><a href="#step-1.2-era-adjusted-marcel-shrinkage-tom-tangos-age-factor" id="toc-step-1.2-era-adjusted-marcel-shrinkage-tom-tangos-age-factor" class="nav-link" data-scroll-target="#step-1.2-era-adjusted-marcel-shrinkage-tom-tangos-age-factor">Step 1.2: Era-Adjusted Marcel Shrinkage &amp; Tom Tango’s Age Factor</a></li>
   <li><a href="#step-1.3-exposure-calibrated-80-uncertainty-bands" id="toc-step-1.3-exposure-calibrated-80-uncertainty-bands" class="nav-link" data-scroll-target="#step-1.3-exposure-calibrated-80-uncertainty-bands">Step 1.3: Exposure-Calibrated 80% Uncertainty Bands</a></li>
   </ul></li>
-  <li><a href="#live-statcast-spray-physics-gold-tier-2-backtests" id="toc-live-statcast-spray-physics-gold-tier-2-backtests" class="nav-link" data-scroll-target="#live-statcast-spray-physics-gold-tier-2-backtests">2. Live Statcast Spray Physics &amp; Gold Tier 2 Backtests</a></li>
+  <li><a href="#live-statcast-spray-physics-gold-tier-2-backtests" id="toc-live-statcast-spray-physics-gold-tier-2-backtests" class="nav-link" data-scroll-target="#live-statcast-spray-physics-gold-tier-2-backtests">2. Live Statcast Spray Physics &amp; Gold Tier 2 Backtests</a>
+  <ul class="collapse">
+  <li><a href="#full-spectrum-true-talent-war-valuation-level-2-completion" id="toc-full-spectrum-true-talent-war-valuation-level-2-completion" class="nav-link" data-scroll-target="#full-spectrum-true-talent-war-valuation-level-2-completion">Full-Spectrum True-Talent WAR Valuation (Level 2 Completion)</a></li>
+  </ul></li>
   <li><a href="#dark-cyber-visual-diagnostic" id="toc-dark-cyber-visual-diagnostic" class="nav-link" data-scroll-target="#dark-cyber-visual-diagnostic">3. Dark Cyber Visual Diagnostic</a></li>
   <li><a href="#hands-on-mentor-checkpoints" id="toc-hands-on-mentor-checkpoints" class="nav-link" data-scroll-target="#hands-on-mentor-checkpoints">4. Hands-On Mentor Checkpoints</a></li>
   </ul>
@@ -740,7 +755,95 @@ window.Quarto = {
 </tbody>
 </table>
 <p>Adding spray physics (<code>Pulled Air%</code>), <code>EV90</code>, and <code>Zone-Chase Selectivity (Z-O%)</code> slashes locked <code>2025</code> Batter <code>wOBA</code> wRMSE from <code>0.03215</code> (true Tango <code>B2</code>) to <strong><code>0.03121</code></strong> (<span class="math inline">\(p_{\text{beat}} = 0.995\)</span>), while <code>M4_Component_FIP</code> slashes Pitcher <code>FIP</code> wRMSE from <code>0.80631</code> to <strong><code>0.77185</code></strong> (<span class="math inline">\(p_{\text{beat}} = 0.995\)</span>).</p>
+<section id="full-spectrum-true-talent-war-valuation-level-2-completion" class="level3">
+<h3 class="anchored" data-anchor-id="full-spectrum-true-talent-war-valuation-level-2-completion">Full-Spectrum True-Talent WAR Valuation (Level 2 Completion)</h3>
+<p>By combining Marcel + Aging offensive projections with defensive runs (<code>proj_def_runs</code>), baserunning runs (<code>proj_bsr_runs</code>), and positional adjustments (<code>proj_pos_runs</code>), <code>mlbr</code> derives complete True-Talent WAR:</p>
+<p><span class="math display">\[\text{WAR}^{\text{True-Talent}} = \frac{\text{wRAA} + \text{BsR} + \text{Def} + \text{Pos} + \text{Repl}}{9.77}\]</span></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Rank</th>
+<th style="text-align: left;">Batter (<code>2026</code>)</th>
+<th style="text-align: left;">Pos</th>
+<th style="text-align: right;">Proj PA</th>
+<th style="text-align: right;">Proj wOBA</th>
+<th style="text-align: right;"><strong>True-Talent WAR</strong></th>
+<th style="text-align: right;">Def Runs</th>
+<th style="text-align: right;">Bsr Runs</th>
+<th style="text-align: right;">Pos Runs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"><strong>Bobby Witt Jr.</strong></td>
+<td style="text-align: left;">SS</td>
+<td style="text-align: right;">614</td>
+<td style="text-align: right;">.380</td>
+<td style="text-align: right;"><strong>7.93</strong></td>
+<td style="text-align: right;">+14.5</td>
+<td style="text-align: right;">+1.4</td>
+<td style="text-align: right;">+5.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;"><strong>Aaron Judge</strong></td>
+<td style="text-align: left;">OF</td>
+<td style="text-align: right;">610</td>
+<td style="text-align: right;">.432</td>
+<td style="text-align: right;"><strong>7.28</strong></td>
+<td style="text-align: right;">-5.5</td>
+<td style="text-align: right;">-0.4</td>
+<td style="text-align: right;">-6.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;"><strong>Cal Raleigh</strong></td>
+<td style="text-align: left;">C</td>
+<td style="text-align: right;">615</td>
+<td style="text-align: right;">.347</td>
+<td style="text-align: right;"><strong>6.05</strong></td>
+<td style="text-align: right;">+14.8</td>
+<td style="text-align: right;">-0.2</td>
+<td style="text-align: right;">+5.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;"><strong>Juan Soto</strong></td>
+<td style="text-align: left;">OF</td>
+<td style="text-align: right;">629</td>
+<td style="text-align: right;">.403</td>
+<td style="text-align: right;"><strong>5.69</strong></td>
+<td style="text-align: right;">-8.8</td>
+<td style="text-align: right;">+0.8</td>
+<td style="text-align: right;">-6.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;"><strong>Gunnar Henderson</strong></td>
+<td style="text-align: left;">SS</td>
+<td style="text-align: right;">597</td>
+<td style="text-align: right;">.364</td>
+<td style="text-align: right;"><strong>5.57</strong></td>
+<td style="text-align: right;">+2.2</td>
+<td style="text-align: right;">+1.2</td>
+<td style="text-align: right;">+4.5</td>
+</tr>
+</tbody>
+</table>
 <hr>
+</section>
 </section>
 <section id="dark-cyber-visual-diagnostic" class="level2">
 <h2 class="anchored" data-anchor-id="dark-cyber-visual-diagnostic">3. Dark Cyber Visual Diagnostic</h2>
@@ -760,6 +863,7 @@ window.Quarto = {
 <li><strong>Checkpoint 1 — Metric-Specific Reliability (<code>M</code>):</strong> Change <code>M</code> in Part 1B from <code>2200</code> (<code>wOBA</code>) to <code>250</code> (<code>K%</code>). Compare the rookie’s trust weight and explain why strikeout rates stabilize ~9× faster than overall batting value.</li>
 <li><strong>Checkpoint 2 — Survivorship Bias in Aging Curves:</strong> Load <code>data/processed/projections_aging_curves.parquet</code> and plot <code>cum_delta_smooth</code> vs.&nbsp;<code>naive_centered</code> for <code>group == "SP"</code>, <code>metric == "FBv (mph)"</code>. Verify the <code>-5.12 mph</code> vs.&nbsp;<code>-2.68 mph</code> survivorship gap at Age 38.</li>
 <li><strong>Checkpoint 3 — Injured / Missed-2026 Retention (<code>played_2026 == 0</code>):</strong> Filter <code>data/processed/pitcher_projections_true_talent.parquet</code> to <code>projection_year == 2027L &amp; played_2026 == 0L</code> and examine how injured pitchers retain regressed aging-adjusted priors without double-counting.</li>
+<li><strong>Checkpoint 4 — Full-Spectrum True-Talent WAR &amp; Defense:</strong> Inspect <code>proj_war</code> vs <code>proj_woba</code> for batters with positive vs negative defensive runs (<code>proj_def_runs</code>). Why does an elite defensive shortstop like Bobby Witt Jr.&nbsp;(+14.5 Def runs, +5.4 Pos runs) surpass pure designated hitters and corner outfielders in overall True-Talent WAR despite a lower raw wOBA (.380 vs .432)?</li>
 </ol>
 <p><em>Next Lab:</em> <a href="lab05_decomposed_pitching_decisions_workbook.html"><strong>Lab 05: Markov Decomposed Pitching+ &amp; Swing Decisions</strong></a></p>
 
@@ -1291,25 +1395,39 @@ window.Quarto = {
 <span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>Adding spray physics (<span class="in">`Pulled Air%`</span>), <span class="in">`EV90`</span>, and <span class="in">`Zone-Chase Selectivity (Z-O%)`</span> slashes locked <span class="in">`2025`</span> Batter <span class="in">`wOBA`</span> wRMSE from <span class="in">`0.03215`</span> (true Tango <span class="in">`B2`</span>) to **`0.03121`** ($p_{\text{beat}} = 0.995$), while `M4_Component_FIP` slashes Pitcher `FIP` wRMSE from `0.80631` to **`0.77185`** ($p_{\text{beat}} = 0.995$).</span>
 <span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Dark Cyber Visual Diagnostic</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="al">![Lab 04 Diagnostic: Top 20 Projected 2026 Batters — 80% True-Talent Bands vs. 2025 Observed wOBA](../assets/lab04_top20_batter_uncertainty_bands.png)</span>{fig-align="center" width="95%"}</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>*Preserved Assets:* <span class="in">`models/lab04_top20_batter_uncertainty_bands.rds`</span> &amp; <span class="in">`models/lab04_top20_batter_uncertainty_bands.parquet`</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>Inspect the interactive Pitcher &amp; Batter Plotly frontiers (with Live <span class="in">`2027`</span> hover projections) in <span class="co">[</span><span class="ot">**Study 04: Player Projections &amp; Aging**</span><span class="co">](../analyses/04_player_projections.html)</span>.</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Hands-On Mentor Checkpoints</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Checkpoint 1 — Metric-Specific Reliability (`M`):** Change <span class="in">`M`</span> in Part 1B from <span class="in">`2200`</span> (<span class="in">`wOBA`</span>) to <span class="in">`250`</span> (<span class="in">`K%`</span>). Compare the rookie's trust weight and explain why strikeout rates stabilize ~9× faster than overall batting value.</span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Checkpoint 2 — Survivorship Bias in Aging Curves:** Load <span class="in">`data/processed/projections_aging_curves.parquet`</span> and plot <span class="in">`cum_delta_smooth`</span> vs. <span class="in">`naive_centered`</span> for <span class="in">`group == "SP"`</span>, <span class="in">`metric == "FBv (mph)"`</span>. Verify the <span class="in">`-5.12 mph`</span> vs. <span class="in">`-2.68 mph`</span> survivorship gap at Age 38.</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Checkpoint 3 — Injured / Missed-2026 Retention (`played_2026 == 0`):** Filter <span class="in">`data/processed/pitcher_projections_true_talent.parquet`</span> to <span class="in">`projection_year == 2027L &amp; played_2026 == 0L`</span> and examine how injured pitchers retain regressed aging-adjusted priors without double-counting.</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>*Next Lab:* [**Lab 05: Markov Decomposed Pitching+ &amp; Swing Decisions**](lab05_decomposed_pitching_decisions_workbook.html)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="fu">### Full-Spectrum True-Talent WAR Valuation (Level 2 Completion)</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>By combining Marcel + Aging offensive projections with defensive runs (<span class="in">`proj_def_runs`</span>), baserunning runs (<span class="in">`proj_bsr_runs`</span>), and positional adjustments (<span class="in">`proj_pos_runs`</span>), <span class="in">`mlbr`</span> derives complete True-Talent WAR:</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>$$\text{WAR}^{\text{True-Talent}} = \frac{\text{wRAA} + \text{BsR} + \text{Def} + \text{Pos} + \text{Repl}}{9.77}$$</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Rank <span class="pp">|</span> Batter (<span class="in">`2026`</span>) <span class="pp">|</span> Pos <span class="pp">|</span> Proj PA <span class="pp">|</span> Proj wOBA <span class="pp">|</span> **True-Talent WAR** <span class="pp">|</span> Def Runs <span class="pp">|</span> Bsr Runs <span class="pp">|</span> Pos Runs <span class="pp">|</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="pp">|---:|:---|:---|---:|---:|---:|---:|---:|---:|</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> **Bobby Witt Jr.** | SS | 614 | .380 | **7.93** <span class="pp">|</span> +14.5 <span class="pp">|</span> +1.4 <span class="pp">|</span> +5.4 <span class="pp">|</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> **Aaron Judge** | OF | 610 | .432 | **7.28** <span class="pp">|</span> -5.5 <span class="pp">|</span> -0.4 <span class="pp">|</span> -6.5 <span class="pp">|</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> **Cal Raleigh** | C | 615 | .347 | **6.05** <span class="pp">|</span> +14.8 <span class="pp">|</span> -0.2 <span class="pp">|</span> +5.9 <span class="pp">|</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> **Juan Soto** | OF | 629 | .403 | **5.69** <span class="pp">|</span> -8.8 <span class="pp">|</span> +0.8 <span class="pp">|</span> -6.4 <span class="pp">|</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> **Gunnar Henderson** | SS | 597 | .364 | **5.57** <span class="pp">|</span> +2.2 <span class="pp">|</span> +1.2 <span class="pp">|</span> +4.5 <span class="pp">|</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Dark Cyber Visual Diagnostic</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="al">![Lab 04 Diagnostic: Top 20 Projected 2026 Batters — 80% True-Talent Bands vs. 2025 Observed wOBA](../assets/lab04_top20_batter_uncertainty_bands.png)</span>{fig-align="center" width="95%"}</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>*Preserved Assets:* <span class="in">`models/lab04_top20_batter_uncertainty_bands.rds`</span> &amp; <span class="in">`models/lab04_top20_batter_uncertainty_bands.parquet`</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>Inspect the interactive Pitcher &amp; Batter Plotly frontiers (with Live <span class="in">`2027`</span> hover projections) in <span class="co">[</span><span class="ot">**Study 04: Player Projections &amp; Aging**</span><span class="co">](../analyses/04_player_projections.html)</span>.</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Hands-On Mentor Checkpoints</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Checkpoint 1 — Metric-Specific Reliability (`M`):** Change <span class="in">`M`</span> in Part 1B from <span class="in">`2200`</span> (<span class="in">`wOBA`</span>) to <span class="in">`250`</span> (<span class="in">`K%`</span>). Compare the rookie's trust weight and explain why strikeout rates stabilize ~9× faster than overall batting value.</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Checkpoint 2 — Survivorship Bias in Aging Curves:** Load <span class="in">`data/processed/projections_aging_curves.parquet`</span> and plot <span class="in">`cum_delta_smooth`</span> vs. <span class="in">`naive_centered`</span> for <span class="in">`group == "SP"`</span>, <span class="in">`metric == "FBv (mph)"`</span>. Verify the <span class="in">`-5.12 mph`</span> vs. <span class="in">`-2.68 mph`</span> survivorship gap at Age 38.</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Checkpoint 3 — Injured / Missed-2026 Retention (`played_2026 == 0`):** Filter <span class="in">`data/processed/pitcher_projections_true_talent.parquet`</span> to <span class="in">`projection_year == 2027L &amp; played_2026 == 0L`</span> and examine how injured pitchers retain regressed aging-adjusted priors without double-counting.</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Checkpoint 4 — Full-Spectrum True-Talent WAR &amp; Defense:** Inspect <span class="in">`proj_war`</span> vs <span class="in">`proj_woba`</span> for batters with positive vs negative defensive runs (<span class="in">`proj_def_runs`</span>). Why does an elite defensive shortstop like Bobby Witt Jr. (+14.5 Def runs, +5.4 Pos runs) surpass pure designated hitters and corner outfielders in overall True-Talent WAR despite a lower raw wOBA (.380 vs .432)?</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>*Next Lab:* [**Lab 05: Markov Decomposed Pitching+ &amp; Swing Decisions**](lab05_decomposed_pitching_decisions_workbook.html)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
