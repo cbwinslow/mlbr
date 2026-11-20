@@ -25,6 +25,7 @@ Every numbered Q-CRISP study ships with **1:1 paired deliverables** (enforced me
 | **1** | `02_platoon_physics.qmd` (`EXP-002`) | `workbooks/lab02_platoon_physics_workbook.R` | `RvR`/`RvL`/`LvL`/`LvR`, `hb_away_in`, TTO decay, Pitcher `PVI` |
 | **1** | `03_tunneling_stuff_plus.qmd` (`EXP-003`) | `workbooks/lab03_tunneling_stuff_plus_workbook.R` | `y0 = 50 -> 23.8 ft` tunneling (`v_statcast_tunneling`, `10.20M` pairs), `Stuff+`/`Location+`/`Pitching+` |
 | **2** | `04_player_projections.qmd` (`EXP-004`) | `workbooks/lab04_player_projections_workbook.R` | `IP_true`, Tango Marcel, Delta-Method aging, `Pulled Air%`, `Zone-Chase (Z-O%)`, 80% CIs (`2016–2027`) |
+| **1.5/2** | `05_decomposed_pitching_decisions.qmd` (`EXP-005`) | `workbooks/lab05_decomposed_pitching_decisions_workbook.R` | 5-head Markov 12-count pricing (`Decomp Pitching+`/`Location+`), zero-mean `Decision+`/`BatControl+`/`Contact+` |
 
 ---
 

@@ -9,24 +9,28 @@
     <lastmod>2026-11-14T22:01:33.080Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/03_tunneling_stuff_plus.html</loc>
-    <lastmod>2026-11-19T06:13:23.404Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/02_platoon_physics.html</loc>
+    <lastmod>2026-11-18T04:49:58.809Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/04_player_projections.html</loc>
-    <lastmod>2026-11-19T09:17:53.382Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/xwoba_surface.html</loc>
+    <lastmod>2026-11-14T22:01:50.584Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/01_pitch_quality_eda.html</loc>
-    <lastmod>2026-11-16T05:14:19.086Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/experiment_registry.html</loc>
+    <lastmod>2026-11-16T07:29:56.777Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab02_platoon_physics_workbook.html</loc>
-    <lastmod>2026-11-20T00:11:26.432Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/run_expectancy.html</loc>
+    <lastmod>2026-11-14T22:04:37.436Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab03_tunneling_stuff_plus_workbook.html</loc>
-    <lastmod>2026-11-20T00:11:26.437Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab01_aerodynamics_workbook.html</loc>
+    <lastmod>2026-11-20T00:12:47.512Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab04_player_projections_workbook.html</loc>
+    <lastmod>2026-11-20T01:42:23.428Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/verification.html</loc>
@@ -42,11 +46,11 @@
   </url>
   <url>
     <loc>https://cloudcurio.cc/gallery.html</loc>
-    <lastmod>2026-11-19T09:12:52.552Z</lastmod>
+    <lastmod>2026-11-20T01:42:23.404Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/architecture.html</loc>
-    <lastmod>2026-11-20T00:12:47.513Z</lastmod>
+    <lastmod>2026-11-20T01:42:23.419Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/setup.html</loc>
@@ -54,31 +58,35 @@
   </url>
   <url>
     <loc>https://cloudcurio.cc/index.html</loc>
-    <lastmod>2026-11-20T00:12:47.513Z</lastmod>
+    <lastmod>2026-11-20T01:42:23.405Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab04_player_projections_workbook.html</loc>
-    <lastmod>2026-11-20T00:11:26.443Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab05_decomposed_pitching_decisions_workbook.html</loc>
+    <lastmod>2026-11-20T01:41:55.308Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab01_aerodynamics_workbook.html</loc>
-    <lastmod>2026-11-20T00:12:47.512Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab03_tunneling_stuff_plus_workbook.html</loc>
+    <lastmod>2026-11-20T00:11:26.437Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/run_expectancy.html</loc>
-    <lastmod>2026-11-14T22:04:37.436Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab02_platoon_physics_workbook.html</loc>
+    <lastmod>2026-11-20T00:11:26.432Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/experiment_registry.html</loc>
-    <lastmod>2026-11-16T07:29:56.777Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/01_pitch_quality_eda.html</loc>
+    <lastmod>2026-11-16T05:14:19.086Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/xwoba_surface.html</loc>
-    <lastmod>2026-11-14T22:01:50.584Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/04_player_projections.html</loc>
+    <lastmod>2026-11-19T09:17:53.382Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/02_platoon_physics.html</loc>
-    <lastmod>2026-11-18T04:49:58.809Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/03_tunneling_stuff_plus.html</loc>
+    <lastmod>2026-11-19T06:13:23.404Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/05_decomposed_pitching_decisions.html</loc>
+    <lastmod>2026-11-20T01:41:55.302Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/analyses/pitch_clustering.html</loc>

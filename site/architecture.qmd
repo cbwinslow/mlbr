@@ -42,7 +42,10 @@ data/
     ├── pitcher_projections_true_talent.parquet    # 14,263 rows (2016-2027) + 80% CIs
     ├── batter_projections_true_talent.parquet     # 10,335 rows (2016-2027) + 80% CIs
     ├── projections_aging_curves.parquet           # Survivor-bias-corrected Delta-Method curves
-    └── projections_backtest_metrics.parquet       # Strict 4-track chronological OOS benchmarks
+    ├── projections_backtest_metrics.parquet       # Strict 4-track chronological OOS benchmarks
+    ├── pitcher_decomp_pitching_plus.parquet       # 5,974 rows: 5-head Markov Stuff+/Loc+/Pitch+Tun
+    ├── batter_process_metrics.parquet             # 4,965 rows: Decision+, BatControl+, Contact+
+    └── decomp_{count_rv_table,benchmark_ablation}.parquet
 ```
 
 ---

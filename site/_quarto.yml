@@ -67,6 +67,8 @@ website:
               href: workbooks/lab03_tunneling_stuff_plus_workbook.qmd
             - text: "Lab 04: Player Projections & Delta Aging"
               href: workbooks/lab04_player_projections_workbook.qmd
+            - text: "Lab 05: Decomposed Pitching+ & Decisions"
+              href: workbooks/lab05_decomposed_pitching_decisions_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -79,6 +81,8 @@ website:
               href: analyses/03_tunneling_stuff_plus.qmd
             - text: "Study 04: Player Projections & Aging"
               href: analyses/04_player_projections.qmd
+            - text: "Study 05: Decomposed Pitching+ & Decisions"
+              href: analyses/05_decomposed_pitching_decisions.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

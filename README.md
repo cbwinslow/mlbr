@@ -114,6 +114,7 @@ Modeling scripts are organized in `models/`:
 * `models/02_platoon_splits_analysis.R` — Study 02: 4-Quadrant Platoon Physics, `hb_away_in`, Starter TTO Decay & Pitcher PVI (`EXP-002`).
 * `models/03_tunneling_stuff_plus.R` — Study 03: Exact Commit-Point Pitch Tunneling & Chronological XGBoost `Stuff+`/`Location+`/`Pitching+` (`EXP-003`).
 * `models/04_player_projections_marcel_aging.R` — Study 04: Tier 2 Chronological True-Talent Player Projections, Midpoint Delta-Method Aging, Physics Priors & 80% Uncertainty Bands (`EXP-004`).
+* `models/05_decomposed_pitching_swing_decisions.R` — Study 05: 5-Head Markov Decomposed Pitching+ & Pitch-Level Batter Process Engine (`EXP-005`).
 
 ### Student Work-Along Labs (1:1 Parity with Q-CRISP Studies)
 Interactive RStudio Server code-along scripts live in `workbooks/` with companion rendered Quarto guides in `site/workbooks/` (compiled to `site/docs/`):
@@ -121,4 +122,5 @@ Interactive RStudio Server code-along scripts live in `workbooks/` with companio
 * `workbooks/lab02_platoon_physics_workbook.R` → `site/workbooks/lab02_platoon_physics_workbook.qmd`
 * `workbooks/lab03_tunneling_stuff_plus_workbook.R` → `site/workbooks/lab03_tunneling_stuff_plus_workbook.qmd`
 * `workbooks/lab04_player_projections_workbook.R` → `site/workbooks/lab04_player_projections_workbook.qmd`
+* `workbooks/lab05_decomposed_pitching_decisions_workbook.R` → `site/workbooks/lab05_decomposed_pitching_decisions_workbook.qmd`
 * Interactive execution in RStudio Server: [http://192.168.10.1:8787](http://192.168.10.1:8787).

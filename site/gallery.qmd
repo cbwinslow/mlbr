@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 05</span>
+    <span class="gallery-badge">Markov + Decisions</span>
+    <h4><a href="analyses/05_decomposed_pitching_decisions.html">Decomposed Pitching+ &amp; Batter Process Engine</a></h4>
+    <p>5-head Markov probability pricing across 8.11M pitches eliminating base-out variance (<code>Decomp Pitching+</code>, <code>Decomp Location+</code>) plus zero-mean pitch-level batter <code>Decision+</code>, <code>BatControl+</code>, and <code>Contact+</code>.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">SIERA w_r -0.504 | Loc+ BB% -0.327 | Decision+ YoY r = 0.846 | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 04</span>
     <span class="gallery-badge">Tier 2 Projections</span>
     <h4><a href="analyses/04_player_projections.html">Player Projections, Aging Curves &amp; Physics Priors</a></h4>

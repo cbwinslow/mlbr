@@ -125,6 +125,7 @@ Explore our interactive research gallery:
 - [**Q-CRISP Study 02: 4-Quadrant Platoon Physics & PVI**](analyses/02_platoon_physics.html) | [**Lab 02**](workbooks/lab02_platoon_physics_workbook.html): `RvR`/`RvL`/`LvL`/`LvR` mechanics, `hb_away_in`, starter TTO decay, and Pitcher PVI.
 - [**Q-CRISP Study 03: Pitch Tunneling & Stuff+ / Pitching+**](analyses/03_tunneling_stuff_plus.html) | [**Lab 03**](workbooks/lab03_tunneling_stuff_plus_workbook.html): Exact `y0 = 50 -> 23.8 ft` commit-point tunneling (10.20M pairs) & chronological XGBoost `Stuff+`/`Location+`.
 - [**Q-CRISP Study 04: Player Projections, Aging & Physics Priors**](analyses/04_player_projections.html) | [**Lab 04**](workbooks/lab04_player_projections_workbook.html): Chronological Marcel, midpoint Delta-Method aging, `Pulled Air%`, `Zone-Chase (Z-O%)`, and 80% uncertainty bands (`2002–2027`).
+- [**Q-CRISP Study 05: Decomposed Pitching+ & Batter Process Engine**](analyses/05_decomposed_pitching_decisions.html) | [**Lab 05**](workbooks/lab05_decomposed_pitching_decisions_workbook.html): 5-head Markov probability pricing (`Decomp Pitching+`/`Location+`) & zero-mean pitch-level `Decision+`/`BatControl+`/`Contact+`.
 - [**Unsupervised Pitch Clustering**](analyses/pitch_clustering.html): K-Means & GMM movement classification.
 - [**Pitch Classification with Random Forest**](analyses/pitch_classification.html): Predicting pitch type from flight dynamics using `tidymodels`.
 - [**Non-linear xwOBA & Barrel Landscape**](analyses/xwoba_surface.html): 2D GAM surface across Exit Velocity & Launch Angle.

@@ -34,7 +34,8 @@
     - `02_platoon_physics.qmd`: Study 02 — 4-Quadrant Platoon Physics, break symmetry, and PVI.
     - `03_tunneling_stuff_plus.qmd`: Study 03 — Exact commit-point pitch tunneling (`v_statcast_tunneling`), Stuff+/Location+/Pitching+, and stabilization curves.
     - `04_player_projections.qmd`: Study 04 — Tier 2 Chronological True-Talent Player Projections (Marcel, Zero-Sum Delta-Method Aging, Stage-2 Residual Physics & 80% Uncertainty Bands).
-  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab04`).
+    - `05_decomposed_pitching_decisions.qmd`: Study 05 — Context-Neutral 5-Head Markov Decomposed Pitching+ & Pitch-Level Batter Process Engine (`Decision+`, `BatControl+`, `Contact+`).
+  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab05`).
 - Build command: `quarto render site/` from project root.
 
 ## Verification

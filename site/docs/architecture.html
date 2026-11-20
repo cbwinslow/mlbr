@@ -455,6 +455,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workbooks/lab05_decomposed_pitching_decisions_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -494,6 +500,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
   </div>
 </li>
       </ul>
@@ -617,7 +629,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     ├── pitcher_projections_true_talent.parquet    # 14,263 rows (2016-2027) + 80% CIs
     ├── batter_projections_true_talent.parquet     # 10,335 rows (2016-2027) + 80% CIs
     ├── projections_aging_curves.parquet           # Survivor-bias-corrected Delta-Method curves
-    └── projections_backtest_metrics.parquet       # Strict 4-track chronological OOS benchmarks</code></pre>
+    ├── projections_backtest_metrics.parquet       # Strict 4-track chronological OOS benchmarks
+    ├── pitcher_decomp_pitching_plus.parquet       # 5,974 rows: 5-head Markov Stuff+/Loc+/Pitch+Tun
+    ├── batter_process_metrics.parquet             # 4,965 rows: Decision+, BatControl+, Contact+
+    └── decomp_{count_rv_table,benchmark_ablation}.parquet</code></pre>
 <hr>
 </section>
 <section id="adr-001-storage-format-compression-sql-vs.-parquet" class="level2">
@@ -1259,53 +1274,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="in">    ├── pitcher_projections_true_talent.parquet    # 14,263 rows (2016-2027) + 80% CIs</span></span>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="in">    ├── batter_projections_true_talent.parquet     # 10,335 rows (2016-2027) + 80% CIs</span></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="in">    ├── projections_aging_curves.parquet           # Survivor-bias-corrected Delta-Method curves</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="in">    └── projections_backtest_metrics.parquet       # Strict 4-track chronological OOS benchmarks</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## ADR-001: Storage Format, Compression &amp; SQL vs. Parquet</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="fu">### What Is `sql/01_statcast_features.sql`?</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="in">`sql/01_statcast_features.sql`</span> is a **DuckDB SQL view definition** (`CREATE OR REPLACE VIEW v_statcast_features ...`), **not a storage file**. It stores zero data. Instead:</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`R/materialize_features.R`</span> executes the canonical view definition inside DuckDB and materializes the full 14.64M-row Silver table to **ZSTD-compressed, key-sorted Parquet** (<span class="in">`data/features/statcast_features/`</span>).</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`mlbr::lake_register_features()`</span> mounts that Parquet dataset as <span class="in">`v_statcast_features`</span> for sub-50ms SQL queries (falling back to live SQL evaluation over Bronze only when Silver isn't materialized yet or <span class="in">`force_dynamic = TRUE`</span>).</span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="fu">### Empirical Benchmark on `cbwdellr720` (2024 Partition: 802,059 Pitches × 80+ Columns)</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Storage Format <span class="pp">|</span> 2024 Size <span class="pp">|</span> Single-Pitcher Scan (<span class="in">`pitcher = 543037`</span>) <span class="pp">|</span> Multi-Reader Safe? <span class="pp">|</span> DuckDB / Polars / Arrow Native? <span class="pp">|</span></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|---:|---:|:---:|:---:|</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ZSTD Sorted Parquet** *(Chosen Standard)* | **92.4 MB** | **0.013s** (0.022s across 14.64M lake) | **Yes** | **Yes** <span class="pp">|</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Snappy Unsorted Parquet *(Legacy)* <span class="pp">|</span> 105.7 MB <span class="pp">|</span> 0.044s <span class="pp">|</span> Yes <span class="pp">|</span> Yes <span class="pp">|</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Monolithic <span class="in">`.duckdb`</span> Table <span class="pp">|</span> 127.2 MB <span class="pp">|</span> 0.166s <span class="pp">|</span> No (write lock) <span class="pp">|</span> DuckDB only <span class="pp">|</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> ZSTD Arrow IPC / Feather <span class="pp">|</span> 151.6 MB <span class="pp">|</span> 0.203s <span class="pp">|</span> Yes <span class="pp">|</span> Arrow/Polars only <span class="pp">|</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="fu">### How Polars, Arrow &amp; DuckDB Fit Together</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In Memory (Zero-Copy Interchange):** **Polars** uses **Apache Arrow** columnar buffers in memory (`polars-arrow`), the same memory layout used by **DuckDB** and **R `arrow`** via the **Arrow C Data Interface**. Moving query results between DuckDB SQL, R, and Python/Polars requires zero serialization copies.</span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**On Disk (Canonical Storage):** Polars and DuckDB both treat **Apache Parquet** as their primary analytical disk format. Combining **`COMPRESSION ZSTD`** with **`ROW_GROUP_SIZE = 100000`** and **`ORDER BY (game_year, pitcher, game_date, game_pk, at_bat_number, pitch_number)`** shrinks the 14.64M-row Silver table from **1.6 GB (Snappy)** down to **1.4 GB (ZSTD)** while enabling Parquet min-max zone-map pruning (**3.4× faster** filtered reads).</span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Future Lakehouse Scaling (Delta Lake / Apache Iceberg):** Because our canonical storage is already open Parquet, adding an Iceberg or Delta transaction log later requires zero data re-encoding if concurrent streaming writes grow.</span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Zero-Drop Column Invariant</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>Every raw dataset in <span class="in">`data/raw/`</span> retains **100% of its available columns**.</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Source Table <span class="pp">|</span> Preserved Columns <span class="pp">|</span> Key Retained Attributes <span class="pp">|</span></span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Statcast** | **119** <span class="pp">|</span> <span class="in">`release_speed`</span>, <span class="in">`release_spin_rate`</span>, <span class="in">`pfx_x`</span>, <span class="in">`pfx_z`</span>, <span class="in">`spin_axis`</span>, <span class="in">`vx0`</span>, <span class="in">`vy0`</span>, <span class="in">`vz0`</span>, <span class="in">`ax`</span>, <span class="in">`ay`</span>, <span class="in">`az`</span>, <span class="in">`sz_top`</span>, <span class="in">`sz_bot`</span>, <span class="in">`bat_speed`</span>, <span class="in">`swing_length`</span> <span class="pp">|</span></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Retrosheet Plays** | **160** <span class="pp">|</span> Base runner states, pitch sequence strings, fielder position codes, count, batted ball types <span class="pp">|</span></span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Retrosheet Games** | **84** <span class="pp">|</span> Temperature, wind, attendance, umpires, day/night, ballpark ID <span class="pp">|</span></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FanGraphs Batting** | **447** <span class="pp">|</span> wOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, plate discipline <span class="pp">|</span></span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FanGraphs Pitching**| **520** <span class="pp">|</span> FIP, xFIP, SIERA, K-BB%, Pitch mix, pitch run values <span class="pp">|</span></span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Chadwick Register** | **40** <span class="pp">|</span> Crosswalk IDs: <span class="in">`key_mlbam`</span>, <span class="in">`key_retro`</span>, <span class="in">`key_bbref`</span>, <span class="in">`key_fangraphs`</span>, <span class="in">`key_npb`</span> <span class="pp">|</span></span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ingestion Safety &amp; Passive Market Archiving</span></span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Statcast Adaptive Tier Ladder:** <span class="in">`R/ingest/ingest_statcast.R`</span> steps down <span class="in">`month → week → day`</span> whenever Baseball Savant approaches its 25,000-row query cap.</span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Passive Market &amp; Lineup Archiver:** `R/ingest/archive_market_snapshots.py` asynchronously polls the MLB Stats API (`probablePitcher,lineups`), Polymarket Gamma (`tag_slug=mlb`/`baseball`), and Kalshi public v2 MLB series, persisting **ZSTD Parquet** snapshots for Closing Line Value (CLV) backtesting.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="in">    ├── projections_backtest_metrics.parquet       # Strict 4-track chronological OOS benchmarks</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="in">    ├── pitcher_decomp_pitching_plus.parquet       # 5,974 rows: 5-head Markov Stuff+/Loc+/Pitch+Tun</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="in">    ├── batter_process_metrics.parquet             # 4,965 rows: Decision+, BatControl+, Contact+</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="in">    └── decomp_{count_rv_table,benchmark_ablation}.parquet</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## ADR-001: Storage Format, Compression &amp; SQL vs. Parquet</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="fu">### What Is `sql/01_statcast_features.sql`?</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="in">`sql/01_statcast_features.sql`</span> is a **DuckDB SQL view definition** (`CREATE OR REPLACE VIEW v_statcast_features ...`), **not a storage file**. It stores zero data. Instead:</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`R/materialize_features.R`</span> executes the canonical view definition inside DuckDB and materializes the full 14.64M-row Silver table to **ZSTD-compressed, key-sorted Parquet** (<span class="in">`data/features/statcast_features/`</span>).</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`mlbr::lake_register_features()`</span> mounts that Parquet dataset as <span class="in">`v_statcast_features`</span> for sub-50ms SQL queries (falling back to live SQL evaluation over Bronze only when Silver isn't materialized yet or <span class="in">`force_dynamic = TRUE`</span>).</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="fu">### Empirical Benchmark on `cbwdellr720` (2024 Partition: 802,059 Pitches × 80+ Columns)</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Storage Format <span class="pp">|</span> 2024 Size <span class="pp">|</span> Single-Pitcher Scan (<span class="in">`pitcher = 543037`</span>) <span class="pp">|</span> Multi-Reader Safe? <span class="pp">|</span> DuckDB / Polars / Arrow Native? <span class="pp">|</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|---:|---:|:---:|:---:|</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ZSTD Sorted Parquet** *(Chosen Standard)* | **92.4 MB** | **0.013s** (0.022s across 14.64M lake) | **Yes** | **Yes** <span class="pp">|</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Snappy Unsorted Parquet *(Legacy)* <span class="pp">|</span> 105.7 MB <span class="pp">|</span> 0.044s <span class="pp">|</span> Yes <span class="pp">|</span> Yes <span class="pp">|</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Monolithic <span class="in">`.duckdb`</span> Table <span class="pp">|</span> 127.2 MB <span class="pp">|</span> 0.166s <span class="pp">|</span> No (write lock) <span class="pp">|</span> DuckDB only <span class="pp">|</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> ZSTD Arrow IPC / Feather <span class="pp">|</span> 151.6 MB <span class="pp">|</span> 0.203s <span class="pp">|</span> Yes <span class="pp">|</span> Arrow/Polars only <span class="pp">|</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="fu">### How Polars, Arrow &amp; DuckDB Fit Together</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In Memory (Zero-Copy Interchange):** **Polars** uses **Apache Arrow** columnar buffers in memory (`polars-arrow`), the same memory layout used by **DuckDB** and **R `arrow`** via the **Arrow C Data Interface**. Moving query results between DuckDB SQL, R, and Python/Polars requires zero serialization copies.</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**On Disk (Canonical Storage):** Polars and DuckDB both treat **Apache Parquet** as their primary analytical disk format. Combining **`COMPRESSION ZSTD`** with **`ROW_GROUP_SIZE = 100000`** and **`ORDER BY (game_year, pitcher, game_date, game_pk, at_bat_number, pitch_number)`** shrinks the 14.64M-row Silver table from **1.6 GB (Snappy)** down to **1.4 GB (ZSTD)** while enabling Parquet min-max zone-map pruning (**3.4× faster** filtered reads).</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Future Lakehouse Scaling (Delta Lake / Apache Iceberg):** Because our canonical storage is already open Parquet, adding an Iceberg or Delta transaction log later requires zero data re-encoding if concurrent streaming writes grow.</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Zero-Drop Column Invariant</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>Every raw dataset in <span class="in">`data/raw/`</span> retains **100% of its available columns**.</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Source Table <span class="pp">|</span> Preserved Columns <span class="pp">|</span> Key Retained Attributes <span class="pp">|</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Statcast** | **119** <span class="pp">|</span> <span class="in">`release_speed`</span>, <span class="in">`release_spin_rate`</span>, <span class="in">`pfx_x`</span>, <span class="in">`pfx_z`</span>, <span class="in">`spin_axis`</span>, <span class="in">`vx0`</span>, <span class="in">`vy0`</span>, <span class="in">`vz0`</span>, <span class="in">`ax`</span>, <span class="in">`ay`</span>, <span class="in">`az`</span>, <span class="in">`sz_top`</span>, <span class="in">`sz_bot`</span>, <span class="in">`bat_speed`</span>, <span class="in">`swing_length`</span> <span class="pp">|</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Retrosheet Plays** | **160** <span class="pp">|</span> Base runner states, pitch sequence strings, fielder position codes, count, batted ball types <span class="pp">|</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Retrosheet Games** | **84** <span class="pp">|</span> Temperature, wind, attendance, umpires, day/night, ballpark ID <span class="pp">|</span></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FanGraphs Batting** | **447** <span class="pp">|</span> wOBA, wRC+, ISO, HardHit%, Barrel%, xBA, xSLG, plate discipline <span class="pp">|</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **FanGraphs Pitching**| **520** <span class="pp">|</span> FIP, xFIP, SIERA, K-BB%, Pitch mix, pitch run values <span class="pp">|</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Chadwick Register** | **40** <span class="pp">|</span> Crosswalk IDs: <span class="in">`key_mlbam`</span>, <span class="in">`key_retro`</span>, <span class="in">`key_bbref`</span>, <span class="in">`key_fangraphs`</span>, <span class="in">`key_npb`</span> <span class="pp">|</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ingestion Safety &amp; Passive Market Archiving</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Statcast Adaptive Tier Ladder:** <span class="in">`R/ingest/ingest_statcast.R`</span> steps down <span class="in">`month → week → day`</span> whenever Baseball Savant approaches its 25,000-row query cap.</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Passive Market &amp; Lineup Archiver:** `R/ingest/archive_market_snapshots.py` asynchronously polls the MLB Stats API (`probablePitcher,lineups`), Polymarket Gamma (`tag_slug=mlb`/`baseball`), and Kalshi public v2 MLB series, persisting **ZSTD Parquet** snapshots for Closing Line Value (CLV) backtesting.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

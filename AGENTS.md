@@ -51,7 +51,7 @@ The `mlbr` workspace on `cbwdellr720` is a comprehensive, production-grade Saber
 - `experiments/`: Curated experiment registry (`registry.json`, `README.md`) tracking all hypotheses, equations, metrics, and validation status.
 - `sql/`: Reusable, standalone, pure DuckDB SQL scripts for feature materialization and queries.
 - `models/`: Self-contained, reproducible model training and exploratory research scripts in R, including saved figure artifacts (`.png`, `.rds`, `.parquet`).
-- `workbooks/`: Student-facing interactive RStudio Server code-along scripts (`lab01`–`lab04_*.R`). **Mandatory 1:1 Parity Rule:** Every numbered Q-CRISP study (`site/analyses/0X_*.qmd`) MUST ship with a matching runnable `workbooks/lab0X_*.R` AND companion published walkthrough `site/workbooks/lab0X_*.qmd` wired into `site/_quarto.yml` (verified mechanically by `R/generate_agent_manifest.R`).
+- `workbooks/`: Student-facing interactive RStudio Server code-along scripts (`lab01`–`lab05_*.R`). **Mandatory 1:1 Parity Rule:** Every numbered Q-CRISP study (`site/analyses/0X_*.qmd`) MUST ship with a matching runnable `workbooks/lab0X_*.R` AND companion published walkthrough `site/workbooks/lab0X_*.qmd` wired into `site/_quarto.yml` (verified mechanically by `R/generate_agent_manifest.R`).
 - `specs/`: Engineering and sabermetric model specifications following SDD principles and Q-CRISP.
 - `DECISIONS.md`: Architecture Decision Records (ADR-001+) documenting settled storage, modeling, and validation choices.
 - `.agents/`: Project-scoped Antigravity subagents (`agents/`), progressive skills (`skills/`), and deterministic guardrails (`hooks.json`).

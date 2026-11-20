@@ -73,3 +73,5 @@ Inspect the interactive Pitcher & Batter Plotly frontiers (with Live `2027` hove
 1. **Checkpoint 1 — Metric-Specific Reliability (`M`):** Change `M` in Part 1B from `2200` (`wOBA`) to `250` (`K%`). Compare the rookie's trust weight and explain why strikeout rates stabilize ~9× faster than overall batting value.
 2. **Checkpoint 2 — Survivorship Bias in Aging Curves:** Load `data/processed/projections_aging_curves.parquet` and plot `cum_delta_smooth` vs. `naive_centered` for `group == "SP"`, `metric == "FBv (mph)"`. Verify the `-5.12 mph` vs. `-2.68 mph` survivorship gap at Age 38.
 3. **Checkpoint 3 — Injured / Missed-2026 Retention (`played_2026 == 0`):** Filter `data/processed/pitcher_projections_true_talent.parquet` to `projection_year == 2027L & played_2026 == 0L` and examine how injured pitchers retain regressed aging-adjusted priors without double-counting.
+
+*Next Lab:* [**Lab 05: Markov Decomposed Pitching+ & Swing Decisions**](lab05_decomposed_pitching_decisions_workbook.html)

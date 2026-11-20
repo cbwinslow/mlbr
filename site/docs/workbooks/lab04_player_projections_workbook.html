@@ -486,6 +486,12 @@ window.Quarto = {
  <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab05_decomposed_pitching_decisions_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -525,6 +531,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
   </div>
 </li>
       </ul>
@@ -749,6 +761,7 @@ window.Quarto = {
 <li><strong>Checkpoint 2 — Survivorship Bias in Aging Curves:</strong> Load <code>data/processed/projections_aging_curves.parquet</code> and plot <code>cum_delta_smooth</code> vs.&nbsp;<code>naive_centered</code> for <code>group == "SP"</code>, <code>metric == "FBv (mph)"</code>. Verify the <code>-5.12 mph</code> vs.&nbsp;<code>-2.68 mph</code> survivorship gap at Age 38.</li>
 <li><strong>Checkpoint 3 — Injured / Missed-2026 Retention (<code>played_2026 == 0</code>):</strong> Filter <code>data/processed/pitcher_projections_true_talent.parquet</code> to <code>projection_year == 2027L &amp; played_2026 == 0L</code> and examine how injured pitchers retain regressed aging-adjusted priors without double-counting.</li>
 </ol>
+<p><em>Next Lab:</em> <a href="lab05_decomposed_pitching_decisions_workbook.html"><strong>Lab 05: Markov Decomposed Pitching+ &amp; Swing Decisions</strong></a></p>
 
 
 <!-- -->
@@ -1294,7 +1307,9 @@ window.Quarto = {
 <span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Checkpoint 1 — Metric-Specific Reliability (`M`):** Change <span class="in">`M`</span> in Part 1B from <span class="in">`2200`</span> (<span class="in">`wOBA`</span>) to <span class="in">`250`</span> (<span class="in">`K%`</span>). Compare the rookie's trust weight and explain why strikeout rates stabilize ~9× faster than overall batting value.</span>
 <span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Checkpoint 2 — Survivorship Bias in Aging Curves:** Load <span class="in">`data/processed/projections_aging_curves.parquet`</span> and plot <span class="in">`cum_delta_smooth`</span> vs. <span class="in">`naive_centered`</span> for <span class="in">`group == "SP"`</span>, <span class="in">`metric == "FBv (mph)"`</span>. Verify the <span class="in">`-5.12 mph`</span> vs. <span class="in">`-2.68 mph`</span> survivorship gap at Age 38.</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Checkpoint 3 — Injured / Missed-2026 Retention (`played_2026 == 0`):** Filter <span class="in">`data/processed/pitcher_projections_true_talent.parquet`</span> to <span class="in">`projection_year == 2027L &amp; played_2026 == 0L`</span> and examine how injured pitchers retain regressed aging-adjusted priors without double-counting.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Checkpoint 3 — Injured / Missed-2026 Retention (`played_2026 == 0`):** Filter <span class="in">`data/processed/pitcher_projections_true_talent.parquet`</span> to <span class="in">`projection_year == 2027L &amp; played_2026 == 0L`</span> and examine how injured pitchers retain regressed aging-adjusted priors without double-counting.</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>*Next Lab:* [**Lab 05: Markov Decomposed Pitching+ &amp; Swing Decisions**](lab05_decomposed_pitching_decisions_workbook.html)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
