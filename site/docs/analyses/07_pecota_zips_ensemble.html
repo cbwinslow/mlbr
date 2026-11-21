@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="mlbr Quantitative Research Group">
+<meta name="dcterms.date" content="2026-11-21">
+
+<title>Study 07: PECOTA k-NN Similarity Comps, ZiPS Archetype Multi-Year Aging &amp; Non-Pitch Defense/Baserunning EDA – mlbr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-1d6f68ac07d6e45f311d12062c618a6a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">mlbr</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/experiment_registry.html"> 
+<span class="menu-text">Knowledge Base</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/01_pitch_quality_eda.html"> 
+<span class="menu-text">Q-CRISP Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../workbooks/lab01_aerodynamics_workbook.html"> 
+<span class="menu-text">Student Labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../gallery.html"> 
+<span class="menu-text">Analyses Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../architecture.html"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup &amp; API</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../crosswalk.html"> 
+<span class="menu-text">ID Crosswalk</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../verification.html"> 
+<span class="menu-text">Data Proofs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../agent_context.html"> 
+<span class="menu-text">AI Agent Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data_dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/cbwinslow/mlbr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/07_pecota_zips_ensemble.html">Study 07: PECOTA k-NN, ZiPS &amp; Meta-Ensemble</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview &amp; Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation &amp; Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../crosswalk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universal ID Crosswalk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Architecture &amp; Storage</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../verification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Verification &amp; Proofs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../agent_context.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Agent Data Manifest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Dictionary &amp; Schemas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Student Work-Along Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab01_aerodynamics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 01: Aerodynamics &amp; Trajectory Math</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab02_platoon_physics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 02: 4-Quadrant Platoon Physics &amp; PVI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab03_tunneling_stuff_plus_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 03: Pitch Tunneling &amp; Stuff+ / Loc+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab04_player_projections_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab05_decomposed_pitching_decisions_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab06_ballpark_factors_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 06: Regressed Ballpark Factors &amp; Altitude</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab07_pecota_zips_ensemble_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 07: PECOTA Comps, ZiPS Aging &amp; Defense EDA</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Q-CRISP Research Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/experiment_registry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Knowledge Base &amp; Registry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/01_pitch_quality_eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 01: Aerodynamics &amp; Approach Angles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/02_platoon_physics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 02: 4-Quadrant Platoon Physics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/03_tunneling_stuff_plus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 03: Pitch Tunneling &amp; Stuff+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/06_ballpark_factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 06: Empirical Ballpark Factors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/07_pecota_zips_ensemble.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Study 07: PECOTA k-NN, ZiPS &amp; Meta-Ensemble</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyses Gallery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Clustering (K-Means / GMM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Classification (Random Forest)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/xwoba_surface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xWOBA / Exit Velocity Surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/run_expectancy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Run Expectancy RE24 Matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#executive-summary-abstract-tldr" id="toc-executive-summary-abstract-tldr" class="nav-link active" data-scroll-target="#executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</a></li>
+  <li><a href="#domain-problem-theoretical-grounding" id="toc-domain-problem-theoretical-grounding" class="nav-link" data-scroll-target="#domain-problem-theoretical-grounding">2. Domain Problem &amp; Theoretical Grounding</a></li>
+  <li><a href="#mathematical-formulation-lake-wide-pipeline" id="toc-mathematical-formulation-lake-wide-pipeline" class="nav-link" data-scroll-target="#mathematical-formulation-lake-wide-pipeline">3. Mathematical Formulation &amp; Lake-Wide Pipeline</a>
+  <ul class="collapse">
+  <li><a href="#era-neutralized-historical-z-scores-19602025" id="toc-era-neutralized-historical-z-scores-19602025" class="nav-link" data-scroll-target="#era-neutralized-historical-z-scores-19602025">3.1 Era-Neutralized Historical <span class="math inline">\(z\)</span>-Scores (<code>1960–2025</code>)</a></li>
+  <li><a href="#vectorized-pecota-k-nn-kernel-strict-anti-leakage-guard" id="toc-vectorized-pecota-k-nn-kernel-strict-anti-leakage-guard" class="nav-link" data-scroll-target="#vectorized-pecota-k-nn-kernel-strict-anti-leakage-guard">3.2 Vectorized PECOTA <span class="math inline">\(k\)</span>-NN Kernel &amp; Strict Anti-Leakage Guard</a></li>
+  </ul></li>
+  <li><a href="#non-pitch-exploratory-data-analysis-defense-baserunning-reliability" id="toc-non-pitch-exploratory-data-analysis-defense-baserunning-reliability" class="nav-link" data-scroll-target="#non-pitch-exploratory-data-analysis-defense-baserunning-reliability">4. Non-Pitch Exploratory Data Analysis: Defense &amp; Baserunning Reliability</a></li>
+  <li><a href="#model-architecture-temporal-validation-pecota-percentile-fans" id="toc-model-architecture-temporal-validation-pecota-percentile-fans" class="nav-link" data-scroll-target="#model-architecture-temporal-validation-pecota-percentile-fans">5. Model Architecture, Temporal Validation &amp; PECOTA Percentile Fans</a></li>
+  <li><a href="#leaderboards-named-historical-comps-5-year-zips-trajectories" id="toc-leaderboards-named-historical-comps-5-year-zips-trajectories" class="nav-link" data-scroll-target="#leaderboards-named-historical-comps-5-year-zips-trajectories">6. Leaderboards, Named Historical Comps &amp; 5-Year ZiPS Trajectories</a>
+  <ul class="collapse">
+  <li><a href="#marquee-2026-pecota-historical-comps-19602025-full-pool" id="toc-marquee-2026-pecota-historical-comps-19602025-full-pool" class="nav-link" data-scroll-target="#marquee-2026-pecota-historical-comps-19602025-full-pool">6.1 Marquee 2026 PECOTA Historical Comps (<code>1960–2025</code> Full Pool)</a></li>
+  <li><a href="#zips-style-5-year-archetype-career-trajectories-20262030" id="toc-zips-style-5-year-archetype-career-trajectories-20262030" class="nav-link" data-scroll-target="#zips-style-5-year-archetype-career-trajectories-20262030">6.2 ZiPS-Style 5-Year Archetype Career Trajectories (<code>2026–2030</code>)</a></li>
+  </ul></li>
+  <li><a href="#downstream-integration-level-35-roadmap" id="toc-downstream-integration-level-35-roadmap" class="nav-link" data-scroll-target="#downstream-integration-level-35-roadmap">7. Downstream Integration &amp; Level 3–5 Roadmap</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/07_pecota_zips_ensemble.html">Study 07: PECOTA k-NN, ZiPS &amp; Meta-Ensemble</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Study 07: PECOTA k-NN Similarity Comps, ZiPS Archetype Multi-Year Aging &amp; Non-Pitch Defense/Baserunning EDA</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Q-CRISP Research Series: Completing All 5 Sabermetric Projection Paradigms Across 70,967 Historical Player-Seasons (1960–2026)</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>mlbr Quantitative Research Group </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 21, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Experiment Registry &amp; Architecture
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Experiment ID:</strong> <code>EXP-007-PECOTA-ZIPS-ENSEMBLE</code> (<code>VALIDATED</code> in <code>experiments/registry.json</code>)</li>
+<li><strong>Architecture Tier:</strong> Level 2B — Complete Player Projection Gamut (Comps, Archetype Aging, 5-Year Horizons &amp; Consensus Stacking)</li>
+<li><strong>Specification:</strong> <code>specs/07_pecota_zips_ensemble.md</code></li>
+<li><strong>Companion Student Lab:</strong> <a href="../workbooks/lab07_pecota_zips_ensemble_workbook.html"><strong>Lab 07: PECOTA k-NN, ZiPS 5-Year Aging &amp; Survival Curves</strong></a></li>
+<li><strong>Gold Deliverables:</strong> <code>defense_baserunning_eda_2002_2025.parquet</code>, <code>pecota_knn_comps_2026.parquet</code>, <code>zips_5yr_trajectories_2026_2030.parquet</code>, <code>ensemble_projections_2016_2026.parquet</code>, <code>ensemble_backtest_metrics.parquet</code></li>
+<li><strong>Preserved Assets:</strong> <code>models/pz01_*</code> .. <code>pz04_*</code> (PNG 300 DPI, RDS <code>&lt; 0.35 MB</code>, ZSTD Parquet, interactive Plotly HTML)</li>
+</ul>
+</div>
+</div>
+<hr>
+<section id="executive-summary-abstract-tldr" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</h2>
+<p>In <strong>Study 04</strong>, <code>mlbr</code> established Tom Tango’s <strong>Marcel</strong>, <strong>Midpoint Delta-Method Aging</strong>, and <strong>THE BAT / OOPSY-style Statcast Physics Ridge</strong>. In <strong>Study 07</strong>, we complete the remaining pillars of modern sabermetric forecasting across the <strong>full <code>1960–2025</code> historical data lake (<code>70,967</code> player-seasons)</strong> and <strong><code>2002–2025</code> non-pitch fielding/baserunning lake (<code>14,684</code> non-pitch fielder-seasons)</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pillar</th>
+<th style="text-align: left;">Validated Empirical Result</th>
+<th style="text-align: left;">Sabermetric &amp; Forecasting Implication</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Non-Pitch EDA (Defense &amp; Baserunning)</strong></td>
+<td style="text-align: left;">Statcast <strong>OAA (<code>r = 0.506</code>)</strong> stabilizes significantly faster than <strong>DRS (<code>r = 0.431</code>)</strong> and <strong>UZR/150 (<code>r = 0.374</code>)</strong>; stolen base rate (<code>r = 0.815</code>) rivals plate discipline (<code>K% r = 0.861</code>).</td>
+<td style="text-align: left;">Modern tracking-based defense (OAA) carries ~35% more year-over-year signal than legacy zone-grid defensive metrics, justifying heavier shrinkage on DRS/UZR.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>ZiPS-Style Archetype Aging (<code>8/5/4/3</code>)</strong></td>
+<td style="text-align: left;">Strictly beats Tango Marcel on locked 2025 batter wOBA (<code>0.02987</code> vs.&nbsp;<code>0.03002</code>, <code>w_r = 0.5469</code> vs.&nbsp;<code>0.5356</code>) without any Statcast inputs and forecasts 5-year horizons (<code>2026–2030</code>).</td>
+<td style="text-align: left;">Position- and role-archetype aging curves capture distinct decay shapes across catchers, up-the-middle athletes, and power starters.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>PECOTA <span class="math inline">\(k\)</span>-NN Similarity Comps (<code>1960–2025</code>)</strong></td>
+<td style="text-align: left;">Era-neutralized <span class="math inline">\(k = 50\)</span> nearest neighbors produce empirical <code>[p10, p90]</code> coverage of <strong><code>85.3%</code> (batters)</strong> and <strong><code>75.2%</code> (pitchers)</strong> plus explicit survival/breakout/collapse probabilities.</td>
+<td style="text-align: left;">Solves veteran survivorship bias directly and surfaces uncanny historical comps (e.g., Paul Skenes → Noah Syndergaard ’16 / Clayton Kershaw ’11; Aaron Judge → Mickey Mantle ’63).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>5-Paradigm Shootout &amp; M5 Consensus Stack</strong></td>
+<td style="text-align: left;">Exact KKT simplex stacking on <code>2016–2024</code> blends <strong><code>68.1% M4 + 31.9% PECOTA</code></strong> (batters, highest <code>w_r = 0.5782</code>) and <strong><code>81.8% M4 + 11.1% Marcel + 7.1% ZiPS</code></strong> (pitchers, lowest <code>w_rmse = 0.71565</code>, highest <code>w_r = 0.5756</code>).</td>
+<td style="text-align: left;">Combining Statcast physics (<code>M4</code>) with orthogonal historical comp (<code>PECOTA</code>) and multi-year aging (<code>ZiPS</code>/<code>Marcel</code>) signal strictly improves out-of-sample pitcher FIP RMSE and boosts correlation across both domains.</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/pz04_five_paradigm_oos_shootout.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 4: 5-Paradigm Locked 2024 -&gt; 2025 Out-of-Sample Shootout</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="domain-problem-theoretical-grounding" class="level2">
+<h2 class="anchored" data-anchor-id="domain-problem-theoretical-grounding">2. Domain Problem &amp; Theoretical Grounding</h2>
+<p>Public baseball forecasting evolved through five distinct intellectual eras: 1. <strong>Marcel (Tom Tango, 2004):</strong> 3-year weighted baseline (<code>5/4/3</code>) + universal reliability regression + piecewise-linear age adjustment. 2. <strong>ZiPS (Dan Szymborski):</strong> 4-year weighted baseline (<code>8/5/4/3</code>) + position/archetype aging curves + multi-year career horizon forecasts. 3. <strong>PECOTA (Nate Silver, 2003):</strong> Non-parametric nearest-neighbor (<span class="math inline">\(k\)</span>-NN) similarity scores across decades of baseball history, outputting full <strong>10th–90th percentile distributions</strong>, <strong>breakout/collapse probabilities</strong>, and <strong>attrition/survival rates</strong>. 4. <strong>THE BAT / OOPSY (Derek Carty / Jordan Rosenblum):</strong> Incorporating Statcast batted-ball physics (<code>xwOBA</code>, <code>EV90</code>, <code>Pulled Air%</code>) and pitch tracking (<code>Stuff+</code>, <code>Location+</code>). 5. <strong>ATC / Depth Charts Consensus:</strong> Ensembling multiple orthogonal projection systems via out-of-sample inverse-variance / convex stacking.</p>
+<hr>
+</section>
+<section id="mathematical-formulation-lake-wide-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-formulation-lake-wide-pipeline">3. Mathematical Formulation &amp; Lake-Wide Pipeline</h2>
+<section id="era-neutralized-historical-z-scores-19602025" class="level3">
+<h3 class="anchored" data-anchor-id="era-neutralized-historical-z-scores-19602025">3.1 Era-Neutralized Historical <span class="math inline">\(z\)</span>-Scores (<code>1960–2025</code>)</h3>
+<p>To compare a 1963 Mickey Mantle or 1996 Gary Sheffield directly against a 2025 hitter without run-environment distortion, every feature is standardized within its own season <span class="math inline">\(s\)</span> and role <span class="math inline">\(g\)</span>: <span class="math display">\[z_{i,s}^{(f)} = \frac{x_{i,s}^{(f)} - \mu_{s,g}^{(f)}}{\sigma_{s,g}^{(f)}}\]</span></p>
+</section>
+<section id="vectorized-pecota-k-nn-kernel-strict-anti-leakage-guard" class="level3">
+<h3 class="anchored" data-anchor-id="vectorized-pecota-k-nn-kernel-strict-anti-leakage-guard">3.2 Vectorized PECOTA <span class="math inline">\(k\)</span>-NN Kernel &amp; Strict Anti-Leakage Guard</h3>
+<p>For any target season <span class="math inline">\(T\)</span>, candidate historical comps must satisfy <span class="math inline">\(s \le T - 2\)</span> so their subsequent <span class="math inline">\(s+1\)</span> outcome is strictly <span class="math inline">\(\le T - 1\)</span>. Pairwise weighted Euclidean distances <span class="math inline">\(d_{ij}\)</span> across all <code>70,967</code> historical seasons are computed in milliseconds via BLAS matrix algebra (<span class="math inline">\(\|x - y\|^2 = \|x\|^2 + \|y\|^2 - 2xy^\top\)</span>) and weighted by a Gaussian kernel <span class="math inline">\(w_j = \exp(-\frac{1}{2}(d_{ij}/\tau)^2)\)</span> over the top <span class="math inline">\(k = 50\)</span> nearest neighbors.</p>
+<hr>
+</section>
+</section>
+<section id="non-pitch-exploratory-data-analysis-defense-baserunning-reliability" class="level2">
+<h2 class="anchored" data-anchor-id="non-pitch-exploratory-data-analysis-defense-baserunning-reliability">4. Non-Pitch Exploratory Data Analysis: Defense &amp; Baserunning Reliability</h2>
+<p>Before building comps, we audited how non-pitch skills stabilize year-over-year across <code>2002–2025</code>:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/pz01_defense_baserunning_stabilization_aging.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 1: Non-Pitch EDA Year-over-Year Reliability (Offense vs.&nbsp;Baserunning vs.&nbsp;Defense)</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>Key Discovery:</strong> Statcast <strong>Outs Above Average (<code>OAA</code>, <span class="math inline">\(r = 0.506\)</span>)</strong> nearly matches overall offensive <code>wOBA</code> (<span class="math inline">\(r = 0.526\)</span>) in year-over-year stability and decisively outperforms legacy <strong>DRS (<span class="math inline">\(r = 0.431\)</span>)</strong> and <strong>UZR/150 (<span class="math inline">\(r = 0.374\)</span>)</strong>. Meanwhile, stolen base rate (<span class="math inline">\(r = 0.815\)</span>) is almost as repeatable as strikeout rate (<span class="math inline">\(r = 0.861\)</span>).</li>
+</ul>
+<hr>
+</section>
+<section id="model-architecture-temporal-validation-pecota-percentile-fans" class="level2">
+<h2 class="anchored" data-anchor-id="model-architecture-temporal-validation-pecota-percentile-fans">5. Model Architecture, Temporal Validation &amp; PECOTA Percentile Fans</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/pz02_pecota_knn_percentile_fan.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 2: PECOTA k-NN Percentile Fan — Top 20 Projected 2026 Batters</figcaption>
+</figure>
+</div>
+<iframe src="../assets/pz02_pecota_knn_percentile_fan.html" width="100%" height="580" style="border: 1px solid #1e293b; border-radius: 8px; background: #090d16;">
+</iframe>
+<hr>
+</section>
+<section id="leaderboards-named-historical-comps-5-year-zips-trajectories" class="level2">
+<h2 class="anchored" data-anchor-id="leaderboards-named-historical-comps-5-year-zips-trajectories">6. Leaderboards, Named Historical Comps &amp; 5-Year ZiPS Trajectories</h2>
+<section id="marquee-2026-pecota-historical-comps-19602025-full-pool" class="level3">
+<h3 class="anchored" data-anchor-id="marquee-2026-pecota-historical-comps-19602025-full-pool">6.1 Marquee 2026 PECOTA Historical Comps (<code>1960–2025</code> Full Pool)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">2026 Player</th>
+<th style="text-align: right;">Age</th>
+<th style="text-align: left;">#1 Historical Comp (Sim)</th>
+<th style="text-align: left;">#2 Historical Comp (Sim)</th>
+<th style="text-align: left;">#3 Historical Comp (Sim)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Aaron Judge</strong></td>
+<td style="text-align: right;">34</td>
+<td style="text-align: left;">Mickey Mantle 1963 (<code>73.9</code>)</td>
+<td style="text-align: left;">Mark McGwire 1996 (<code>70.3</code>)</td>
+<td style="text-align: left;">Jim Thome 2002 (<code>68.6</code>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Shohei Ohtani</strong></td>
+<td style="text-align: right;">31</td>
+<td style="text-align: left;">Derrek Lee 2005 (<code>79.8</code>)</td>
+<td style="text-align: left;">Frank Robinson 1966 (<code>79.0</code>)</td>
+<td style="text-align: left;">Alex Rodriguez 2007 (<code>77.7</code>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Juan Soto</strong></td>
+<td style="text-align: right;">27</td>
+<td style="text-align: left;">Gary Sheffield 1996 (<code>80.4</code>)</td>
+<td style="text-align: left;">Frank Thomas 1995 (<code>77.9</code>)</td>
+<td style="text-align: left;">Bryce Harper 2020 (<code>77.8</code>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Bobby Witt Jr.</strong></td>
+<td style="text-align: right;">26</td>
+<td style="text-align: left;">Ian Kinsler 2008 (<code>87.1</code>)</td>
+<td style="text-align: left;">AJ Pollock 2014 (<code>82.2</code>)</td>
+<td style="text-align: left;">Cedric Mullins 2021 (<code>79.0</code>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Paul Skenes</strong></td>
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">Noah Syndergaard 2016 (<code>90.5</code>)</td>
+<td style="text-align: left;">José Fernández 2015 (<code>87.2</code>)</td>
+<td style="text-align: left;">Clayton Kershaw 2011 (<code>84.4</code>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Tarik Skubal</strong></td>
+<td style="text-align: right;">29</td>
+<td style="text-align: left;">Félix Hernández 2014 (<code>85.2</code>)</td>
+<td style="text-align: left;">Patrick Corbin 2018 (<code>84.5</code>)</td>
+<td style="text-align: left;">Josh Beckett 2007 (<code>84.2</code>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Garrett Crochet</strong></td>
+<td style="text-align: right;">27</td>
+<td style="text-align: left;">Javier Vazquez 2003 (<code>89.6</code>)</td>
+<td style="text-align: left;">Stephen Strasburg 2015 (<code>88.6</code>)</td>
+<td style="text-align: left;">Justin Verlander 2009 (<code>86.3</code>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Zack Wheeler</strong></td>
+<td style="text-align: right;">36</td>
+<td style="text-align: left;">David Cone 1998 (<code>92.1</code>)</td>
+<td style="text-align: left;">Jim Bunning 1967 (<code>89.0</code>)</td>
+<td style="text-align: left;">Mike Mussina 2003 (<code>85.9</code>)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="zips-style-5-year-archetype-career-trajectories-20262030" class="level3">
+<h3 class="anchored" data-anchor-id="zips-style-5-year-archetype-career-trajectories-20262030">6.2 ZiPS-Style 5-Year Archetype Career Trajectories (<code>2026–2030</code>)</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/pz03_zips_5yr_career_trajectories.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 3: ZiPS-Style 5-Year Archetype Career Trajectories (2026–2030)</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+</section>
+<section id="downstream-integration-level-35-roadmap" class="level2">
+<h2 class="anchored" data-anchor-id="downstream-integration-level-35-roadmap">7. Downstream Integration &amp; Level 3–5 Roadmap</h2>
+<p>With <strong>Level 2 (<code>EXP-004</code> + <code>EXP-007</code>)</strong> now 100% complete across all five sabermetric projection paradigms: - <strong>Level 3 (<code>EXP-008</code> BaseRuns &amp; Pythagenpat Standings):</strong> Consumes <code>M4_Statcast_Physics</code> / <code>M5</code> point forecasts together with PECOTA <code>p10–p90</code> uncertainty widths and <code>EXP-006</code> Ballpark Factors to simulate full 162-game division and playoff distributions. - <strong>Contract Valuation &amp; Dynasty Markets:</strong> ZiPS 5-year trajectories (<code>zips_5yr_trajectories_2026_2030.parquet</code>) and PECOTA survival probabilities provide multi-year free-agent WAR valuation curves.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/cloudcurio\.cc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Study 07: PECOTA k-NN Similarity Comps, ZiPS Archetype Multi-Year Aging &amp; Non-Pitch Defense/Baserunning EDA"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Q-CRISP Research Series: Completing All 5 Sabermetric Projection Paradigms Across 70,967 Historical Player-Seasons (1960–2026)"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Quantitative Research Group"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-21"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Experiment Registry &amp; Architecture</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Experiment ID:** <span class="in">`EXP-007-PECOTA-ZIPS-ENSEMBLE`</span> (<span class="in">`VALIDATED`</span> in <span class="in">`experiments/registry.json`</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Architecture Tier:** Level 2B — Complete Player Projection Gamut (Comps, Archetype Aging, 5-Year Horizons &amp; Consensus Stacking)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Specification:** <span class="in">`specs/07_pecota_zips_ensemble.md`</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Companion Student Lab:** [**Lab 07: PECOTA k-NN, ZiPS 5-Year Aging &amp; Survival Curves**](../workbooks/lab07_pecota_zips_ensemble_workbook.html)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Gold Deliverables:** <span class="in">`defense_baserunning_eda_2002_2025.parquet`</span>, <span class="in">`pecota_knn_comps_2026.parquet`</span>, <span class="in">`zips_5yr_trajectories_2026_2030.parquet`</span>, <span class="in">`ensemble_projections_2016_2026.parquet`</span>, <span class="in">`ensemble_backtest_metrics.parquet`</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Preserved Assets:** <span class="in">`models/pz01_*`</span> .. <span class="in">`pz04_*`</span> (PNG 300 DPI, RDS <span class="in">`&lt; 0.35 MB`</span>, ZSTD Parquet, interactive Plotly HTML)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Executive Summary &amp; Abstract (TL;DR)</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>In **Study 04**, `mlbr` established Tom Tango's **Marcel**, **Midpoint Delta-Method Aging**, and **THE BAT / OOPSY-style Statcast Physics Ridge**. In **Study 07**, we complete the remaining pillars of modern sabermetric forecasting across the **full `1960–2025` historical data lake (`70,967` player-seasons)** and **`2002–2025` non-pitch fielding/baserunning lake (`14,684` non-pitch fielder-seasons)**:</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pillar <span class="pp">|</span> Validated Empirical Result <span class="pp">|</span> Sabermetric &amp; Forecasting Implication <span class="pp">|</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Non-Pitch EDA (Defense &amp; Baserunning)** | Statcast **OAA (`r = 0.506`)** stabilizes significantly faster than **DRS (`r = 0.431`)** and **UZR/150 (`r = 0.374`)**; stolen base rate (<span class="in">`r = 0.815`</span>) rivals plate discipline (<span class="in">`K% r = 0.861`</span>). <span class="pp">|</span> Modern tracking-based defense (OAA) carries ~35% more year-over-year signal than legacy zone-grid defensive metrics, justifying heavier shrinkage on DRS/UZR. <span class="pp">|</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ZiPS-Style Archetype Aging (`8/5/4/3`)** <span class="pp">|</span> Strictly beats Tango Marcel on locked 2025 batter wOBA (<span class="in">`0.02987`</span> vs. <span class="in">`0.03002`</span>, <span class="in">`w_r = 0.5469`</span> vs. <span class="in">`0.5356`</span>) without any Statcast inputs and forecasts 5-year horizons (<span class="in">`2026–2030`</span>). <span class="pp">|</span> Position- and role-archetype aging curves capture distinct decay shapes across catchers, up-the-middle athletes, and power starters. <span class="pp">|</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **PECOTA $k$-NN Similarity Comps (`1960–2025`)** | Era-neutralized $k = 50$ nearest neighbors produce empirical `[p10, p90]` coverage of **`85.3%` (batters)** and **`75.2%` (pitchers)** plus explicit survival/breakout/collapse probabilities. <span class="pp">|</span> Solves veteran survivorship bias directly and surfaces uncanny historical comps (e.g., Paul Skenes → Noah Syndergaard '16 / Clayton Kershaw '11; Aaron Judge → Mickey Mantle '63). <span class="pp">|</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **5-Paradigm Shootout &amp; M5 Consensus Stack** | Exact KKT simplex stacking on `2016–2024` blends **`68.1% M4 + 31.9% PECOTA`** (batters, highest `w_r = 0.5782`) and **`81.8% M4 + 11.1% Marcel + 7.1% ZiPS`** (pitchers, lowest <span class="in">`w_rmse = 0.71565`</span>, highest <span class="in">`w_r = 0.5756`</span>). <span class="pp">|</span> Combining Statcast physics (<span class="in">`M4`</span>) with orthogonal historical comp (<span class="in">`PECOTA`</span>) and multi-year aging (<span class="in">`ZiPS`</span>/<span class="in">`Marcel`</span>) signal strictly improves out-of-sample pitcher FIP RMSE and boosts correlation across both domains. <span class="pp">|</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 4: 5-Paradigm Locked 2024 -&gt; 2025 Out-of-Sample Shootout](../assets/pz04_five_paradigm_oos_shootout.png)</span>{width=100%}</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Domain Problem &amp; Theoretical Grounding</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Public baseball forecasting evolved through five distinct intellectual eras:</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Marcel (Tom Tango, 2004):** 3-year weighted baseline (<span class="in">`5/4/3`</span>) + universal reliability regression + piecewise-linear age adjustment.</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**ZiPS (Dan Szymborski):** 4-year weighted baseline (<span class="in">`8/5/4/3`</span>) + position/archetype aging curves + multi-year career horizon forecasts.</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**PECOTA (Nate Silver, 2003):** Non-parametric nearest-neighbor ($k$-NN) similarity scores across decades of baseball history, outputting full **10th–90th percentile distributions**, **breakout/collapse probabilities**, and **attrition/survival rates**.</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**THE BAT / OOPSY (Derek Carty / Jordan Rosenblum):** Incorporating Statcast batted-ball physics (<span class="in">`xwOBA`</span>, <span class="in">`EV90`</span>, <span class="in">`Pulled Air%`</span>) and pitch tracking (<span class="in">`Stuff+`</span>, <span class="in">`Location+`</span>).</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**ATC / Depth Charts Consensus:** Ensembling multiple orthogonal projection systems via out-of-sample inverse-variance / convex stacking.</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Mathematical Formulation &amp; Lake-Wide Pipeline</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.1 Era-Neutralized Historical $z$-Scores (`1960–2025`)</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>To compare a 1963 Mickey Mantle or 1996 Gary Sheffield directly against a 2025 hitter without run-environment distortion, every feature is standardized within its own season $s$ and role $g$:</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>$$z_{i,s}^{(f)} = \frac{x_{i,s}^{(f)} - \mu_{s,g}^{(f)}}{\sigma_{s,g}^{(f)}}$$</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.2 Vectorized PECOTA $k$-NN Kernel &amp; Strict Anti-Leakage Guard</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>For any target season $T$, candidate historical comps must satisfy $s \le T - 2$ so their subsequent $s+1$ outcome is strictly $\le T - 1$. Pairwise weighted Euclidean distances $d_{ij}$ across all <span class="in">`70,967`</span> historical seasons are computed in milliseconds via BLAS matrix algebra ($<span class="sc">\|</span>x - y<span class="sc">\|</span>^2 = <span class="sc">\|</span>x<span class="sc">\|</span>^2 + <span class="sc">\|</span>y<span class="sc">\|</span>^2 - 2xy^\top$) and weighted by a Gaussian kernel $w_j = \exp(-\frac{1}{2}(d_{ij}/\tau)^2)$ over the top $k = 50$ nearest neighbors.</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Non-Pitch Exploratory Data Analysis: Defense &amp; Baserunning Reliability</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>Before building comps, we audited how non-pitch skills stabilize year-over-year across <span class="in">`2002–2025`</span>:</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 1: Non-Pitch EDA Year-over-Year Reliability (Offense vs. Baserunning vs. Defense)](../assets/pz01_defense_baserunning_stabilization_aging.png)</span>{width=100%}</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Key Discovery:** Statcast **Outs Above Average (`OAA`, $r = 0.506$)** nearly matches overall offensive `wOBA` ($r = 0.526$) in year-over-year stability and decisively outperforms legacy **DRS ($r = 0.431$)** and **UZR/150 ($r = 0.374$)**. Meanwhile, stolen base rate ($r = 0.815$) is almost as repeatable as strikeout rate ($r = 0.861$).</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Model Architecture, Temporal Validation &amp; PECOTA Percentile Fans</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 2: PECOTA k-NN Percentile Fan — Top 20 Projected 2026 Batters](../assets/pz02_pecota_knn_percentile_fan.png)</span>{width=100%}</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../assets/pz02_pecota_knn_percentile_fan.html"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"580"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"border: 1px solid #1e293b; border-radius: 8px; background: #090d16;"</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Leaderboards, Named Historical Comps &amp; 5-Year ZiPS Trajectories</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="fu">### 6.1 Marquee 2026 PECOTA Historical Comps (`1960–2025` Full Pool)</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2026 Player <span class="pp">|</span> Age <span class="pp">|</span> #1 Historical Comp (Sim) <span class="pp">|</span> #2 Historical Comp (Sim) <span class="pp">|</span> #3 Historical Comp (Sim) <span class="pp">|</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|---:|:---|:---|:---|</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Aaron Judge** <span class="pp">|</span> 34 <span class="pp">|</span> Mickey Mantle 1963 (<span class="in">`73.9`</span>) <span class="pp">|</span> Mark McGwire 1996 (<span class="in">`70.3`</span>) <span class="pp">|</span> Jim Thome 2002 (<span class="in">`68.6`</span>) <span class="pp">|</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Shohei Ohtani** <span class="pp">|</span> 31 <span class="pp">|</span> Derrek Lee 2005 (<span class="in">`79.8`</span>) <span class="pp">|</span> Frank Robinson 1966 (<span class="in">`79.0`</span>) <span class="pp">|</span> Alex Rodriguez 2007 (<span class="in">`77.7`</span>) <span class="pp">|</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Juan Soto** <span class="pp">|</span> 27 <span class="pp">|</span> Gary Sheffield 1996 (<span class="in">`80.4`</span>) <span class="pp">|</span> Frank Thomas 1995 (<span class="in">`77.9`</span>) <span class="pp">|</span> Bryce Harper 2020 (<span class="in">`77.8`</span>) <span class="pp">|</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Bobby Witt Jr.** <span class="pp">|</span> 26 <span class="pp">|</span> Ian Kinsler 2008 (<span class="in">`87.1`</span>) <span class="pp">|</span> AJ Pollock 2014 (<span class="in">`82.2`</span>) <span class="pp">|</span> Cedric Mullins 2021 (<span class="in">`79.0`</span>) <span class="pp">|</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Paul Skenes** <span class="pp">|</span> 24 <span class="pp">|</span> Noah Syndergaard 2016 (<span class="in">`90.5`</span>) <span class="pp">|</span> José Fernández 2015 (<span class="in">`87.2`</span>) <span class="pp">|</span> Clayton Kershaw 2011 (<span class="in">`84.4`</span>) <span class="pp">|</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Tarik Skubal** <span class="pp">|</span> 29 <span class="pp">|</span> Félix Hernández 2014 (<span class="in">`85.2`</span>) <span class="pp">|</span> Patrick Corbin 2018 (<span class="in">`84.5`</span>) <span class="pp">|</span> Josh Beckett 2007 (<span class="in">`84.2`</span>) <span class="pp">|</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Garrett Crochet** <span class="pp">|</span> 27 <span class="pp">|</span> Javier Vazquez 2003 (<span class="in">`89.6`</span>) <span class="pp">|</span> Stephen Strasburg 2015 (<span class="in">`88.6`</span>) <span class="pp">|</span> Justin Verlander 2009 (<span class="in">`86.3`</span>) <span class="pp">|</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Zack Wheeler** <span class="pp">|</span> 36 <span class="pp">|</span> David Cone 1998 (<span class="in">`92.1`</span>) <span class="pp">|</span> Jim Bunning 1967 (<span class="in">`89.0`</span>) <span class="pp">|</span> Mike Mussina 2003 (<span class="in">`85.9`</span>) <span class="pp">|</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### 6.2 ZiPS-Style 5-Year Archetype Career Trajectories (`2026–2030`)</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 3: ZiPS-Style 5-Year Archetype Career Trajectories (2026–2030)](../assets/pz03_zips_5yr_career_trajectories.png)</span>{width=100%}</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. Downstream Integration &amp; Level 3–5 Roadmap</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>With **Level 2 (`EXP-004` + `EXP-007`)** now 100% complete across all five sabermetric projection paradigms:</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Level 3 (`EXP-008` BaseRuns &amp; Pythagenpat Standings):** Consumes <span class="in">`M4_Statcast_Physics`</span> / <span class="in">`M5`</span> point forecasts together with PECOTA <span class="in">`p10–p90`</span> uncertainty widths and <span class="in">`EXP-006`</span> Ballpark Factors to simulate full 162-game division and playoff distributions.</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Contract Valuation &amp; Dynasty Markets:** ZiPS 5-year trajectories (<span class="in">`zips_5yr_trajectories_2026_2030.parquet`</span>) and PECOTA survival probabilities provide multi-year free-agent WAR valuation curves.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

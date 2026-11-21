@@ -38,16 +38,17 @@ All 6 experiments are fully completed, peer-audited (`SHIP` + `PASS`), and verif
 | **EXP-005** | 1 | Decomposed Pitching+ & Process Engine | 5-head Markov pricing ($r = -0.504$ with SIERA) + Batter Decision+ ($r = 0.846$ YoY) | `05_decomposed_pitching_decisions.qmd` / `lab05` |
 | **EXP-004** | 2 | True-Talent Projections & WAR | Beats Tango Marcel ($p = 1.000$ SO, $p = 0.983$ wOBA), 80% CI coverage ($82.8\%$), Full WAR | `04_player_projections.qmd` / `lab04` |
 | **EXP-006** | 3 | Empirical 3-Year Ballpark Factors | 720 park-seasons (2002-2025), Coors 121.6 R, Great American 132.1 HR, Yankee +8.9 LHB HR | `06_ballpark_factors.qmd` / `lab06` |
+| **EXP-007** | 2B | PECOTA k-NN, ZiPS Aging & Defense EDA | 70,967 historical comps (1960-2025), OAA YoY r=0.506 > DRS 0.431 > UZR 0.374, 5-yr ZiPS trajectories, M5 Ensemble | `07_pecota_zips_ensemble.qmd` / `lab07` |
 
 ---
 
-## 3. Immediate Next Milestone: EXP-007 (Level 3 Team BaseRuns & Standings Simulator)
+## 3. Immediate Next Milestone: EXP-008 (Level 3 Team BaseRuns & Standings Simulator)
 
 ### Specification
-- Spec file: `specs/07_team_baseruns_pythagenpat.md` (Already drafted and ready!)
+- Spec file: `specs/08_team_baseruns_pythagenpat.md` (Already drafted and ready!)
 
 ### Execution Steps for Next Agent:
-1. **Create Model Script:** `models/07_team_baseruns_pythagenpat.R`
+1. **Create Model Script:** `models/08_team_baseruns_pythagenpat.R`
    - Ingest `v_retrosheet_games` and `v_retrosheet_plays` (`BAT_EVENT_FL = 'T'`) for 2002–2025.
    - Implement David Smyth's BaseRuns: $R = \frac{A \cdot B}{B + C} + D$.
    - Implement Smyth/Patriot dynamic Pythagenpat exponent: $\gamma = \left(\frac{R + RA}{G}\right)^{0.287}$.
@@ -56,20 +57,20 @@ All 6 experiments are fully completed, peer-audited (`SHIP` + `PASS`), and verif
    - Run 10,000 Monte Carlo schedule simulations over `v_mlbmeta_schedule` to compute projected division titles, wild cards, and win totals.
    - Output Gold Parquet: `data/processed/team_baseruns_pythagenpat_2002_2025.parquet` and `data/processed/team_standings_projections_2026.parquet`.
    - Preserve 4-asset figures: `models/br01_*`, `models/br02_*`, `models/br03_*`.
-   - Log experiment `EXP-007-TEAM-BASERUNS-PYTHAGENPAT` using `mlbr::lake_log_experiment()`.
-2. **Create Q-CRISP Study:** `site/analyses/07_team_baseruns_pythagenpat.qmd` (7-section template).
-3. **Create Companion Student Lab:** `workbooks/lab07_team_baseruns_pythagenpat_workbook.R` and `site/workbooks/lab07_team_baseruns_pythagenpat_workbook.qmd` with 3+ mentor checkpoints.
-4. **Update Site Navigation:** Add Study 07 and Lab 07 to `site/_quarto.yml` and `site/gallery.qmd`.
+   - Log experiment `EXP-008-TEAM-BASERUNS-PYTHAGENPAT` using `mlbr::lake_log_experiment()`.
+2. **Create Q-CRISP Study:** `site/analyses/08_team_baseruns_pythagenpat.qmd` (7-section template).
+3. **Create Companion Student Lab:** `workbooks/lab08_team_baseruns_pythagenpat_workbook.R` and `site/workbooks/lab08_team_baseruns_pythagenpat_workbook.qmd` with 3+ mentor checkpoints.
+4. **Update Site Navigation:** Add Study 08 and Lab 08 to `site/_quarto.yml` and `site/gallery.qmd`.
 
 ---
 
-## 4. Downstream Milestones: EXP-008 & EXP-009
+## 4. Downstream Milestones: EXP-009 & EXP-010
 
 - **EXP-008: Level 4 Plate-Appearance Markov Monte Carlo Game Simulator & Live Win Probability**
-  - Spec: `specs/08_game_monte_carlo_simulator.md` (Already drafted and ready!)
+  - Spec: `specs/09_game_monte_carlo_simulator.md` (Already drafted and ready!)
   - Core methods: Log5 matchup pricing, 24 base-out discrete state transitions, pitcher stamina/TTO penalties, bullpen sequencing, WPA / Win Expectancy trajectories.
 - **EXP-009: Level 5 Market Edge, Pricing Efficiency & Prediction Market Valuation**
-  - Spec: `specs/09_market_edge_prediction_valuation.md` (Already drafted and ready!)
+  - Spec: `specs/10_market_edge_prediction_valuation.md` (Already drafted and ready!)
   - Core methods: Polymarket & Kalshi orderbook pricing, fractional Kelly bankroll management, Closing Line Value (CLV) backtesting, Brier score calibration.
 
 ---

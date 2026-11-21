@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 07</span>
+    <span class="gallery-badge">PECOTA + ZiPS + EDA</span>
+    <h4><a href="analyses/07_pecota_zips_ensemble.html">PECOTA k-NN Comps, ZiPS 5-Yr Aging &amp; Defense EDA</a></h4>
+    <p>Completes all 5 sabermetric projection paradigms across 70,967 historical player-seasons (1960–2026) and 17,880 fielder-seasons: Non-pitch OAA/DRS/wBsR reliability EDA, ZiPS 8/5/4/3 archetype 5-year trajectories, PECOTA k-NN historical comps &amp; p10–p90 fans, and M5 Convex Meta-Ensemble shootout.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">OAA YoY r = 0.506 | 70.9k Historical Comps | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge sabermetrics">Q-CRISP Study 06</span>
     <span class="gallery-badge">Level 3 Foundation</span>
     <h4><a href="analyses/06_ballpark_factors.html">Empirical Ballpark Factors &amp; Altitude Geometry</a></h4>

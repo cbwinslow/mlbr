@@ -363,6 +363,69 @@
     }
   },
   {
+    "id": "EXP-007-PECOTA-ZIPS-ENSEMBLE",
+    "title": "PECOTA k-NN Similarity Comps, ZiPS Archetype Multi-Year Aging, Defense/Baserunning EDA & 5-Paradigm Consensus Ensemble",
+    "tier": 2,
+    "tier_name": "Level 2: Player Projections",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-21 21:30:50 UTC",
+    "summary": "Completed Level 2B projection gamut across the full 1960-2025 historical lake (60,591 player-seasons) and 2002-2025 fielding/baserunning EDA (166,850 fielder-seasons). Implemented ZiPS 8/5/4/3 archetype-specific aging & 5-year (2026-2030) career trajectories, vectorized PECOTA k-NN era-neutralized similarity comps (k = 50, p10-p90 percentiles, breakout/collapse/survival probabilities), and a strictly chronological M5 Consensus Meta-Ensemble uniting Marcel, ZiPS, PECOTA, and Statcast Physics.",
+    "hypotheses": [
+      "Defensive (OAA/DRS/UZR) and baserunning (wBsR) skills exhibit markedly lower YoY reliability than plate discipline (K%, BB%), requiring heavier empirical shrinkage.",
+      "Position- and role-archetype aging curves (ZiPS 8/5/4/3) capture distinct decay shapes across catchers, up-the-middle athletes, power starters, and relievers.",
+      "Era-neutralized PECOTA k-NN similarity matching (1960-2025) yields well-calibrated non-parametric 10th-90th percentile uncertainty fans and explicit attrition/survival probabilities.",
+      "A strictly chronological convex meta-ensemble (M5) combining Marcel, ZiPS, PECOTA, and Statcast Physics matches or outperforms every individual projection paradigm out of sample."
+    ],
+    "formulas": {
+      "era_neutral_zscore": "z_{i,s} = (x_{i,s} - mu_{s,g}) / sd_{s,g}",
+      "pecota_gaussian_w": "w_j = exp(-0.5 * (d_{ij} / tau)^2), top k = 50 comps with season_j <= T - 2",
+      "zips_4yr_weights": "8/5/4/3 recency weighting + archetype midpoint Delta-Method spline aging",
+      "convex_meta_stack": "M5 = sum_m w_m * M_m, w_m >= 0, sum(w_m) = 1 (fit strictly on <= T - 1)"
+    },
+    "metrics": {
+      "batter_2025_marcel_woba_rmse": 0.03002,
+      "batter_2025_zips_woba_rmse": 0.02987,
+      "batter_2025_pecota_woba_rmse": 0.03105,
+      "batter_2025_m4_woba_rmse": 0.0291,
+      "batter_2025_m5_ens_woba_rmse": 0.02919,
+      "pitcher_2025_marcel_fip_rmse": 0.74849,
+      "pitcher_2025_zips_fip_rmse": 0.77087,
+      "pitcher_2025_pecota_fip_rmse": 0.77179,
+      "pitcher_2025_m4_fip_rmse": 0.72061,
+      "pitcher_2025_m5_ens_fip_rmse": 0.71565,
+      "pecota_batter_80ci_coverage": 0.8533,
+      "pecota_pitcher_80ci_coverage": 0.7524,
+      "yoy_r_oaa": 0.5061,
+      "yoy_r_drs": 0.4314,
+      "yoy_r_bsr": 0.4625
+    },
+    "features": [
+      "z_woba",
+      "z_k",
+      "z_bb",
+      "z_iso",
+      "z_babip",
+      "z_sb",
+      "z_fip",
+      "z_hr9",
+      "bmi",
+      "pos_group",
+      "archetype",
+      "oaa",
+      "drs",
+      "uzr_150",
+      "bsr_runs"
+    ],
+    "artifacts": {
+      "spec": "specs/07_pecota_zips_ensemble.md",
+      "script": "models/07_pecota_zips_ensemble.R",
+      "gold_comps": "data/processed/pecota_knn_comps_2026.parquet",
+      "gold_zips": "data/processed/zips_5yr_trajectories_2026_2030.parquet",
+      "gold_ens": "data/processed/ensemble_projections_2016_2026.parquet",
+      "gold_eda": "data/processed/defense_baserunning_eda_2002_2025.parquet"
+    }
+  },
+  {
     "id": "EXP-006-BALLPARK-FACTORS",
     "title": "Empirical Multi-Year Regressed Ballpark Factors & Handedness Asymmetry",
     "tier": 3,

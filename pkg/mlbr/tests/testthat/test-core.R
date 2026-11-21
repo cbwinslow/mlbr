@@ -332,3 +332,55 @@ test_that("Gold True-Talent Projections adhere to ADR-005 WAR accounting without
   expect_gte(judge26$proj_war, 6.5)
   expect_lte(judge26$proj_war, 9.5)
 })
+
+test_that("EXP-007 Gold PECOTA, ZiPS 5-Year & Defense EDA Parquets satisfy invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  eda_p   <- file.path(proc, "defense_baserunning_eda_2002_2025.parquet")
+  comps_p <- file.path(proc, "pecota_knn_comps_2026.parquet")
+  z5_p    <- file.path(proc, "zips_5yr_trajectories_2026_2030.parquet")
+  skip_if_not(file.exists(eda_p) && file.exists(comps_p) && file.exists(z5_p), "EXP-007 Gold files not materialized")
+
+  eda   <- arrow::read_parquet(eda_p)
+  comps <- arrow::read_parquet(comps_p)
+  z5    <- arrow::read_parquet(z5_p)
+
+  # Defense EDA invariant: Statcast OAA YoY reliability > DRS > UZR/150
+  r_oaa <- eda$yoy_r[eda$metric_col == "oaa"]
+  r_drs <- eda$yoy_r[eda$metric_col == "drs"]
+  r_uzr <- eda$yoy_r[eda$metric_col == "uzr_150"]
+  expect_gt(r_oaa, r_drs)
+  expect_gt(r_drs, r_uzr)
+
+  # PECOTA percentile monotonicity & survival bounds
+  expect_true(all(comps$pecota_p10 <= comps$pecota_p50 + 1e-6))
+  expect_true(all(comps$pecota_p50 <= comps$pecota_p90 + 1e-6))
+  expect_true(all(comps$survival_prob >= 0 & comps$survival_prob <= 1))
+  expect_true(all(comps$comp_year <= 2024L))
+
+  # ZiPS 5-year horizon completeness (2026-2030)
+  expect_setequal(unique(z5$horizon_year), 2026L:2030L)
+
+  # Ensemble projections & backtest metrics + exact 2026 ZiPS parity
+  ens_p <- file.path(proc, "ensemble_projections_2016_2026.parquet")
+  bm_p  <- file.path(proc, "ensemble_backtest_metrics.parquet")
+  expect_true(file.exists(ens_p) && file.exists(bm_p))
+  ens <- arrow::read_parquet(ens_p)
+  bm  <- arrow::read_parquet(bm_p)
+  expect_equal(nrow(bm), 10L)
+  expect_true(all(is.finite(bm$w_rmse)))
+
+  # Exact zero-centered parity: zips_5yr (2026) == ensemble_projections (2026, zips_pred)
+  z5_b26 <- z5[z5$domain == "Batter" & z5$horizon_year == 2026L, c("mlbam", "proj_woba")]
+  en_b26 <- ens[ens$domain == "Batter" & ens$projection_year == 2026L, c("mlbam", "zips_pred")]
+  mb <- merge(z5_b26, en_b26, by = "mlbam")
+  expect_gt(nrow(mb), 400L)
+  expect_lt(max(abs(mb$proj_woba - mb$zips_pred)), 1e-10)
+
+  z5_p26 <- z5[z5$domain == "Pitcher" & z5$horizon_year == 2026L, c("mlbam", "proj_fip")]
+  en_p26 <- ens[ens$domain == "Pitcher" & ens$projection_year == 2026L, c("mlbam", "zips_pred")]
+  mp <- merge(z5_p26, en_p26, by = "mlbam")
+  expect_gt(nrow(mp), 400L)
+  expect_lt(max(abs(mp$proj_fip - mp$zips_pred)), 1e-10)
+})
