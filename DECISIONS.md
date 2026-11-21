@@ -48,6 +48,13 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Alternatives Considered:** Fixed Pythagorean exponent (`gamma = 1.83`, not chosen because it misprices extreme high/low run environments) or binomial-only schedule simulation without talent perturbation (not chosen because it understates pre-season win-total credible intervals by ~40%; revisit once Level 4 PA-level simulator is wired).
 - **Consequences:** Proves BaseRuns Pythagenpat strictly outperforms actual win% and actual-runs Pythagorean in next-season forecasting (`0.06515` vs `0.07082` RMSE) while generating calibrated 2026 MLB playoff probabilities summing exactly to 6 division titles and 12 playoff berths.
 
+## ADR-008: Level 4 Exact 24 Base-Out Markov Half-Inning Convolution & Zero-Leakage Win Expectancy
+- **Status:** Accepted (2026-11-21)
+- **Context:** Simulating 4,859 historical MLB games via naive play-by-play Monte Carlo (10,000 paths/game = 48.6M games) is slow and introduces Monte Carlo sampling variance into Brier/Log-Loss backtests.
+- **Decision:** Extract exact empirical 24 base-out transition tensors strictly from pre-test `2015–2023` Retrosheet PAs (`1.57M` plays), propagate exact half-inning run distributions analytically across starter TTO 1/2/3 innings, bullpen innings, and extra-inning ghost-runner (`bases = 2`) states, and convolve 9 innings via exact discrete convolution parallelized across 8 cores (`53.5s` for all `4,859` games).
+- **Alternatives Considered:** Pure stochastic Monte Carlo game paths (not chosen for pre-game backtest pricing due to $O(1/\sqrt{N})$ sampling noise and 20× slower runtime; reserved for interactive single-game trajectory visualization).
+- **Consequences:** Delivers deterministic, zero-variance Moneyline, Run-Line (`-1.5`), and Over/Under Total pricing across all `4,859` regular-season `2024–2025` games (`Brier = 0.24451`, `Cal Slope = 0.949`) plus a 5,372-state empirical Win Expectancy matrix ready for Level 5 market valuation (`EXP-010`).
+
 ---
 
 ## Template for New ADRs

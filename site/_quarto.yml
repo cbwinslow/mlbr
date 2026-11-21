@@ -75,6 +75,8 @@ website:
               href: workbooks/lab07_pecota_zips_ensemble_workbook.qmd
             - text: "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
               href: workbooks/lab08_team_baseruns_pythagenpat_workbook.qmd
+            - text: "Lab 09: Markov Game Simulator & Win Expectancy"
+              href: workbooks/lab09_game_monte_carlo_simulator_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -95,6 +97,8 @@ website:
               href: analyses/07_pecota_zips_ensemble.qmd
             - text: "Study 08: BaseRuns, Pythagenpat & Standings"
               href: analyses/08_team_baseruns_pythagenpat.qmd
+            - text: "Study 09: Markov Game Simulator & WPA"
+              href: analyses/09_game_monte_carlo_simulator.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

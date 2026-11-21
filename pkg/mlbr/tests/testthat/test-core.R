@@ -407,6 +407,7 @@ test_that("EXP-008 Gold BaseRuns, Pythagenpat & 2026 Standings satisfy conservat
   expect_lt(abs(sum(s26$playoff_prob) - 12.0), 0.02)
   expect_lt(abs(mean(s26$mean_wins) - 81.0), 0.5)
   expect_true(all(s26$p10_wins <= s26$p50_wins & s26$p50_wins <= s26$p90_wins))
+  expect_true("roster_sigma_logit" %in% names(s26) && all(s26$roster_sigma_logit >= 0.10 & s26$roster_sigma_logit <= 0.19))
 
   # Published Regular-Season Ground-Truth Benchmark: 2024 Los Angeles Dodgers (98-64, 842 RS, 686 RA, 162 G)
   lad24 <- hist[hist$season == 2024L & hist$team_id == "LAN", ]
@@ -420,4 +421,30 @@ test_that("EXP-008 Gold BaseRuns, Pythagenpat & 2026 Standings satisfy conservat
   exp_w_lad <- 162 * (842^g_lad) / (842^g_lad + 686^g_lad)
   expect_lt(abs(lad24$pyth_gamma - g_lad), 1e-4)
   expect_lt(abs(lad24$pyth_act_wins - exp_w_lad), 1e-4)
+})
+
+test_that("EXP-009 Gold Markov Game Simulator & Win Expectancy satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  gm_p <- file.path(proc, "game_simulation_backtest_2024_2025.parquet")
+  bm_p <- file.path(proc, "game_simulator_benchmark_metrics.parquet")
+  we_p <- file.path(proc, "win_expectancy_re24_matrix.parquet")
+  skip_if_not(file.exists(gm_p) && file.exists(bm_p) && file.exists(we_p), "EXP-009 Gold files not materialized")
+
+  gm <- arrow::read_parquet(gm_p)
+  bm <- arrow::read_parquet(bm_p)
+  we <- arrow::read_parquet(we_p)
+
+  expect_gt(nrow(gm), 4800L)
+  expect_true(all(gm$p_m4 > 0.05 & gm$p_m4 < 0.95))
+  expect_true(all(gm$p_m4_rl15 > 0 & gm$p_m4_rl15 < gm$p_m4))
+  expect_lt(bm$brier[bm$model == "M4_PA_Markov_Simulator"], bm$brier[bm$model == "B1_HomeField_Constant"])
+  expect_lt(bm$brier[bm$model == "M3_Starter_Team_Log5"],   bm$brier[bm$model == "B1_HomeField_Constant"])
+  expect_true(all(we$home_we >= 0 & we$home_we <= 1))
+  # Sanity: Bot 9th tied bases loaded 0 outs must have home_we > 0.80
+  w_walkoff <- we$home_we[we$inning == 9L & we$bat_home == 1L & we$outs == 0L & we$bases == 7L & we$score_diff == 0L]
+  expect_gt(w_walkoff, 0.80)
+  # Exact Bot-9th skip & walk-off truncation calibration: mean total runs within 0.25 R/G of actual
+  expect_lt(abs(mean(gm$exp_total_runs) - mean(gm$actual_total_runs)), 0.25)
 })

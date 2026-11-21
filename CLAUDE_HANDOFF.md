@@ -39,7 +39,8 @@ All 6 experiments are fully completed, peer-audited (`SHIP` + `PASS`), and verif
 | **EXP-004** | 2 | True-Talent Projections & WAR | Beats Tango Marcel ($p = 1.000$ SO, $p = 0.983$ wOBA), 80% CI coverage ($82.8\%$), Full WAR | `04_player_projections.qmd` / `lab04` |
 | **EXP-006** | 3 | Empirical 3-Year Ballpark Factors | 720 park-seasons (2002-2025), Coors 121.6 R, Great American 132.1 HR, Yankee +8.9 LHB HR | `06_ballpark_factors.qmd` / `lab06` |
 | **EXP-007** | 2B | PECOTA k-NN, ZiPS Aging & Defense EDA | 70,967 historical comps (1960-2025), OAA YoY r=0.506 > DRS 0.431 > UZR 0.374, 5-yr ZiPS trajectories, M5 Ensemble | `07_pecota_zips_ensemble.qmd` / `lab07` |
-| **EXP-008** | 3 | BaseRuns, Pythagenpat & 2026 Standings | 720 team-seasons BaseRuns r=0.983, next-yr RMSE 0.0652, 10,000-season 2026 schedule MC playoff odds | `08_team_baseruns_pythagenpat.qmd` / `lab08` |
+| **EXP-008** | 3 | BaseRuns, Pythagenpat & 2026 Standings | 720 team-seasons BaseRuns r=0.982, next-yr RMSE 0.0670, 10k-season 2026 MC w/ club PECOTA uncertainty | `08_team_baseruns_pythagenpat.qmd` / `lab08` |
+| **EXP-009** | 4 | 24 Base-Out Markov Game Simulator & WE | 4,859 OOS games (2024-2025) Brier 0.2445 (M3 0.2439), Cal Slope 0.949, 5,372-state empirical WE/WPA | `09_game_monte_carlo_simulator.qmd` / `lab09` |
 
 ---
 

@@ -1,8 +1,8 @@
-# Specification 08: Level 4 Plate-Appearance Markov Monte Carlo Game Simulator & Live Win Probability
+# Specification 09: Level 4 Plate-Appearance Markov Monte Carlo Game Simulator & Live Win Probability
 
-- **Experiment ID:** `EXP-008-GAME-MONTE-CARLO-SIMULATOR`
+- **Experiment ID:** `EXP-009-GAME-MONTE-CARLO-SIMULATOR`
 - **Architecture Tier:** Level 4 (Game-Level Win Probability, Inning Simulation & In-Game Leverage Engine)
-- **Status:** `SPEC READY FOR IMPLEMENTATION`
+- **Status:** `VALIDATED`
 - **Upstream Dependencies:**
   - Level 2 Gold Tables: `data/processed/pitcher_projections_true_talent.parquet` (`EXP-004`), `data/processed/batter_projections_true_talent.parquet` (`EXP-004`)
   - Level 3 Gold Tables: `data/processed/ballpark_factors_2002_2025.parquet` (`EXP-006`), `data/processed/team_baseruns_pythagenpat_2002_2025.parquet` (`EXP-007`)
@@ -53,9 +53,9 @@ where $\text{Hand} \in \{\text{LHB}, \text{RHB}\}$.
 ---
 
 ## 3. Implementation Deliverables
-- Model: `models/08_game_monte_carlo_simulator.R`
+- Model: `models/09_game_monte_carlo_simulator.R`
 - Output: `data/processed/game_simulation_backtest_2024_2025.parquet`
-- Study: `site/analyses/08_game_monte_carlo_simulator.qmd`
-- Lab: `workbooks/lab08_game_monte_carlo_simulator_workbook.R` & `site/workbooks/lab08_game_monte_carlo_simulator_workbook.qmd`
+- Study: `site/analyses/09_game_monte_carlo_simulator.qmd`
+- Lab: `workbooks/lab09_game_monte_carlo_simulator_workbook.R` & `site/workbooks/lab09_game_monte_carlo_simulator_workbook.qmd`
 - Visuals: Dark Cyber 4-asset suites (`models/mc01_*`, `models/mc02_*`).
 

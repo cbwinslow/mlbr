@@ -12,6 +12,7 @@ This curated registry catalogs all verified mathematical models, empirical formu
 | **[EXP-007-PECOTA-ZIPS-ENSEMBLE](registry.json)** | 2 | PECOTA k-NN Similarity Comps, ZiPS Archetype Multi-Year Aging, Defense/Baserunning EDA & 5-Paradigm Consensus Ensemble | `VALIDATED` | `era_neutral_zscore`: z_{i,s} = (x_{i,s} - mu_{s,g}) / sd... | 2026-11-21 |
 | **[EXP-006-BALLPARK-FACTORS](registry.json)** | 3 | Empirical Multi-Year Regressed Ballpark Factors & Handedness Asymmetry | `VALIDATED` | `raw_scoring_ratio`: (r_home / g_home) / (r_road / g_road) | 2026-11-20 |
 | **[EXP-008-TEAM-BASERUNS-PYTHAGENPAT](registry.json)** | 3 | Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 10,000-Season 2026 Standings Simulator | `VALIDATED` | `david_smyth_baseruns`: R = (A * B) / (B + C) + D | 2026-11-21 |
+| **[EXP-009-GAME-MONTE-CARLO-SIMULATOR](registry.json)** | 4 | Level 4 Plate-Appearance 24 Base-Out Markov Game Simulator & Empirical Win Expectancy Engine | `VALIDATED` | `multi_category_log5`: P(E) = (P_bat(E) * P_pit(E) / P_lg... | 2026-11-21 |
 
 ---
 *Maintained by mlbr::lake_log_experiment()*

@@ -407,7 +407,7 @@ run_exp008 <- function(smoke = FALSE, lake = NULL) {
   b26 <- merge(
     exp04_b[projection_year == 2026L & !is.na(team_prev) & team_prev != "",
             .(mlbam = batter_mlbam, team_prev, proj_pa, proj_woba, proj_fld_runs, proj_bsr_runs)],
-    exp07_e[domain == "Batter" & projection_year == 2026L, .(mlbam, m5_woba = ensemble_pred)],
+    exp07_e[domain == "Batter" & projection_year == 2026L, .(mlbam, m5_woba = ensemble_pred, pecota_sd = (pecota_p90 - pecota_p10) / 2.563)],
     by = "mlbam", all.x = TRUE
   )
   b26 <- merge(b26, sc_last_bat, by = "mlbam", all.x = TRUE)
@@ -437,14 +437,16 @@ run_exp008 <- function(smoke = FALSE, lake = NULL) {
     team_wraa <- ((team_woba - lg_woba_26) / woba_scale) * 6150.0
     team_bsr  <- sum(bsr_v * ratio_pa)
     team_fld  <- sum(fld_v * ratio_pa)
-    .(team_woba = team_woba, team_wraa = team_wraa, team_bsr_runs = team_bsr, team_fld_runs = team_fld)
+    sd_v <- fifelse(is.finite(pecota_sd[ord]), pecota_sd[ord], 0.032)
+    bat_uncert <- weighted.mean(sd_v, keep_pa, na.rm = TRUE)
+    .(team_woba = team_woba, team_wraa = team_wraa, team_bsr_runs = team_bsr, team_fld_runs = team_fld, bat_uncert = bat_uncert)
   }, by = team_retro]
 
   # 2026 Pitchers: resolve multi-team pitchers via end-of-2025 Statcast club
   p26 <- merge(
     exp04_p[projection_year == 2026L & !is.na(team_prev) & team_prev != "",
             .(mlbam = pitcher_mlbam, team_prev, proj_ip, proj_fip)],
-    exp07_e[domain == "Pitcher" & projection_year == 2026L, .(mlbam, m5_fip = ensemble_pred)],
+    exp07_e[domain == "Pitcher" & projection_year == 2026L, .(mlbam, m5_fip = ensemble_pred, pecota_sd = (pecota_p90 - pecota_p10) / 2.563)],
     by = "mlbam", all.x = TRUE
   )
   p26 <- merge(p26, sc_last_pit, by = "mlbam", all.x = TRUE)
@@ -464,7 +466,9 @@ run_exp008 <- function(smoke = FALSE, lake = NULL) {
     keep_ip <- pmax(pmin(ip_v, 1458.0 - shift(cum_ip, 1L, fill = 0.0)), 0.0)
     fill_ip <- max(1458.0 - sum(keep_ip), 0.0)
     team_fip <- (sum(keep_ip * f_v) + fill_ip * repl_fip) / 1458.0
-    .(team_fip = team_fip)
+    sd_v <- fifelse(is.finite(pecota_sd[ord]), pecota_sd[ord], 0.72)
+    pit_uncert <- weighted.mean(sd_v, keep_ip, na.rm = TRUE)
+    .(team_fip = team_fip, pit_uncert = pit_uncert)
   }, by = team_retro]
 
   t26 <- merge(teams30, team_bat_26, by = "team_retro", all.x = TRUE)
@@ -522,7 +526,10 @@ run_exp008 <- function(smoke = FALSE, lake = NULL) {
   # Plus game-by-game binomial variance across the exact 2026 schedule!
   wins_mat <- matrix(0L, nrow = 30L, ncol = n_sims)
   base_logit <- qlogis(t26$true_wpct)
-  sigma_logit <- 0.14  # ~0.035 win% SD (~5.6 wins true-talent pre-season uncertainty)
+  # Club-specific pre-season talent uncertainty derived from active roster PECOTA [p10, p90] spread
+  raw_u <- scale(t26$bat_uncert)[, 1] + scale(t26$pit_uncert)[, 1]
+  t26[, roster_sigma_logit := round(pmin(pmax(0.14 + 0.015 * raw_u, 0.105), 0.185), 4)]
+  sigma_logit <- t26$roster_sigma_logit
 
   # Vectorized simulation in chunks of 500 seasons for peak speed & low RAM
   chunk_sz <- 500L
@@ -533,7 +540,7 @@ run_exp008 <- function(smoke = FALSE, lake = NULL) {
     nc <- s2 - s1 + 1L
     # Draw perturbed season true-talent win% (30 x nc)
     p_draw <- plogis(matrix(base_logit, nrow = 30L, ncol = nc) +
-                       matrix(stats::rnorm(30L * nc, 0.0, sigma_logit), nrow = 30L, ncol = nc))
+                       matrix(stats::rnorm(30L * nc, 0.0, 1.0), nrow = 30L, ncol = nc) * sigma_logit)
     # Game home win probabilities (n_g x nc)
     ph <- p_draw[h_idx, , drop = FALSE]
     pa <- p_draw[a_idx, , drop = FALSE]

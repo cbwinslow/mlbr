@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 09</span>
+    <span class="gallery-badge">Level 4 Simulator</span>
+    <h4><a href="analyses/09_game_monte_carlo_simulator.html">24 Base-Out Markov Game Simulator &amp; Win Expectancy</a></h4>
+    <p>Exact 9-inning (+ ghost-runner extra innings) Markov half-inning convolution built from 1.57M Retrosheet PAs, starter TTO stamina, bullpen hand-off, and EXP-006 park factors — backtested strictly out-of-sample across 4,859 MLB games (2024–2025) with 5,372-state empirical Win Expectancy.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">4,859 OOS Games | Brier 0.2445 | 4.02M-Play Win Expectancy | Interactive WPA</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge sabermetrics">Q-CRISP Study 08</span>
     <span class="gallery-badge">Level 3 Standings</span>
     <h4><a href="analyses/08_team_baseruns_pythagenpat.html">BaseRuns, Dynamic Pythagenpat &amp; 2026 Standings</a></h4>
