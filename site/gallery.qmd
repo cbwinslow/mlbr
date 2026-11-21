@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge sabermetrics">Q-CRISP Study 08</span>
+    <span class="gallery-badge">Level 3 Standings</span>
+    <h4><a href="analyses/08_team_baseruns_pythagenpat.html">BaseRuns, Dynamic Pythagenpat &amp; 2026 Standings</a></h4>
+    <p>Exact David Smyth BaseRuns across 720 team-seasons (2002–2025, r = 0.983), out-of-time next-season win% forecasting, and a 10,000-season vectorized Monte Carlo simulation over the exact 2026 MLB regular-season schedule.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">BaseRuns r = 0.983 | Next-Yr RMSE 0.0652 | 10,000 MC Seasons</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 07</span>
     <span class="gallery-badge">PECOTA + ZiPS + EDA</span>
     <h4><a href="analyses/07_pecota_zips_ensemble.html">PECOTA k-NN Comps, ZiPS 5-Yr Aging &amp; Defense EDA</a></h4>

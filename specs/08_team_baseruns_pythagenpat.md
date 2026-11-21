@@ -1,8 +1,8 @@
-# Specification 07: Level 3 Team Run Creation, BaseRuns & Pythagenpat Standings Simulator
+# Specification 08: Level 3 Team Run Creation, BaseRuns & Pythagenpat Standings Simulator
 
-- **Experiment ID:** `EXP-007-TEAM-BASERUNS-PYTHAGENPAT`
+- **Experiment ID:** `EXP-008-TEAM-BASERUNS-PYTHAGENPAT`
 - **Architecture Tier:** Level 3 (Team Run Creation/Prevention & Dynamic Standings Engine)
-- **Status:** `SPEC READY FOR IMPLEMENTATION`
+- **Status:** `VALIDATED`
 - **Upstream Dependencies:**
   - Gold Tier: `data/processed/ballpark_factors_2002_2025.parquet` (`EXP-006`)
   - Gold Tier: `data/processed/pitcher_projections_true_talent.parquet` (`EXP-004`)
@@ -25,9 +25,9 @@ where:
 - **$A$ (Base Runners on Base):** The volume of runners who reach base safely without scoring immediately on their own batted ball:
   $$A = H + BB + HBP - HR - 0.5 \cdot IBB$$
 - **$B$ (Advancement & Scoring Rate):** The ability of the lineup to advance runners around the bases:
-  $$B = 0.78 \cdot 2B + 1.15 \cdot 3B + 2.04 \cdot HR + 0.17 \cdot (H - 2B - 3B - HR) + 0.10 \cdot (BB - IBB + HBP) + 0.04 \cdot SB - 0.05 \cdot CS$$
+  $$B = (1.4 \cdot TB - 0.6 \cdot H - 3 \cdot HR + 0.1 \cdot (BB + HBP - IBB) + 0.9 \cdot (SB - CS - GDP)) \times 1.1$$
 - **$C$ (Outs Remaining / Inning Clocks):** The capacity of the defense/pitching to record outs:
-  $$C = 3 \cdot (\text{BIP} - H) + SO + CS + GIDP + SH + SF \approx 3 \cdot \text{Innings}$$
+  $$C = AB - H + CS + GDP$$
 - **$D$ (Guaranteed Self-Scored Runs):** Home runs that score automatically regardless of baserunners:
   $$D = HR$$
 

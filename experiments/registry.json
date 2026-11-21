@@ -474,5 +474,55 @@
       "figure_pf01": "models/pf01_park_factor_runs_scatter.png",
       "figure_pf02": "models/pf02_handedness_hr_asymmetry.png"
     }
+  },
+  {
+    "id": "EXP-008-TEAM-BASERUNS-PYTHAGENPAT",
+    "title": "Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 10,000-Season 2026 Standings Simulator",
+    "tier": 3,
+    "tier_name": "Level 3: Team BaseRuns & Run Environment",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-21 21:52:44 UTC",
+    "summary": "Built Level 3 Team Run Creation & Dynamic Standings Engine across 720 historical MLB team-seasons (2002-2025) using exact David Smyth BaseRuns from v_retrosheet_plays, Smyth/Patriot dynamic Pythagenpat exponents, EXP-006 Ballpark Factors, and Level 2 M5 Consensus Player Projections. Executed 10,000 vectorized Monte Carlo simulations over the exact 2026 MLB regular-season schedule to price win distributions and MLB 12-team playoff odds.",
+    "hypotheses": [
+      "David Smyth BaseRuns accurately models non-linear team run creation (r >= 0.96) directly from Retrosheet atomic play components.",
+      "Team sequencing/cluster luck (Actual Wins - BaseRuns Pythagenpat Wins) exhibits near-zero year-over-year persistence.",
+      "BaseRuns Pythagenpat strictly outperforms prior-year actual win percentage in forecasting next-season (Year T -> T+1) team win percentage.",
+      "Combining Level 2 M5 Consensus Projections, EXP-006 Ballpark Factors, and pre-season talent uncertainty yields calibrated 2026 division and playoff probabilities summing strictly to 6 division titles and 12 playoff berths."
+    ],
+    "formulas": {
+      "david_smyth_baseruns": "R = (A * B) / (B + C) + D",
+      "pythagenpat_exponent": "gamma = ((RS + RA) / G)^0.287",
+      "log5_hfa_game_prob": "Log5(p_home, p_away) combined with neutral HFA = 0.535"
+    },
+    "metrics": {
+      "n_team_seasons": 720,
+      "baseruns_off_r": 0.9823,
+      "baseruns_off_rmse_runs": 24.57,
+      "baseruns_def_r": 0.9816,
+      "baseruns_def_rmse_runs": 25.84,
+      "luck_yoy_persistence_r": 0.1786,
+      "next_yr_actual_w_rmse": 0.07225,
+      "next_yr_baseruns_w_rmse": 0.06704,
+      "n_mc_seasons_2026": 10000
+    },
+    "features": [
+      "bsr_off",
+      "bsr_def",
+      "pf_runs",
+      "pyth_gamma",
+      "luck_wins",
+      "team_woba",
+      "team_fip",
+      "team_fld_runs",
+      "team_bsr_runs"
+    ],
+    "artifacts": {
+      "spec": "specs/08_team_baseruns_pythagenpat.md",
+      "script": "models/08_team_baseruns_pythagenpat.R",
+      "gold_hist": "data/processed/team_baseruns_pythagenpat_2002_2025.parquet",
+      "gold_2026": "data/processed/team_standings_projections_2026.parquet",
+      "figure_br01": "models/br01_baseruns_vs_actual_runs.png",
+      "figure_br03": "models/br03_standings_win_distribution_explorer.png"
+    }
   }
 ]

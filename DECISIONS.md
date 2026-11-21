@@ -41,6 +41,13 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Alternatives Considered:** External QP packages (`quadprog`) or finite-difference `BFGS` (not chosen: `BFGS` hit `maxit=100` on flat collinear wOBA MSE surfaces, whereas exact active-set KKT enumeration over all 15 faces of the 4-simplex guarantees $10^{-16}$ global optimality in `< 0.5 ms` with zero external dependencies; revisit only if stacking $m > 10$ models). Matching PECOTA on unregressed single-season deltas (not chosen: double-regresses stars by ~30 pts wOBA; replaced by symmetric 4-year `8/5/4/3` candidate baselines).
 - **Consequences:** Delivers all five canonical sabermetric projection paradigms in one unified Gold tier while proving empirically that Statcast physics captures 100% of point-estimate weight and PECOTA/ZiPS provide orthogonal distributional and multi-year career intelligence.
 
+## ADR-007: Level 3 Non-Linear BaseRuns, Dynamic Pythagenpat & Two-Layer Schedule Monte Carlo
+- **Status:** Accepted (2026-11-21)
+- **Context:** Aggregating player projections into team win totals requires accounting for non-linear run creation (baserunners × advancement), era-specific run environments, ballpark asymmetry, and both game-level binomial variance and pre-season true-talent projection uncertainty.
+- **Decision:** Compute David Smyth BaseRuns directly from Retrosheet atomic play events (`2002–2025`), apply Smyth/Patriot dynamic Pythagenpat (`gamma = ((RS+RA)/G)^0.287`), bridge Level 2 `M5` Consensus player projections + `EXP-006` Ballpark Factors into 2026 park-adjusted team runs, and simulate 10,000 full 2,430-game schedules with pre-season logit talent perturbation (`sigma = 0.14`) and neutral HFA (`0.535`).
+- **Alternatives Considered:** Fixed Pythagorean exponent (`gamma = 1.83`, not chosen because it misprices extreme high/low run environments) or binomial-only schedule simulation without talent perturbation (not chosen because it understates pre-season win-total credible intervals by ~40%; revisit once Level 4 PA-level simulator is wired).
+- **Consequences:** Proves BaseRuns Pythagenpat strictly outperforms actual win% and actual-runs Pythagorean in next-season forecasting (`0.06515` vs `0.07082` RMSE) while generating calibrated 2026 MLB playoff probabilities summing exactly to 6 division titles and 12 playoff berths.
+
 ---
 
 ## Template for New ADRs

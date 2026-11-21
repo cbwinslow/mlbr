@@ -384,3 +384,40 @@ test_that("EXP-007 Gold PECOTA, ZiPS 5-Year & Defense EDA Parquets satisfy invar
   expect_gt(nrow(mp), 400L)
   expect_lt(max(abs(mp$proj_fip - mp$zips_pred)), 1e-10)
 })
+
+test_that("EXP-008 Gold BaseRuns, Pythagenpat & 2026 Standings satisfy conservation invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  hist_p <- file.path(proc, "team_baseruns_pythagenpat_2002_2025.parquet")
+  s26_p  <- file.path(proc, "team_standings_projections_2026.parquet")
+  skip_if_not(file.exists(hist_p) && file.exists(s26_p), "EXP-008 Gold files not materialized")
+
+  hist <- arrow::read_parquet(hist_p)
+  s26  <- arrow::read_parquet(s26_p)
+
+  expect_equal(nrow(hist), 720L)
+  expect_gt(stats::cor(hist$bsr_off, hist$rs), 0.96)
+  expect_gt(stats::cor(hist$bsr_def, hist$ra), 0.96)
+  expect_true(all(hist$bsr_off >= 0 & hist$bsr_def >= 0))
+
+  expect_equal(nrow(s26), 30L)
+  expect_lt(abs(sum(s26$div_prob) - 6.0), 0.02)
+  expect_lt(abs(sum(s26$wc_prob) - 6.0), 0.02)
+  expect_lt(abs(sum(s26$playoff_prob) - 12.0), 0.02)
+  expect_lt(abs(mean(s26$mean_wins) - 81.0), 0.5)
+  expect_true(all(s26$p10_wins <= s26$p50_wins & s26$p50_wins <= s26$p90_wins))
+
+  # Published Regular-Season Ground-Truth Benchmark: 2024 Los Angeles Dodgers (98-64, 842 RS, 686 RA, 162 G)
+  lad24 <- hist[hist$season == 2024L & hist$team_id == "LAN", ]
+  expect_equal(nrow(lad24), 1L)
+  expect_equal(lad24$g, 162L)
+  expect_equal(lad24$wins, 98L)
+  expect_equal(lad24$rs, 842L)
+  expect_equal(lad24$ra, 686L)
+  # Published Smyth/Patriot Pythagenpat: gamma = ((842+686)/162)^0.287 = 1.9035 -> 96.60 exp wins
+  g_lad <- ((842 + 686) / 162)^0.287
+  exp_w_lad <- 162 * (842^g_lad) / (842^g_lad + 686^g_lad)
+  expect_lt(abs(lad24$pyth_gamma - g_lad), 1e-4)
+  expect_lt(abs(lad24$pyth_act_wins - exp_w_lad), 1e-4)
+})

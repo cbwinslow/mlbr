@@ -648,6 +648,54 @@
     ]
   },
   {
+    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html",
+    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html",
+    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
+    "section": "",
+    "text": "TipHow to Use This Workbook\n\n\n\nOpen RStudio Server at http://192.168.10.1:8787, open mlbr.Rproj, and run workbooks/lab08_team_baseruns_pythagenpat_workbook.R line-by-line with Ctrl + Enter. Companion Q-CRISP study: Study 08: BaseRuns, Pythagenpat & 2026 Standings.",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#first-principles-baseruns-dynamic-pythagenpat-math",
+    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#first-principles-baseruns-dynamic-pythagenpat-math",
+    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
+    "section": "1. First-Principles BaseRuns & Dynamic Pythagenpat Math",
+    "text": "1. First-Principles BaseRuns & Dynamic Pythagenpat Math\n\\[\\text{BaseRuns} = \\frac{A \\cdot B}{B + C} + D, \\qquad \\gamma = \\left(\\frac{RS + RA}{G}\\right)^{0.287}\\]",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#diagnostic-chart-2026-mlb-playoff-odds-by-division-10000-mc-seasons",
+    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#diagnostic-chart-2026-mlb-playoff-odds-by-division-10000-mc-seasons",
+    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
+    "section": "2. Diagnostic Chart: 2026 MLB Playoff Odds by Division (10,000 MC Seasons)",
+    "text": "2. Diagnostic Chart: 2026 MLB Playoff Odds by Division (10,000 MC Seasons)\n\n\n\nLab 08 Diagnostic: 2026 MLB Playoff Probabilities by Division",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#mentor-checkpoints-hands-on-exercises",
+    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#mentor-checkpoints-hands-on-exercises",
+    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
+    "section": "3. Mentor Checkpoints (Hands-On Exercises)",
+    "text": "3. Mentor Checkpoints (Hands-On Exercises)\n\nCheckpoint 1 (BaseRuns vs. Sequencing Luck): Query hist_dt[season == 2024][order(-luck_wins)]. Which 2024 clubs outperformed their BaseRuns expectation the most, and how did they regress in 2025?\nCheckpoint 2 (Dynamic Pythagenpat Exponent Across Eras): Compare mean pyth_gamma in 2014 (low-scoring) vs. 2019 (high-scoring). Why is a \\(+100\\) run differential worth more wins in a low-run era?\nCheckpoint 3 (Division Difficulty & Schedule Strength): Compare the 2026 NL East (Phillies/Braves/Mets) vs. the AL West (Mariners). Why do the 87.2-win Mariners hold higher division odds (40.9%) than the 88.0-win Phillies (28.9%)?",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
+    ]
+  },
+  {
     "objectID": "workbooks/lab01_aerodynamics_workbook.html",
     "href": "workbooks/lab01_aerodynamics_workbook.html",
     "title": "Lab 01 Work-Along: Aerodynamics, Trajectory Math & The Physics of Pitch Movement",
@@ -1024,7 +1072,7 @@
     "href": "gallery.html#machine-learning-classification",
     "title": "Analyses Gallery",
     "section": "Machine Learning & Classification",
-    "text": "Machine Learning & Classification\n\n\n\n  \n    Q-CRISP Study 07\n    PECOTA + ZiPS + EDA\n    PECOTA k-NN Comps, ZiPS 5-Yr Aging & Defense EDA\n    Completes all 5 sabermetric projection paradigms across 70,967 historical player-seasons (1960–2026) and 17,880 fielder-seasons: Non-pitch OAA/DRS/wBsR reliability EDA, ZiPS 8/5/4/3 archetype 5-year trajectories, PECOTA k-NN historical comps & p10–p90 fans, and M5 Convex Meta-Ensemble shootout.\n  \n  \n    \n    OAA YoY r = 0.506 | 70.9k Historical Comps | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 06\n    Level 3 Foundation\n    Empirical Ballpark Factors & Altitude Geometry\n    3-year rolling regressed park factors across 24 seasons (2002–2025) for all 30 MLB venues from 62,598 Retrosheet games and 16.2M+ play events. Quantifies altitude elevation lift (Coors Field ~122), small-sample shrinkage (M = 40 games), and handedness home run wall asymmetry.\n  \n  \n    \n    Dataset: 16.2M Retrosheet Plays | M = 40 Games / M = 1500 PA | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 05\n    Markov + Decisions\n    Decomposed Pitching+ & Batter Process Engine\n    5-head Markov probability pricing across 8.11M pitches eliminating base-out variance (Decomp Pitching+, Decomp Location+) plus zero-mean pitch-level batter Decision+, BatControl+, and Contact+.\n  \n  \n    \n    SIERA w_r -0.504 | Loc+ BB% -0.327 | Decision+ YoY r = 0.846 | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 04\n    Tier 2 Projections\n    Player Projections, Aging Curves & Physics Priors\n    Chronological True-Talent Marcel + Zero-Sum Delta-Method Aging + Stage-2 Residual mlbr Stuff+, Pulled Air%, Zone-Chase Selectivity, and 80% uncertainty bands across 2002–2027.\n  \n  \n    \n    Locked 2025 FIP 0.772 | wOBA 0.0312 | 80% CI Coverage 81–83% | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 03\n    XGBoost + Tunneling\n    Commit-Point Pitch Tunneling & Stuff+ / Pitching+\n    Exact y₀ = 50 ft → 23.8 ft commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost Stuff+, orthogonal Location+, and Pitching+Tunnel trained on 8.11M regular-season pitches.\n  \n  \n    \n    Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly\n  \n\n\n\n  \n    Unsupervised ML\n    Statcast\n    Unsupervised Pitch Clustering\n    K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (pfx_x, pfx_z, velocity, spin). Repertoire discovery without human pitch-tag bias.\n  \n  \n    \n    Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics\n  \n\n\n\n  \n    Supervised ML\n    tidymodels\n    Pitch Type Classification with Random Forest\n    Multi-class classification using ranger and tidymodels to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.\n  \n  \n    \n    Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC",
+    "text": "Machine Learning & Classification\n\n\n\n  \n    Q-CRISP Study 08\n    Level 3 Standings\n    BaseRuns, Dynamic Pythagenpat & 2026 Standings\n    Exact David Smyth BaseRuns across 720 team-seasons (2002–2025, r = 0.983), out-of-time next-season win% forecasting, and a 10,000-season vectorized Monte Carlo simulation over the exact 2026 MLB regular-season schedule.\n  \n  \n    \n    BaseRuns r = 0.983 | Next-Yr RMSE 0.0652 | 10,000 MC Seasons\n  \n\n\n\n  \n    Q-CRISP Study 07\n    PECOTA + ZiPS + EDA\n    PECOTA k-NN Comps, ZiPS 5-Yr Aging & Defense EDA\n    Completes all 5 sabermetric projection paradigms across 70,967 historical player-seasons (1960–2026) and 17,880 fielder-seasons: Non-pitch OAA/DRS/wBsR reliability EDA, ZiPS 8/5/4/3 archetype 5-year trajectories, PECOTA k-NN historical comps & p10–p90 fans, and M5 Convex Meta-Ensemble shootout.\n  \n  \n    \n    OAA YoY r = 0.506 | 70.9k Historical Comps | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 06\n    Level 3 Foundation\n    Empirical Ballpark Factors & Altitude Geometry\n    3-year rolling regressed park factors across 24 seasons (2002–2025) for all 30 MLB venues from 62,598 Retrosheet games and 16.2M+ play events. Quantifies altitude elevation lift (Coors Field ~122), small-sample shrinkage (M = 40 games), and handedness home run wall asymmetry.\n  \n  \n    \n    Dataset: 16.2M Retrosheet Plays | M = 40 Games / M = 1500 PA | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 05\n    Markov + Decisions\n    Decomposed Pitching+ & Batter Process Engine\n    5-head Markov probability pricing across 8.11M pitches eliminating base-out variance (Decomp Pitching+, Decomp Location+) plus zero-mean pitch-level batter Decision+, BatControl+, and Contact+.\n  \n  \n    \n    SIERA w_r -0.504 | Loc+ BB% -0.327 | Decision+ YoY r = 0.846 | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 04\n    Tier 2 Projections\n    Player Projections, Aging Curves & Physics Priors\n    Chronological True-Talent Marcel + Zero-Sum Delta-Method Aging + Stage-2 Residual mlbr Stuff+, Pulled Air%, Zone-Chase Selectivity, and 80% uncertainty bands across 2002–2027.\n  \n  \n    \n    Locked 2025 FIP 0.772 | wOBA 0.0312 | 80% CI Coverage 81–83% | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 03\n    XGBoost + Tunneling\n    Commit-Point Pitch Tunneling & Stuff+ / Pitching+\n    Exact y₀ = 50 ft → 23.8 ft commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost Stuff+, orthogonal Location+, and Pitching+Tunnel trained on 8.11M regular-season pitches.\n  \n  \n    \n    Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly\n  \n\n\n\n  \n    Unsupervised ML\n    Statcast\n    Unsupervised Pitch Clustering\n    K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (pfx_x, pfx_z, velocity, spin). Repertoire discovery without human pitch-tag bias.\n  \n  \n    \n    Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics\n  \n\n\n\n  \n    Supervised ML\n    tidymodels\n    Pitch Type Classification with Random Forest\n    Multi-class classification using ranger and tidymodels to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.\n  \n  \n    \n    Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC",
     "crumbs": [
       "Home",
       "Analyses Gallery",
@@ -1509,6 +1557,102 @@
       "Home",
       "Student Work-Along Labs",
       "Lab 02: 4-Quadrant Platoon Physics & PVI"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html",
+    "href": "analyses/08_team_baseruns_pythagenpat.html",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "",
+    "text": "TipExperiment Registry & Architecture\n\n\n\n\nExperiment ID: EXP-008-TEAM-BASERUNS-PYTHAGENPAT (VALIDATED in experiments/registry.json)\nArchitecture Tier: Level 3 — Team Run Creation/Prevention & Dynamic Standings Engine\nSpecification: specs/08_team_baseruns_pythagenpat.md\nCompanion Student Lab: Lab 08: BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds\nGold Deliverables: team_baseruns_pythagenpat_2002_2025.parquet (720 team-seasons), team_pythagenpat_backtest_metrics.parquet, team_standings_projections_2026.parquet (30 clubs, 10,000 MC seasons)\nPreserved Assets: models/br01_* .. br03_* (PNG 300 DPI, RDS &lt;= 0.60 MB, ZSTD Parquet, interactive Plotly HTML)",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html#executive-summary-abstract-tldr",
+    "href": "analyses/08_team_baseruns_pythagenpat.html#executive-summary-abstract-tldr",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "1. Executive Summary & Abstract (TL;DR)",
+    "text": "1. Executive Summary & Abstract (TL;DR)\nIn Study 08, we bridge Level 2 player projections (EXP-004 + EXP-007 M5 Consensus) and Level 3 Ballpark Factors (EXP-006) into a full Team Run Creation & Dynamic Standings Engine:\n\n\n\n\n\n\n\n\nPillar\nValidated Empirical Result\nSabermetric & Forecasting Implication\n\n\n\n\nDavid Smyth BaseRuns (2002–2025)\nOffensive BaseRuns achieves r = 0.9823 (RMSE = 24.57 runs) and Defensive BaseRuns achieves r = 0.9816 (RMSE = 25.84 runs) across all 720 team-seasons.\nCaptures non-linear baserunner × advancement interaction directly from atomic Retrosheet play events.\n\n\nOut-of-Time Next-Year Win% (T -&gt; T+1)\nAcross 690 consecutive regular-season franchise pairs, M4_Pythagenpat_BaseRuns (RMSE = 0.06704, r = 0.5639) decisively beats prior-year actual win% (0.07225), fixed Pythagorean (0.06979), and actual-runs Pythagenpat (0.07063).\nStripping sequencing and cluster luck produces a strictly cleaner signal of true team talent entering the following season.\n\n\n2026 Schedule Monte Carlo (10,000 sims)\nIntegrates Level 2 M5 projections, EXP-006 Ballpark Factors, pre-season true-talent uncertainty, and the exact 2026 MLB regular-season schedule (2,430 games).\nProduces calibrated win credible intervals (p10–p90) and exact MLB 12-team playoff odds (sum(div) = 6.0, sum(wc) = 6.0, sum(playoff) = 12.0).\n\n\n\n\n\n\nFigure 3: 2026 MLB Projected Standings & 10,000-Season Monte Carlo Credible Intervals",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html#domain-problem-non-linear-run-theory",
+    "href": "analyses/08_team_baseruns_pythagenpat.html#domain-problem-non-linear-run-theory",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "2. Domain Problem & Non-Linear Run Theory",
+    "text": "2. Domain Problem & Non-Linear Run Theory\nLinear weights (wOBA, wRAA) treat every offensive event as additive. In reality, baseball scoring is multiplicative: getting on base (\\(A\\)) only converts into runs proportionally to the lineup’s ability to advance runners (\\(B\\)) before the defense records outs (\\(C\\)), plus self-scoring home runs (\\(D\\)). David Smyth’s BaseRuns models this exact physical structure, while Smyth & Patriot’s Pythagenpat adapts the win-expectation exponent \\(\\gamma\\) continuously to each era’s run-scoring environment.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html#mathematical-formulation-lake-wide-pipeline",
+    "href": "analyses/08_team_baseruns_pythagenpat.html#mathematical-formulation-lake-wide-pipeline",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "3. Mathematical Formulation & Lake-Wide Pipeline",
+    "text": "3. Mathematical Formulation & Lake-Wide Pipeline\n\\[\\text{BaseRuns} = \\frac{A \\cdot B}{B + C} + D, \\qquad \\gamma = \\left(\\frac{RS + RA}{G}\\right)^{0.287}, \\qquad W\\% = \\frac{RS^\\gamma}{RS^\\gamma + RA^\\gamma}\\]\nGame-by-game 2026 schedule probabilities combine each club’s perturbed season true-talent win percentage via Tom Tango’s Log5 odds ratio layered with neutral home-field advantage (\\(\\text{HFA} = 0.535\\)).",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html#exploratory-validation-baseruns-accuracy-sequencing-luck-persistence",
+    "href": "analyses/08_team_baseruns_pythagenpat.html#exploratory-validation-baseruns-accuracy-sequencing-luck-persistence",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "4. Exploratory Validation: BaseRuns Accuracy & Sequencing-Luck Persistence",
+    "text": "4. Exploratory Validation: BaseRuns Accuracy & Sequencing-Luck Persistence\n\n\n\nFigure 1: David Smyth BaseRuns vs. Actual Team Runs Scored (2002–2025, n = 720)\n\n\n\n\n\nFigure 2: Year-over-Year Persistence of Sequencing & Cluster Luck Residuals",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html#out-of-time-forecasting-shootout-year-t---year-t1-n-687",
+    "href": "analyses/08_team_baseruns_pythagenpat.html#out-of-time-forecasting-shootout-year-t---year-t1-n-687",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "5. Out-of-Time Forecasting Shootout (Year T -> Year T+1, n = 687)",
+    "text": "5. Out-of-Time Forecasting Shootout (Year T -&gt; Year T+1, n = 687)\n\n\n\n\n\n\n\n\nModel\nNext-Year Win% RMSE\nNext-Year Win% \\(r\\)\n\n\n\n\nB0_Neutral_500 (81-81 Baseline)\n0.07344\n—\n\n\nB1_PriorYear_ActualWinPct\n0.07082\n0.5396\n\n\nB2_Pythag_183_Actual (\\(\\gamma = 1.83\\))\n0.06850\n0.5480\n\n\nM3_Pythagenpat_Actual (Dynamic \\(\\gamma\\))\n0.06933\n0.5486\n\n\nM4_Pythagenpat_BaseRuns (True Talent)\n0.06515\n0.5681",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html#interactive-2026-team-run-frontier-standings-leaderboard",
+    "href": "analyses/08_team_baseruns_pythagenpat.html#interactive-2026-team-run-frontier-standings-leaderboard",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "6. Interactive 2026 Team Run Frontier & Standings Leaderboard",
+    "text": "6. Interactive 2026 Team Run Frontier & Standings Leaderboard\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRank\nClub\nDivision\nProj RS\nProj RA\nMean Wins\n10th–90th\nDiv Odds\nPlayoff Odds\n\n\n\n\n1\nNew York Yankees\nAL East\n782\n683\n91.3\n80–102\n45.6%\n80.5%\n\n\n2\nLos Angeles Dodgers\nNL West\n781\n694\n90.8\n80–102\n55.9%\n76.5%\n\n\n3\nNew York Mets\nNL East\n770\n687\n89.2\n78–100\n33.6%\n70.5%\n\n\n4\nAtlanta Braves\nNL East\n774\n696\n88.7\n78–100\n31.5%\n67.4%\n\n\n5\nPhiladelphia Phillies\nNL East\n767\n695\n88.0\n77–99\n28.9%\n65.0%\n\n\n6\nSeattle Mariners\nAL West\n691\n641\n87.2\n76–98\n40.9%\n66.3%",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html#downstream-integration-level-4-level-5-roadmap",
+    "href": "analyses/08_team_baseruns_pythagenpat.html#downstream-integration-level-4-level-5-roadmap",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "7. Downstream Integration: Level 4 & Level 5 Roadmap",
+    "text": "7. Downstream Integration: Level 4 & Level 5 Roadmap\nWith Level 3 (EXP-006 + EXP-008) complete, mlbr now holds calibrated park-adjusted team run environments and season win distributions ready to feed Level 4 (EXP-009 Plate-Appearance Markov Game Simulator) and Level 5 (EXP-010 Season Win Total & Prediction Market Valuation).",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
     ]
   },
   {
@@ -2037,6 +2181,18 @@
       "Home",
       "Analyses Gallery",
       "Pitch Clustering (K-Means / GMM)"
+    ]
+  },
+  {
+    "objectID": "analyses/08_team_baseruns_pythagenpat.html#out-of-time-forecasting-shootout-year-t---year-t1-n-690",
+    "href": "analyses/08_team_baseruns_pythagenpat.html#out-of-time-forecasting-shootout-year-t---year-t1-n-690",
+    "title": "Study 08: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat & 2026 Standings Simulator",
+    "section": "5. Out-of-Time Forecasting Shootout (Year T -> Year T+1, n = 690)",
+    "text": "5. Out-of-Time Forecasting Shootout (Year T -&gt; Year T+1, n = 690)\n\n\n\n\n\n\n\n\nModel\nNext-Year Win% RMSE\nNext-Year Win% \\(r\\)\n\n\n\n\nB0_Neutral_500 (81-81 Baseline)\n0.07475\n—\n\n\nB1_PriorYear_ActualWinPct\n0.07225\n0.5382\n\n\nB2_Pythag_183_Actual (\\(\\gamma = 1.83\\))\n0.06979\n0.5470\n\n\nM3_Pythagenpat_Actual (Dynamic \\(\\gamma\\))\n0.07063\n0.5476\n\n\nM4_Pythagenpat_BaseRuns (True Talent)\n0.06704\n0.5639",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 08: BaseRuns, Pythagenpat & Standings"
     ]
   }
 ]
