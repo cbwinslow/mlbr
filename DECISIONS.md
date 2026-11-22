@@ -55,6 +55,13 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Alternatives Considered:** Pure stochastic Monte Carlo game paths (not chosen for pre-game backtest pricing due to $O(1/\sqrt{N})$ sampling noise and 20× slower runtime; reserved for interactive single-game trajectory visualization).
 - **Consequences:** Delivers deterministic, zero-variance Moneyline, Run-Line (`-1.5`), and Over/Under Total pricing across all `4,859` regular-season `2024–2025` games (`Brier = 0.24451`, `Cal Slope = 0.949`) plus a 5,372-state empirical Win Expectancy matrix ready for Level 5 market valuation (`EXP-010`).
 
+## ADR-009: Level 5 Chronological Fair-Value Blending, Fractional Kelly Risk Caps & Prediction Market Overround Auditing
+- **Status:** Accepted (2026-11-21)
+- **Context:** Translating Level 4 pre-game probabilities (`M3_Starter_Team_Log5`, `M4_PA_Markov_Simulator`) and Level 3 season standings (`team_standings_projections_2026.parquet`) into capital allocation exposes portfolios to estimation error, correlated same-day MLB slates, and severe early-season prediction-market overround (`+91.7%` raw sum in archived Polymarket 2027 WS contracts).
+- **Decision:** Fit the convex Level 4 fair-value blend weight strictly chronologically (`2024` regular season Log-Loss minimization $\rightarrow$ frozen `w_M3 = 0.453, w_M4 = 0.547` on locked `2025` OOS), size simultaneous-day MLB slates off start-of-day bankroll $W_t$ with zero intraday look-ahead, enforce single-game (`5%`) and daily slate (`35%`) exposure caps, recommend Eighth-Kelly (`c = 0.125`) or Quarter-Kelly (`c = 0.25`) over Full Kelly, and explicitly audit multi-outcome overround ($\nu = \sum q_i^{\text{mid}} - 1$) and bid-ask spreads on archived Polymarket/Kalshi orderbooks.
+- **Alternatives Considered:** Full Kelly (`c = 1.0`, rejected: produced `78.4%` max drawdown on locked `2025` OOS vs. `29.5%` for Eighth-Kelly under exact `-105/-105` vig) and unadjusted mid-price comparisons on raw futures books (rejected: ignores `+91.7%` overround and `7–8¢` median bid-ask spread drag).
+- **Consequences:** Completes the 5-tier hierarchical `mlbr` platform (`EXP-001` through `EXP-010`) with reproducible Gold valuation tables (`market_valuation_backtest_2024_2025.parquet`, `market_staking_summary_2024_2025.parquet`, `market_2026_futures_valuation.parquet`), transparent disclosure of synthetic vs. live archived market benchmarks, and zero-leakage portfolio risk controls.
+
 ---
 
 ## Template for New ADRs

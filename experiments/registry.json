@@ -573,5 +573,65 @@
       "fig_cal": "models/mc01_calibration_brier_shootout.png",
       "fig_wpa": "models/mc03_sample_game_wpa_trajectory.html"
     }
+  },
+  {
+    "id": "EXP-010-MARKET-EDGE-PREDICTION-VALUATION",
+    "title": "Level 5 Market Edge, Closing Line Value (CLV), Fractional Kelly Bankroll Optimization & Prediction Market Valuation",
+    "tier": 5,
+    "tier_name": "Level 5: Betting Markets & Staking",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 00:20:47 UTC",
+    "summary": "Completed Level 5 Quantitative Market Valuation Engine. Calibrated a strictly chronological fair-value blend (w_M3=0.453, w_M4=0.547) on 2024 (n=2429) and evaluated strictly out-of-sample on locked 2025 (n=2430) against vig-adjusted sportsbook (-105, 2.38% vig) and prediction-market exchange (-102, 1.00% fee) benchmarks across 4 staking regimes (Flat 1u, Full/Quarter/Eighth Kelly) and 4 EV thresholds (+1%..+5%). Priced all 30 MLB clubs for 2026 Win-Total, Playoff, and World Series futures and audited live archived Polymarket/Kalshi orderbook overround and spreads.",
+    "hypotheses": [
+      "A chronologically calibrated Level 4 blend (M3 Starter+Team Log5 + M4 24 Base-Out Markov) improves locked 2025 OOS ROC AUC and calibration slope (1.043 vs 1.323) over the prior-year Pythagorean baseline, while M3 leads raw Brier and Log-Loss.",
+      "Quarter-Kelly (c=0.25) and Eighth-Kelly (c=0.125) bankroll sizing preserve positive long-run log-growth while sharply compressing maximum drawdown relative to Full Kelly (c=1.0).",
+      "Live prediction market futures (Polymarket archived WS orderbook) exhibit measurable overround (>100% sum of mids) and bid-ask spread drag that must be explicitly overcome before sizing positive-EV allocations."
+    ],
+    "formulas": {
+      "expected_value": "EV = p * (O - 1) - (1 - p) = p * O - 1",
+      "fractional_kelly": "f* = min(f_max, c * max(0, (p * (O - 1) - (1 - p)) / (O - 1)))",
+      "closing_line_val": "CLV = (O_entry / O_close) - 1",
+      "market_overround": "nu = sum(q_i_mid) - 1"
+    },
+    "metrics": {
+      "n_train_2024": 2429,
+      "n_locked_oos_2025": 2430,
+      "blend_weight_m3": 0.4532,
+      "blend_weight_m4": 0.5468,
+      "oos_2025_b2_brier": 0.2435,
+      "oos_2025_m5_fair_brier": 0.24354,
+      "oos_2025_m5_fair_logloss": 0.68004,
+      "oos_2025_m5_fair_auc": 0.5759,
+      "oos_2025_qk_sb105_n_bets": 1325,
+      "oos_2025_qk_sb105_roi_pct": 1.35,
+      "oos_2025_qk_sb105_clv_pct": 4.67,
+      "oos_2025_qk_sb105_sharpe": 0.93,
+      "oos_2025_qk_sb105_max_dd": 52.14,
+      "oos_2025_qk_ex102_roi_pct": 2.15,
+      "polymarket_ws_overround_pct": 91.7,
+      "polymarket_ws_med_spread_c": 7
+    },
+    "features": [
+      "p_fair",
+      "q_open_home",
+      "q_close_home",
+      "ev_best",
+      "clv_pct",
+      "f_kelly_qtr",
+      "f_kelly_eighth",
+      "mlbr_ws_prob",
+      "pm_ws_mid",
+      "ws_edge_pct"
+    ],
+    "artifacts": {
+      "spec": "specs/10_market_edge_prediction_valuation.md",
+      "script": "models/10_market_edge_prediction_valuation.R",
+      "gold_backtest": "data/processed/market_valuation_backtest_2024_2025.parquet",
+      "gold_staking": "data/processed/market_staking_summary_2024_2025.parquet",
+      "gold_futures": "data/processed/market_2026_futures_valuation.parquet",
+      "fig_bankroll": "models/mkt01_bankroll_kelly_frontier.html",
+      "fig_ev": "models/mkt02_ev_threshold_clv_efficiency.png",
+      "fig_futures": "models/mkt03_2026_futures_polymarket_valuation.html"
+    }
   }
 ]

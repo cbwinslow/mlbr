@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 10</span>
+    <span class="gallery-badge">Level 5 Markets</span>
+    <h4><a href="analyses/10_market_edge_prediction_valuation.html">Market Edge, CLV &amp; Prediction Market Valuation</a></h4>
+    <p>Chronological Level 4 fair-value blend (2024 train &rarr; locked 2025 OOS), Fractional Kelly bankroll optimization (Flat 1u vs. Full/Quarter/Eighth Kelly) across -105 sportsbook &amp; -102 exchange vig regimes, plus 30-club 2026 futures valuation vs. archived Polymarket orderbooks.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">Locked 2025 OOS | Eighth-Kelly +2.07% ROI | +91.7% PM Overround Audit | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 09</span>
     <span class="gallery-badge">Level 4 Simulator</span>
     <h4><a href="analyses/09_game_monte_carlo_simulator.html">24 Base-Out Markov Game Simulator &amp; Win Expectancy</a></h4>

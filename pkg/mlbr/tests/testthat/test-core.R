@@ -448,3 +448,52 @@ test_that("EXP-009 Gold Markov Game Simulator & Win Expectancy satisfy OOS invar
   # Exact Bot-9th skip & walk-off truncation calibration: mean total runs within 0.25 R/G of actual
   expect_lt(abs(mean(gm$exp_total_runs) - mean(gm$actual_total_runs)), 0.25)
 })
+
+test_that("EXP-010 Gold Market Edge, Kelly Sizing & Prediction Market Futures satisfy invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  bt_p  <- file.path(proc, "market_valuation_backtest_2024_2025.parquet")
+  st_p  <- file.path(proc, "market_staking_summary_2024_2025.parquet")
+  fut_p <- file.path(proc, "market_2026_futures_valuation.parquet")
+  skip_if_not(file.exists(bt_p) && file.exists(st_p) && file.exists(fut_p), "EXP-010 Gold files not materialized")
+
+  bt  <- arrow::read_parquet(bt_p)
+  st  <- arrow::read_parquet(st_p)
+  fut <- arrow::read_parquet(fut_p)
+
+  # Exact closed-form analytical benchmark (p = 0.60, O_entry = 1/0.55, O_close = 1/0.58)
+  p_ref <- 0.60; o_en <- 1.0 / 0.55; o_cl <- 1.0 / 0.58; b_ref <- o_en - 1.0
+  expect_lt(abs((p_ref * b_ref - (1.0 - p_ref)) - (0.60 / 0.55 - 1.0)), 1e-12)
+  expect_lt(abs(((p_ref * b_ref - (1.0 - p_ref)) / b_ref) - (1.0 / 9.0)), 1e-12)
+  expect_lt(abs(((o_en / o_cl) - 1.0) - (0.58 / 0.55 - 1.0)), 1e-12)
+
+  # Backtest Gold table invariants (4,859 games across 2024-2025)
+  expect_equal(nrow(bt), 4859L)
+  expect_true(all(bt$p_fair > 0.05 & bt$p_fair < 0.95))
+  expect_true(all(bt$o_home > 1.0 & bt$o_away > 1.0))
+  # Exact -105/-105 two-way book overround invariant: 1/o_home + 1/o_away == 210/205
+  expect_lt(max(abs((1.0 / bt$o_home + 1.0 / bt$o_away) - (210.0 / 205.0))), 1e-5)
+  expect_true(all(bt$f_kelly_qtr >= 0.0 & bt$f_kelly_qtr <= 0.05))
+  expect_true(all(bt$f_kelly_eighth <= bt$f_kelly_qtr + 1e-12))
+
+  # Staking invariants on Locked 2025 OOS (EV >= +2%)
+  s25_sb <- st[st$split_name == "Locked 2025 OOS" & grepl("105", st$vig_tier) & abs(st$ev_min - 0.02) < 1e-9, ]
+  s25_ex <- st[st$split_name == "Locked 2025 OOS" & grepl("102", st$vig_tier) & abs(st$ev_min - 0.02) < 1e-9, ]
+  expect_equal(nrow(s25_sb), 4L)
+  expect_lt(
+    s25_sb$max_drawdown_pct[s25_sb$regime == "Eighth_Kelly"],
+    s25_sb$max_drawdown_pct[s25_sb$regime == "Full_Kelly"]
+  )
+  expect_gt(
+    s25_ex$final_bankroll[s25_ex$regime == "Quarter_Kelly"],
+    s25_sb$final_bankroll[s25_sb$regime == "Quarter_Kelly"]
+  )
+
+  # 30-club 2026 Futures & Polymarket overround invariants
+  expect_equal(nrow(fut), 30L)
+  expect_lt(abs(sum(fut$mlbr_ws_prob) - 1.0), 1e-5)
+  expect_lt(abs(sum(fut$pm_ws_novig) - 1.0), 1e-5)
+  expect_gt(sum(fut$pm_ws_mid), 1.0)
+  expect_true(all(fut$qtr_kelly_ws_ask <= fut$qtr_kelly_ws + 1e-12))
+})

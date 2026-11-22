@@ -9,32 +9,36 @@
     <lastmod>2026-11-14T22:01:33.080Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/09_game_monte_carlo_simulator.html</loc>
-    <lastmod>2026-11-21T22:18:31.242Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/05_decomposed_pitching_decisions.html</loc>
+    <lastmod>2026-11-20T01:41:55.302Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/03_tunneling_stuff_plus.html</loc>
-    <lastmod>2026-11-19T06:13:23.404Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/02_platoon_physics.html</loc>
+    <lastmod>2026-11-18T04:49:58.809Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/06_ballpark_factors.html</loc>
-    <lastmod>2026-11-20T06:14:41.915Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/xwoba_surface.html</loc>
+    <lastmod>2026-11-14T22:01:50.584Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/experiment_registry.html</loc>
-    <lastmod>2026-11-16T07:29:56.777Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/04_player_projections.html</loc>
+    <lastmod>2026-11-20T06:14:15.398Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/07_pecota_zips_ensemble.html</loc>
-    <lastmod>2026-11-21T21:31:26.265Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/01_pitch_quality_eda.html</loc>
+    <lastmod>2026-11-16T05:14:19.086Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/08_team_baseruns_pythagenpat.html</loc>
+    <loc>https://cloudcurio.cc/analyses/run_expectancy.html</loc>
+    <lastmod>2026-11-14T22:04:37.436Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab08_team_baseruns_pythagenpat_workbook.html</loc>
     <lastmod>2026-11-21T21:55:16.589Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab02_platoon_physics_workbook.html</loc>
-    <lastmod>2026-11-20T00:11:26.432Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab01_aerodynamics_workbook.html</loc>
+    <lastmod>2026-11-20T00:12:47.512Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/workbooks/lab03_tunneling_stuff_plus_workbook.html</loc>
@@ -62,7 +66,7 @@
   </url>
   <url>
     <loc>https://cloudcurio.cc/gallery.html</loc>
-    <lastmod>2026-11-21T22:09:56.919Z</lastmod>
+    <lastmod>2026-11-22T00:21:41.256Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/architecture.html</loc>
@@ -89,36 +93,40 @@
     <lastmod>2026-11-20T06:13:33.819Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab01_aerodynamics_workbook.html</loc>
-    <lastmod>2026-11-20T00:12:47.512Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab10_market_edge_prediction_valuation_workbook.html</loc>
+    <lastmod>2026-11-22T00:21:41.256Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab08_team_baseruns_pythagenpat_workbook.html</loc>
+    <loc>https://cloudcurio.cc/workbooks/lab02_platoon_physics_workbook.html</loc>
+    <lastmod>2026-11-20T00:11:26.432Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/08_team_baseruns_pythagenpat.html</loc>
     <lastmod>2026-11-21T21:55:16.589Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/run_expectancy.html</loc>
-    <lastmod>2026-11-14T22:04:37.436Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/07_pecota_zips_ensemble.html</loc>
+    <lastmod>2026-11-21T21:31:26.265Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/01_pitch_quality_eda.html</loc>
-    <lastmod>2026-11-16T05:14:19.086Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/experiment_registry.html</loc>
+    <lastmod>2026-11-16T07:29:56.777Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/04_player_projections.html</loc>
-    <lastmod>2026-11-20T06:14:15.398Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/06_ballpark_factors.html</loc>
+    <lastmod>2026-11-20T06:14:41.915Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/xwoba_surface.html</loc>
-    <lastmod>2026-11-14T22:01:50.584Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/03_tunneling_stuff_plus.html</loc>
+    <lastmod>2026-11-19T06:13:23.404Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/02_platoon_physics.html</loc>
-    <lastmod>2026-11-18T04:49:58.809Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/09_game_monte_carlo_simulator.html</loc>
+    <lastmod>2026-11-21T22:18:31.242Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/05_decomposed_pitching_decisions.html</loc>
-    <lastmod>2026-11-20T01:41:55.302Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/10_market_edge_prediction_valuation.html</loc>
+    <lastmod>2026-11-22T00:21:41.235Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/analyses/pitch_clustering.html</loc>

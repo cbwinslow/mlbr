@@ -77,6 +77,8 @@ website:
               href: workbooks/lab08_team_baseruns_pythagenpat_workbook.qmd
             - text: "Lab 09: Markov Game Simulator & Win Expectancy"
               href: workbooks/lab09_game_monte_carlo_simulator_workbook.qmd
+            - text: "Lab 10: Market Edge, CLV & Fractional Kelly"
+              href: workbooks/lab10_market_edge_prediction_valuation_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -99,6 +101,8 @@ website:
               href: analyses/08_team_baseruns_pythagenpat.qmd
             - text: "Study 09: Markov Game Simulator & WPA"
               href: analyses/09_game_monte_carlo_simulator.qmd
+            - text: "Study 10: Market Edge & Prediction Markets"
+              href: analyses/10_market_edge_prediction_valuation.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"
