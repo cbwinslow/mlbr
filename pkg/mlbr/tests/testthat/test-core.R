@@ -497,3 +497,106 @@ test_that("EXP-010 Gold Market Edge, Kelly Sizing & Prediction Market Futures sa
   expect_gt(sum(fut$pm_ws_mid), 1.0)
   expect_true(all(fut$qtr_kelly_ws_ask <= fut$qtr_kelly_ws + 1e-12))
 })
+
+test_that("EXP-011 Gold Hawk-Eye Bat-Tracking & Arm-Slot Biomechanics satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  bat_p <- file.path(proc, "batter_bat_tracking_biomechanics_2023_2026.parquet")
+  pit_p <- file.path(proc, "pitcher_arm_angle_biomechanics_2020_2026.parquet")
+  abl_p <- file.path(proc, "bat_tracking_oos_ablation_metrics.parquet")
+  yoy_p <- file.path(proc, "biomechanics_yoy_reliability_2024_2025.parquet")
+  skip_if_not(all(file.exists(c(bat_p, pit_p, abl_p, yoy_p))), "EXP-011 Gold files not materialized")
+
+  bat <- arrow::read_parquet(bat_p)
+  pit <- arrow::read_parquet(pit_p)
+  abl <- arrow::read_parquet(abl_p)
+  yoy <- arrow::read_parquet(yoy_p)
+
+  expect_gt(nrow(bat), 2000L)
+  expect_true(all(bat$mean_bat_speed >= 60.0 & bat$mean_bat_speed <= 90.0))
+  expect_gt(nrow(pit), 1500L)
+  expect_true(all(pit$mean_arm_angle >= -10.0 & pit$mean_arm_angle <= 85.0))
+  # Biomechanical sensors must beat traditional wOBA on YoY reliability
+  expect_gt(yoy$yoy_r[yoy$metric == "Pitcher Arm Angle (deg)"], 0.90)
+  expect_gt(yoy$yoy_r[yoy$metric == "Batter Bat Speed (mph)"],  0.90)
+  expect_gt(yoy$yoy_r[yoy$metric == "Batter Bat Speed (mph)"],  yoy$yoy_r[yoy$metric == "Traditional wOBA"])
+  # OOS lift checks: lower ISO RMSE and higher 4-seam Whiff AUC
+  expect_lt(abl$value[abl$task == "2025_OOS_ISO_RMSE" & abl$model == "Plus_HawkEye_BatTracking"],
+            abl$value[abl$task == "2025_OOS_ISO_RMSE" & abl$model == "Baseline_Prior_Stat"])
+  expect_gt(abl$value[abl$task == "2024_2025_OOS_FF_Whiff_AUC" & abl$model == "Plus_ArmAngle_SlotRide"],
+            abl$value[abl$task == "2024_2025_OOS_FF_Whiff_AUC" & abl$model == "Baseline_Velo_IVB"])
+})
+
+test_that("EXP-012 Gold Weather/Wind, Umpire Zones & Catcher Framing CSAA satisfy invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  wx_p <- file.path(proc, "game_weather_umpire_environment_2015_2025.parquet")
+  um_p <- file.path(proc, "umpire_zone_factors_2015_2025.parquet")
+  cf_p <- file.path(proc, "catcher_framing_csaa_2021_2025.parquet")
+  skip_if_not(all(file.exists(c(wx_p, um_p, cf_p))), "EXP-012 Gold files not materialized")
+
+  wx <- arrow::read_parquet(wx_p)
+  um <- arrow::read_parquet(um_p)
+  cf <- arrow::read_parquet(cf_p)
+
+  expect_gt(nrow(wx), 25000L)
+  expect_true(all(wx$temp_f >= 25.0 & wx$temp_f <= 115.0))
+  # Hot games (>=85F) must score significantly higher than cold games (<55F)
+  expect_gt(mean(wx$actual_total_runs[wx$temp_f >= 85]), mean(wx$actual_total_runs[wx$temp_f < 55]) + 0.5)
+  expect_gt(nrow(um), 100L)
+  # Zero-sum within-season centering for Catcher Framing CSAA
+  cf25 <- cf[cf$season == 2025L, ]
+  expect_lt(abs(sum(cf25$csaa)), 1e-4)
+  expect_gt(max(cf25$framing_runs), 15.0)
+})
+
+test_that("EXP-013 Gold Starter Velocity Decay & Rolling Bullpen Fatigue satisfy invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  dec_p <- file.path(proc, "starter_velocity_decay_curve_2018_2025.parquet")
+  bp_p  <- file.path(proc, "team_bullpen_fatigue_daily_2018_2025.parquet")
+  st_p  <- file.path(proc, "pitcher_stamina_leaderboard_2024_2025.parquet")
+  skip_if_not(all(file.exists(c(dec_p, bp_p, st_p))), "EXP-013 Gold files not materialized")
+
+  dec <- arrow::read_parquet(dec_p)
+  bp  <- arrow::read_parquet(bp_p)
+  st  <- arrow::read_parquet(st_p)
+
+  expect_equal(nrow(dec), 6L)
+  expect_lt(dec$mean_velo_delta[dec$pc_bin == "61-80"], -0.25)
+  expect_gt(nrow(bp), 30000L)
+  expect_true(all(bp$bp_pitches_3d >= 0 & bp$bp_pitches_1d >= 0))
+  expect_gt(mean(bp$late_runs_allowed[bp$bp_pitches_3d > 180]),
+            mean(bp$late_runs_allowed[bp$bp_pitches_3d >= 61 & bp$bp_pitches_3d <= 100]))
+  expect_gt(nrow(st), 150L)
+})
+
+test_that("EXP-014 Gold Unified Pro Multi-Market Engine & Exact 12-Team Bracket satisfy invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  gm_p <- file.path(proc, "unified_pro_game_f5_totals_2024_2025.parquet")
+  mm_p <- file.path(proc, "unified_pro_multi_market_metrics.parquet")
+  br_p <- file.path(proc, "mlb_2026_12team_bracket_ws_odds.parquet")
+  skip_if_not(all(file.exists(c(gm_p, mm_p, br_p))), "EXP-014 Gold files not materialized")
+
+  gm <- arrow::read_parquet(gm_p)
+  mm <- arrow::read_parquet(mm_p)
+  br <- arrow::read_parquet(br_p)
+
+  expect_equal(nrow(gm), 4859L)
+  expect_true(all(gm$p_m6_ml > 0.05 & gm$p_m6_ml < 0.95))
+  expect_true(all(gm$p_m6_f5 > 0.05 & gm$p_m6_f5 < 0.95))
+  # Unified Pro Totals must beat EXP-009 baseline Totals RMSE on locked 2025 OOS
+  expect_lt(mm$metric_val[mm$model == "M6_Pro_Totals"], mm$metric_val[mm$model == "EXP-009_Totals"])
+  # Exact 12-Team Playoff Bracket probability conservation invariants
+  expect_equal(nrow(br), 30L)
+  expect_lt(abs(sum(br$pennant_prob[br$league == "AL"]) - 1.0), 1e-5)
+  expect_lt(abs(sum(br$pennant_prob[br$league == "NL"]) - 1.0), 1e-5)
+  expect_lt(abs(sum(br$ws_prob_12team) - 1.0), 1e-5)
+  expect_lt(abs(sum(br$playoff_prob_12) - 12.0), 1e-3)
+  expect_lt(abs(sum(br$bye_prob) - 4.0), 1e-3)
+})

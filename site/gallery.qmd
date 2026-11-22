@@ -17,6 +17,58 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 14</span>
+    <span class="gallery-badge">Unified Pro Engine</span>
+    <h4><a href="analyses/14_unified_pro_game_f5_totals_bracket.html">Unified Pro Multi-Market Engine (ML, F5, Totals) &amp; 12-Team Bracket</a></h4>
+    <p>Synthesizes Arm-Slot ride (<code>EXP-011</code>), Weather/Umpire carry (<code>EXP-012</code>), and 3-day Bullpen Fatigue (<code>EXP-013</code>) into locked-2025 ML, F5 (<code>AUC 0.5846</code>), and Totals (<code>-0.0118 R/G</code> RMSE) pricing + 50,000 exact 12-team MLB playoff brackets.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">F5 AUC 0.5846 | Totals -0.0118 R/G | 50k Exact 12-Team Brackets | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge ml">Q-CRISP Study 13</span>
+    <span class="gallery-badge">Fatigue &amp; Bullpen</span>
+    <h4><a href="analyses/13_pitcher_stamina_bullpen_fatigue.html">Pitcher Stamina, Velocity Decay &amp; Bullpen Fatigue Engine</a></h4>
+    <p>1.44M starter fastballs (2018–2025) pitch-count decay curve (<code>-0.43 mph</code> at P61–80; <code>+0.35 RV/100</code> at P101+) and 35,812 team-game zero-leakage trailing 3-day bullpen fatigue engine (<code>Taxed 181+</code> <code>2.028 R/G</code> vs. <code>Light</code> <code>1.890 R/G</code>).</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">1.44M Fastballs | 35,812 Team-Games | 2025 Stamina Explorer | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge ml">Q-CRISP Study 12</span>
+    <span class="gallery-badge">Environment &amp; Framing</span>
+    <h4><a href="analyses/12_weather_umpire_catcher_framing.html">Weather/Wind Carry, Umpire Zones &amp; Catcher Framing (CSAA)</a></h4>
+    <p>25,639 MLB games (2015–2025) temperature/wind scoring carry (<code>+0.33 R/G</code> per +10&deg;F), Empirical Bayes home-plate umpire run factors (<code>-0.0091 R/G</code> OOS Totals RMSE lift), and 1.77M-pitch zero-sum Catcher Framing <code>CSAA</code> (Patrick Bailey <code>+23.8 R</code>).</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">25,639 Games | 1.77M Called Pitches | Bailey +23.8 Framing R | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
+    <span class="gallery-badge ml">Q-CRISP Study 11</span>
+    <span class="gallery-badge">Hawk-Eye Biomechanics</span>
+    <h4><a href="analyses/11_bat_tracking_arm_slot_biomechanics.html">Bat-Tracking (1.04M Swings) &amp; Pitcher Arm-Slot Biomechanics</a></h4>
+    <p>Full-population Hawk-Eye bat speed, swing length, attack angle, Blast Rate, and pitcher release <code>arm_angle</code> slot-adjusted ride across 2020–2026: <code>r &gt; 0.92</code> YoY stability, <code>-3.66%</code> locked-2025 ISO RMSE lift, and <code>+0.0302</code> OOS 4-seam Whiff AUC gain.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">1.04M Swings | Arm Angle r=0.963 | +0.0302 FF Whiff AUC | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 10</span>
     <span class="gallery-badge">Level 5 Markets</span>
     <h4><a href="analyses/10_market_edge_prediction_valuation.html">Market Edge, CLV &amp; Prediction Market Valuation</a></h4>

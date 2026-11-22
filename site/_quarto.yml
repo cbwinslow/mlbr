@@ -79,6 +79,14 @@ website:
               href: workbooks/lab09_game_monte_carlo_simulator_workbook.qmd
             - text: "Lab 10: Market Edge, CLV & Fractional Kelly"
               href: workbooks/lab10_market_edge_prediction_valuation_workbook.qmd
+            - text: "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
+              href: workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.qmd
+            - text: "Lab 12: Weather, Umpires & Catcher Framing"
+              href: workbooks/lab12_weather_umpire_catcher_framing_workbook.qmd
+            - text: "Lab 13: Pitcher Stamina & Bullpen Fatigue"
+              href: workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.qmd
+            - text: "Lab 14: Unified Pro Multi-Market & 12-Team Bracket"
+              href: workbooks/lab14_unified_pro_game_f5_totals_bracket_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -103,6 +111,14 @@ website:
               href: analyses/09_game_monte_carlo_simulator.qmd
             - text: "Study 10: Market Edge & Prediction Markets"
               href: analyses/10_market_edge_prediction_valuation.qmd
+            - text: "Study 11: Bat-Tracking & Arm-Slot Biomechanics"
+              href: analyses/11_bat_tracking_arm_slot_biomechanics.qmd
+            - text: "Study 12: Weather, Umpires & Catcher Framing"
+              href: analyses/12_weather_umpire_catcher_framing.qmd
+            - text: "Study 13: Pitcher Stamina & Bullpen Fatigue"
+              href: analyses/13_pitcher_stamina_bullpen_fatigue.qmd
+            - text: "Study 14: Unified Pro Multi-Market & 12-Team Bracket"
+              href: analyses/14_unified_pro_game_f5_totals_bracket.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

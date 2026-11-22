@@ -40,7 +40,11 @@
     - `08_team_baseruns_pythagenpat.qmd`: Study 08 — David Smyth Complex BaseRuns, Dynamic Pythagenpat & 2026 10k-Season Schedule Simulator (`EXP-008`).
     - `09_game_monte_carlo_simulator.qmd`: Study 09 — Level 4 24 Base-Out Markov Game Simulator & Empirical Win Expectancy (`EXP-009`).
     - `10_market_edge_prediction_valuation.qmd`: Study 10 — Level 5 Market Edge, CLV, Fractional Kelly & Prediction Market Valuation (`EXP-010`).
-  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab10`).
+    - `11_bat_tracking_arm_slot_biomechanics.qmd`: Study 11 — Hawk-Eye Bat-Tracking (1.04M Swings) & Pitcher Arm-Slot Biomechanics (`EXP-011`).
+    - `12_weather_umpire_catcher_framing.qmd`: Study 12 — Weather/Wind Carry, Umpire Zones & Catcher Framing CSAA (`EXP-012`).
+    - `13_pitcher_stamina_bullpen_fatigue.qmd`: Study 13 — Pitcher Stamina, Velocity Decay & Bullpen Fatigue Engine (`EXP-013`).
+    - `14_unified_pro_game_f5_totals_bracket.qmd`: Study 14 — Unified Pro Multi-Market Engine (ML, F5, Totals) & Exact 12-Team Playoff Bracket (`EXP-014`).
+  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab14`).
 - Build command: `quarto render site/` from project root.
 
 ## Verification

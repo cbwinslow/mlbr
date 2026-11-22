@@ -62,6 +62,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Alternatives Considered:** Full Kelly (`c = 1.0`, rejected: produced `78.4%` max drawdown on locked `2025` OOS vs. `29.5%` for Eighth-Kelly under exact `-105/-105` vig) and unadjusted mid-price comparisons on raw futures books (rejected: ignores `+91.7%` overround and `7–8¢` median bid-ask spread drag).
 - **Consequences:** Completes the 5-tier hierarchical `mlbr` platform (`EXP-001` through `EXP-010`) with reproducible Gold valuation tables (`market_valuation_backtest_2024_2025.parquet`, `market_staking_summary_2024_2025.parquet`, `market_2026_futures_valuation.parquet`), transparent disclosure of synthetic vs. live archived market benchmarks, and zero-leakage portfolio risk controls.
 
+## ADR-010: Pro-Grade Signal Expansion (Hawk-Eye Bat-Tracking, Arm-Slot Ride, Weather/Umpire/CSAA, Bullpen Fatigue) & Exact 12-Team MLB Playoff Bracket
+- **Status:** Accepted (2026-11-21)
+- **Context:** While `EXP-001` through `EXP-010` completed the 5-tier hierarchy, modern MLB front offices and sharp syndicates extract substantial additional signal from Hawk-Eye bat-tracking (`1.04M` competitive swings), pitcher release `arm_angle`, game-time temperature/wind carry, home-plate umpire strike zones, catcher framing (`CSAA`), rolling 3-day bullpen exhaustion, First-5-Innings (F5) markets, and MLB's asymmetric 12-team playoff bracket (Top-2 First-Round Byes).
+- **Decision:** Standardize four strictly chronological research engines (`EXP-011`..`EXP-014`): (1) competitive bat-tracking (`>= 60 mph`) & pre-test quadratic `arm_angle` slot-ride (`ivb_above_slot`), (2) zero-sum season-centered 2D strike-zone Catcher Framing (`CSAA`) removing secular 2021–2025 umpire zone-tightening drift + weather/umpire carry, (3) zero-leakage (`g2.game_date < g1.game_date`) rolling 3-day bullpen workload fatigue, and (4) unified multi-market (ML/F5/Totals) pricing paired with an exact 50,000-season 12-team MLB playoff bracket simulator guaranteeing exact AL/NL pennant (`1.000`), bye (`4.00`), and WS (`1.000`) probability sums.
+- **Consequences:** Delivers `+0.0302` OOS 4-seam Whiff AUC (`EXP-011`), `-3.66%` OOS ISO RMSE (`EXP-011`), `+23.8` Framing Runs for Patrick Bailey (`EXP-012`), `-0.0118 R/G` locked-2025 OOS Totals RMSE (`EXP-014`), `0.5846` F5 OOS AUC (`EXP-014`), and exact bye-adjusted 2026 World Series probabilities (`NYY 12.91%`, `LAD 10.62%`).
+
 ---
 
 ## Template for New ADRs

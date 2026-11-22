@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="mlbr Quantitative Research Group">
+<meta name="dcterms.date" content="2026-11-21">
+
+<title>Study 13: Pitcher Stamina, In-Game Fastball Velocity Decay &amp; Dynamic Rolling Bullpen Fatigue Engine – mlbr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-1d6f68ac07d6e45f311d12062c618a6a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">mlbr</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/experiment_registry.html"> 
+<span class="menu-text">Knowledge Base</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/01_pitch_quality_eda.html"> 
+<span class="menu-text">Q-CRISP Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../workbooks/lab01_aerodynamics_workbook.html"> 
+<span class="menu-text">Student Labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../gallery.html"> 
+<span class="menu-text">Analyses Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../architecture.html"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup &amp; API</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../crosswalk.html"> 
+<span class="menu-text">ID Crosswalk</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../verification.html"> 
+<span class="menu-text">Data Proofs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../agent_context.html"> 
+<span class="menu-text">AI Agent Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data_dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/cbwinslow/mlbr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/13_pitcher_stamina_bullpen_fatigue.html">Study 13: Pitcher Stamina &amp; Bullpen Fatigue</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview &amp; Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation &amp; Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../crosswalk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universal ID Crosswalk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Architecture &amp; Storage</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../verification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Verification &amp; Proofs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../agent_context.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Agent Data Manifest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Dictionary &amp; Schemas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Student Work-Along Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab01_aerodynamics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 01: Aerodynamics &amp; Trajectory Math</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab02_platoon_physics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 02: 4-Quadrant Platoon Physics &amp; PVI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab03_tunneling_stuff_plus_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 03: Pitch Tunneling &amp; Stuff+ / Loc+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab04_player_projections_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab05_decomposed_pitching_decisions_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab06_ballpark_factors_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 06: Regressed Ballpark Factors &amp; Altitude</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab07_pecota_zips_ensemble_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 07: PECOTA Comps, ZiPS Aging &amp; Defense EDA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab08_team_baseruns_pythagenpat_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 08: BaseRuns, Pythagenpat &amp; 2026 Standings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab09_game_monte_carlo_simulator_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 09: Markov Game Simulator &amp; Win Expectancy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab10_market_edge_prediction_valuation_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 10: Market Edge, CLV &amp; Fractional Kelly</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 11: Bat-Tracking &amp; Arm-Slot Biomechanics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab12_weather_umpire_catcher_framing_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 12: Weather, Umpires &amp; Catcher Framing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 13: Pitcher Stamina &amp; Bullpen Fatigue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab14_unified_pro_game_f5_totals_bracket_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 14: Unified Pro Multi-Market &amp; 12-Team Bracket</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Q-CRISP Research Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/experiment_registry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Knowledge Base &amp; Registry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/01_pitch_quality_eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 01: Aerodynamics &amp; Approach Angles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/02_platoon_physics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 02: 4-Quadrant Platoon Physics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/03_tunneling_stuff_plus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 03: Pitch Tunneling &amp; Stuff+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/06_ballpark_factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 06: Empirical Ballpark Factors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/07_pecota_zips_ensemble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 07: PECOTA k-NN, ZiPS &amp; Meta-Ensemble</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/08_team_baseruns_pythagenpat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 08: BaseRuns, Pythagenpat &amp; Standings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/09_game_monte_carlo_simulator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 09: Markov Game Simulator &amp; WPA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/10_market_edge_prediction_valuation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 10: Market Edge &amp; Prediction Markets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/11_bat_tracking_arm_slot_biomechanics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 11: Bat-Tracking &amp; Arm-Slot Biomechanics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/12_weather_umpire_catcher_framing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 12: Weather, Umpires &amp; Catcher Framing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/13_pitcher_stamina_bullpen_fatigue.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Study 13: Pitcher Stamina &amp; Bullpen Fatigue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/14_unified_pro_game_f5_totals_bracket.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 14: Unified Pro Multi-Market &amp; 12-Team Bracket</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyses Gallery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Clustering (K-Means / GMM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Classification (Random Forest)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/xwoba_surface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xWOBA / Exit Velocity Surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/run_expectancy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Run Expectancy RE24 Matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#executive-summary-abstract-tldr" id="toc-executive-summary-abstract-tldr" class="nav-link active" data-scroll-target="#executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</a></li>
+  <li><a href="#domain-problem-theoretical-fatigue-mechanics" id="toc-domain-problem-theoretical-fatigue-mechanics" class="nav-link" data-scroll-target="#domain-problem-theoretical-fatigue-mechanics">2. Domain Problem &amp; Theoretical Fatigue Mechanics</a></li>
+  <li><a href="#mathematical-formulation-lake-wide-pipeline" id="toc-mathematical-formulation-lake-wide-pipeline" class="nav-link" data-scroll-target="#mathematical-formulation-lake-wide-pipeline">3. Mathematical Formulation &amp; Lake-Wide Pipeline</a></li>
+  <li><a href="#exploratory-data-analysis-eda-workload-diagnostics" id="toc-exploratory-data-analysis-eda-workload-diagnostics" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda-workload-diagnostics">4. Exploratory Data Analysis (EDA) &amp; Workload Diagnostics</a></li>
+  <li><a href="#model-architecture-temporal-validation" id="toc-model-architecture-temporal-validation" class="nav-link" data-scroll-target="#model-architecture-temporal-validation">5. Model Architecture &amp; Temporal Validation</a></li>
+  <li><a href="#leaderboards-case-studies-2025-starter-velocity-retention" id="toc-leaderboards-case-studies-2025-starter-velocity-retention" class="nav-link" data-scroll-target="#leaderboards-case-studies-2025-starter-velocity-retention">6. Leaderboards &amp; Case Studies (<code>2025</code> Starter Velocity Retention)</a>
+  <ul class="collapse">
+  <li><a href="#interactive-2025-starter-stamina-explorer" id="toc-interactive-2025-starter-stamina-explorer" class="nav-link" data-scroll-target="#interactive-2025-starter-stamina-explorer">Interactive 2025 Starter Stamina Explorer</a></li>
+  </ul></li>
+  <li><a href="#downstream-integration-market-applications" id="toc-downstream-integration-market-applications" class="nav-link" data-scroll-target="#downstream-integration-market-applications">7. Downstream Integration &amp; Market Applications</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/13_pitcher_stamina_bullpen_fatigue.html">Study 13: Pitcher Stamina &amp; Bullpen Fatigue</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Study 13: Pitcher Stamina, In-Game Fastball Velocity Decay &amp; Dynamic Rolling Bullpen Fatigue Engine</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Q-CRISP Research Series: Quantifying 1.44M Starter Fastballs &amp; 35,812 Team-Game Bullpen Workloads (2018–2025)</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>mlbr Quantitative Research Group </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 21, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Experiment Registry &amp; Architecture
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Experiment ID:</strong> <code>EXP-013-PITCHER-STAMINA-BULLPEN-FATIGUE</code> (<code>VALIDATED</code> in <code>experiments/registry.json</code>)</li>
+<li><strong>Architecture Tier:</strong> Level 1D / Level 3C — In-Game Fatigue &amp; Pre-Game Bullpen Availability</li>
+<li><strong>Specification:</strong> <code>specs/13_pitcher_stamina_bullpen_fatigue.md</code></li>
+<li><strong>Companion Student Lab:</strong> <a href="../workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.html"><strong>Lab 13: Pitcher Stamina &amp; Bullpen Fatigue</strong></a></li>
+<li><strong>Gold Deliverables:</strong> <code>starter_velocity_decay_curve_2018_2025.parquet</code>, <code>team_bullpen_fatigue_daily_2018_2025.parquet</code> (<code>35,812</code> team-games), <code>pitcher_stamina_leaderboard_2024_2025.parquet</code></li>
+<li><strong>Preserved Assets:</strong> <code>models/fat01_*</code> .. <code>fat03_*</code> (PNG 300 DPI, RDS <code>&lt;= 0.34 MB</code>, ZSTD Parquet, interactive Plotly HTML)</li>
+</ul>
+</div>
+</div>
+<hr>
+<section id="executive-summary-abstract-tldr" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</h2>
+<p>In <strong>Study 13</strong>, <code>mlbr</code> quantifies two critical dynamic fatigue effects used by pro MLB front offices and sharp game-pricing syndicates across <strong><code>2018–2025</code></strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pillar</th>
+<th style="text-align: left;">Validated Result (<code>2018–2025</code>)</th>
+<th style="text-align: left;">Sabermetric &amp; Market Implication</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Starter Velocity Decay (<code>1.44M</code> Fastballs)</strong></td>
+<td style="text-align: left;">Starters drop <strong><code>-0.11 mph</code></strong> (<code>21–40</code>), <strong><code>-0.21 mph</code></strong> (<code>41–60</code>), and <strong><code>-0.43 mph</code></strong> (<code>61–80</code>); past pitch 100, survivorship masks velocity (<code>-0.04 mph</code>) while <strong>Pitcher RV/100 degrades to <code>+0.35</code></strong> (worst of all 6 bins).</td>
+<td style="text-align: left;">Confirms why TTO familiarity + late-inning fatigue drives sharp live-betting and F5-vs-Full-Game divergences.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Zero-Leakage Rolling Bullpen Fatigue (<code>35,812</code> Team-Games)</strong></td>
+<td style="text-align: left;">Pre-test (<code>2018–2023</code>, <code>n = 26,094</code>) slope: <strong><code>+0.0516 R/G</code> per <code>+100</code> trailing 3-day reliever pitches</strong>; <code>Taxed (181+)</code> bullpens allow <strong><code>2.025 R/G</code></strong> in innings 6–9 vs.&nbsp;<code>1.892 R/G</code> for <code>Light (61–100)</code>.</td>
+<td style="text-align: left;">Directly quantifies the pre-game penalty of a gassed bullpen for Level 4/5 game and totals pricing.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Starter Velocity Retention Leaderboard (<code>2025</code>)</strong></td>
+<td style="text-align: left;">Rare “ramping” workhorses (<strong>Carlos Rodón <code>+1.18 mph</code></strong>, <strong>Luis Severino <code>+0.89 mph</code></strong>, <strong>Sandy Alcántara <code>+0.51 mph</code></strong>, <code>-0.46</code> late RV/100) hold velocity past pitch 75.</td>
+<td style="text-align: left;">Identifies starters who outperform generic TTO-3 fatigue curves in innings 5–7.</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/fat01_starter_velo_decay_by_pitch_count.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 1: MLB Starting Pitcher In-Game Fastball Velocity Decay &amp; Run Value (2018-2025)</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="domain-problem-theoretical-fatigue-mechanics" class="level2">
+<h2 class="anchored" data-anchor-id="domain-problem-theoretical-fatigue-mechanics">2. Domain Problem &amp; Theoretical Fatigue Mechanics</h2>
+<p>Pre-game models that treat every club’s bullpen as a static season-long FIP ignore acute 3-day workload spikes (extra-inning games, short starts, doubleheaders) that force managers to deploy lower-leverage middle relievers. Similarly, starter velocity pacing exhibits a classic non-linear interplay between physiological fatigue (peaking at pitches <code>61–80</code>) and survivorship/adrenaline (“emptying the tank” on the final batter past pitch <code>80</code>).</p>
+<hr>
+</section>
+<section id="mathematical-formulation-lake-wide-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-formulation-lake-wide-pipeline">3. Mathematical Formulation &amp; Lake-Wide Pipeline</h2>
+<p><span class="math display">\[\Delta v(k) = v(k) - \bar{v}_{1..20}, \qquad P_{c,t}^{(3d)} = \sum_{d \in [t-3,\, t-1]} \text{pitches}_{\text{RP}}(c, d)\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> memory_limit <span class="op">=</span> <span class="st">'12GB'</span>;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> load_bin, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_team_games,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fu">AVG</span>(bp_pitches_3d), <span class="dv">1</span>) <span class="kw">AS</span> avg_3d_pitches,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fu">AVG</span>(late_runs_allowed), <span class="dv">3</span>) <span class="kw">AS</span> avg_late_runs</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> read_parquet(<span class="st">'data/processed/team_bullpen_fatigue_daily_2018_2025.parquet'</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> load_bin <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> load_bin <span class="kw">ORDER</span> <span class="kw">BY</span> avg_3d_pitches;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="exploratory-data-analysis-eda-workload-diagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis-eda-workload-diagnostics">4. Exploratory Data Analysis (EDA) &amp; Workload Diagnostics</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/fat02_bullpen_fatigue_runs_allowed_curve.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 2: Trailing 3-Day Bullpen Pitch Load vs.&nbsp;Late-Inning Runs Allowed (Innings 6-9)</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="model-architecture-temporal-validation" class="level2">
+<h2 class="anchored" data-anchor-id="model-architecture-temporal-validation">5. Model Architecture &amp; Temporal Validation</h2>
+<p>Bullpen workload features (<code>bp_pitches_1d</code>, <code>bp_pitches_3d</code>, <code>bp_arm_apps_3d</code>) are computed strictly prior to game date (<code>g2.game_date &lt; g1.game_date</code>, preventing same-day doubleheader leakage). Regression slopes are fit strictly on <code>2018–2023</code> (<code>n = 26,094</code> team-games) and applied forward to <code>2024–2025</code> for downstream integration in <code>EXP-014</code>.</p>
+<hr>
+</section>
+<section id="leaderboards-case-studies-2025-starter-velocity-retention" class="level2">
+<h2 class="anchored" data-anchor-id="leaderboards-case-studies-2025-starter-velocity-retention">6. Leaderboards &amp; Case Studies (<code>2025</code> Starter Velocity Retention)</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Starting Pitcher (<code>2025</code>)</th>
+<th style="text-align: right;">Starts (<code>&gt;= 75p</code>)</th>
+<th style="text-align: right;">Early Velo (<code>P1–25</code>)</th>
+<th style="text-align: right;">Late Velo (<code>P75+</code>)</th>
+<th style="text-align: right;">Retention (<code>mph</code>)</th>
+<th style="text-align: right;">Late <code>RV/100</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Carlos Rodón</strong></td>
+<td style="text-align: right;"><code>33</code></td>
+<td style="text-align: right;"><code>93.2</code></td>
+<td style="text-align: right;"><code>94.3</code></td>
+<td style="text-align: right;"><strong><code>+1.18</code></strong></td>
+<td style="text-align: right;"><code>+0.24</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Luis Severino</strong></td>
+<td style="text-align: right;"><code>28</code></td>
+<td style="text-align: right;"><code>95.5</code></td>
+<td style="text-align: right;"><code>96.3</code></td>
+<td style="text-align: right;"><strong><code>+0.89</code></strong></td>
+<td style="text-align: right;"><code>-0.22</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Tyler Mahle</strong></td>
+<td style="text-align: right;"><code>14</code></td>
+<td style="text-align: right;"><code>91.5</code></td>
+<td style="text-align: right;"><code>92.4</code></td>
+<td style="text-align: right;"><strong><code>+0.86</code></strong></td>
+<td style="text-align: right;"><code>+0.45</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Janson Junk</strong></td>
+<td style="text-align: right;"><code>12</code></td>
+<td style="text-align: right;"><code>93.2</code></td>
+<td style="text-align: right;"><code>94.0</code></td>
+<td style="text-align: right;"><strong><code>+0.79</code></strong></td>
+<td style="text-align: right;"><code>+0.74</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Kyle Freeland</strong></td>
+<td style="text-align: right;"><code>22</code></td>
+<td style="text-align: right;"><code>91.5</code></td>
+<td style="text-align: right;"><code>92.1</code></td>
+<td style="text-align: right;"><strong><code>+0.59</code></strong></td>
+<td style="text-align: right;"><code>+0.54</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Sandy Alcántara</strong></td>
+<td style="text-align: right;"><code>26</code></td>
+<td style="text-align: right;"><code>97.1</code></td>
+<td style="text-align: right;"><code>97.6</code></td>
+<td style="text-align: right;"><strong><code>+0.51</code></strong></td>
+<td style="text-align: right;"><strong><code>-0.46</code></strong></td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/fat03_starter_stamina_leaderboard_2025.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 3: 2025 Starting Pitcher Late-Game Velocity Retention</figcaption>
+</figure>
+</div>
+<section id="interactive-2025-starter-stamina-explorer" class="level3">
+<h3 class="anchored" data-anchor-id="interactive-2025-starter-stamina-explorer">Interactive 2025 Starter Stamina Explorer</h3>
+<iframe src="../assets/fat03_starter_stamina_leaderboard_2025.html" width="100%" height="520" style="border: 1px solid #1e293b; border-radius: 8px; background: #090d16;">
+</iframe>
+<hr>
+</section>
+</section>
+<section id="downstream-integration-market-applications" class="level2">
+<h2 class="anchored" data-anchor-id="downstream-integration-market-applications">7. Downstream Integration &amp; Market Applications</h2>
+<p><code>team_bullpen_fatigue_daily_2018_2025.parquet</code> feeds directly into <strong>Study 14 (<code>EXP-014</code>)</strong> so pre-game win probabilities and totals account for acute 3-day bullpen exhaustion alongside weather, umpire zones, and starting lineup quality.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/cloudcurio\.cc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Study 13: Pitcher Stamina, In-Game Fastball Velocity Decay &amp; Dynamic Rolling Bullpen Fatigue Engine"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Q-CRISP Research Series: Quantifying 1.44M Starter Fastballs &amp; 35,812 Team-Game Bullpen Workloads (2018–2025)"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Quantitative Research Group"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-21"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Experiment Registry &amp; Architecture</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Experiment ID:** <span class="in">`EXP-013-PITCHER-STAMINA-BULLPEN-FATIGUE`</span> (<span class="in">`VALIDATED`</span> in <span class="in">`experiments/registry.json`</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Architecture Tier:** Level 1D / Level 3C — In-Game Fatigue &amp; Pre-Game Bullpen Availability</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Specification:** <span class="in">`specs/13_pitcher_stamina_bullpen_fatigue.md`</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Companion Student Lab:** [**Lab 13: Pitcher Stamina &amp; Bullpen Fatigue**](../workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.html)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Gold Deliverables:** <span class="in">`starter_velocity_decay_curve_2018_2025.parquet`</span>, <span class="in">`team_bullpen_fatigue_daily_2018_2025.parquet`</span> (<span class="in">`35,812`</span> team-games), <span class="in">`pitcher_stamina_leaderboard_2024_2025.parquet`</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Preserved Assets:** <span class="in">`models/fat01_*`</span> .. <span class="in">`fat03_*`</span> (PNG 300 DPI, RDS <span class="in">`&lt;= 0.34 MB`</span>, ZSTD Parquet, interactive Plotly HTML)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Executive Summary &amp; Abstract (TL;DR)</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>In **Study 13**, `mlbr` quantifies two critical dynamic fatigue effects used by pro MLB front offices and sharp game-pricing syndicates across **`2018–2025`**:</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pillar <span class="pp">|</span> Validated Result (<span class="in">`2018–2025`</span>) <span class="pp">|</span> Sabermetric &amp; Market Implication <span class="pp">|</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Starter Velocity Decay (`1.44M` Fastballs)** | Starters drop **`-0.11 mph`** (`21–40`), **`-0.21 mph`** (`41–60`), and **`-0.43 mph`** (`61–80`); past pitch 100, survivorship masks velocity (`-0.04 mph`) while **Pitcher RV/100 degrades to `+0.35`** (worst of all 6 bins). <span class="pp">|</span> Confirms why TTO familiarity + late-inning fatigue drives sharp live-betting and F5-vs-Full-Game divergences. <span class="pp">|</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Zero-Leakage Rolling Bullpen Fatigue (`35,812` Team-Games)** | Pre-test (`2018–2023`, `n = 26,094`) slope: **`+0.0516 R/G` per `+100` trailing 3-day reliever pitches**; `Taxed (181+)` bullpens allow **`2.025 R/G`** in innings 6–9 vs. <span class="in">`1.892 R/G`</span> for <span class="in">`Light (61–100)`</span>. <span class="pp">|</span> Directly quantifies the pre-game penalty of a gassed bullpen for Level 4/5 game and totals pricing. <span class="pp">|</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Starter Velocity Retention Leaderboard (`2025`)** | Rare "ramping" workhorses (**Carlos Rodón `+1.18 mph`**, **Luis Severino `+0.89 mph`**, **Sandy Alcántara `+0.51 mph`**, <span class="in">`-0.46`</span> late RV/100) hold velocity past pitch 75. <span class="pp">|</span> Identifies starters who outperform generic TTO-3 fatigue curves in innings 5–7. <span class="pp">|</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 1: MLB Starting Pitcher In-Game Fastball Velocity Decay &amp; Run Value (2018-2025)](../assets/fat01_starter_velo_decay_by_pitch_count.png)</span>{width=100%}</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Domain Problem &amp; Theoretical Fatigue Mechanics</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>Pre-game models that treat every club's bullpen as a static season-long FIP ignore acute 3-day workload spikes (extra-inning games, short starts, doubleheaders) that force managers to deploy lower-leverage middle relievers. Similarly, starter velocity pacing exhibits a classic non-linear interplay between physiological fatigue (peaking at pitches <span class="in">`61–80`</span>) and survivorship/adrenaline ("emptying the tank" on the final batter past pitch <span class="in">`80`</span>).</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Mathematical Formulation &amp; Lake-Wide Pipeline</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>$$\Delta v(k) = v(k) - \bar{v}_{1..20}, \qquad P_{c,t}^{(3d)} = \sum_{d \in [t-3,\, t-1]} \text{pitches}_{\text{RP}}(c, d)$$</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="in">```sql</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> memory_limit <span class="op">=</span> <span class="st">'12GB'</span>;</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> load_bin, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_team_games,</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fu">AVG</span>(bp_pitches_3d), <span class="dv">1</span>) <span class="kw">AS</span> avg_3d_pitches,</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fu">AVG</span>(late_runs_allowed), <span class="dv">3</span>) <span class="kw">AS</span> avg_late_runs</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> read_parquet(<span class="st">'data/processed/team_bullpen_fatigue_daily_2018_2025.parquet'</span>)</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> load_bin <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> load_bin <span class="kw">ORDER</span> <span class="kw">BY</span> avg_3d_pitches;</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Exploratory Data Analysis (EDA) &amp; Workload Diagnostics</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 2: Trailing 3-Day Bullpen Pitch Load vs. Late-Inning Runs Allowed (Innings 6-9)](../assets/fat02_bullpen_fatigue_runs_allowed_curve.png)</span>{width=100%}</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Model Architecture &amp; Temporal Validation</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>Bullpen workload features (<span class="in">`bp_pitches_1d`</span>, <span class="in">`bp_pitches_3d`</span>, <span class="in">`bp_arm_apps_3d`</span>) are computed strictly prior to game date (<span class="in">`g2.game_date &lt; g1.game_date`</span>, preventing same-day doubleheader leakage). Regression slopes are fit strictly on <span class="in">`2018–2023`</span> (<span class="in">`n = 26,094`</span> team-games) and applied forward to <span class="in">`2024–2025`</span> for downstream integration in <span class="in">`EXP-014`</span>.</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Leaderboards &amp; Case Studies (`2025` Starter Velocity Retention)</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Starting Pitcher (<span class="in">`2025`</span>) <span class="pp">|</span> Starts (<span class="in">`&gt;= 75p`</span>) <span class="pp">|</span> Early Velo (<span class="in">`P1–25`</span>) <span class="pp">|</span> Late Velo (<span class="in">`P75+`</span>) <span class="pp">|</span> Retention (<span class="in">`mph`</span>) <span class="pp">|</span> Late <span class="in">`RV/100`</span> <span class="pp">|</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|---:|---:|---:|---:|---:|</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Carlos Rodón** | `33` | `93.2` | `94.3` | **`+1.18`** <span class="pp">|</span> <span class="in">`+0.24`</span> <span class="pp">|</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Luis Severino** | `28` | `95.5` | `96.3` | **`+0.89`** <span class="pp">|</span> <span class="in">`-0.22`</span> <span class="pp">|</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Tyler Mahle** | `14` | `91.5` | `92.4` | **`+0.86`** <span class="pp">|</span> <span class="in">`+0.45`</span> <span class="pp">|</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Janson Junk** | `12` | `93.2` | `94.0` | **`+0.79`** <span class="pp">|</span> <span class="in">`+0.74`</span> <span class="pp">|</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Kyle Freeland** | `22` | `91.5` | `92.1` | **`+0.59`** <span class="pp">|</span> <span class="in">`+0.54`</span> <span class="pp">|</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Sandy Alcántara** | `26` | `97.1` | `97.6` | **`+0.51`** | **`-0.46`** <span class="pp">|</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 3: 2025 Starting Pitcher Late-Game Velocity Retention](../assets/fat03_starter_stamina_leaderboard_2025.png)</span>{width=100%}</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="fu">### Interactive 2025 Starter Stamina Explorer</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../assets/fat03_starter_stamina_leaderboard_2025.html"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"520"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"border: 1px solid #1e293b; border-radius: 8px; background: #090d16;"</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. Downstream Integration &amp; Market Applications</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="in">`team_bullpen_fatigue_daily_2018_2025.parquet`</span> feeds directly into **Study 14 (`EXP-014`)** so pre-game win probabilities and totals account for acute 3-day bullpen exhaustion alongside weather, umpire zones, and starting lineup quality.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

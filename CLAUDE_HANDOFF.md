@@ -23,9 +23,9 @@
 
 ---
 
-## 2. Verified Baseline (All 10 Completed & Audited Experiments — Full 5-Tier Hierarchy Complete!)
+## 2. Verified Baseline (All 14 Completed & Audited Experiments — Full 5-Tier Hierarchy + Pro Signal Expansion Complete!)
 
-All 10 experiments (`EXP-001` through `EXP-010`) are completed, independently audited, logged in `experiments/registry.json`, verified across `130/130` `testthat` unit tests + `33/33` Quarto pages, and green in GitHub Actions CI:
+All 14 experiments (`EXP-001` through `EXP-014`) are completed, independently audited, logged in `experiments/registry.json`, verified across `160+` `testthat` unit tests + `41/41` Quarto pages, and green in GitHub Actions CI:
 
 | Exp ID | Tier | Name | Key Validated Result | Study & Lab |
 |:---|:---:|:---|:---|:---|
@@ -39,6 +39,10 @@ All 10 experiments (`EXP-001` through `EXP-010`) are completed, independently au
 | **EXP-008** | 3 | BaseRuns, Pythagenpat & 2026 Standings | 720 regular seasons BaseRuns $r = 0.982$, next-yr RMSE `0.0670`, 10k MC w/ club PECOTA uncertainty | `08_team_baseruns_pythagenpat.qmd` / `lab08` |
 | **EXP-009** | 4 | 24 Base-Out Markov Game Simulator & WE | 4,859 OOS games (2024–2025) Brier `0.2446` (`M3` `0.2439`), Cal Slope `0.971`, `+0.086 R/G` total bias, 5,372-state WE | `09_game_monte_carlo_simulator.qmd` / `lab09` |
 | **EXP-010** | 5 | Market Edge, CLV & Prediction Markets | Locked 2025 OOS (`n=2,430`): `M5` Cal Slope `1.043`, Eighth-Kelly `+2.07%` ROI / `29.5%` Max DD vs Full Kelly `78.4%` (`-105`), Polymarket `+91.7%` overround audit | `10_market_edge_prediction_valuation.qmd` / `lab10` |
+| **EXP-011** | 1B | Hawk-Eye Bat-Tracking & Arm-Slot | 1.04M swings (`2023–2026`), Arm Angle YoY `r=0.963`, Bat Speed `r=0.923`, `-3.66%` OOS ISO RMSE, `+0.0302` OOS 4-Seam Whiff AUC | `11_bat_tracking_arm_slot_biomechanics.qmd` / `lab11` |
+| **EXP-012** | 3B | Weather/Wind, Umpires & Framing CSAA | 25,639 games (`+0.33 R/G` per `+10°F`), 1.77M called pitches zero-sum CSAA (Bailey `+23.8 R`), `-0.0091 R/G` OOS Totals RMSE | `12_weather_umpire_catcher_framing.qmd` / `lab12` |
+| **EXP-013** | 3C | Pitcher Stamina & Bullpen Fatigue | 1.44M starter fastballs (`-0.43 mph` at P61–80; `+0.35 RV/100` at P101+) & 35,812 team-game zero-leakage 3-day bullpen fatigue | `13_pitcher_stamina_bullpen_fatigue.qmd` / `lab13` |
+| **EXP-014** | 5B | Unified Pro Multi-Market & 12-Team Bracket | Locked 2025 OOS F5 AUC `0.5846`, Totals RMSE `-0.0118 R/G`, 50,000 exact 12-team brackets (`NYY 12.91%`, `LAD 10.62%` WS) | `14_unified_pro_game_f5_totals_bracket.qmd` / `lab14` |
 
 ---
 

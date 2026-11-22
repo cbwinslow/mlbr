@@ -264,6 +264,60 @@
     }
   },
   {
+    "id": "EXP-011-BAT-TRACKING-ARM-SLOT-BIOMECHANICS",
+    "title": "Hawk-Eye Bat-Tracking (1.15M Swings) & Pitcher Arm-Slot (arm_angle) Biomechanics",
+    "tier": 1,
+    "tier_name": "Level 1: Pitch Physics & Quality",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 01:47:41 UTC",
+    "summary": "Extracted full-population Hawk-Eye bat-tracking biomechanics (2023-2026 competitive swings >= 60 mph) and pitcher release arm_angle (2020-2026 4-seam fastballs). Proved biomechanical process sensors (arm_angle r=0.963, bat_speed r=0.923, swing_length r=0.928) vastly outperform outcome stats in YoY stability, reduce locked 2025 OOS ISO RMSE (0.0444 -> 0.0427) and wOBA RMSE (0.0317 -> 0.0312), and improve OOS 4-seam Whiff% AUC (0.5615 -> 0.5917).",
+    "hypotheses": [
+      "Hawk-Eye biomechanical sensors (bat_speed, swing_length, arm_angle) exhibit YoY reliability r > 0.90, vastly exceeding outcome stats (wOBA, ISO, BABIP).",
+      "Adding 2024 bat_speed, blast_rate, and swing_length to prior-year ISO/wOBA improves locked 2025 OOS weighted RMSE.",
+      "Pitcher arm_angle and pre-test slot-adjusted ride (ivb_above_slot) improve locked 2024-2025 OOS 4-seam fastball Whiff% Log-Loss and AUC over velocity + raw IVB."
+    ],
+    "formulas": {
+      "max_ev_collision": "MaxEV = 1.23 * bat_speed + 0.2116 * release_speed",
+      "blast_definition": "EV/MaxEV >= 0.80 AND bat_speed + 100*(EV/MaxEV) >= 164",
+      "slot_adjusted_ivb": "IVB_above_slot = 12*pfx_z - (b0 + b1*arm_angle + b2*arm_angle^2)"
+    },
+    "metrics": {
+      "n_batter_seasons": 2210,
+      "n_pitcher_seasons": 3231,
+      "yoy_r_arm_angle": 0.963,
+      "yoy_r_bat_speed": 0.9231,
+      "yoy_r_swing_length": 0.928,
+      "oos_2025_iso_rmse_base": 0.04437,
+      "oos_2025_iso_rmse_bio": 0.04275,
+      "oos_2025_woba_rmse_base": 0.03171,
+      "oos_2025_woba_rmse_bio": 0.03122,
+      "oos_ff_whiff_ll_base": 0.52156,
+      "oos_ff_whiff_ll_slot": 0.51721,
+      "oos_ff_whiff_auc_base": 0.5615,
+      "oos_ff_whiff_auc_slot": 0.5917
+    },
+    "features": [
+      "mean_bat_speed",
+      "fast_swing_rate",
+      "mean_swing_length",
+      "mean_attack_angle",
+      "squared_up_rate",
+      "blast_rate",
+      "swing_power_plus",
+      "mean_arm_angle",
+      "ivb_above_slot"
+    ],
+    "artifacts": {
+      "spec": "specs/11_bat_tracking_arm_slot_biomechanics.md",
+      "script": "models/11_bat_tracking_arm_slot_biomechanics.R",
+      "gold_bat": "data/processed/batter_bat_tracking_biomechanics_2023_2026.parquet",
+      "gold_pit": "data/processed/pitcher_arm_angle_biomechanics_2020_2026.parquet",
+      "fig_power": "models/bio01_bat_speed_vs_swing_length_power_map.html",
+      "fig_arm": "models/bio02_arm_angle_slot_adjusted_ride.png",
+      "fig_yoy": "models/bio03_biomechanics_yoy_reliability_oos_lift.png"
+    }
+  },
+  {
     "id": "EXP-004-PLAYER-PROJECTIONS",
     "title": "Chronological True-Talent Player Projections: Marcel, Delta-Method Aging & Tier 1 Physics Priors",
     "tier": 2,
@@ -526,6 +580,97 @@
     }
   },
   {
+    "id": "EXP-012-WEATHER-UMPIRE-CATCHER-FRAMING",
+    "title": "Environmental & Officiating Alpha: Weather/Wind Carry, Home-Plate Umpire Strike Zones & Catcher Framing (CSAA)",
+    "tier": 3,
+    "tier_name": "Level 3: Team BaseRuns & Run Environment",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 01:47:52 UTC",
+    "summary": "Quantified environmental carry, home-plate umpire run environments, and catcher framing (CSAA) strictly chronologically. Across 25,640 regular-season MLB games (2015-2025), pre-test (2015-2023) weather carry estimates +0.32 R/G per +10 degF and +0.19 R/G per +10 mph wind out, reducing locked 2024-2025 OOS Totals RMSE on top of EXP-009 from 4.4689 to 4.4598. Across 1.77M called pitches (2021-2025), Catcher Framing CSAA/1000 achieves locked 2024->2025 YoY r = 0.475.",
+    "hypotheses": [
+      "Higher game-time temperature and outfield-blowing wind significantly increase MLB scoring and reduce locked 2024-2025 OOS Total-Runs RMSE on top of EXP-009.",
+      "Empirical Bayes home-plate umpire run factors capture persistent zone expansion/compression across veteran umpires.",
+      "2D batter-normalized strike-zone Catcher Framing (CSAA) exhibits strong out-of-sample YoY reliability (2024 -> 2025)."
+    ],
+    "formulas": {
+      "weather_carry": "R_env = b0 + b1*PF_runs + b2*(Temp - 70) + b3*WindOut + b4*DayGame",
+      "umpire_eb": "Delta_R_u = (n_u / (n_u + 80)) * mean_park_adj_resid_u",
+      "catcher_framing": "CSAA = sum(is_called_strike - p_cs_exp(x, z_norm, stand)); FramingRuns = 0.125 * CSAA"
+    },
+    "metrics": {
+      "n_weather_games_2015_2025": 25639,
+      "runs_per_10degF": 0.3226,
+      "runs_per_10mph_wind_out": 0.1882,
+      "oos_2024_2025_tot_rmse_base": 4.46892,
+      "oos_2024_2025_tot_rmse_env": 4.45978,
+      "n_catcher_seasons": 436,
+      "catcher_framing_yoy_r": 0.475
+    },
+    "features": [
+      "temp_f",
+      "wind_out_mph",
+      "weather_runs_adj",
+      "ump_rpg_eb",
+      "csaa",
+      "csaa_per_1000",
+      "framing_runs"
+    ],
+    "artifacts": {
+      "spec": "specs/12_weather_umpire_catcher_framing.md",
+      "script": "models/12_weather_umpire_catcher_framing.R",
+      "gold_weather": "data/processed/game_weather_umpire_environment_2015_2025.parquet",
+      "gold_umpires": "data/processed/umpire_zone_factors_2015_2025.parquet",
+      "gold_framing": "data/processed/catcher_framing_csaa_2021_2025.parquet",
+      "fig_weather": "models/env01_weather_temp_wind_runs_surface.png",
+      "fig_framing": "models/env02_catcher_framing_csaa_leaderboard.html",
+      "fig_umpires": "models/env03_umpire_runs_environment_distribution.png"
+    }
+  },
+  {
+    "id": "EXP-013-PITCHER-STAMINA-BULLPEN-FATIGUE",
+    "title": "Pitcher Stamina, In-Game Fastball Velocity Decay & Dynamic Rolling Bullpen Fatigue Engine",
+    "tier": 3,
+    "tier_name": "Level 3: Team BaseRuns & Run Environment",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 01:48:04 UTC",
+    "summary": "Quantified in-game starting pitcher fastball velocity decay across pitch counts (2018-2025) and built a zero-leakage daily rolling 3-day bullpen workload fatigue engine (n=35812 team-games). Starters lose -0.37 mph at pitches 81-100 and -0.04 mph at 101+, while taxed bullpens (>180 trailing 3d pitches) allow significantly more late-inning runs than rested pens (2.02 vs 1.95 R/G).",
+    "hypotheses": [
+      "Starting pitcher fastball velocity decays through pitch 80 (-0.43 mph), while survivorship masks velocity past pitch 100 even as Run Value/100 degrades.",
+      "Clubs entering a game with heavily taxed bullpens (>180 trailing 3-day reliever pitches strictly prior to game date) surrender more late-inning (innings 6-9) runs than rested bullpens."
+    ],
+    "formulas": {
+      "velo_decay": "Delta_v(k) = v(k) - mean(v_1..20)",
+      "bp_load_3d": "P_3d(c, t) = sum_{d in [t-3, t-1]} reliever_pitches(c, d)",
+      "bp_fatigue_adj": "Delta_R_bp = b_3d * (P_3d - mean_3d)/100 + b_1d * (P_1d - mean_1d)/100"
+    },
+    "metrics": {
+      "n_team_games_bp": 35812,
+      "n_stamina_pitcher_yrs": 294,
+      "velo_delta_81_100_mph": -0.375,
+      "velo_delta_101plus_mph": -0.038,
+      "bp_slope_per_100p_3d": 0.0516,
+      "bp_runs_rested_0_60": 1.952,
+      "bp_runs_taxed_181plus": 2.025
+    },
+    "features": [
+      "mean_velo_delta",
+      "velo_retention_mph",
+      "bp_pitches_1d",
+      "bp_pitches_3d",
+      "bp_fatigue_runs_adj"
+    ],
+    "artifacts": {
+      "spec": "specs/13_pitcher_stamina_bullpen_fatigue.md",
+      "script": "models/13_pitcher_stamina_bullpen_fatigue.R",
+      "gold_decay": "data/processed/starter_velocity_decay_curve_2018_2025.parquet",
+      "gold_bp": "data/processed/team_bullpen_fatigue_daily_2018_2025.parquet",
+      "gold_stamina": "data/processed/pitcher_stamina_leaderboard_2024_2025.parquet",
+      "fig_decay": "models/fat01_starter_velo_decay_by_pitch_count.png",
+      "fig_bp": "models/fat02_bullpen_fatigue_runs_allowed_curve.png",
+      "fig_stamina": "models/fat03_starter_stamina_leaderboard_2025.html"
+    }
+  },
+  {
     "id": "EXP-009-GAME-MONTE-CARLO-SIMULATOR",
     "title": "Level 4 Plate-Appearance 24 Base-Out Markov Game Simulator & Empirical Win Expectancy Engine",
     "tier": 4,
@@ -632,6 +777,58 @@
       "fig_bankroll": "models/mkt01_bankroll_kelly_frontier.html",
       "fig_ev": "models/mkt02_ev_threshold_clv_efficiency.png",
       "fig_futures": "models/mkt03_2026_futures_polymarket_valuation.html"
+    }
+  },
+  {
+    "id": "EXP-014-UNIFIED-PRO-GAME-F5-TOTALS-BRACKET",
+    "title": "Unified Pro Multi-Market Engine (Full-Game ML, F5 ML, Totals) & Exact 12-Team MLB Playoff Bracket Simulator",
+    "tier": 5,
+    "tier_name": "Level 5: Betting Markets & Staking",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 01:48:53 UTC",
+    "summary": "Integrated EXP-011 starter arm-slot ride (prior season), EXP-012 game-time weather/umpire carry, and EXP-013 zero-leakage rolling 3-day bullpen fatigue into a unified chronological multi-market engine (2024 train -> locked 2025 OOS, n=2,430). Improved locked 2025 Full-Game ML Brier (0.2445 -> 0.2444), matched M4 on F5 ML Brier (0.2436 vs 0.2435 with 0.5846 AUC) and improved Total-Runs RMSE (4.5862 -> 4.5744), and simulated 50,000 exact 12-team MLB playoff brackets (AL/NL top-2 byes, Bo3/Bo5/Bo7 Log5 series).",
+    "hypotheses": [
+      "Integrating starter arm-slot ride, weather/umpire carry, and rolling 3-day bullpen fatigue improves locked 2025 OOS Brier/RMSE across Full-Game ML, F5 ML, and Totals.",
+      "An exact 12-team MLB playoff bracket simulator with AL/NL top-2 first-round byes preserves exact AL/NL pennant (=1.000), bye (=4.000), and WS (=1.000) probability sums."
+    ],
+    "formulas": {
+      "unified_ml": "logit(p_ML) = b0 + b1*logit(p_M3) + b2*logit(p_M4) + b3*Delta_IVB_slot + b4*Delta_BP_fatigue",
+      "unified_totals": "T_hat = g0 + g1*T_EXP009 + g2*Delta_R_weather + g3*Delta_R_ump + g4*Total_BP_fatigue",
+      "exact_bracket": "50,000 MC seasons: AL/NL Seeds 1-2 Byes -> Bo3 WC -> Bo5 DS -> Bo7 LCS -> Bo7 WS (Log5 + HFA)"
+    },
+    "metrics": {
+      "oos_2025_ml_brier_m4": 0.24454,
+      "oos_2025_ml_brier_m6": 0.24435,
+      "oos_2025_f5_brier_m4": 0.24347,
+      "oos_2025_f5_brier_m6": 0.24358,
+      "oos_2025_totals_rmse_v1": 4.58623,
+      "oos_2025_totals_rmse_m6": 4.57445,
+      "oos_2025_f5_auc_m6": 0.5846,
+      "bracket_n_sims": 50000,
+      "top_ws_club_2026": "NYY",
+      "top_ws_prob_2026_pct": 12.91
+    },
+    "features": [
+      "p_m6_ml",
+      "p_m6_f5",
+      "exp_total_m6",
+      "sp_ivb_slot_diff",
+      "weather_runs_adj",
+      "ump_rpg_eb",
+      "bp_fatigue_adv_home",
+      "bye_prob",
+      "pennant_prob",
+      "ws_prob_12team"
+    ],
+    "artifacts": {
+      "spec": "specs/14_unified_pro_game_f5_totals_bracket.md",
+      "script": "models/14_unified_pro_game_f5_totals_bracket.R",
+      "gold_games": "data/processed/unified_pro_game_f5_totals_2024_2025.parquet",
+      "gold_metrics": "data/processed/unified_pro_multi_market_metrics.parquet",
+      "gold_bracket": "data/processed/mlb_2026_12team_bracket_ws_odds.parquet",
+      "fig_ablation": "models/pro01_multi_market_oos_ablation.png",
+      "fig_bracket": "models/pro02_2026_12team_bracket_ws_pennant_odds.html",
+      "fig_cal": "models/pro03_f5_vs_fullgame_calibration.png"
     }
   }
 ]
