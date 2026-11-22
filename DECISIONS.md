@@ -68,6 +68,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** Standardize four strictly chronological research engines (`EXP-011`..`EXP-014`): (1) competitive bat-tracking (`>= 60 mph`) & pre-test quadratic `arm_angle` slot-ride (`ivb_above_slot`), (2) zero-sum season-centered 2D strike-zone Catcher Framing (`CSAA`) removing secular 2021–2025 umpire zone-tightening drift + weather/umpire carry, (3) zero-leakage (`g2.game_date < g1.game_date`) rolling 3-day bullpen workload fatigue, and (4) unified multi-market (ML/F5/Totals) pricing paired with an exact 50,000-season 12-team MLB playoff bracket simulator guaranteeing exact AL/NL pennant (`1.000`), bye (`4.00`), and WS (`1.000`) probability sums.
 - **Consequences:** Delivers `+0.0302` OOS 4-seam Whiff AUC (`EXP-011`), `-3.66%` OOS ISO RMSE (`EXP-011`), `+23.8` Framing Runs for Patrick Bailey (`EXP-012`), `-0.0118 R/G` locked-2025 OOS Totals RMSE (`EXP-014`), `0.5846` F5 OOS AUC (`EXP-014`), and exact bye-adjusted 2026 World Series probabilities (`NYY 12.91%`, `LAD 10.62%`).
 
+## ADR-011: Exact Daily 9-Man Starting Lineup Extraction & Multi-Factor Poisson Pitcher Strikeout (`SO`) Prop Pricing
+- **Status:** Accepted (2026-11-21)
+- **Context:** Team-level offensive ratings obscure daily 9-man lineup strikeout propensity, handedness platoon stacking, and venue-specific HR asymmetry (`pf_hr_lhb` vs `pf_hr_rhb`), which are primary drivers of sharp MLB player prop markets.
+- **Decision:** Extract exact 1-through-9 starting batting orders directly from `v_retrosheet_plays` (`89,118` lineup slots across `2024–2025`), apply strictly prior-season (`season - 1`) Empirical Bayes batter/pitcher priors ($M = 150$ PA/BF), and price starting pitcher strikeouts via a strictly chronological Poisson GLM (`2024` train $\rightarrow$ locked `2025` OOS `n = 4,859` starts) incorporating opposing 9-man lineup K%, arm-slot ride (`EXP-011`), park `pf_so` (`EXP-006`), pre-test umpire K-factors (`2015–2023`), and prior-season catcher framing (`EXP-012`).
+- **Consequences:** Delivers `Over 5.5 K` locked-2025 OOS ROC AUC `0.6638` (`+0.0228` over starter-prior-only `0.6409`) and SO RMSE `2.3285` (`-0.0257` vs starter-only), while demonstrating honestly that daily lineup composition concentrates its strongest incremental alpha in player props rather than raw full-game moneylines.
+
 ---
 
 ## Template for New ADRs

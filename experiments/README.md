@@ -18,6 +18,7 @@ This curated registry catalogs all verified mathematical models, empirical formu
 | **[EXP-009-GAME-MONTE-CARLO-SIMULATOR](registry.json)** | 4 | Level 4 Plate-Appearance 24 Base-Out Markov Game Simulator & Empirical Win Expectancy Engine | `VALIDATED` | `multi_category_log5`: P(E) = (P_bat(E) * P_pit(E) / P_lg... | 2026-11-21 |
 | **[EXP-010-MARKET-EDGE-PREDICTION-VALUATION](registry.json)** | 5 | Level 5 Market Edge, Closing Line Value (CLV), Fractional Kelly Bankroll Optimization & Prediction Market Valuation | `VALIDATED` | `expected_value`: EV = p * (O - 1) - (1 - p) = p * O - 1 | 2026-11-22 |
 | **[EXP-014-UNIFIED-PRO-GAME-F5-TOTALS-BRACKET](registry.json)** | 5 | Unified Pro Multi-Market Engine (Full-Game ML, F5 ML, Totals) & Exact 12-Team MLB Playoff Bracket Simulator | `VALIDATED` | `unified_ml`: logit(p_ML) = b0 + b1*logit(p_M3) + b2*logi... | 2026-11-22 |
+| **[EXP-015-DAILY-LINEUPS-PLATOON-K-PROPS](registry.json)** | 5 | Daily 9-Man Starting Lineups, Handedness Park Asymmetry & Starting Pitcher Strikeout (SO) Prop Pricing Engine | `VALIDATED` | `lineup_k_pct`: LineupK% = sum(w_slot * EB_K%_prior) / su... | 2026-11-22 |
 
 ---
 *Maintained by mlbr::lake_log_experiment()*

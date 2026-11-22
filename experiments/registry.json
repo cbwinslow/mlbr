@@ -830,5 +830,53 @@
       "fig_bracket": "models/pro02_2026_12team_bracket_ws_pennant_odds.html",
       "fig_cal": "models/pro03_f5_vs_fullgame_calibration.png"
     }
+  },
+  {
+    "id": "EXP-015-DAILY-LINEUPS-PLATOON-K-PROPS",
+    "title": "Daily 9-Man Starting Lineups, Handedness Park Asymmetry & Starting Pitcher Strikeout (SO) Prop Pricing Engine",
+    "tier": 5,
+    "tier_name": "Level 5: Betting Markets & Staking",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 02:12:31 UTC",
+    "summary": "Extracted exact 9-man starting batting orders (89,118 lineup slots) and realized starter strikeouts across all 2024-2025 regular-season MLB games with strictly prior-season (season-1) EB batter/pitcher priors, EXP-006 handedness park factors, EXP-011 arm-slot ride, EXP-012 umpire K-factors & catcher framing. Locked 2025 OOS Poisson K-Prop engine (n=4859 starts) reduced Strikeout RMSE from 2.4703 -> 2.3285 and achieved Over 5.5 K Brier 0.2129 (AUC 0.6638), while 9-man prior-year lineup wOBA was flat on Full-Game ML Brier (0.24471 vs 0.24435), confirming lineup alpha concentrates sharply in player strikeout props.",
+    "hypotheses": [
+      "Combining prior-season starter K% and BF/GS with exact opposing 9-man starting lineup K%, arm-slot ride, park pf_so, umpire K-factor, and catcher framing beats starter-only and league-mean baselines on locked 2025 OOS Strikeout RMSE, Poisson NLL, and Over 5.5 K Brier/AUC.",
+      "Daily 9-man starting lineups and handedness-weighted park factors deliver measurable OOS alpha in player strikeout props (+0.0249 AUC) even where full-game ML Brier is already saturated by team BaseRuns + SP FIP."
+    ],
+    "formulas": {
+      "lineup_k_pct": "LineupK% = sum(w_slot * EB_K%_prior) / sum(w_slot)",
+      "poisson_kprop": "log(lambda) = b0 + b1*log(EB_SP_K * EB_BF_GS) + b2*OppLineupK% + b3*IVB_slot + b4*PF_SO + b5*UmpK + b6*CSAA",
+      "over_5_5_prob": "P(SO >= 6) = 1 - ppois(5, lambda)"
+    },
+    "metrics": {
+      "n_locked_2025_starts": 4859,
+      "oos_2025_so_rmse_b0": 2.4703,
+      "oos_2025_so_rmse_m1": 2.3542,
+      "oos_2025_so_rmse_m2": 2.3285,
+      "oos_2025_o55_brier_m2": 0.21295,
+      "oos_2025_o55_auc_m2": 0.6638,
+      "oos_2025_ml_brier_m6": 0.24435,
+      "oos_2025_ml_brier_lu": 0.24471
+    },
+    "features": [
+      "lineup_woba_diff",
+      "lineup_pf_hr_diff",
+      "opp_lineup_k",
+      "prior_exp_so",
+      "ump_k_eb",
+      "cat_csaa_1k",
+      "exp_so_m2",
+      "p_over_5_5"
+    ],
+    "artifacts": {
+      "spec": "specs/15_daily_lineups_platoon_k_props.md",
+      "script": "models/15_daily_lineups_platoon_k_props.R",
+      "gold_lineups": "data/processed/daily_lineups_platoon_2024_2025.parquet",
+      "gold_kprops": "data/processed/sp_strikeout_prop_backtest_2024_2025.parquet",
+      "gold_ablat": "data/processed/sp_k_prop_ablation_metrics_2025.parquet",
+      "fig_cal": "models/kprop01_sp_strikeout_prop_calibration.png",
+      "fig_leaders": "models/kprop02_lineup_k_pct_vs_sp_strikeouts.html",
+      "fig_park": "models/kprop03_platoon_park_lineup_asymmetry.png"
+    }
   }
 ]

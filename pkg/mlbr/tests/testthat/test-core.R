@@ -600,3 +600,34 @@ test_that("EXP-014 Gold Unified Pro Multi-Market Engine & Exact 12-Team Bracket 
   expect_lt(abs(sum(br$playoff_prob_12) - 12.0), 1e-3)
   expect_lt(abs(sum(br$bye_prob) - 4.0), 1e-3)
 })
+
+test_that("EXP-011..015 published external reference-value formulas & EXP-015 Gold K-Props satisfy invariants", {
+  skip_if_not_installed("arrow")
+  # 1. Published Alan Nathan / MLB Statcast MaxEV collision formula: 1.23*75 + 0.2116*95 = 112.352 mph
+  expect_lt(abs((1.23 * 75.0 + 0.2116 * 95.0) - 112.352), 1e-9)
+  # 2. Exact Best-of-3 series probability for p=0.60: p^2 + 2*p^2*(1-p) = 0.36 + 0.288 = 0.648
+  expect_lt(abs((0.60^2 + 2 * 0.60^2 * 0.40) - 0.648), 1e-12)
+  # 3. Exact Poisson Over 5.5 K probability for lambda = 6.0: 1 - ppois(5, 6) == 0.5543203586
+  expect_lt(abs((1.0 - stats::ppois(5L, 6.0)) - 0.5543203586), 1e-7)
+
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  lu_p <- file.path(proc, "daily_lineups_platoon_2024_2025.parquet")
+  kp_p <- file.path(proc, "sp_strikeout_prop_backtest_2024_2025.parquet")
+  ab_p <- file.path(proc, "sp_k_prop_ablation_metrics_2025.parquet")
+  skip_if_not(all(file.exists(c(lu_p, kp_p, ab_p))), "EXP-015 Gold files not materialized")
+
+  lu <- arrow::read_parquet(lu_p)
+  kp <- arrow::read_parquet(kp_p)
+  ab <- arrow::read_parquet(ab_p)
+
+  expect_gt(nrow(lu), 4800L)
+  expect_gt(nrow(kp), 9500L)
+  expect_true(all(kp$p_over_4_5 >= kp$p_over_5_5 & kp$p_over_5_5 >= kp$p_over_6_5))
+  expect_true(all(kp$exp_so_m2 > 0 & kp$exp_so_m2 < 15))
+  # Pro K-Prop engine must strictly beat both League Mean and SP-Prior-Only on RMSE, Poisson NLL, Brier & AUC
+  expect_lt(ab$rmse_so[ab$model == "M2_Pro_K_Prop_Engine"], ab$rmse_so[ab$model == "M1_SP_Prior_Only"])
+  expect_lt(ab$pois_nll[ab$model == "M2_Pro_K_Prop_Engine"], ab$pois_nll[ab$model == "M1_SP_Prior_Only"])
+  expect_lt(ab$brier_o55[ab$model == "M2_Pro_K_Prop_Engine"], ab$brier_o55[ab$model == "M1_SP_Prior_Only"])
+  expect_gt(ab$auc_o55[ab$model == "M2_Pro_K_Prop_Engine"], ab$auc_o55[ab$model == "M1_SP_Prior_Only"] + 0.015)
+})

@@ -23,9 +23,9 @@
 
 ---
 
-## 2. Verified Baseline (All 14 Completed & Audited Experiments — Full 5-Tier Hierarchy + Pro Signal Expansion Complete!)
+## 2. Verified Baseline (All 15 Completed & Audited Experiments — Full 5-Tier Hierarchy + Pro Signal Expansion Complete!)
 
-All 14 experiments (`EXP-001` through `EXP-014`) are completed, independently audited, logged in `experiments/registry.json`, verified across `160+` `testthat` unit tests + `41/41` Quarto pages, and green in GitHub Actions CI:
+All 15 experiments (`EXP-001` through `EXP-015`) are completed, independently audited, logged in `experiments/registry.json`, verified across `175+` `testthat` unit tests + `43/43` Quarto pages, and green in GitHub Actions CI:
 
 | Exp ID | Tier | Name | Key Validated Result | Study & Lab |
 |:---|:---:|:---|:---|:---|
@@ -43,6 +43,7 @@ All 14 experiments (`EXP-001` through `EXP-014`) are completed, independently au
 | **EXP-012** | 3B | Weather/Wind, Umpires & Framing CSAA | 25,639 games (`+0.33 R/G` per `+10°F`), 1.77M called pitches zero-sum CSAA (Bailey `+23.8 R`), `-0.0091 R/G` OOS Totals RMSE | `12_weather_umpire_catcher_framing.qmd` / `lab12` |
 | **EXP-013** | 3C | Pitcher Stamina & Bullpen Fatigue | 1.44M starter fastballs (`-0.43 mph` at P61–80; `+0.35 RV/100` at P101+) & 35,812 team-game zero-leakage 3-day bullpen fatigue | `13_pitcher_stamina_bullpen_fatigue.qmd` / `lab13` |
 | **EXP-014** | 5B | Unified Pro Multi-Market & 12-Team Bracket | Locked 2025 OOS F5 AUC `0.5846`, Totals RMSE `-0.0118 R/G`, 50,000 exact 12-team brackets (`NYY 12.91%`, `LAD 10.62%` WS) | `14_unified_pro_game_f5_totals_bracket.qmd` / `lab14` |
+| **EXP-015** | 5C | Daily 9-Man Lineups & SP Strikeout Props | 89,118 lineup slots, 4,859 locked-2025 OOS starts: `Over 5.5 K` AUC `0.6638` (`+0.0228` lift), SO RMSE `2.3285` | `15_daily_lineups_platoon_k_props.qmd` / `lab15` |
 
 ---
 

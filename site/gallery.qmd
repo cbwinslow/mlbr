@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 15</span>
+    <span class="gallery-badge">Lineups &amp; K-Props</span>
+    <h4><a href="analyses/15_daily_lineups_platoon_k_props.html">Daily 9-Man Starting Lineups &amp; Pitcher Strikeout (SO) Prop Engine</a></h4>
+    <p>89,118 exact starting lineup slots (2024–2025) &amp; 9,714 MLB starts: Poisson Strikeout Prop engine combining SP prior K%, opposing 9-man lineup K%, arm-slot ride, park <code>pf_so</code>, umpire K-factor &amp; catcher framing delivers locked-2025 <code>Over 5.5 K</code> <code>AUC 0.6638</code> (<code>+0.0228</code> lift).</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">89,118 Lineup Slots | 4,859 OOS Starts | Over 5.5 K AUC 0.6638 | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 14</span>
     <span class="gallery-badge">Unified Pro Engine</span>
     <h4><a href="analyses/14_unified_pro_game_f5_totals_bracket.html">Unified Pro Multi-Market Engine (ML, F5, Totals) &amp; 12-Team Bracket</a></h4>

@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="mlbr Quantitative Research Group">
+<meta name="dcterms.date" content="2026-11-21">
+
+<title>Study 15: Daily 9-Man Starting Lineups, Handedness Park Asymmetry &amp; Starting Pitcher Strikeout (SO) Prop Pricing Engine – mlbr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-1d6f68ac07d6e45f311d12062c618a6a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">mlbr</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/experiment_registry.html"> 
+<span class="menu-text">Knowledge Base</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/01_pitch_quality_eda.html"> 
+<span class="menu-text">Q-CRISP Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../workbooks/lab01_aerodynamics_workbook.html"> 
+<span class="menu-text">Student Labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../gallery.html"> 
+<span class="menu-text">Analyses Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../architecture.html"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup &amp; API</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../crosswalk.html"> 
+<span class="menu-text">ID Crosswalk</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../verification.html"> 
+<span class="menu-text">Data Proofs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../agent_context.html"> 
+<span class="menu-text">AI Agent Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data_dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/cbwinslow/mlbr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/15_daily_lineups_platoon_k_props.html">Study 15: Daily Lineups &amp; Pitcher Strikeout Props</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview &amp; Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation &amp; Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../crosswalk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universal ID Crosswalk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Architecture &amp; Storage</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../verification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Verification &amp; Proofs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../agent_context.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Agent Data Manifest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Dictionary &amp; Schemas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Student Work-Along Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab01_aerodynamics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 01: Aerodynamics &amp; Trajectory Math</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab02_platoon_physics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 02: 4-Quadrant Platoon Physics &amp; PVI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab03_tunneling_stuff_plus_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 03: Pitch Tunneling &amp; Stuff+ / Loc+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab04_player_projections_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab05_decomposed_pitching_decisions_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab06_ballpark_factors_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 06: Regressed Ballpark Factors &amp; Altitude</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab07_pecota_zips_ensemble_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 07: PECOTA Comps, ZiPS Aging &amp; Defense EDA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab08_team_baseruns_pythagenpat_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 08: BaseRuns, Pythagenpat &amp; 2026 Standings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab09_game_monte_carlo_simulator_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 09: Markov Game Simulator &amp; Win Expectancy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab10_market_edge_prediction_valuation_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 10: Market Edge, CLV &amp; Fractional Kelly</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 11: Bat-Tracking &amp; Arm-Slot Biomechanics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab12_weather_umpire_catcher_framing_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 12: Weather, Umpires &amp; Catcher Framing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 13: Pitcher Stamina &amp; Bullpen Fatigue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab14_unified_pro_game_f5_totals_bracket_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 14: Unified Pro Multi-Market &amp; 12-Team Bracket</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab15_daily_lineups_platoon_k_props_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 15: Daily Lineups &amp; Pitcher Strikeout Props</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Q-CRISP Research Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/experiment_registry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Knowledge Base &amp; Registry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/01_pitch_quality_eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 01: Aerodynamics &amp; Approach Angles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/02_platoon_physics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 02: 4-Quadrant Platoon Physics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/03_tunneling_stuff_plus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 03: Pitch Tunneling &amp; Stuff+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/06_ballpark_factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 06: Empirical Ballpark Factors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/07_pecota_zips_ensemble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 07: PECOTA k-NN, ZiPS &amp; Meta-Ensemble</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/08_team_baseruns_pythagenpat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 08: BaseRuns, Pythagenpat &amp; Standings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/09_game_monte_carlo_simulator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 09: Markov Game Simulator &amp; WPA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/10_market_edge_prediction_valuation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 10: Market Edge &amp; Prediction Markets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/11_bat_tracking_arm_slot_biomechanics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 11: Bat-Tracking &amp; Arm-Slot Biomechanics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/12_weather_umpire_catcher_framing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 12: Weather, Umpires &amp; Catcher Framing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/13_pitcher_stamina_bullpen_fatigue.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 13: Pitcher Stamina &amp; Bullpen Fatigue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/14_unified_pro_game_f5_totals_bracket.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 14: Unified Pro Multi-Market &amp; 12-Team Bracket</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/15_daily_lineups_platoon_k_props.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Study 15: Daily Lineups &amp; Pitcher Strikeout Props</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyses Gallery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Clustering (K-Means / GMM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Classification (Random Forest)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/xwoba_surface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xWOBA / Exit Velocity Surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/run_expectancy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Run Expectancy RE24 Matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#executive-summary-abstract-tldr" id="toc-executive-summary-abstract-tldr" class="nav-link active" data-scroll-target="#executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</a></li>
+  <li><a href="#domain-problem-player-prop-market-structure" id="toc-domain-problem-player-prop-market-structure" class="nav-link" data-scroll-target="#domain-problem-player-prop-market-structure">2. Domain Problem &amp; Player-Prop Market Structure</a></li>
+  <li><a href="#mathematical-formulation-lake-wide-pipeline" id="toc-mathematical-formulation-lake-wide-pipeline" class="nav-link" data-scroll-target="#mathematical-formulation-lake-wide-pipeline">3. Mathematical Formulation &amp; Lake-Wide Pipeline</a></li>
+  <li><a href="#exploratory-data-analysis-eda-handedness-park-diagnostics" id="toc-exploratory-data-analysis-eda-handedness-park-diagnostics" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda-handedness-park-diagnostics">4. Exploratory Data Analysis (EDA) &amp; Handedness Park Diagnostics</a></li>
+  <li><a href="#model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" id="toc-model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" class="nav-link" data-scroll-target="#model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos">5. Model Architecture &amp; Temporal Validation (<code>2024</code> Train <span class="math inline">\(\rightarrow\)</span> Locked <code>2025</code> OOS)</a></li>
+  <li><a href="#leaderboards-case-studies-2025-starting-pitcher-strikeout-leaders" id="toc-leaderboards-case-studies-2025-starting-pitcher-strikeout-leaders" class="nav-link" data-scroll-target="#leaderboards-case-studies-2025-starting-pitcher-strikeout-leaders">6. Leaderboards &amp; Case Studies (<code>2025</code> Starting Pitcher Strikeout Leaders)</a>
+  <ul class="collapse">
+  <li><a href="#interactive-2025-pitcher-strikeout-prop-explorer" id="toc-interactive-2025-pitcher-strikeout-prop-explorer" class="nav-link" data-scroll-target="#interactive-2025-pitcher-strikeout-prop-explorer">Interactive 2025 Pitcher Strikeout Prop Explorer</a></li>
+  </ul></li>
+  <li><a href="#downstream-integration-market-applications" id="toc-downstream-integration-market-applications" class="nav-link" data-scroll-target="#downstream-integration-market-applications">7. Downstream Integration &amp; Market Applications</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/15_daily_lineups_platoon_k_props.html">Study 15: Daily Lineups &amp; Pitcher Strikeout Props</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Study 15: Daily 9-Man Starting Lineups, Handedness Park Asymmetry &amp; Starting Pitcher Strikeout (SO) Prop Pricing Engine</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Q-CRISP Research Series: Extracting 89,118 Exact Starting Lineup Slots &amp; Pricing 9,714 Regular-Season MLB Starts Strictly Out-of-Sample (2024–2025)</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>mlbr Quantitative Research Group </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 21, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Experiment Registry &amp; Architecture
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Experiment ID:</strong> <code>EXP-015-DAILY-LINEUPS-PLATOON-K-PROPS</code> (<code>VALIDATED</code> in <code>experiments/registry.json</code>)</li>
+<li><strong>Architecture Tier:</strong> Level 4C / Level 5C — Daily 9-Man Lineup Platoon Matchups &amp; Player Prop Pricing</li>
+<li><strong>Specification:</strong> <code>specs/15_daily_lineups_platoon_k_props.md</code></li>
+<li><strong>Companion Student Lab:</strong> <a href="../workbooks/lab15_daily_lineups_platoon_k_props_workbook.html"><strong>Lab 15: Daily 9-Man Lineups &amp; Pitcher Strikeout Props</strong></a></li>
+<li><strong>Gold Deliverables:</strong> <code>daily_lineups_platoon_2024_2025.parquet</code>, <code>sp_strikeout_prop_backtest_2024_2025.parquet</code> (<code>9,714</code> regular-season starts), <code>sp_k_prop_ablation_metrics_2025.parquet</code></li>
+<li><strong>Preserved Assets:</strong> <code>models/kprop01_*</code> .. <code>kprop03_*</code> (PNG 300 DPI, RDS <code>&lt;= 0.34 MB</code>, ZSTD Parquet, interactive Plotly HTML)</li>
+</ul>
+</div>
+</div>
+<hr>
+<section id="executive-summary-abstract-tldr" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</h2>
+<p>In <strong>Study 15</strong>, <code>mlbr</code> extracts all <strong>89,118 exact 1-through-9 starting batting-order slots</strong> across <code>2024–2025</code> regular-season MLB games (<code>v_retrosheet_plays</code>) and builds a strictly out-of-sample <strong>Starting Pitcher Strikeout (<code>SO</code>) Prop Pricing Engine</strong> (<code>2024</code> train <code>n = 4,855</code> starts <span class="math inline">\(\rightarrow\)</span> locked <code>2025</code> OOS <code>n = 4,859</code> starts):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Pillar</th>
+<th style="text-align: left;">Validated Locked <code>2025</code> OOS Result (<code>n = 4,859</code> Starts)</th>
+<th style="text-align: left;">Quantitative Market Implication</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Pro Poisson K-Prop Engine (<code>M2</code>)</strong></td>
+<td style="text-align: left;">Cuts Strikeout RMSE from <code>2.4703</code> (<code>B0</code>) &amp; <code>2.3542</code> (<code>M1</code> SP-only) down to <strong><code>2.3285</code></strong>, drops Poisson NLL <code>2.2593 -&gt; 2.2457</code>, and jumps <strong><code>Over 5.5 K</code> ROC AUC by <code>+0.0228</code> (<code>0.6409 -&gt; 0.6638</code>)</strong> (<code>Brier 0.21295</code>).</td>
+<td style="text-align: left;">Player strikeout props exhibit <strong>much higher signal-to-noise (<code>AUC 0.664</code>)</strong> than full-game moneylines (<code>AUC 0.574</code>) when opposing 9-man lineup K%, arm-slot ride, park <code>pf_so</code>, umpire K-factor, and catcher framing are combined.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Daily 9-Man Lineups on Full-Game ML</strong></td>
+<td style="text-align: left;">Adding prior-year 9-man lineup wOBA + handedness HR park factor on top of <code>EXP-014</code> <code>M6</code> is flat (<code>0.24435 vs. 0.24471</code> (nested <code>M6 + lineups</code>), <code>n = 2,430</code>).</td>
+<td style="text-align: left;">Confirms honestly that daily lineup composition delivers its sharpest incremental alpha in <strong>player props</strong> rather than raw full-game moneylines where team BaseRuns + SP FIP already captures most macro offensive variance.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Ballpark Handedness HR Asymmetry</strong></td>
+<td style="text-align: left;">Combines exact daily LHB% with <code>EXP-006</code> <code>pf_hr_lhb</code> vs.&nbsp;<code>pf_hr_rhb</code> across all 30 MLB parks.</td>
+<td style="text-align: left;">Captures venue-specific platoon stacking (e.g., LHB-heavy lineups at Yankee Stadium vs.&nbsp;RHB-heavy lineups at Fenway).</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/kprop01_sp_strikeout_prop_calibration.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 1: Locked 2025 OOS Pitcher Strikeout Prop Calibration — Over 5.5 K</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="domain-problem-player-prop-market-structure" class="level2">
+<h2 class="anchored" data-anchor-id="domain-problem-player-prop-market-structure">2. Domain Problem &amp; Player-Prop Market Structure</h2>
+<p>Why do sharp syndicates allocate substantial capital to <strong>Pitcher Strikeout Props</strong>? Because a starting pitcher’s strikeout total is directly governed by <strong>6 compounding, pre-game observable physical &amp; environmental factors</strong>: (1) the starter’s own K% &amp; batters-faced stamina (<code>BF/GS</code>), (2) the exact 9 batters in today’s opposing lineup (<code>opp_lineup_k</code>), (3) starter arm-slot vertical ride (<code>ivb_above_slot</code>, <code>EXP-011</code>), (4) ballpark strikeout factor (<code>pf_so</code>, <code>EXP-006</code>), (5) home-plate umpire strike-zone K tendency (<code>BASE4_UMP_ID</code>), and (6) the starting catcher’s prior-season framing (<code>csaa_per_1000</code>, <code>EXP-012</code>).</p>
+<hr>
+</section>
+<section id="mathematical-formulation-lake-wide-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-formulation-lake-wide-pipeline">3. Mathematical Formulation &amp; Lake-Wide Pipeline</h2>
+<p><span class="math display">\[\log(\lambda_i) = \beta_0 + \beta_1 \log(\widehat{\text{K\%}}_{\text{SP}, t-1} \cdot \widehat{\text{BF}}_{\text{SP}, t-1}) + \beta_2 \text{OppLineupK\%}_i + \beta_3 \text{IVB}_{\text{slot}, t-1} + \beta_4 \text{PF}_{\text{SO}} + \beta_5 \Delta K_{\text{ump}} + \beta_6 \text{CSAA}_{c, t-1}\]</span> <span class="math display">\[P(\text{SO}_i &gt; 5.5) = 1 - \sum_{k=0}^{5} \frac{e^{-\lambda_i}\lambda_i^k}{k!}\]</span></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> memory_limit <span class="op">=</span> <span class="st">'12GB'</span>;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> season, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_starts,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fu">AVG</span>(exp_so_m2), <span class="dv">2</span>) <span class="kw">AS</span> mean_exp_so, <span class="fu">ROUND</span>(<span class="fu">AVG</span>(sp_actual_so), <span class="dv">2</span>) <span class="kw">AS</span> mean_act_so,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fl">100.0</span> <span class="op">*</span> <span class="fu">AVG</span>(p_over_5_5), <span class="dv">1</span>) <span class="kw">AS</span> pred_o55_pct, <span class="fu">ROUND</span>(<span class="fl">100.0</span> <span class="op">*</span> <span class="fu">AVG</span>(y_over_5_5), <span class="dv">1</span>) <span class="kw">AS</span> obs_o55_pct</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> read_parquet(<span class="st">'data/processed/sp_strikeout_prop_backtest_2024_2025.parquet'</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> season <span class="kw">ORDER</span> <span class="kw">BY</span> season;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="exploratory-data-analysis-eda-handedness-park-diagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis-eda-handedness-park-diagnostics">4. Exploratory Data Analysis (EDA) &amp; Handedness Park Diagnostics</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/kprop03_platoon_park_lineup_asymmetry.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 2: Ballpark Handedness Home Run Asymmetry (PF_HR_LHB minus PF_HR_RHB, 2025)</figcaption>
+</figure>
+</div>
+<hr>
+</section>
+<section id="model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" class="level2">
+<h2 class="anchored" data-anchor-id="model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos">5. Model Architecture &amp; Temporal Validation (<code>2024</code> Train <span class="math inline">\(\rightarrow\)</span> Locked <code>2025</code> OOS)</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model (<code>Locked 2025 OOS</code>, <code>n = 4,859</code> Starts)</th>
+<th style="text-align: right;">SO RMSE</th>
+<th style="text-align: right;">Poisson NLL</th>
+<th style="text-align: right;"><code>Over 5.5 K</code> Brier</th>
+<th style="text-align: right;"><code>Over 5.5 K</code> ROC AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>B0_League_Mean</code></td>
+<td style="text-align: right;"><code>2.4703</code></td>
+<td style="text-align: right;"><code>2.3163</code></td>
+<td style="text-align: right;"><code>0.23029</code></td>
+<td style="text-align: right;"><code>0.5000</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>M1_SP_Prior_Only</code></td>
+<td style="text-align: right;"><code>2.3542</code></td>
+<td style="text-align: right;"><code>2.2593</code></td>
+<td style="text-align: right;"><code>0.21555</code></td>
+<td style="text-align: right;"><code>0.6409</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong><code>M2_Pro_K_Prop_Engine</code></strong></td>
+<td style="text-align: right;"><strong><code>2.3285</code></strong></td>
+<td style="text-align: right;"><strong><code>2.2457</code></strong></td>
+<td style="text-align: right;"><strong><code>0.21295</code></strong></td>
+<td style="text-align: right;"><strong><code>0.6638</code></strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="leaderboards-case-studies-2025-starting-pitcher-strikeout-leaders" class="level2">
+<h2 class="anchored" data-anchor-id="leaderboards-case-studies-2025-starting-pitcher-strikeout-leaders">6. Leaderboards &amp; Case Studies (<code>2025</code> Starting Pitcher Strikeout Leaders)</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Starting Pitcher (<code>2025</code>)</th>
+<th style="text-align: right;">Starts</th>
+<th style="text-align: right;">Pre-Game Exp <code>SO/GS</code></th>
+<th style="text-align: right;">Actual <code>SO/GS</code></th>
+<th style="text-align: right;">Avg <code>P(Over 5.5 K)</code></th>
+<th style="text-align: right;">Obs <code>Over 5.5 K</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Chris Sale</strong></td>
+<td style="text-align: right;"><code>20</code></td>
+<td style="text-align: right;"><strong><code>6.48</code></strong></td>
+<td style="text-align: right;"><code>7.80</code></td>
+<td style="text-align: right;"><code>61.5%</code></td>
+<td style="text-align: right;"><code>85.0%</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Tarik Skubal</strong></td>
+<td style="text-align: right;"><code>31</code></td>
+<td style="text-align: right;"><strong><code>6.18</code></strong></td>
+<td style="text-align: right;"><code>7.77</code></td>
+<td style="text-align: right;"><code>57.5%</code></td>
+<td style="text-align: right;"><code>80.6%</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sonny Gray</strong></td>
+<td style="text-align: right;"><code>32</code></td>
+<td style="text-align: right;"><strong><code>6.18</code></strong></td>
+<td style="text-align: right;"><code>6.28</code></td>
+<td style="text-align: right;"><code>57.8%</code></td>
+<td style="text-align: right;"><code>59.4%</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Paul Skenes</strong></td>
+<td style="text-align: right;"><code>32</code></td>
+<td style="text-align: right;"><strong><code>6.03</code></strong></td>
+<td style="text-align: right;"><code>6.75</code></td>
+<td style="text-align: right;"><code>55.2%</code></td>
+<td style="text-align: right;"><code>81.2%</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Dylan Cease</strong></td>
+<td style="text-align: right;"><code>32</code></td>
+<td style="text-align: right;"><strong><code>5.98</code></strong></td>
+<td style="text-align: right;"><code>6.72</code></td>
+<td style="text-align: right;"><code>54.6%</code></td>
+<td style="text-align: right;"><code>75.0%</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Logan Gilbert</strong></td>
+<td style="text-align: right;"><code>25</code></td>
+<td style="text-align: right;"><strong><code>5.96</code></strong></td>
+<td style="text-align: right;"><code>6.92</code></td>
+<td style="text-align: right;"><code>54.0%</code></td>
+<td style="text-align: right;"><code>76.0%</code></td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/kprop02_lineup_k_pct_vs_sp_strikeouts.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Figure 3: Locked 2025 Starting Pitcher Strikeouts/Start — Predicted vs.&nbsp;Actual</figcaption>
+</figure>
+</div>
+<section id="interactive-2025-pitcher-strikeout-prop-explorer" class="level3">
+<h3 class="anchored" data-anchor-id="interactive-2025-pitcher-strikeout-prop-explorer">Interactive 2025 Pitcher Strikeout Prop Explorer</h3>
+<iframe src="../assets/kprop02_lineup_k_pct_vs_sp_strikeouts.html" width="100%" height="520" style="border: 1px solid #1e293b; border-radius: 8px; background: #090d16;">
+</iframe>
+<hr>
+</section>
+</section>
+<section id="downstream-integration-market-applications" class="level2">
+<h2 class="anchored" data-anchor-id="downstream-integration-market-applications">7. Downstream Integration &amp; Market Applications</h2>
+<p>With <code>EXP-015</code>, <code>mlbr</code> now prices <strong>five distinct MLB quantitative markets</strong> end-to-end strictly out-of-sample: <strong>Full-Game Moneylines</strong>, <strong>First-5-Innings (F5) Moneylines</strong>, <strong>Over/Under Totals</strong>, <strong>Starting Pitcher Strikeout Props (<code>Over 4.5 / 5.5 / 6.5 K</code>)</strong>, and <strong>Exact 12-Team Playoff &amp; World Series Futures</strong>.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/cloudcurio\.cc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Study 15: Daily 9-Man Starting Lineups, Handedness Park Asymmetry &amp; Starting Pitcher Strikeout (SO) Prop Pricing Engine"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Q-CRISP Research Series: Extracting 89,118 Exact Starting Lineup Slots &amp; Pricing 9,714 Regular-Season MLB Starts Strictly Out-of-Sample (2024–2025)"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "mlbr Quantitative Research Group"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-21"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: show</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Experiment Registry &amp; Architecture</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Experiment ID:** <span class="in">`EXP-015-DAILY-LINEUPS-PLATOON-K-PROPS`</span> (<span class="in">`VALIDATED`</span> in <span class="in">`experiments/registry.json`</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Architecture Tier:** Level 4C / Level 5C — Daily 9-Man Lineup Platoon Matchups &amp; Player Prop Pricing</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Specification:** <span class="in">`specs/15_daily_lineups_platoon_k_props.md`</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Companion Student Lab:** [**Lab 15: Daily 9-Man Lineups &amp; Pitcher Strikeout Props**](../workbooks/lab15_daily_lineups_platoon_k_props_workbook.html)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Gold Deliverables:** <span class="in">`daily_lineups_platoon_2024_2025.parquet`</span>, <span class="in">`sp_strikeout_prop_backtest_2024_2025.parquet`</span> (<span class="in">`9,714`</span> regular-season starts), <span class="in">`sp_k_prop_ablation_metrics_2025.parquet`</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Preserved Assets:** <span class="in">`models/kprop01_*`</span> .. <span class="in">`kprop03_*`</span> (PNG 300 DPI, RDS <span class="in">`&lt;= 0.34 MB`</span>, ZSTD Parquet, interactive Plotly HTML)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Executive Summary &amp; Abstract (TL;DR)</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>In **Study 15**, `mlbr` extracts all **89,118 exact 1-through-9 starting batting-order slots** across `2024–2025` regular-season MLB games (`v_retrosheet_plays`) and builds a strictly out-of-sample **Starting Pitcher Strikeout (`SO`) Prop Pricing Engine** (<span class="in">`2024`</span> train <span class="in">`n = 4,855`</span> starts $\rightarrow$ locked <span class="in">`2025`</span> OOS <span class="in">`n = 4,859`</span> starts):</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pillar <span class="pp">|</span> Validated Locked <span class="in">`2025`</span> OOS Result (<span class="in">`n = 4,859`</span> Starts) <span class="pp">|</span> Quantitative Market Implication <span class="pp">|</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Pro Poisson K-Prop Engine (`M2`)** | Cuts Strikeout RMSE from `2.4703` (`B0`) &amp; `2.3542` (`M1` SP-only) down to **`2.3285`**, drops Poisson NLL `2.2593 -&gt; 2.2457`, and jumps **`Over 5.5 K` ROC AUC by `+0.0228` (`0.6409 -&gt; 0.6638`)** (`Brier 0.21295`). | Player strikeout props exhibit **much higher signal-to-noise (`AUC 0.664`)** than full-game moneylines (<span class="in">`AUC 0.574`</span>) when opposing 9-man lineup K%, arm-slot ride, park <span class="in">`pf_so`</span>, umpire K-factor, and catcher framing are combined. <span class="pp">|</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Daily 9-Man Lineups on Full-Game ML** | Adding prior-year 9-man lineup wOBA + handedness HR park factor on top of `EXP-014` `M6` is flat (`0.24435 vs. 0.24471` (nested `M6 + lineups`), `n = 2,430`). | Confirms honestly that daily lineup composition delivers its sharpest incremental alpha in **player props** rather than raw full-game moneylines where team BaseRuns + SP FIP already captures most macro offensive variance. <span class="pp">|</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Ballpark Handedness HR Asymmetry** <span class="pp">|</span> Combines exact daily LHB% with <span class="in">`EXP-006`</span> <span class="in">`pf_hr_lhb`</span> vs. <span class="in">`pf_hr_rhb`</span> across all 30 MLB parks. <span class="pp">|</span> Captures venue-specific platoon stacking (e.g., LHB-heavy lineups at Yankee Stadium vs. RHB-heavy lineups at Fenway). <span class="pp">|</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 1: Locked 2025 OOS Pitcher Strikeout Prop Calibration — Over 5.5 K](../assets/kprop01_sp_strikeout_prop_calibration.png)</span>{width=100%}</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Domain Problem &amp; Player-Prop Market Structure</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>Why do sharp syndicates allocate substantial capital to **Pitcher Strikeout Props**? Because a starting pitcher's strikeout total is directly governed by **6 compounding, pre-game observable physical &amp; environmental factors**: (1) the starter's own K% &amp; batters-faced stamina (<span class="in">`BF/GS`</span>), (2) the exact 9 batters in today's opposing lineup (<span class="in">`opp_lineup_k`</span>), (3) starter arm-slot vertical ride (<span class="in">`ivb_above_slot`</span>, <span class="in">`EXP-011`</span>), (4) ballpark strikeout factor (<span class="in">`pf_so`</span>, <span class="in">`EXP-006`</span>), (5) home-plate umpire strike-zone K tendency (<span class="in">`BASE4_UMP_ID`</span>), and (6) the starting catcher's prior-season framing (<span class="in">`csaa_per_1000`</span>, <span class="in">`EXP-012`</span>).</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Mathematical Formulation &amp; Lake-Wide Pipeline</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>$$\log(\lambda_i) = \beta_0 + \beta_1 \log(\widehat{\text{K\%}}_{\text{SP}, t-1} \cdot \widehat{\text{BF}}_{\text{SP}, t-1}) + \beta_2 \text{OppLineupK\%}_i + \beta_3 \text{IVB}_{\text{slot}, t-1} + \beta_4 \text{PF}_{\text{SO}} + \beta_5 \Delta K_{\text{ump}} + \beta_6 \text{CSAA}_{c, t-1}$$</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>$$P(\text{SO}_i &gt; 5.5) = 1 - \sum_{k=0}^{5} \frac{e^{-\lambda_i}\lambda_i^k}{k!}$$</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="in">```sql</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> memory_limit <span class="op">=</span> <span class="st">'12GB'</span>;</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> season, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_starts,</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fu">AVG</span>(exp_so_m2), <span class="dv">2</span>) <span class="kw">AS</span> mean_exp_so, <span class="fu">ROUND</span>(<span class="fu">AVG</span>(sp_actual_so), <span class="dv">2</span>) <span class="kw">AS</span> mean_act_so,</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fl">100.0</span> <span class="op">*</span> <span class="fu">AVG</span>(p_over_5_5), <span class="dv">1</span>) <span class="kw">AS</span> pred_o55_pct, <span class="fu">ROUND</span>(<span class="fl">100.0</span> <span class="op">*</span> <span class="fu">AVG</span>(y_over_5_5), <span class="dv">1</span>) <span class="kw">AS</span> obs_o55_pct</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> read_parquet(<span class="st">'data/processed/sp_strikeout_prop_backtest_2024_2025.parquet'</span>)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> season <span class="kw">ORDER</span> <span class="kw">BY</span> season;</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Exploratory Data Analysis (EDA) &amp; Handedness Park Diagnostics</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 2: Ballpark Handedness Home Run Asymmetry (PF_HR_LHB minus PF_HR_RHB, 2025)](../assets/kprop03_platoon_park_lineup_asymmetry.png)</span>{width=100%}</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Model Architecture &amp; Temporal Validation (`2024` Train $\rightarrow$ Locked `2025` OOS)</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Model (<span class="in">`Locked 2025 OOS`</span>, <span class="in">`n = 4,859`</span> Starts) <span class="pp">|</span> SO RMSE <span class="pp">|</span> Poisson NLL <span class="pp">|</span> <span class="in">`Over 5.5 K`</span> Brier <span class="pp">|</span> <span class="in">`Over 5.5 K`</span> ROC AUC <span class="pp">|</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|---:|---:|---:|---:|</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`B0_League_Mean`</span> <span class="pp">|</span> <span class="in">`2.4703`</span> <span class="pp">|</span> <span class="in">`2.3163`</span> <span class="pp">|</span> <span class="in">`0.23029`</span> <span class="pp">|</span> <span class="in">`0.5000`</span> <span class="pp">|</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`M1_SP_Prior_Only`</span> <span class="pp">|</span> <span class="in">`2.3542`</span> <span class="pp">|</span> <span class="in">`2.2593`</span> <span class="pp">|</span> <span class="in">`0.21555`</span> <span class="pp">|</span> <span class="in">`0.6409`</span> <span class="pp">|</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **`M2_Pro_K_Prop_Engine`** | **`2.3285`** | **`2.2457`** | **`0.21295`** | **`0.6638`** <span class="pp">|</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Leaderboards &amp; Case Studies (`2025` Starting Pitcher Strikeout Leaders)</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Starting Pitcher (<span class="in">`2025`</span>) <span class="pp">|</span> Starts <span class="pp">|</span> Pre-Game Exp <span class="in">`SO/GS`</span> <span class="pp">|</span> Actual <span class="in">`SO/GS`</span> <span class="pp">|</span> Avg <span class="in">`P(Over 5.5 K)`</span> <span class="pp">|</span> Obs <span class="in">`Over 5.5 K`</span> <span class="pp">|</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|---:|---:|---:|---:|---:|</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Chris Sale** | `20` | **`6.48`** <span class="pp">|</span> <span class="in">`7.80`</span> <span class="pp">|</span> <span class="in">`61.5%`</span> <span class="pp">|</span> <span class="in">`85.0%`</span> <span class="pp">|</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Tarik Skubal** | `31` | **`6.18`** <span class="pp">|</span> <span class="in">`7.77`</span> <span class="pp">|</span> <span class="in">`57.5%`</span> <span class="pp">|</span> <span class="in">`80.6%`</span> <span class="pp">|</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Sonny Gray** | `32` | **`6.18`** <span class="pp">|</span> <span class="in">`6.28`</span> <span class="pp">|</span> <span class="in">`57.8%`</span> <span class="pp">|</span> <span class="in">`59.4%`</span> <span class="pp">|</span></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Paul Skenes** | `32` | **`6.03`** <span class="pp">|</span> <span class="in">`6.75`</span> <span class="pp">|</span> <span class="in">`55.2%`</span> <span class="pp">|</span> <span class="in">`81.2%`</span> <span class="pp">|</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Dylan Cease** | `32` | **`5.98`** <span class="pp">|</span> <span class="in">`6.72`</span> <span class="pp">|</span> <span class="in">`54.6%`</span> <span class="pp">|</span> <span class="in">`75.0%`</span> <span class="pp">|</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Logan Gilbert** | `25` | **`5.96`** <span class="pp">|</span> <span class="in">`6.92`</span> <span class="pp">|</span> <span class="in">`54.0%`</span> <span class="pp">|</span> <span class="in">`76.0%`</span> <span class="pp">|</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="al">![Figure 3: Locked 2025 Starting Pitcher Strikeouts/Start — Predicted vs. Actual](../assets/kprop02_lineup_k_pct_vs_sp_strikeouts.png)</span>{width=100%}</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Interactive 2025 Pitcher Strikeout Prop Explorer</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../assets/kprop02_lineup_k_pct_vs_sp_strikeouts.html"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"520"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"border: 1px solid #1e293b; border-radius: 8px; background: #090d16;"</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. Downstream Integration &amp; Market Applications</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>With <span class="in">`EXP-015`</span>, <span class="in">`mlbr`</span> now prices **five distinct MLB quantitative markets** end-to-end strictly out-of-sample: **Full-Game Moneylines**, **First-5-Innings (F5) Moneylines**, **Over/Under Totals**, **Starting Pitcher Strikeout Props (`Over 4.5 / 5.5 / 6.5 K`)**, and **Exact 12-Team Playoff &amp; World Series Futures**.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
