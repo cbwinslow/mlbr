@@ -656,3 +656,35 @@ test_that("EXP-016 Silver statcast_biomechanics & Dynamic State-Space NegBin K-P
   expect_gt(ab$auc_o55[ab$model == "M4_NegBin_Dynamic_StateSpace"], ab$auc_o55[ab$model == "M3_NegBin_Static"] + 0.01)
   expect_lt(ab$brier_o75[ab$model == "M4_NegBin_Dynamic_StateSpace"], ab$brier_o75[ab$model == "M3_NegBin_Static"])
 })
+
+test_that("EXP-017 Native v_statcast_biomechanics View & Batter HR/TB Props satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  con <- lake_duckdb(lake)
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+  expect_true("v_statcast_biomechanics" %in% DBI::dbListTables(con))
+  bio_chk <- DBI::dbGetQuery(con, "SELECT COUNT(*) AS n, ROUND(AVG(csaa_pitch), 6) AS m_csaa FROM v_statcast_biomechanics")
+  expect_gt(bio_chk$n, 4500000L)
+  expect_lt(abs(bio_chk$m_csaa), 1e-5)
+
+  proc <- file.path(lake, "data/processed")
+  bg_p <- file.path(proc, "batter_hr_tb_prop_backtest_2024_2025.parquet")
+  ab_p <- file.path(proc, "batter_hr_tb_ablation_metrics_2025.parquet")
+  skip_if_not(file.exists(bg_p) && file.exists(ab_p), "EXP-017 Gold files not materialized")
+
+  bg <- arrow::read_parquet(bg_p)
+  ab <- arrow::read_parquet(ab_p)
+
+  expect_gt(nrow(bg), 87000L)
+  expect_true(all(bg$p_hr_m2 > 0 & bg$p_hr_m2 < 0.65))
+  expect_true(all(bg$p_tb2_m2 >= bg$p_hr_m2))
+  # M2 must strictly beat M1 (ISO/SLG only) on both HR>=1 and TB>=2 Log-Loss & ROC AUC
+  expect_lt(ab$log_loss[ab$market == "Home Run (HR >= 1)" & ab$model == "M2_Pro_Biomech_Env"],
+            ab$log_loss[ab$market == "Home Run (HR >= 1)" & ab$model == "M1_Prior_ISO_Only"])
+  expect_gt(ab$roc_auc[ab$market == "Home Run (HR >= 1)" & ab$model == "M2_Pro_Biomech_Env"],
+            ab$roc_auc[ab$market == "Home Run (HR >= 1)" & ab$model == "M1_Prior_ISO_Only"] + 0.015)
+  expect_lt(ab$log_loss[ab$market == "Total Bases (TB >= 2)" & ab$model == "M2_Pro_Biomech_Env"],
+            ab$log_loss[ab$market == "Total Bases (TB >= 2)" & ab$model == "M1_Prior_ISO_Only"])
+  expect_gt(ab$roc_auc[ab$market == "Total Bases (TB >= 2)" & ab$model == "M2_Pro_Biomech_Env"],
+            ab$roc_auc[ab$market == "Total Bases (TB >= 2)" & ab$model == "M1_Prior_ISO_Only"] + 0.020)
+})

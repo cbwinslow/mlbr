@@ -131,11 +131,12 @@ lake_duckdb <- function(lake = NULL, dbdir = ":memory:", read_only = TRUE) {
     lake_register_features(con, lake = lake)
     registered <- registered + 1L
     lake_register_tunneling(con, lake = lake)
+    lake_register_biomechanics(con, lake = lake)
     registered <- registered + 1L
   }
 
   mounted_v <- DBI::dbGetQuery(con, "SELECT table_name FROM information_schema.views WHERE table_name LIKE 'v_%'")$table_name
-  ordered_v <- c(names(views), "v_statcast_features", "v_statcast_tunneling")
+  ordered_v <- c(names(views), "v_statcast_features", "v_statcast_tunneling", "v_statcast_biomechanics")
   active_views <- ordered_v[ordered_v %in% mounted_v]
   message(sprintf("Mounted %d zero-copy DuckDB views over %s.", length(active_views), lake))
   message("Available views: ", paste(active_views, collapse = ", "))

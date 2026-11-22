@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 17</span>
+    <span class="gallery-badge">Batter HR &amp; TB Props</span>
+    <h4><a href="analyses/17_batter_hr_total_bases_props.html">Batter Home Run (HR&gt;=1) &amp; Total Bases (TB&gt;=2) Prop Engine</a></h4>
+    <p>Powered by the 17th native DuckDB view <code>v_statcast_biomechanics</code> (4.55M Silver pitches) + handedness park HR + weather carry across 43,740 locked-2025 starts: <code>HR&gt;=1</code> <code>AUC 0.6155</code> (<code>+0.0195</code>) &amp; <code>TB&gt;=2</code> <code>AUC 0.5695</code> (<code>+0.0277</code>).</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">43,740 OOS Starts | HR AUC 0.6155 | TB&gt;=2 AUC 0.5695 | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 16</span>
     <span class="gallery-badge">State-Space &amp; NegBin</span>
     <h4><a href="analyses/16_dynamic_statespace_negbin_k_props.html">Dynamic State-Space Updates &amp; Negative Binomial K-Props</a></h4>

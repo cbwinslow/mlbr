@@ -929,5 +929,55 @@
       "fig_state": "models/dyn02_inseason_csw_kprop_lift.html",
       "fig_ablation": "models/dyn03_dynamic_ablation_shootout.png"
     }
+  },
+  {
+    "id": "EXP-017-BATTER-HR-TOTAL-BASES-PROPS",
+    "title": "Batter Home Run (HR >= 1) & Total Bases (TB >= 2) Prop Pricing Engine via v_statcast_biomechanics",
+    "tier": 5,
+    "tier_name": "Level 5: Betting Markets & Staking",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 03:52:42 UTC",
+    "summary": "Registered v_statcast_biomechanics (17th DuckDB view, 4.55M Silver pitches) and built a strictly chronological Batter Home Run & Total Bases Prop Engine (2024 train n=43722 -> locked 2025 OOS n=43740 starting batter-games). Combining Silver bat_speed & Blast Rate with handedness park HR factors (pf_hr_lhb/rhb), game-time temp/wind carry, batting-order slot, platoon, and opposing SP HR% lifted locked-2025 OOS HR>=1 AUC 0.5960 -> 0.6155 (LL 0.35614 -> 0.35303) and TB>=2 AUC 0.5418 -> 0.5695 (LL 0.64849 -> 0.64427).",
+    "hypotheses": [
+      "Integrating Silver bat_speed and Blast Rate with handedness park HR factors, game-time weather/wind carry, batting-order slot, platoon, and opposing SP HR% strictly beats prior-ISO-only and league-mean baselines on locked 2025 OOS Home Run (HR>=1) and Total Bases (TB>=2) Log-Loss and ROC AUC."
+    ],
+    "formulas": {
+      "hr_prop_logit": "logit(P(HR>=1)) = b0 + b1*EB_ISO + b2*EB_HR + b3*BatSpeed + b4*Blast + b5*Slot + b6*Platoon + b7*PF_HR_hand + b8*Temp + b9*WindOut + b10*OppSP_HR",
+      "tb2_prop_logit": "logit(P(TB>=2)) = g0 + g1*EB_SLG + g2*EB_ISO + g3*BatSpeed + g4*Blast + g5*Slot + g6*Platoon + g7*PF_Runs + g8*PF_HR_hand + g9*Temp + g10*WindOut + g11*OppSP_HR"
+    },
+    "metrics": {
+      "n_locked_2025_batter_games": 43740,
+      "oos_2025_hr_auc_m1": 0.596,
+      "oos_2025_hr_auc_m2": 0.6155,
+      "oos_2025_hr_ll_m1": 0.35614,
+      "oos_2025_hr_ll_m2": 0.35303,
+      "oos_2025_tb2_auc_m1": 0.5418,
+      "oos_2025_tb2_auc_m2": 0.5695,
+      "oos_2025_tb2_ll_m1": 0.64849,
+      "oos_2025_tb2_ll_m2": 0.64427
+    },
+    "features": [
+      "prior_bs",
+      "prior_blast",
+      "eb_iso",
+      "eb_slg",
+      "slot",
+      "is_platoon",
+      "pf_hr_hand",
+      "temp_f",
+      "wind_out_mph",
+      "opp_sp_hr",
+      "p_hr_m2",
+      "p_tb2_m2"
+    ],
+    "artifacts": {
+      "spec": "specs/17_batter_hr_total_bases_props.md",
+      "script": "models/17_batter_hr_total_bases_props.R",
+      "gold_props": "data/processed/batter_hr_tb_prop_backtest_2024_2025.parquet",
+      "gold_ablat": "data/processed/batter_hr_tb_ablation_metrics_2025.parquet",
+      "fig_cal": "models/bprop01_hr_prop_calibration_2025.png",
+      "fig_leaders": "models/bprop02_batter_hr_prop_leaders_2025.html",
+      "fig_ablation": "models/bprop03_batter_prop_ablation_2025.png"
+    }
   }
 ]

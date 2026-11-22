@@ -23,9 +23,9 @@
 
 ---
 
-## 2. Verified Baseline (All 16 Completed & Audited Experiments — Full 5-Tier Hierarchy + Pro Signal Expansion Complete!)
+## 2. Verified Baseline (All 17 Completed & Audited Experiments — Full 5-Tier Hierarchy + Pro Signal Expansion Complete!)
 
-All 16 experiments (`EXP-001` through `EXP-016`) are completed, independently audited, logged in `experiments/registry.json`, verified across `180+` `testthat` unit tests + `45/45` Quarto pages, and green in GitHub Actions CI:
+All 17 experiments (`EXP-001` through `EXP-017`) are completed, independently audited, logged in `experiments/registry.json`, verified across `190+` `testthat` unit tests + `47/47` Quarto pages, and green in GitHub Actions CI:
 
 | Exp ID | Tier | Name | Key Validated Result | Study & Lab |
 |:---|:---:|:---|:---|:---|
@@ -45,6 +45,7 @@ All 16 experiments (`EXP-001` through `EXP-016`) are completed, independently au
 | **EXP-014** | 5B | Unified Pro Multi-Market & 12-Team Bracket | Locked 2025 OOS F5 AUC `0.5846`, Totals RMSE `-0.0118 R/G`, 50,000 exact 12-team brackets (`NYY 12.91%`, `LAD 10.62%` WS) | `14_unified_pro_game_f5_totals_bracket.qmd` / `lab14` |
 | **EXP-015** | 5C | Daily 9-Man Lineups & SP Strikeout Props | 89,118 lineup slots, 4,859 locked-2025 OOS starts: `Over 5.5 K` AUC `0.6638` (`+0.0228` lift), SO RMSE `2.3285` | `15_daily_lineups_platoon_k_props.qmd` / `lab15` |
 | **EXP-016** | 5D | Silver Biomech + Dynamic State-Space NegBin K-Props | 4.55M Silver pitches + NegBin (`theta=46.9`) + 30d `CSW%` state-space: `Over 5.5 K` AUC `0.6779`, Brier `0.2095`, `Over 7.5 K` Brier `0.1133` | `16_dynamic_statespace_negbin_k_props.qmd` / `lab16` |
+| **EXP-017** | 5E | Batter HR & Total Bases Props (`v_statcast_biomechanics`) | 17th DuckDB view + 43,740 locked-2025 starts: `HR>=1` AUC `0.6155` (`+0.0195`), `TB>=2` AUC `0.5695` (`+0.0277`) | `17_batter_hr_total_bases_props.qmd` / `lab17` |
 
 ---
 

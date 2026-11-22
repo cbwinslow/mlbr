@@ -80,6 +80,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** Materialize `data/features/statcast_biomechanics/` (`4.55M` pitches `2020–2026`, Hive-partitioned ZSTD Parquet) via `R/materialize_biomechanics_framing.R`, and upgrade Strikeout Props to a `MASS::glm.nb` Negative Binomial model incorporating strictly pre-game (`date < t`) trailing 30-day starter `CSW%` ($M = 150$) and `K%` ($M = 60$).
 - **Consequences:** Improves locked-2025 OOS (`n = 4,859` starts) SO RMSE `2.3285 -> 2.3068`, exact Count NLL `2.2457 -> 2.2327`, `Over 5.5 K` Brier `0.21295 -> 0.20948` / AUC `0.6638 -> 0.6779`, and `Over 7.5 K` tail Brier `0.11499 -> 0.11333`, while cleanly documenting that 30-day club offensive streaks (`xwOBA` + `bat_speed`) add variance rather than signal to Full-Game ML.
 
+## ADR-013: Native Silver View `v_statcast_biomechanics` (17th Lake View) & Batter HR / Total Bases Prop Pricing
+- **Status:** Accepted (2026-11-21)
+- **Context:** Promoting `data/features/statcast_biomechanics/` (`4.55M` pitches) to a first-class zero-copy DuckDB view eliminates repeated `read_parquet()` path boilerplate across studies and unlocks batter-level power prop pricing (`HR >= 1` and `TB >= 2`).
+- **Decision:** Export `mlbr::lake_register_biomechanics()` and auto-mount `v_statcast_biomechanics` inside `mlbr::lake_duckdb()` (17th view), and price batter `HR >= 1` and `TB >= 2` props via strictly chronological logistic models (`2024` train `n = 43,722` $\rightarrow$ locked `2025` OOS `n = 43,740`) combining `season - 1` Silver `bat_speed`/Blast Rate, batting-order slot, platoon, handedness `pf_hr_hand`, weather/wind carry, and opposing SP `HR%`.
+- **Consequences:** Lifts locked-2025 OOS `HR >= 1` ROC AUC `0.5960 -> 0.6155` (`-0.00311` Log-Loss) and `TB >= 2` ROC AUC `0.5418 -> 0.5695` (`-0.00422` Log-Loss), expanding `mlbr` to six validated out-of-sample MLB markets across 17 studies and 17 companion labs.
+
 ---
 
 ## Template for New ADRs

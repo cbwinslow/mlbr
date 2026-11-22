@@ -91,6 +91,8 @@ website:
               href: workbooks/lab15_daily_lineups_platoon_k_props_workbook.qmd
             - text: "Lab 16: Dynamic State-Space & NegBin K-Props"
               href: workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.qmd
+            - text: "Lab 17: Batter HR & Total Bases Props"
+              href: workbooks/lab17_batter_hr_total_bases_props_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -127,6 +129,8 @@ website:
               href: analyses/15_daily_lineups_platoon_k_props.qmd
             - text: "Study 16: Dynamic State-Space & NegBin K-Props"
               href: analyses/16_dynamic_statespace_negbin_k_props.qmd
+            - text: "Study 17: Batter HR & Total Bases Props"
+              href: analyses/17_batter_hr_total_bases_props.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

@@ -46,7 +46,8 @@
     - `14_unified_pro_game_f5_totals_bracket.qmd`: Study 14 — Unified Pro Multi-Market Engine (ML, F5, Totals) & Exact 12-Team Playoff Bracket (`EXP-014`).
     - `15_daily_lineups_platoon_k_props.qmd`: Study 15 — Daily 9-Man Starting Lineups, Platoon Parks & Pitcher Strikeout Prop Engine (`EXP-015`).
     - `16_dynamic_statespace_negbin_k_props.qmd`: Study 16 — Dynamic In-Season State-Space Updates & Negative Binomial Overdispersed K-Props (`EXP-016`).
-  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab16`).
+    - `17_batter_hr_total_bases_props.qmd`: Study 17 — Batter Home Run (HR>=1) & Total Bases (TB>=2) Prop Pricing Engine (`EXP-017`).
+  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab17`).
 - Build command: `quarto render site/` from project root.
 
 ## Verification

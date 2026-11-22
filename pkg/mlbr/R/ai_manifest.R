@@ -42,7 +42,7 @@ build_lake_manifest <- function(lake = NULL) {
   }
 
   # 2. Key views column catalogs & null profiles
-  key_views <- c("v_statcast", "v_statcast_features", "v_statcast_tunneling",
+  key_views <- c("v_statcast", "v_statcast_features", "v_statcast_tunneling", "v_statcast_biomechanics",
                  "v_retrosheet_plays", "v_retrosheet_games",
                  "v_fangraphs_bat", "v_fangraphs_pitch", "v_chadwick_register",
                  "v_lahman_people", "v_mlbmeta_schedule")
@@ -318,6 +318,7 @@ con <- mlbr::lake_duckdb()
 # - v_lahman_people         (Historical biographical registry)
 # - v_statcast_features     (14.64M Silver physics/platoon/outcome rows, ZSTD Parquet)
 # - v_statcast_tunneling    (10.2M Silver commit-point y=23.8ft tunneling pairs, ZSTD Parquet)
+# - v_statcast_biomechanics (4.55M Silver arm_angle ride, Alan Nathan MaxEV/Blast & zero-sum CSAA, ZSTD Parquet)
 # - v_mlbmeta_schedule      (Official MLB schedule 2008-2026)
 ```
 

@@ -315,3 +315,34 @@ lake_register_tunneling <- function(con, lake = NULL, force_dynamic = FALSE) {
   DBI::dbExecute(con, "CREATE OR REPLACE VIEW statcast_tunneling AS SELECT * FROM v_statcast_tunneling;")
   invisible(con)
 }
+
+#' Register Pitch-Level Silver Biomechanics & Catcher Framing View
+#'
+#' Mounts the materialized Silver Parquet lake (`data/features/statcast_biomechanics`)
+#' as `v_statcast_biomechanics` (and alias `statcast_biomechanics`) in an active
+#' DuckDB connection, exposing `ivb_above_slot`, Alan Nathan `max_ev_mph`/`sq_ratio`/`is_blast`,
+#' and zero-sum pitch-level catcher framing `csaa_pitch`.
+#'
+#' @param con Active DBI/DuckDB connection from [lake_duckdb()].
+#' @param lake Optional path to lake root. Defaults to [default_lake()].
+#' @return Invisibly returns `TRUE` if mounted, `FALSE` if Silver directory is absent.
+#' @export
+#' @examples
+#' \dontrun{
+#' con <- lake_duckdb()
+#' lake_register_biomechanics(con)
+#' }
+lake_register_biomechanics <- function(con, lake = NULL) {
+  if (is.null(lake)) lake <- default_lake()
+  bio_dir <- file.path(lake, "data", "features", "statcast_biomechanics")
+  if (!dir.exists(bio_dir)) return(invisible(FALSE))
+  parq_files <- Sys.glob(file.path(bio_dir, "*", "*.parquet"))
+  if (length(parq_files) == 0L) return(invisible(FALSE))
+  sql <- sprintf(
+    "CREATE OR REPLACE VIEW v_statcast_biomechanics AS SELECT * FROM read_parquet('%s/*/*.parquet', hive_partitioning = true);",
+    bio_dir
+  )
+  DBI::dbExecute(con, sql)
+  DBI::dbExecute(con, "CREATE OR REPLACE VIEW statcast_biomechanics AS SELECT * FROM v_statcast_biomechanics;")
+  invisible(TRUE)
+}
