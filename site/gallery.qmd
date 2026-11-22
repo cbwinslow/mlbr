@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge ml">Q-CRISP Study 16</span>
+    <span class="gallery-badge">State-Space &amp; NegBin</span>
+    <h4><a href="analyses/16_dynamic_statespace_negbin_k_props.html">Dynamic State-Space Updates &amp; Negative Binomial K-Props</a></h4>
+    <p>4.55M-pitch Silver <code>statcast_biomechanics</code> materialization + Negative Binomial overdispersion (<code>Var/Mean = 1.28</code>) + zero-leakage trailing 30-day starter <code>CSW%</code>/<code>K%</code> state-space engine pushing locked-2025 <code>Over 5.5 K</code> to <code>AUC 0.6779</code> &amp; <code>Brier 0.2095</code>.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">4.55M Silver Pitches | Over 5.5 K AUC 0.6779 | Over 7.5 K Tail Lift | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 15</span>
     <span class="gallery-badge">Lineups &amp; K-Props</span>
     <h4><a href="analyses/15_daily_lineups_platoon_k_props.html">Daily 9-Man Starting Lineups &amp; Pitcher Strikeout (SO) Prop Engine</a></h4>

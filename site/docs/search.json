@@ -1068,63 +1068,99 @@
     ]
   },
   {
-    "objectID": "workbooks/lab02_platoon_physics_workbook.html",
-    "href": "workbooks/lab02_platoon_physics_workbook.html",
-    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
+    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html",
+    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html",
+    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
     "section": "",
-    "text": "TipHow to Use This Workbook\n\n\n\nOpen RStudio Server at http://192.168.10.1:8787, open mlbr.Rproj, and execute workbooks/lab02_platoon_physics_workbook.R line-by-line with Ctrl + Enter. Pair this lab with the full Q-CRISP research study: Study 02: 4-Quadrant Platoon Physics & PVI.",
+    "text": "TipHow to Use This Workbook\n\n\n\nOpen RStudio Server at http://192.168.10.1:8787, open mlbr.Rproj, and run workbooks/lab08_team_baseruns_pythagenpat_workbook.R line-by-line with Ctrl + Enter. Companion Q-CRISP study: Study 08: BaseRuns, Pythagenpat & 2026 Standings.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 02: 4-Quadrant Platoon Physics & PVI"
+      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
     ]
   },
   {
-    "objectID": "workbooks/lab02_platoon_physics_workbook.html#batter-perspective-break-symmetry-hb_away_in-pvi-math",
-    "href": "workbooks/lab02_platoon_physics_workbook.html#batter-perspective-break-symmetry-hb_away_in-pvi-math",
-    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
-    "section": "1. Batter-Perspective Break Symmetry (hb_away_in) & PVI Math",
-    "text": "1. Batter-Perspective Break Symmetry (hb_away_in) & PVI Math\nStatcast measures horizontal break (pfx_x) from the catcher’s point of view (+ toward 1st base, - toward 3rd base). To compare all four handedness matchups (RvR, RvL, LvL, LvR) on a single physical axis, we define batter-perspective horizontal break away from the hitter:\n\\[\\text{hb\\_away\\_in} = \\begin{cases} +12 \\cdot \\text{pfx\\_x} & \\text{if } \\text{stand} = \\text{R} \\text{ (1st-base side is away)} \\\\ -12 \\cdot \\text{pfx\\_x} & \\text{if } \\text{stand} = \\text{L} \\text{ (3rd-base side is away)} \\end{cases}\\]\nUnder this coordinate transform, a 15-inch sweeper yields +15.0 in (breaking away from the barrel) in both RvR and LvL, and -15.0 in (breaking back into the barrel) in both RvL and LvR.\n\nEmpirical Bayes Pitcher Platoon Vulnerability Index (PVI)\nRaw same-hand vs. opposite-hand splits are noisy for relievers and rookies. We stabilize each pitcher’s platoon split using the harmonic-mean effective sample size \\(n_{\\text{eff}}\\) and shrinkage constant \\(M = 800\\) pitches:\n\\[n_{\\text{eff}} = \\frac{2 \\, n_{\\text{same}} \\, n_{\\text{opp}}}{n_{\\text{same}} + n_{\\text{opp}}}, \\qquad \\text{PVI}_{\\text{xwOBA}} = \\frac{n_{\\text{eff}}}{n_{\\text{eff}} + 800} \\cdot (\\text{xwOBA}_{\\text{opp}} - \\text{xwOBA}_{\\text{same}})\\]\n\nA small sample (120 same vs. 120 opp, raw +0.080 split) receives only 13.0% weight → PVI = +0.010.\nA large sample (1,800 same vs. 1,800 opp, raw +0.080 split) receives 69.2% weight → PVI = +0.055.",
+    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#first-principles-baseruns-dynamic-pythagenpat-math",
+    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#first-principles-baseruns-dynamic-pythagenpat-math",
+    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
+    "section": "1. First-Principles BaseRuns & Dynamic Pythagenpat Math",
+    "text": "1. First-Principles BaseRuns & Dynamic Pythagenpat Math\n\\[\\text{BaseRuns} = \\frac{A \\cdot B}{B + C} + D, \\qquad \\gamma = \\left(\\frac{RS + RA}{G}\\right)^{0.287}\\]",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 02: 4-Quadrant Platoon Physics & PVI"
+      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
     ]
   },
   {
-    "objectID": "workbooks/lab02_platoon_physics_workbook.html#full-population-4-quadrant-duckdb-query-20202026",
-    "href": "workbooks/lab02_platoon_physics_workbook.html#full-population-4-quadrant-duckdb-query-20202026",
-    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
-    "section": "2. Full-Population 4-Quadrant DuckDB Query (2020–2026)",
-    "text": "2. Full-Population 4-Quadrant DuckDB Query (2020–2026)\nRunning Part 2 of workbooks/lab02_platoon_physics_workbook.R executes directly over our ADR-001 ZSTD sorted Silver table v_statcast_features (14.64M rows):\n\n\n\n\n\n\n\n\n\n\n\n\nPitch\nQuadrant\nPitches\nMean hb_away_in\nCSW%\nWhiff% (Swings)\nxwOBA\n\n\n\n\nSweeper (ST)\nLvL (Same)\n32,142\n+13.95 in\n30.55%\n35.95%\n.227\n\n\nSweeper (ST)\nRvR (Same)\n138,291\n+13.83 in\n30.23%\n34.12%\n.251\n\n\nSweeper (ST)\nLvR (Opp)\n34,137\n-13.75 in\n32.32%\n28.90%\n.285\n\n\nSweeper (ST)\nRvL (Opp)\n61,481\n-13.83 in\n32.16%\n28.01%\n.298\n\n\nChangeup (CH)\nRvL (Opp)\n232,104\n+14.21 in\n23.87%\n29.18%\n.293\n\n\nChangeup (CH)\nLvR (Opp)\n161,863\n+14.05 in\n25.61%\n31.62%\n.293\n\n\n\nNotice the crisp physics law: Sweepers dominate same-handed batters (+14 in away → .227–.251 xwOBA), while Changeups flip the sign (+14 in away against opposite-handed hitters) to neutralize platoon disadvantage.",
+    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#diagnostic-chart-2026-mlb-playoff-odds-by-division-10000-mc-seasons",
+    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#diagnostic-chart-2026-mlb-playoff-odds-by-division-10000-mc-seasons",
+    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
+    "section": "2. Diagnostic Chart: 2026 MLB Playoff Odds by Division (10,000 MC Seasons)",
+    "text": "2. Diagnostic Chart: 2026 MLB Playoff Odds by Division (10,000 MC Seasons)\n\n\n\nLab 08 Diagnostic: 2026 MLB Playoff Probabilities by Division",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 02: 4-Quadrant Platoon Physics & PVI"
+      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
     ]
   },
   {
-    "objectID": "workbooks/lab02_platoon_physics_workbook.html#dark-cyber-visual-diagnostic",
-    "href": "workbooks/lab02_platoon_physics_workbook.html#dark-cyber-visual-diagnostic",
-    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
-    "section": "3. Dark Cyber Visual Diagnostic",
-    "text": "3. Dark Cyber Visual Diagnostic\n\n\n\nLab 02 Diagnostic: Batter-Perspective Break vs. Whiff% Across All 4 Quadrants\n\n\nPreserved Assets: models/lab02_platoon_break_whiff_matrix.rds & models/lab02_platoon_break_whiff_matrix.parquet\nFor the interactive pitcher PVI scatter explorer, see Study 02: 4-Quadrant Platoon Physics & PVI.",
+    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#mentor-checkpoints-hands-on-exercises",
+    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#mentor-checkpoints-hands-on-exercises",
+    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
+    "section": "3. Mentor Checkpoints (Hands-On Exercises)",
+    "text": "3. Mentor Checkpoints (Hands-On Exercises)\n\nCheckpoint 1 (BaseRuns vs. Sequencing Luck): Query hist_dt[season == 2024][order(-luck_wins)]. Which 2024 clubs outperformed their BaseRuns expectation the most, and how did they regress in 2025?\nCheckpoint 2 (Dynamic Pythagenpat Exponent Across Eras): Compare mean pyth_gamma in 2014 (low-scoring) vs. 2019 (high-scoring). Why is a \\(+100\\) run differential worth more wins in a low-run era?\nCheckpoint 3 (Division Difficulty & Schedule Strength): Compare the 2026 NL East (Phillies/Braves/Mets) vs. the AL West (Mariners). Why do the 87.2-win Mariners hold higher division odds (40.9%) than the 88.0-win Phillies (28.9%)?",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 02: 4-Quadrant Platoon Physics & PVI"
+      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
     ]
   },
   {
-    "objectID": "workbooks/lab02_platoon_physics_workbook.html#hands-on-mentor-checkpoints",
-    "href": "workbooks/lab02_platoon_physics_workbook.html#hands-on-mentor-checkpoints",
-    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
-    "section": "4. Hands-On Mentor Checkpoints",
-    "text": "4. Hands-On Mentor Checkpoints\nComplete these 3 exercises inside workbooks/lab02_platoon_physics_workbook.R in RStudio Server, then ask me to review your code and interpretation:\n\nCheckpoint 1 — Splitters (FS) & Cutters (FC): Modify the Part 2 SQL WHERE pitch_type IN (...) filter to add 'FS' and 'FC'. Explain physically why splitters exhibit smaller platoon xwOBA gaps than sweepers (ST).\nCheckpoint 2 — Starter Times-Through-Order (TTO) Decay: Load data/processed/starter_tto_platoon_2020_2026.parquet and plot xwoba across 1st, 2nd, and 3rd TTO faceted by platoon advantage.\nCheckpoint 3 — Shrinkage Sensitivity: Change M in calc_pvi() from 800 to 200 and 2000. Observe how shrinkage controls small-sample reliever volatility.\n\nNext Lab: Lab 03: Commit-Point Pitch Tunneling & Stuff+ / Location+",
+    "objectID": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html",
+    "href": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html",
+    "title": "Lab 11 Work-Along: Hawk-Eye Bat-Tracking & Pitcher Arm-Slot Biomechanics",
+    "section": "",
+    "text": "TipHow to Use This Workbook\n\n\n\nOpen RStudio Server at http://192.168.10.1:8787, open mlbr.Rproj, and run workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.R line-by-line with Ctrl + Enter. Companion Q-CRISP study: Study 11: Hawk-Eye Bat-Tracking & Arm-Slot Biomechanics.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 02: 4-Quadrant Platoon Physics & PVI"
+      "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#first-principles-collision-physics-maxev-squared-up-blast-rate",
+    "href": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#first-principles-collision-physics-maxev-squared-up-blast-rate",
+    "title": "Lab 11 Work-Along: Hawk-Eye Bat-Tracking & Pitcher Arm-Slot Biomechanics",
+    "section": "1. First-Principles Collision Physics: MaxEV, Squared-Up & Blast Rate",
+    "text": "1. First-Principles Collision Physics: MaxEV, Squared-Up & Blast Rate\n\\[\\text{MaxEV} = 1.23 \\cdot v_{\\text{bat}} + 0.2116 \\cdot v_{\\text{release}}\\]\nA batted ball is Squared-Up when \\(\\text{SqUp} = \\text{EV} / \\text{MaxEV} \\ge 0.80\\), and is a Blast when \\(\\text{SqUp} \\ge 0.80\\) and \\(v_{\\text{bat}} + 100 \\cdot \\text{SqUp} \\ge 164\\).",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#diagnostic-chart-competitive-bat-speed-vs.-2025-isolated-power-iso",
+    "href": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#diagnostic-chart-competitive-bat-speed-vs.-2025-isolated-power-iso",
+    "title": "Lab 11 Work-Along: Hawk-Eye Bat-Tracking & Pitcher Arm-Slot Biomechanics",
+    "section": "2. Diagnostic Chart: Competitive Bat Speed vs. 2025 Isolated Power (ISO)",
+    "text": "2. Diagnostic Chart: Competitive Bat Speed vs. 2025 Isolated Power (ISO)\n\n\n\nLab 11 Diagnostic: Competitive Bat Speed vs. Isolated Power (2025)",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#mentor-checkpoints-hands-on-exercises",
+    "href": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#mentor-checkpoints-hands-on-exercises",
+    "title": "Lab 11 Work-Along: Hawk-Eye Bat-Tracking & Pitcher Arm-Slot Biomechanics",
+    "section": "3. Mentor Checkpoints (Hands-On Exercises)",
+    "text": "3. Mentor Checkpoints (Hands-On Exercises)\n\nCheckpoint 1 (Compact vs. Long Power Swings): Compare Juan Soto (73.5 mph, 7.03 ft swing length, 32.9% Blast Rate) against Giancarlo Stanton (79.9 mph, 8.76 ft, 31.0% Blast Rate). Compute mean_bat_speed / mean_swing_length across b25 to identify MLB’s highest angular-whip hitters.\nCheckpoint 2 (Why Arm Angle Matters for 4-Seam Whiffs): In pitcher_arm_angle_biomechanics_2020_2026.parquet (season == 2025), compare mean ff_whiff_rate for pitchers with ivb_above_slot &gt;= +1.5\" vs. &lt;= -1.5\".\nCheckpoint 3 (Process vs. Outcome Reliability): Inspect biomechanics_yoy_reliability_2024_2025.parquet. Why does bat_speed (r = 0.923 YoY) cut locked-2025 OOS ISO RMSE by 3.65% even when prior-year ISO is already in the regression?",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
     ]
   },
   {
@@ -1660,7 +1696,7 @@
     "href": "gallery.html#machine-learning-classification",
     "title": "Analyses Gallery",
     "section": "Machine Learning & Classification",
-    "text": "Machine Learning & Classification\n\n\n\n  \n    Q-CRISP Study 15\n    Lineups & K-Props\n    Daily 9-Man Starting Lineups & Pitcher Strikeout (SO) Prop Engine\n    89,118 exact starting lineup slots (2024–2025) & 9,714 MLB starts: Poisson Strikeout Prop engine combining SP prior K%, opposing 9-man lineup K%, arm-slot ride, park pf_so, umpire K-factor & catcher framing delivers locked-2025 Over 5.5 K AUC 0.6638 (+0.0228 lift).\n  \n  \n    \n    89,118 Lineup Slots | 4,859 OOS Starts | Over 5.5 K AUC 0.6638 | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 14\n    Unified Pro Engine\n    Unified Pro Multi-Market Engine (ML, F5, Totals) & 12-Team Bracket\n    Synthesizes Arm-Slot ride (EXP-011), Weather/Umpire carry (EXP-012), and 3-day Bullpen Fatigue (EXP-013) into locked-2025 ML, F5 (AUC 0.5846), and Totals (-0.0118 R/G RMSE) pricing + 50,000 exact 12-team MLB playoff brackets.\n  \n  \n    \n    F5 AUC 0.5846 | Totals -0.0118 R/G | 50k Exact 12-Team Brackets | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 13\n    Fatigue & Bullpen\n    Pitcher Stamina, Velocity Decay & Bullpen Fatigue Engine\n    1.44M starter fastballs (2018–2025) pitch-count decay curve (-0.43 mph at P61–80; +0.35 RV/100 at P101+) and 35,812 team-game zero-leakage trailing 3-day bullpen fatigue engine (Taxed 181+ 2.028 R/G vs. Light 1.890 R/G).\n  \n  \n    \n    1.44M Fastballs | 35,812 Team-Games | 2025 Stamina Explorer | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 12\n    Environment & Framing\n    Weather/Wind Carry, Umpire Zones & Catcher Framing (CSAA)\n    25,639 MLB games (2015–2025) temperature/wind scoring carry (+0.33 R/G per +10°F), Empirical Bayes home-plate umpire run factors (-0.0091 R/G OOS Totals RMSE lift), and 1.77M-pitch zero-sum Catcher Framing CSAA (Patrick Bailey +23.8 R).\n  \n  \n    \n    25,639 Games | 1.77M Called Pitches | Bailey +23.8 Framing R | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 11\n    Hawk-Eye Biomechanics\n    Bat-Tracking (1.04M Swings) & Pitcher Arm-Slot Biomechanics\n    Full-population Hawk-Eye bat speed, swing length, attack angle, Blast Rate, and pitcher release arm_angle slot-adjusted ride across 2020–2026: r &gt; 0.92 YoY stability, -3.66% locked-2025 ISO RMSE lift, and +0.0302 OOS 4-seam Whiff AUC gain.\n  \n  \n    \n    1.04M Swings | Arm Angle r=0.963 | +0.0302 FF Whiff AUC | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 10\n    Level 5 Markets\n    Market Edge, CLV & Prediction Market Valuation\n    Chronological Level 4 fair-value blend (2024 train → locked 2025 OOS), Fractional Kelly bankroll optimization (Flat 1u vs. Full/Quarter/Eighth Kelly) across -105 sportsbook & -102 exchange vig regimes, plus 30-club 2026 futures valuation vs. archived Polymarket orderbooks.\n  \n  \n    \n    Locked 2025 OOS | Eighth-Kelly +2.07% ROI | +91.7% PM Overround Audit | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 09\n    Level 4 Simulator\n    24 Base-Out Markov Game Simulator & Win Expectancy\n    Exact 9-inning (+ ghost-runner extra innings) Markov half-inning convolution built from 1.57M Retrosheet PAs, starter TTO stamina, bullpen hand-off, and EXP-006 park factors — backtested strictly out-of-sample across 4,859 MLB games (2024–2025) with 5,372-state empirical Win Expectancy.\n  \n  \n    \n    4,859 OOS Games | Brier 0.2445 | 4.02M-Play Win Expectancy | Interactive WPA\n  \n\n\n\n  \n    Q-CRISP Study 08\n    Level 3 Standings\n    BaseRuns, Dynamic Pythagenpat & 2026 Standings\n    Exact David Smyth BaseRuns across 720 team-seasons (2002–2025, r = 0.983), out-of-time next-season win% forecasting, and a 10,000-season vectorized Monte Carlo simulation over the exact 2026 MLB regular-season schedule.\n  \n  \n    \n    BaseRuns r = 0.983 | Next-Yr RMSE 0.0652 | 10,000 MC Seasons\n  \n\n\n\n  \n    Q-CRISP Study 07\n    PECOTA + ZiPS + EDA\n    PECOTA k-NN Comps, ZiPS 5-Yr Aging & Defense EDA\n    Completes all 5 sabermetric projection paradigms across 70,967 historical player-seasons (1960–2026) and 17,880 fielder-seasons: Non-pitch OAA/DRS/wBsR reliability EDA, ZiPS 8/5/4/3 archetype 5-year trajectories, PECOTA k-NN historical comps & p10–p90 fans, and M5 Convex Meta-Ensemble shootout.\n  \n  \n    \n    OAA YoY r = 0.506 | 70.9k Historical Comps | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 06\n    Level 3 Foundation\n    Empirical Ballpark Factors & Altitude Geometry\n    3-year rolling regressed park factors across 24 seasons (2002–2025) for all 30 MLB venues from 62,598 Retrosheet games and 16.2M+ play events. Quantifies altitude elevation lift (Coors Field ~122), small-sample shrinkage (M = 40 games), and handedness home run wall asymmetry.\n  \n  \n    \n    Dataset: 16.2M Retrosheet Plays | M = 40 Games / M = 1500 PA | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 05\n    Markov + Decisions\n    Decomposed Pitching+ & Batter Process Engine\n    5-head Markov probability pricing across 8.11M pitches eliminating base-out variance (Decomp Pitching+, Decomp Location+) plus zero-mean pitch-level batter Decision+, BatControl+, and Contact+.\n  \n  \n    \n    SIERA w_r -0.504 | Loc+ BB% -0.327 | Decision+ YoY r = 0.846 | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 04\n    Tier 2 Projections\n    Player Projections, Aging Curves & Physics Priors\n    Chronological True-Talent Marcel + Zero-Sum Delta-Method Aging + Stage-2 Residual mlbr Stuff+, Pulled Air%, Zone-Chase Selectivity, and 80% uncertainty bands across 2002–2027.\n  \n  \n    \n    Locked 2025 FIP 0.772 | wOBA 0.0312 | 80% CI Coverage 81–83% | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 03\n    XGBoost + Tunneling\n    Commit-Point Pitch Tunneling & Stuff+ / Pitching+\n    Exact y₀ = 50 ft → 23.8 ft commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost Stuff+, orthogonal Location+, and Pitching+Tunnel trained on 8.11M regular-season pitches.\n  \n  \n    \n    Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly\n  \n\n\n\n  \n    Unsupervised ML\n    Statcast\n    Unsupervised Pitch Clustering\n    K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (pfx_x, pfx_z, velocity, spin). Repertoire discovery without human pitch-tag bias.\n  \n  \n    \n    Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics\n  \n\n\n\n  \n    Supervised ML\n    tidymodels\n    Pitch Type Classification with Random Forest\n    Multi-class classification using ranger and tidymodels to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.\n  \n  \n    \n    Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC",
+    "text": "Machine Learning & Classification\n\n\n\n  \n    Q-CRISP Study 16\n    State-Space & NegBin\n    Dynamic State-Space Updates & Negative Binomial K-Props\n    4.55M-pitch Silver statcast_biomechanics materialization + Negative Binomial overdispersion (Var/Mean = 1.28) + zero-leakage trailing 30-day starter CSW%/K% state-space engine pushing locked-2025 Over 5.5 K to AUC 0.6779 & Brier 0.2095.\n  \n  \n    \n    4.55M Silver Pitches | Over 5.5 K AUC 0.6779 | Over 7.5 K Tail Lift | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 15\n    Lineups & K-Props\n    Daily 9-Man Starting Lineups & Pitcher Strikeout (SO) Prop Engine\n    89,118 exact starting lineup slots (2024–2025) & 9,714 MLB starts: Poisson Strikeout Prop engine combining SP prior K%, opposing 9-man lineup K%, arm-slot ride, park pf_so, umpire K-factor & catcher framing delivers locked-2025 Over 5.5 K AUC 0.6638 (+0.0228 lift).\n  \n  \n    \n    89,118 Lineup Slots | 4,859 OOS Starts | Over 5.5 K AUC 0.6638 | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 14\n    Unified Pro Engine\n    Unified Pro Multi-Market Engine (ML, F5, Totals) & 12-Team Bracket\n    Synthesizes Arm-Slot ride (EXP-011), Weather/Umpire carry (EXP-012), and 3-day Bullpen Fatigue (EXP-013) into locked-2025 ML, F5 (AUC 0.5846), and Totals (-0.0118 R/G RMSE) pricing + 50,000 exact 12-team MLB playoff brackets.\n  \n  \n    \n    F5 AUC 0.5846 | Totals -0.0118 R/G | 50k Exact 12-Team Brackets | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 13\n    Fatigue & Bullpen\n    Pitcher Stamina, Velocity Decay & Bullpen Fatigue Engine\n    1.44M starter fastballs (2018–2025) pitch-count decay curve (-0.43 mph at P61–80; +0.35 RV/100 at P101+) and 35,812 team-game zero-leakage trailing 3-day bullpen fatigue engine (Taxed 181+ 2.028 R/G vs. Light 1.890 R/G).\n  \n  \n    \n    1.44M Fastballs | 35,812 Team-Games | 2025 Stamina Explorer | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 12\n    Environment & Framing\n    Weather/Wind Carry, Umpire Zones & Catcher Framing (CSAA)\n    25,639 MLB games (2015–2025) temperature/wind scoring carry (+0.33 R/G per +10°F), Empirical Bayes home-plate umpire run factors (-0.0091 R/G OOS Totals RMSE lift), and 1.77M-pitch zero-sum Catcher Framing CSAA (Patrick Bailey +23.8 R).\n  \n  \n    \n    25,639 Games | 1.77M Called Pitches | Bailey +23.8 Framing R | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 11\n    Hawk-Eye Biomechanics\n    Bat-Tracking (1.04M Swings) & Pitcher Arm-Slot Biomechanics\n    Full-population Hawk-Eye bat speed, swing length, attack angle, Blast Rate, and pitcher release arm_angle slot-adjusted ride across 2020–2026: r &gt; 0.92 YoY stability, -3.66% locked-2025 ISO RMSE lift, and +0.0302 OOS 4-seam Whiff AUC gain.\n  \n  \n    \n    1.04M Swings | Arm Angle r=0.963 | +0.0302 FF Whiff AUC | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 10\n    Level 5 Markets\n    Market Edge, CLV & Prediction Market Valuation\n    Chronological Level 4 fair-value blend (2024 train → locked 2025 OOS), Fractional Kelly bankroll optimization (Flat 1u vs. Full/Quarter/Eighth Kelly) across -105 sportsbook & -102 exchange vig regimes, plus 30-club 2026 futures valuation vs. archived Polymarket orderbooks.\n  \n  \n    \n    Locked 2025 OOS | Eighth-Kelly +2.07% ROI | +91.7% PM Overround Audit | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 09\n    Level 4 Simulator\n    24 Base-Out Markov Game Simulator & Win Expectancy\n    Exact 9-inning (+ ghost-runner extra innings) Markov half-inning convolution built from 1.57M Retrosheet PAs, starter TTO stamina, bullpen hand-off, and EXP-006 park factors — backtested strictly out-of-sample across 4,859 MLB games (2024–2025) with 5,372-state empirical Win Expectancy.\n  \n  \n    \n    4,859 OOS Games | Brier 0.2445 | 4.02M-Play Win Expectancy | Interactive WPA\n  \n\n\n\n  \n    Q-CRISP Study 08\n    Level 3 Standings\n    BaseRuns, Dynamic Pythagenpat & 2026 Standings\n    Exact David Smyth BaseRuns across 720 team-seasons (2002–2025, r = 0.983), out-of-time next-season win% forecasting, and a 10,000-season vectorized Monte Carlo simulation over the exact 2026 MLB regular-season schedule.\n  \n  \n    \n    BaseRuns r = 0.983 | Next-Yr RMSE 0.0652 | 10,000 MC Seasons\n  \n\n\n\n  \n    Q-CRISP Study 07\n    PECOTA + ZiPS + EDA\n    PECOTA k-NN Comps, ZiPS 5-Yr Aging & Defense EDA\n    Completes all 5 sabermetric projection paradigms across 70,967 historical player-seasons (1960–2026) and 17,880 fielder-seasons: Non-pitch OAA/DRS/wBsR reliability EDA, ZiPS 8/5/4/3 archetype 5-year trajectories, PECOTA k-NN historical comps & p10–p90 fans, and M5 Convex Meta-Ensemble shootout.\n  \n  \n    \n    OAA YoY r = 0.506 | 70.9k Historical Comps | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 06\n    Level 3 Foundation\n    Empirical Ballpark Factors & Altitude Geometry\n    3-year rolling regressed park factors across 24 seasons (2002–2025) for all 30 MLB venues from 62,598 Retrosheet games and 16.2M+ play events. Quantifies altitude elevation lift (Coors Field ~122), small-sample shrinkage (M = 40 games), and handedness home run wall asymmetry.\n  \n  \n    \n    Dataset: 16.2M Retrosheet Plays | M = 40 Games / M = 1500 PA | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 05\n    Markov + Decisions\n    Decomposed Pitching+ & Batter Process Engine\n    5-head Markov probability pricing across 8.11M pitches eliminating base-out variance (Decomp Pitching+, Decomp Location+) plus zero-mean pitch-level batter Decision+, BatControl+, and Contact+.\n  \n  \n    \n    SIERA w_r -0.504 | Loc+ BB% -0.327 | Decision+ YoY r = 0.846 | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 04\n    Tier 2 Projections\n    Player Projections, Aging Curves & Physics Priors\n    Chronological True-Talent Marcel + Zero-Sum Delta-Method Aging + Stage-2 Residual mlbr Stuff+, Pulled Air%, Zone-Chase Selectivity, and 80% uncertainty bands across 2002–2027.\n  \n  \n    \n    Locked 2025 FIP 0.772 | wOBA 0.0312 | 80% CI Coverage 81–83% | Interactive Plotly\n  \n\n\n\n  \n    Q-CRISP Study 03\n    XGBoost + Tunneling\n    Commit-Point Pitch Tunneling & Stuff+ / Pitching+\n    Exact y₀ = 50 ft → 23.8 ft commit-point tunneling across 10.20M pairs plus strictly chronological XGBoost Stuff+, orthogonal Location+, and Pitching+Tunnel trained on 8.11M regular-season pitches.\n  \n  \n    \n    Out-of-Sample FG Pitching+ r = 0.817 | 100-Pitch Stuff+ r = 0.975 | Interactive Plotly\n  \n\n\n\n  \n    Unsupervised ML\n    Statcast\n    Unsupervised Pitch Clustering\n    K-Means and Gaussian Mixture Models (GMM) applied to 3D trajectory and break vectors (pfx_x, pfx_z, velocity, spin). Repertoire discovery without human pitch-tag bias.\n  \n  \n    \n    Algorithm: K-Means / GMM | Dataset: Statcast Flight Dynamics\n  \n\n\n\n  \n    Supervised ML\n    tidymodels\n    Pitch Type Classification with Random Forest\n    Multi-class classification using ranger and tidymodels to classify 6 distinct pitch types from raw flight physics. Out-of-fold ROC-AUC evaluation and confusion matrix diagnostics.\n  \n  \n    \n    Algorithm: Random Forest (ranger) | Metrics: Accuracy & ROC-AUC",
     "crumbs": [
       "Home",
       "Analyses Gallery",
@@ -2220,99 +2256,207 @@
     ]
   },
   {
-    "objectID": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html",
-    "href": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html",
-    "title": "Lab 11 Work-Along: Hawk-Eye Bat-Tracking & Pitcher Arm-Slot Biomechanics",
+    "objectID": "workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html",
+    "href": "workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html",
+    "title": "Lab 16 Work-Along: Dynamic In-Season State-Space Updates & Negative Binomial K-Props",
     "section": "",
-    "text": "TipHow to Use This Workbook\n\n\n\nOpen RStudio Server at http://192.168.10.1:8787, open mlbr.Rproj, and run workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.R line-by-line with Ctrl + Enter. Companion Q-CRISP study: Study 11: Hawk-Eye Bat-Tracking & Arm-Slot Biomechanics.",
+    "text": "TipHow to Use This Workbook\n\n\n\nOpen RStudio Server at http://192.168.10.1:8787, open mlbr.Rproj, and run workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.R line-by-line with Ctrl + Enter. Companion Q-CRISP study: Study 16: Dynamic State-Space & Negative Binomial K-Props.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
+      "Lab 16: Dynamic State-Space & NegBin K-Props"
     ]
   },
   {
-    "objectID": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#first-principles-collision-physics-maxev-squared-up-blast-rate",
-    "href": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#first-principles-collision-physics-maxev-squared-up-blast-rate",
-    "title": "Lab 11 Work-Along: Hawk-Eye Bat-Tracking & Pitcher Arm-Slot Biomechanics",
-    "section": "1. First-Principles Collision Physics: MaxEV, Squared-Up & Blast Rate",
-    "text": "1. First-Principles Collision Physics: MaxEV, Squared-Up & Blast Rate\n\\[\\text{MaxEV} = 1.23 \\cdot v_{\\text{bat}} + 0.2116 \\cdot v_{\\text{release}}\\]\nA batted ball is Squared-Up when \\(\\text{SqUp} = \\text{EV} / \\text{MaxEV} \\ge 0.80\\), and is a Blast when \\(\\text{SqUp} \\ge 0.80\\) and \\(v_{\\text{bat}} + 100 \\cdot \\text{SqUp} \\ge 164\\).",
+    "objectID": "workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html#first-principles-poisson-vs.-negative-binomial-overdispersion",
+    "href": "workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html#first-principles-poisson-vs.-negative-binomial-overdispersion",
+    "title": "Lab 16 Work-Along: Dynamic In-Season State-Space Updates & Negative Binomial K-Props",
+    "section": "1. First-Principles Poisson vs. Negative Binomial Overdispersion",
+    "text": "1. First-Principles Poisson vs. Negative Binomial Overdispersion\n\\[\\text{Var}_{\\text{NB}}(\\text{SO}) = \\mu + \\frac{\\mu^2}{\\theta}, \\qquad P(\\text{SO} &gt; k + 0.5) = 1 - F_{\\text{NB}}(k;\\; \\mu, \\theta)\\]\nFor a \\(\\mu = 6.0\\) K starter with \\(\\theta = 46.9\\), Negative Binomial widens both tails relative to Poisson: Over 7.5 K increases from 25.60% \\(\\rightarrow\\) 26.39%, and Under 2.5 K (early-hook/blowout tail) increases from 6.20% \\(\\rightarrow\\) 7.33%.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
+      "Lab 16: Dynamic State-Space & NegBin K-Props"
     ]
   },
   {
-    "objectID": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#diagnostic-chart-competitive-bat-speed-vs.-2025-isolated-power-iso",
-    "href": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#diagnostic-chart-competitive-bat-speed-vs.-2025-isolated-power-iso",
-    "title": "Lab 11 Work-Along: Hawk-Eye Bat-Tracking & Pitcher Arm-Slot Biomechanics",
-    "section": "2. Diagnostic Chart: Competitive Bat Speed vs. 2025 Isolated Power (ISO)",
-    "text": "2. Diagnostic Chart: Competitive Bat Speed vs. 2025 Isolated Power (ISO)\n\n\n\nLab 11 Diagnostic: Competitive Bat Speed vs. Isolated Power (2025)",
+    "objectID": "workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html#diagnostic-chart-strictly-pre-game-trailing-30-day-csw-vs.-2025-strikeouts",
+    "href": "workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html#diagnostic-chart-strictly-pre-game-trailing-30-day-csw-vs.-2025-strikeouts",
+    "title": "Lab 16 Work-Along: Dynamic In-Season State-Space Updates & Negative Binomial K-Props",
+    "section": "2. Diagnostic Chart: Strictly Pre-Game Trailing 30-Day CSW% vs. 2025 Strikeouts",
+    "text": "2. Diagnostic Chart: Strictly Pre-Game Trailing 30-Day CSW% vs. 2025 Strikeouts\n\n\n\nLab 16 Diagnostic: Trailing 30-Day Pre-Game CSW% vs. 2025 Strikeouts",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
+      "Lab 16: Dynamic State-Space & NegBin K-Props"
     ]
   },
   {
-    "objectID": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#mentor-checkpoints-hands-on-exercises",
-    "href": "workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html#mentor-checkpoints-hands-on-exercises",
-    "title": "Lab 11 Work-Along: Hawk-Eye Bat-Tracking & Pitcher Arm-Slot Biomechanics",
+    "objectID": "workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html#mentor-checkpoints-hands-on-exercises",
+    "href": "workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html#mentor-checkpoints-hands-on-exercises",
+    "title": "Lab 16 Work-Along: Dynamic In-Season State-Space Updates & Negative Binomial K-Props",
     "section": "3. Mentor Checkpoints (Hands-On Exercises)",
-    "text": "3. Mentor Checkpoints (Hands-On Exercises)\n\nCheckpoint 1 (Compact vs. Long Power Swings): Compare Juan Soto (73.5 mph, 7.03 ft swing length, 32.9% Blast Rate) against Giancarlo Stanton (79.9 mph, 8.76 ft, 31.0% Blast Rate). Compute mean_bat_speed / mean_swing_length across b25 to identify MLB’s highest angular-whip hitters.\nCheckpoint 2 (Why Arm Angle Matters for 4-Seam Whiffs): In pitcher_arm_angle_biomechanics_2020_2026.parquet (season == 2025), compare mean ff_whiff_rate for pitchers with ivb_above_slot &gt;= +1.5\" vs. &lt;= -1.5\".\nCheckpoint 3 (Process vs. Outcome Reliability): Inspect biomechanics_yoy_reliability_2024_2025.parquet. Why does bat_speed (r = 0.923 YoY) cut locked-2025 OOS ISO RMSE by 3.65% even when prior-year ISO is already in the regression?",
+    "text": "3. Mentor Checkpoints (Hands-On Exercises)\n\nCheckpoint 1 (Overdispersion Physics): Verify var(sp_actual_so) / mean(sp_actual_so) == 1.28 in dynamic_statespace_negbin_kprops_2024_2025.parquet (season == 2025L). Why is starter strikeout variance 28% wider than Poisson?\nCheckpoint 2 (Why 30d Pitcher CSW% Works While 30d Team xwOBA Adds Noise): Compare the +0.0141 Over 5.5 K AUC lift from trailing 30-day pitcher CSW%/K% against the +0.00095 Full-Game ML Brier degradation from 30-day club xwOBA.\nCheckpoint 3 (Silver Tier Audit): Confirm mean_csaa == 0 across all 7 seasons (2020–2026, 4.55M pitches) in data/features/statcast_biomechanics/.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 11: Bat-Tracking & Arm-Slot Biomechanics"
+      "Lab 16: Dynamic State-Space & NegBin K-Props"
     ]
   },
   {
-    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html",
-    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html",
-    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
+    "objectID": "workbooks/lab02_platoon_physics_workbook.html",
+    "href": "workbooks/lab02_platoon_physics_workbook.html",
+    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
     "section": "",
-    "text": "TipHow to Use This Workbook\n\n\n\nOpen RStudio Server at http://192.168.10.1:8787, open mlbr.Rproj, and run workbooks/lab08_team_baseruns_pythagenpat_workbook.R line-by-line with Ctrl + Enter. Companion Q-CRISP study: Study 08: BaseRuns, Pythagenpat & 2026 Standings.",
+    "text": "TipHow to Use This Workbook\n\n\n\nOpen RStudio Server at http://192.168.10.1:8787, open mlbr.Rproj, and execute workbooks/lab02_platoon_physics_workbook.R line-by-line with Ctrl + Enter. Pair this lab with the full Q-CRISP research study: Study 02: 4-Quadrant Platoon Physics & PVI.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
+      "Lab 02: 4-Quadrant Platoon Physics & PVI"
     ]
   },
   {
-    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#first-principles-baseruns-dynamic-pythagenpat-math",
-    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#first-principles-baseruns-dynamic-pythagenpat-math",
-    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
-    "section": "1. First-Principles BaseRuns & Dynamic Pythagenpat Math",
-    "text": "1. First-Principles BaseRuns & Dynamic Pythagenpat Math\n\\[\\text{BaseRuns} = \\frac{A \\cdot B}{B + C} + D, \\qquad \\gamma = \\left(\\frac{RS + RA}{G}\\right)^{0.287}\\]",
+    "objectID": "workbooks/lab02_platoon_physics_workbook.html#batter-perspective-break-symmetry-hb_away_in-pvi-math",
+    "href": "workbooks/lab02_platoon_physics_workbook.html#batter-perspective-break-symmetry-hb_away_in-pvi-math",
+    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
+    "section": "1. Batter-Perspective Break Symmetry (hb_away_in) & PVI Math",
+    "text": "1. Batter-Perspective Break Symmetry (hb_away_in) & PVI Math\nStatcast measures horizontal break (pfx_x) from the catcher’s point of view (+ toward 1st base, - toward 3rd base). To compare all four handedness matchups (RvR, RvL, LvL, LvR) on a single physical axis, we define batter-perspective horizontal break away from the hitter:\n\\[\\text{hb\\_away\\_in} = \\begin{cases} +12 \\cdot \\text{pfx\\_x} & \\text{if } \\text{stand} = \\text{R} \\text{ (1st-base side is away)} \\\\ -12 \\cdot \\text{pfx\\_x} & \\text{if } \\text{stand} = \\text{L} \\text{ (3rd-base side is away)} \\end{cases}\\]\nUnder this coordinate transform, a 15-inch sweeper yields +15.0 in (breaking away from the barrel) in both RvR and LvL, and -15.0 in (breaking back into the barrel) in both RvL and LvR.\n\nEmpirical Bayes Pitcher Platoon Vulnerability Index (PVI)\nRaw same-hand vs. opposite-hand splits are noisy for relievers and rookies. We stabilize each pitcher’s platoon split using the harmonic-mean effective sample size \\(n_{\\text{eff}}\\) and shrinkage constant \\(M = 800\\) pitches:\n\\[n_{\\text{eff}} = \\frac{2 \\, n_{\\text{same}} \\, n_{\\text{opp}}}{n_{\\text{same}} + n_{\\text{opp}}}, \\qquad \\text{PVI}_{\\text{xwOBA}} = \\frac{n_{\\text{eff}}}{n_{\\text{eff}} + 800} \\cdot (\\text{xwOBA}_{\\text{opp}} - \\text{xwOBA}_{\\text{same}})\\]\n\nA small sample (120 same vs. 120 opp, raw +0.080 split) receives only 13.0% weight → PVI = +0.010.\nA large sample (1,800 same vs. 1,800 opp, raw +0.080 split) receives 69.2% weight → PVI = +0.055.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
+      "Lab 02: 4-Quadrant Platoon Physics & PVI"
     ]
   },
   {
-    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#diagnostic-chart-2026-mlb-playoff-odds-by-division-10000-mc-seasons",
-    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#diagnostic-chart-2026-mlb-playoff-odds-by-division-10000-mc-seasons",
-    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
-    "section": "2. Diagnostic Chart: 2026 MLB Playoff Odds by Division (10,000 MC Seasons)",
-    "text": "2. Diagnostic Chart: 2026 MLB Playoff Odds by Division (10,000 MC Seasons)\n\n\n\nLab 08 Diagnostic: 2026 MLB Playoff Probabilities by Division",
+    "objectID": "workbooks/lab02_platoon_physics_workbook.html#full-population-4-quadrant-duckdb-query-20202026",
+    "href": "workbooks/lab02_platoon_physics_workbook.html#full-population-4-quadrant-duckdb-query-20202026",
+    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
+    "section": "2. Full-Population 4-Quadrant DuckDB Query (2020–2026)",
+    "text": "2. Full-Population 4-Quadrant DuckDB Query (2020–2026)\nRunning Part 2 of workbooks/lab02_platoon_physics_workbook.R executes directly over our ADR-001 ZSTD sorted Silver table v_statcast_features (14.64M rows):\n\n\n\n\n\n\n\n\n\n\n\n\nPitch\nQuadrant\nPitches\nMean hb_away_in\nCSW%\nWhiff% (Swings)\nxwOBA\n\n\n\n\nSweeper (ST)\nLvL (Same)\n32,142\n+13.95 in\n30.55%\n35.95%\n.227\n\n\nSweeper (ST)\nRvR (Same)\n138,291\n+13.83 in\n30.23%\n34.12%\n.251\n\n\nSweeper (ST)\nLvR (Opp)\n34,137\n-13.75 in\n32.32%\n28.90%\n.285\n\n\nSweeper (ST)\nRvL (Opp)\n61,481\n-13.83 in\n32.16%\n28.01%\n.298\n\n\nChangeup (CH)\nRvL (Opp)\n232,104\n+14.21 in\n23.87%\n29.18%\n.293\n\n\nChangeup (CH)\nLvR (Opp)\n161,863\n+14.05 in\n25.61%\n31.62%\n.293\n\n\n\nNotice the crisp physics law: Sweepers dominate same-handed batters (+14 in away → .227–.251 xwOBA), while Changeups flip the sign (+14 in away against opposite-handed hitters) to neutralize platoon disadvantage.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
+      "Lab 02: 4-Quadrant Platoon Physics & PVI"
     ]
   },
   {
-    "objectID": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#mentor-checkpoints-hands-on-exercises",
-    "href": "workbooks/lab08_team_baseruns_pythagenpat_workbook.html#mentor-checkpoints-hands-on-exercises",
-    "title": "Lab 08 Work-Along: David Smyth BaseRuns, Dynamic Pythagenpat & 2026 Playoff Odds",
-    "section": "3. Mentor Checkpoints (Hands-On Exercises)",
-    "text": "3. Mentor Checkpoints (Hands-On Exercises)\n\nCheckpoint 1 (BaseRuns vs. Sequencing Luck): Query hist_dt[season == 2024][order(-luck_wins)]. Which 2024 clubs outperformed their BaseRuns expectation the most, and how did they regress in 2025?\nCheckpoint 2 (Dynamic Pythagenpat Exponent Across Eras): Compare mean pyth_gamma in 2014 (low-scoring) vs. 2019 (high-scoring). Why is a \\(+100\\) run differential worth more wins in a low-run era?\nCheckpoint 3 (Division Difficulty & Schedule Strength): Compare the 2026 NL East (Phillies/Braves/Mets) vs. the AL West (Mariners). Why do the 87.2-win Mariners hold higher division odds (40.9%) than the 88.0-win Phillies (28.9%)?",
+    "objectID": "workbooks/lab02_platoon_physics_workbook.html#dark-cyber-visual-diagnostic",
+    "href": "workbooks/lab02_platoon_physics_workbook.html#dark-cyber-visual-diagnostic",
+    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
+    "section": "3. Dark Cyber Visual Diagnostic",
+    "text": "3. Dark Cyber Visual Diagnostic\n\n\n\nLab 02 Diagnostic: Batter-Perspective Break vs. Whiff% Across All 4 Quadrants\n\n\nPreserved Assets: models/lab02_platoon_break_whiff_matrix.rds & models/lab02_platoon_break_whiff_matrix.parquet\nFor the interactive pitcher PVI scatter explorer, see Study 02: 4-Quadrant Platoon Physics & PVI.",
     "crumbs": [
       "Home",
       "Student Work-Along Labs",
-      "Lab 08: BaseRuns, Pythagenpat & 2026 Standings"
+      "Lab 02: 4-Quadrant Platoon Physics & PVI"
+    ]
+  },
+  {
+    "objectID": "workbooks/lab02_platoon_physics_workbook.html#hands-on-mentor-checkpoints",
+    "href": "workbooks/lab02_platoon_physics_workbook.html#hands-on-mentor-checkpoints",
+    "title": "Lab 02 Work-Along: 4-Quadrant Platoon Physics, Break Symmetry & PVI",
+    "section": "4. Hands-On Mentor Checkpoints",
+    "text": "4. Hands-On Mentor Checkpoints\nComplete these 3 exercises inside workbooks/lab02_platoon_physics_workbook.R in RStudio Server, then ask me to review your code and interpretation:\n\nCheckpoint 1 — Splitters (FS) & Cutters (FC): Modify the Part 2 SQL WHERE pitch_type IN (...) filter to add 'FS' and 'FC'. Explain physically why splitters exhibit smaller platoon xwOBA gaps than sweepers (ST).\nCheckpoint 2 — Starter Times-Through-Order (TTO) Decay: Load data/processed/starter_tto_platoon_2020_2026.parquet and plot xwoba across 1st, 2nd, and 3rd TTO faceted by platoon advantage.\nCheckpoint 3 — Shrinkage Sensitivity: Change M in calc_pvi() from 800 to 200 and 2000. Observe how shrinkage controls small-sample reliever volatility.\n\nNext Lab: Lab 03: Commit-Point Pitch Tunneling & Stuff+ / Location+",
+    "crumbs": [
+      "Home",
+      "Student Work-Along Labs",
+      "Lab 02: 4-Quadrant Platoon Physics & PVI"
+    ]
+  },
+  {
+    "objectID": "analyses/16_dynamic_statespace_negbin_k_props.html",
+    "href": "analyses/16_dynamic_statespace_negbin_k_props.html",
+    "title": "Study 16: Dynamic In-Season State-Space Talent Updates & Negative Binomial Overdispersed Strikeout Prop Pricing",
+    "section": "",
+    "text": "TipExperiment Registry & Architecture\n\n\n\n\nExperiment ID: EXP-016-DYNAMIC-STATESPACE-NEGBIN-K-PROPS (VALIDATED in experiments/registry.json)\nArchitecture Tier: Level 5D — Silver Biomechanics Materialization, Real-Time State-Space & Overdispersed Count Pricing\nSpecification: specs/16_dynamic_statespace_negbin_k_props.md\nCompanion Student Lab: Lab 16: Dynamic State-Space & Negative Binomial K-Props\nSilver & Gold Deliverables: data/features/statcast_biomechanics/ (4,548,695 pitches, 2020–2026), dynamic_statespace_negbin_kprops_2024_2025.parquet (9,714 starts), dynamic_negbin_ablation_metrics_2025.parquet\nPreserved Assets: models/dyn01_* .. dyn03_* (PNG 300 DPI, RDS &lt;= 0.34 MB, ZSTD Parquet, interactive Plotly HTML)",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 16: Dynamic State-Space & NegBin K-Props"
+    ]
+  },
+  {
+    "objectID": "analyses/16_dynamic_statespace_negbin_k_props.html#executive-summary-abstract-tldr",
+    "href": "analyses/16_dynamic_statespace_negbin_k_props.html#executive-summary-abstract-tldr",
+    "title": "Study 16: Dynamic In-Season State-Space Talent Updates & Negative Binomial Overdispersed Strikeout Prop Pricing",
+    "section": "1. Executive Summary & Abstract (TL;DR)",
+    "text": "1. Executive Summary & Abstract (TL;DR)\nIn Study 16, mlbr promotes pitch-level biomechanics and catcher framing into a permanent Hive-partitioned ZSTD Silver lake (data/features/statcast_biomechanics/, 4,548,695 pitches, 2020–2026) and upgrades our Strikeout Prop engine (EXP-015) with Negative Binomial overdispersion (MASS::glm.nb) and zero-leakage trailing 30-day in-season state-space updates (&lt; game_date):\n\n\n\n\n\n\n\n\nPillar\nValidated Locked 2025 OOS Result (n = 4,859 Starts)\nQuantitative Market Implication\n\n\n\n\nNegative Binomial Overdispersion (M3)\nRealized 2025 strikeout Var/Mean = 1.28 (4.78 mean, 6.10 var). Fitting MASS::glm.nb strictly on 2024 (theta = 38.33) improves locked-2025 Count NLL (2.2457 -&gt; 2.2416) & Over 7.5 K tail Brier (0.11499 -&gt; 0.11466).\nCaptures early-hook (0–2 K) and ace-dominance (8+ K) tails that pure Poisson under-prices.\n\n\nDynamic 30-Day CSW% & K% State-Space (M4)\nAdding strictly pre-game (date &lt; t) trailing 30-day starter CSW% & K% drops SO RMSE to 2.3068 (-0.0217), Count NLL to 2.2327 (-0.0130), Over 5.5 K Brier to 0.20948, Over 5.5 K AUC to 0.6779 (+0.0141!), and Over 7.5 K Brier to 0.11333.\nCaptures mid-season breakouts and dead-arm velocity/stuff slumps in real time — pushing prop discrimination to 0.678 AUC!\n\n\nHonest Negative Result on 30d Team Offense (Full-Game ML)\nAdding 30-day trailing club xwOBA + Silver bat_speed on top of EXP-014 M6 degrades locked-2025 Full-Game ML Brier (0.24435 -&gt; 0.24530).\nProves short-window team offensive streaks are mostly variance, whereas short-window pitcher CSW% reflects genuine mechanical/health state changes.\n\n\n\n\n\n\nFigure 1: Observed 2025 Strikeout Distribution vs. Poisson & Negative Binomial PMFs",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 16: Dynamic State-Space & NegBin K-Props"
+    ]
+  },
+  {
+    "objectID": "analyses/16_dynamic_statespace_negbin_k_props.html#domain-problem-overdispersed-state-space-mechanics",
+    "href": "analyses/16_dynamic_statespace_negbin_k_props.html#domain-problem-overdispersed-state-space-mechanics",
+    "title": "Study 16: Dynamic In-Season State-Space Talent Updates & Negative Binomial Overdispersed Strikeout Prop Pricing",
+    "section": "2. Domain Problem & Overdispersed State-Space Mechanics",
+    "text": "2. Domain Problem & Overdispersed State-Space Mechanics\nTwo structural realities govern sharp in-season MLB pricing: (1) starter strikeout counts are overdispersed (Var/Mean = 1.28) because managers pull struggling starters after 3–4 innings while riding dominant aces through 7+, and (2) pitcher true talent is non-stationary within a season due to pitch-mix changes, fatigue, and minor injuries — making a fast-stabilizing process sensor like trailing 30-day CSW% (M = 150 pitches) far superior to static preseason priors alone.",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 16: Dynamic State-Space & NegBin K-Props"
+    ]
+  },
+  {
+    "objectID": "analyses/16_dynamic_statespace_negbin_k_props.html#mathematical-formulation-lake-wide-silver-pipeline",
+    "href": "analyses/16_dynamic_statespace_negbin_k_props.html#mathematical-formulation-lake-wide-silver-pipeline",
+    "title": "Study 16: Dynamic In-Season State-Space Talent Updates & Negative Binomial Overdispersed Strikeout Prop Pricing",
+    "section": "3. Mathematical Formulation & Lake-Wide Silver Pipeline",
+    "text": "3. Mathematical Formulation & Lake-Wide Silver Pipeline\n\\[\\text{Var}_{\\text{NB}}(\\text{SO}_i) = \\mu_i + \\frac{\\mu_i^2}{\\theta}, \\qquad \\text{CSW}_{30d}(p, t) = \\frac{\\sum_{d \\in [t-30,\\, t-1]} \\text{CSW}_{p,d} + 150 \\cdot 0.290}{\\sum_{d \\in [t-30,\\, t-1]} P_{p,d} + 150}\\]\nSET memory_limit = '12GB';\nSELECT game_year, COUNT(*) AS n_pitches, COUNT(ivb_above_slot) AS n_slot,\n       COUNT(bat_speed_dbl) AS n_swings, SUM(is_blast) AS n_blasts, ROUND(AVG(csaa_pitch), 5) AS mean_csaa\nFROM read_parquet('data/features/statcast_biomechanics/**/*.parquet', hive_partitioning = true)\nGROUP BY game_year ORDER BY game_year;",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 16: Dynamic State-Space & NegBin K-Props"
+    ]
+  },
+  {
+    "objectID": "analyses/16_dynamic_statespace_negbin_k_props.html#exploratory-data-analysis-eda-silver-lake-audit",
+    "href": "analyses/16_dynamic_statespace_negbin_k_props.html#exploratory-data-analysis-eda-silver-lake-audit",
+    "title": "Study 16: Dynamic In-Season State-Space Talent Updates & Negative Binomial Overdispersed Strikeout Prop Pricing",
+    "section": "4. Exploratory Data Analysis (EDA) & Silver Lake Audit",
+    "text": "4. Exploratory Data Analysis (EDA) & Silver Lake Audit\nR/materialize_biomechanics_framing.R materializes 4,548,695 regular-season pitches (2020–2026) in 6.9s with 4,407,135 ivb_above_slot scores, 1,123,979 Hawk-Eye swings (126,243 Blasts), and 2,258,929 zero-sum csaa_pitch observations (mean_csaa == 0.00000 in every season).\n\n\n\nFigure 2: Locked 2025 OOS Ablation — Static Poisson -&gt; Static NegBin -&gt; Dynamic State-Space NegBin",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 16: Dynamic State-Space & NegBin K-Props"
+    ]
+  },
+  {
+    "objectID": "analyses/16_dynamic_statespace_negbin_k_props.html#model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos",
+    "href": "analyses/16_dynamic_statespace_negbin_k_props.html#model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos",
+    "title": "Study 16: Dynamic In-Season State-Space Talent Updates & Negative Binomial Overdispersed Strikeout Prop Pricing",
+    "section": "5. Model Architecture & Temporal Validation (2024 Train \\(\\rightarrow\\) Locked 2025 OOS)",
+    "text": "5. Model Architecture & Temporal Validation (2024 Train \\(\\rightarrow\\) Locked 2025 OOS)\n\n\n\n\n\n\n\n\n\n\n\n\nModel (Locked 2025 OOS, n = 4,859 Starts)\n\\(\\hat{\\theta}\\) (2024)\nSO RMSE\nExact Count NLL\nOver 5.5 K Brier\nOver 5.5 K AUC\nOver 7.5 K Brier\n\n\n\n\nM2_Poisson_Static (EXP-015)\n\\(\\infty\\)\n2.3285\n2.2457\n0.21295\n0.6638\n0.11499\n\n\nM3_NegBin_Static\n38.33\n2.3287\n2.2416\n0.21301\n0.6637\n0.11466\n\n\nM4_NegBin_Dynamic_StateSpace\n46.89\n2.3068\n2.2327\n0.20948\n0.6779\n0.11333",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 16: Dynamic State-Space & NegBin K-Props"
+    ]
+  },
+  {
+    "objectID": "analyses/16_dynamic_statespace_negbin_k_props.html#leaderboards-case-studies-dynamic-m4-vs.-static-m2-2025",
+    "href": "analyses/16_dynamic_statespace_negbin_k_props.html#leaderboards-case-studies-dynamic-m4-vs.-static-m2-2025",
+    "title": "Study 16: Dynamic In-Season State-Space Talent Updates & Negative Binomial Overdispersed Strikeout Prop Pricing",
+    "section": "6. Leaderboards & Case Studies: Dynamic M4 vs. Static M2 (2025)",
+    "text": "6. Leaderboards & Case Studies: Dynamic M4 vs. Static M2 (2025)\n\n\n\nFigure 3: Dynamic In-Season State-Space M4 Expected vs. Actual 2025 SO/GS\n\n\n\nInteractive Dynamic State-Space 2025 Strikeout Explorer",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 16: Dynamic State-Space & NegBin K-Props"
+    ]
+  },
+  {
+    "objectID": "analyses/16_dynamic_statespace_negbin_k_props.html#downstream-integration-market-applications",
+    "href": "analyses/16_dynamic_statespace_negbin_k_props.html#downstream-integration-market-applications",
+    "title": "Study 16: Dynamic In-Season State-Space Talent Updates & Negative Binomial Overdispersed Strikeout Prop Pricing",
+    "section": "7. Downstream Integration & Market Applications",
+    "text": "7. Downstream Integration & Market Applications\nEXP-016 completes our 16-study research expansion: data/features/statcast_biomechanics/ provides instant (&lt; 50ms) pitch-level biomechanical and framing queries across 4.55M pitches, while M4_NegBin_Dynamic_StateSpace achieves 0.6779 locked-2025 OOS Over 5.5 K AUC and 0.20948 Brier with calibrated extreme-tail pricing (Over 7.5 K Brier 0.11333).",
+    "crumbs": [
+      "Home",
+      "Q-CRISP Research Series",
+      "Study 16: Dynamic State-Space & NegBin K-Props"
     ]
   },
   {

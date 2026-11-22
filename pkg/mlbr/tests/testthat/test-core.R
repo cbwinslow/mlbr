@@ -631,3 +631,28 @@ test_that("EXP-011..015 published external reference-value formulas & EXP-015 Go
   expect_lt(ab$brier_o55[ab$model == "M2_Pro_K_Prop_Engine"], ab$brier_o55[ab$model == "M1_SP_Prior_Only"])
   expect_gt(ab$auc_o55[ab$model == "M2_Pro_K_Prop_Engine"], ab$auc_o55[ab$model == "M1_SP_Prior_Only"] + 0.015)
 })
+
+test_that("EXP-016 Silver statcast_biomechanics & Dynamic State-Space NegBin K-Props satisfy invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  silv <- file.path(lake, "data/features/statcast_biomechanics")
+  proc <- file.path(lake, "data/processed")
+  kp_p <- file.path(proc, "dynamic_statespace_negbin_kprops_2024_2025.parquet")
+  ab_p <- file.path(proc, "dynamic_negbin_ablation_metrics_2025.parquet")
+  skip_if_not(dir.exists(silv) && file.exists(kp_p) && file.exists(ab_p), "EXP-016 Silver/Gold files not materialized")
+
+  kp <- arrow::read_parquet(kp_p)
+  ab <- arrow::read_parquet(ab_p)
+
+  expect_equal(nrow(kp), 9714L)
+  expect_true(all(is.finite(kp$mu_m4) & kp$mu_m4 > 0 & kp$mu_m4 < 15))
+  expect_true(all(kp$p_m4_o55 >= kp$p_m4_o75))
+  # NegBin Static must beat Poisson Static on Count NLL & Over 7.5 K tail Brier
+  expect_lt(ab$count_nll[ab$model == "M3_NegBin_Static"], ab$count_nll[ab$model == "M2_Poisson_Static"])
+  expect_lt(ab$brier_o75[ab$model == "M3_NegBin_Static"], ab$brier_o75[ab$model == "M2_Poisson_Static"])
+  # Dynamic State-Space NegBin must beat Static NegBin on RMSE, Count NLL, Over 5.5 K AUC & Over 7.5 K Brier
+  expect_lt(ab$rmse_so[ab$model == "M4_NegBin_Dynamic_StateSpace"], ab$rmse_so[ab$model == "M3_NegBin_Static"])
+  expect_lt(ab$count_nll[ab$model == "M4_NegBin_Dynamic_StateSpace"], ab$count_nll[ab$model == "M3_NegBin_Static"])
+  expect_gt(ab$auc_o55[ab$model == "M4_NegBin_Dynamic_StateSpace"], ab$auc_o55[ab$model == "M3_NegBin_Static"] + 0.01)
+  expect_lt(ab$brier_o75[ab$model == "M4_NegBin_Dynamic_StateSpace"], ab$brier_o75[ab$model == "M3_NegBin_Static"])
+})

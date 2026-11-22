@@ -74,6 +74,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** Extract exact 1-through-9 starting batting orders directly from `v_retrosheet_plays` (`89,118` lineup slots across `2024–2025`), apply strictly prior-season (`season - 1`) Empirical Bayes batter/pitcher priors ($M = 150$ PA/BF), and price starting pitcher strikeouts via a strictly chronological Poisson GLM (`2024` train $\rightarrow$ locked `2025` OOS `n = 4,859` starts) incorporating opposing 9-man lineup K%, arm-slot ride (`EXP-011`), park `pf_so` (`EXP-006`), pre-test umpire K-factors (`2015–2023`), and prior-season catcher framing (`EXP-012`).
 - **Consequences:** Delivers `Over 5.5 K` locked-2025 OOS ROC AUC `0.6638` (`+0.0228` over starter-prior-only `0.6409`) and SO RMSE `2.3285` (`-0.0257` vs starter-only), while demonstrating honestly that daily lineup composition concentrates its strongest incremental alpha in player props rather than raw full-game moneylines.
 
+## ADR-012: Pitch-Level Silver Biomechanics Materialization & Negative Binomial Dynamic State-Space K-Prop Pricing
+- **Status:** Accepted (2026-11-21)
+- **Context:** Starting pitcher strikeout counts exhibit `28%` extra-Poisson overdispersion (`Var/Mean = 1.28`), while static `season - 1` priors miss in-season pitcher breakouts and velocity/command slumps. Simultaneously, pitch-level `ivb_above_slot`, Alan Nathan `MaxEV`/`is_blast`, and zero-sum `csaa_pitch` needed permanent Silver materialization per ADR-002.
+- **Decision:** Materialize `data/features/statcast_biomechanics/` (`4.55M` pitches `2020–2026`, Hive-partitioned ZSTD Parquet) via `R/materialize_biomechanics_framing.R`, and upgrade Strikeout Props to a `MASS::glm.nb` Negative Binomial model incorporating strictly pre-game (`date < t`) trailing 30-day starter `CSW%` ($M = 150$) and `K%` ($M = 60$).
+- **Consequences:** Improves locked-2025 OOS (`n = 4,859` starts) SO RMSE `2.3285 -> 2.3068`, exact Count NLL `2.2457 -> 2.2327`, `Over 5.5 K` Brier `0.21295 -> 0.20948` / AUC `0.6638 -> 0.6779`, and `Over 7.5 K` tail Brier `0.11499 -> 0.11333`, while cleanly documenting that 30-day club offensive streaks (`xwOBA` + `bat_speed`) add variance rather than signal to Full-Game ML.
+
 ---
 
 ## Template for New ADRs

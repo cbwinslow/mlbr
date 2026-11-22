@@ -878,5 +878,56 @@
       "fig_leaders": "models/kprop02_lineup_k_pct_vs_sp_strikeouts.html",
       "fig_park": "models/kprop03_platoon_park_lineup_asymmetry.png"
     }
+  },
+  {
+    "id": "EXP-016-DYNAMIC-STATESPACE-NEGBIN-K-PROPS",
+    "title": "Dynamic In-Season State-Space Talent Updates (30d CSW%, xwOBA, Silver Bat Speed) & Negative Binomial Overdispersed K-Props",
+    "tier": 5,
+    "tier_name": "Level 5: Betting Markets & Staking",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 03:19:43 UTC",
+    "summary": "Materialized pitch-level Silver statcast_biomechanics (4.55M pitches, 2020-2026) and upgraded EXP-015 Strikeout Props to a Negative Binomial (theta=46.89) Dynamic State-Space model using strictly pre-game (< game_date) trailing 30-day starter CSW% & K%. Across n=4859 locked 2025 regular-season starts, Count NLL dropped 2.2457 -> 2.2416 -> 2.2327, Over 5.5 K AUC rose 0.6638 -> 0.6779, and Over 7.5 K Brier improved 0.11499 -> 0.11333.",
+    "hypotheses": [
+      "MLB starter strikeouts exhibit extra-Poisson overdispersion (Var > Mean), so Negative Binomial (MASS::glm.nb) strictly improves locked 2025 OOS Count NLL and Over 7.5 K tail Brier over Poisson.",
+      "Adding strictly pre-game (< game_date) trailing 30-day starter CSW% and K% state-space updates further improves locked 2025 OOS Strikeout RMSE, Count NLL, and Over 5.5 K AUC."
+    ],
+    "formulas": {
+      "negbin_var": "Var(SO) = mu + mu^2 / theta",
+      "state_csw30d": "CSW_30d(p, t) = (sum_{t-30..t-1} CSW + 150*0.290) / (sum P + 150)",
+      "tail_prob": "P(SO > k + 0.5) = 1 - pnbinom(k, size = theta, mu = mu_i)"
+    },
+    "metrics": {
+      "n_silver_biomech_pitches": 4548695,
+      "oos_2025_var_to_mean_so": 1.276,
+      "negbin_theta_2024": 46.887,
+      "oos_2025_nll_m2_pois": 2.24571,
+      "oos_2025_nll_m3_nb": 2.24162,
+      "oos_2025_nll_m4_dyn": 2.23273,
+      "oos_2025_rmse_m4_dyn": 2.3068,
+      "oos_2025_auc_o55_m4_dyn": 0.6779,
+      "oos_2025_brier_o75_m2": 0.11499,
+      "oos_2025_brier_o75_m4": 0.11333,
+      "oos_2025_ml_brier_m6": 0.24435,
+      "oos_2025_ml_brier_dyn": 0.2453
+    },
+    "features": [
+      "sp_csw_30d",
+      "sp_k_30d",
+      "team_xwoba_30d",
+      "team_bs_30d",
+      "mu_m4",
+      "p_m4_o55",
+      "p_m4_o75"
+    ],
+    "artifacts": {
+      "spec": "specs/16_dynamic_statespace_negbin_k_props.md",
+      "silver_dir": "data/features/statcast_biomechanics/",
+      "script": "models/16_dynamic_statespace_negbin_k_props.R",
+      "gold_kprops": "data/processed/dynamic_statespace_negbin_kprops_2024_2025.parquet",
+      "gold_ablat": "data/processed/dynamic_negbin_ablation_metrics_2025.parquet",
+      "fig_pmf": "models/dyn01_negbin_vs_poisson_tail_calibration.png",
+      "fig_state": "models/dyn02_inseason_csw_kprop_lift.html",
+      "fig_ablation": "models/dyn03_dynamic_ablation_shootout.png"
+    }
   }
 ]
