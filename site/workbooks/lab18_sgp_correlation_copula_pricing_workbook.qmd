@@ -1,0 +1,37 @@
+---
+title: "Lab 18: Same-Game Parlay (SGP) Correlation Matrix & Copula Pricing"
+subtitle: "Hands-On RStudio Server Companion for Study 18 (EXP-018)"
+date: "2026-11-22"
+categories: [Workbook, Level 5, Same-Game Parlays, Copulas, DuckDB]
+format:
+  html:
+    toc: true
+    code-fold: false
+---
+
+## Learning Objectives
+
+In this companion work-along lab for [Study 18](../analyses/18_sgp_correlation_copula_pricing.qmd), you will:
+
+1. Implement a first-principles **Clayton Copula** and verify **Fréchet-Hoeffding bounds**.
+2. Query the locked `2025` OOS Same-Game Parlay backtest via zero-copy **DuckDB SQL** (`mlbr::lake_duckdb()`).
+3. Render a **Dark Cyber** diagnostic chart comparing signed calibration bias between **Naive Independence** and our **`2024`-trained Gaussian Copula**.
+
+## Run Locally in RStudio Server
+
+```r
+source("workbooks/lab18_sgp_correlation_copula_pricing_workbook.R")
+```
+
+## Full Runnable Script (`workbooks/lab18_sgp_correlation_copula_pricing_workbook.R`)
+
+```{r}
+#| eval: false
+#| file: ../../workbooks/lab18_sgp_correlation_copula_pricing_workbook.R
+```
+
+## Mentor Checkpoints
+
+1. **Checkpoint 1 (Fréchet-Hoeffding Bounds):** Verify that $C_\theta(u, v)$ stays strictly inside $[\max(0, u+v-1), \min(u, v)]$, converging to independence $uv$ as $\theta \to 0^+$ and comonotonicity $\min(u, v)$ as $\theta \to \infty$.
+2. **Checkpoint 2 (Positive vs. Negative SGP Scripts):** Explain the physical baseball mechanism behind `fair_price_mult > 1.0` (`Batter HR 1+ + Team ML`, `Home ML + F5 Home`) versus `fair_price_mult < 1.0` (`Home SP O5.5 K + Game Over 8.5`).
+3. **Checkpoint 3 (Conditional vs. Unconditional Stack Correlation):** Explain why adjacent teammates (`Slot #2 + Slot #3 TB 2+`) exhibit only a `1.03x` residual copula lift once shared pre-game park, weather, and opposing pitcher features are already priced into the `EXP-017` marginals.

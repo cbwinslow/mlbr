@@ -688,3 +688,42 @@ test_that("EXP-017 Native v_statcast_biomechanics View & Batter HR/TB Props sati
   expect_gt(ab$roc_auc[ab$market == "Total Bases (TB >= 2)" & ab$model == "M2_Pro_Biomech_Env"],
             ab$roc_auc[ab$market == "Total Bases (TB >= 2)" & ab$model == "M1_Prior_ISO_Only"] + 0.020)
 })
+
+test_that("EXP-018 Same-Game Parlay (SGP) Correlation Matrix & Copula Pricing satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  cm_p <- file.path(proc, "sgp_empirical_correlation_matrix_2024_2025.parquet")
+  bt_p <- file.path(proc, "sgp_copula_backtest_2024_2025.parquet")
+  ab_p <- file.path(proc, "sgp_copula_ablation_metrics_2025.parquet")
+  skip_if_not(file.exists(cm_p) && file.exists(bt_p) && file.exists(ab_p), "EXP-018 Gold files not materialized")
+
+  cm <- arrow::read_parquet(cm_p)
+  bt <- arrow::read_parquet(bt_p)
+  ab <- arrow::read_parquet(ab_p)
+
+  expect_equal(nrow(cm), 49L)
+  expect_gt(nrow(bt), 130000L)
+  # Strict Frechet-Hoeffding bounds across all 130k+ OOS SGP legs
+  lb <- pmax(0, bt$p_leg1 + bt$p_leg2 - 1)
+  ub <- pmin(bt$p_leg1, bt$p_leg2)
+  expect_true(all(bt$p_gauss   >= lb - 1e-8 & bt$p_gauss   <= ub + 1e-8))
+  expect_true(all(bt$p_clayton >= lb - 1e-8 & bt$p_clayton <= ub + 1e-8))
+  # Positive scripts must have pricing_mult > 1.0; negative scripts < 1.0
+  expect_gt(ab$pricing_mult[ab$sgp_id == "SGP1_HomeML_F5Home" & ab$model == "M1_Gaussian_Copula"], 1.40)
+  expect_gt(ab$pricing_mult[ab$sgp_id == "SGP4_BatterHR_TeamML" & ab$model == "M1_Gaussian_Copula"], 1.20)
+  expect_lt(ab$pricing_mult[ab$sgp_id == "SGP2_HomeSP_O55K_Over85" & ab$model == "M1_Gaussian_Copula"], 0.90)
+  expect_lt(ab$pricing_mult[ab$sgp_id == "SGP6_BatterTB2_OppSP_O55K" & ab$model == "M1_Gaussian_Copula"], 0.95)
+  # Copula must strictly beat Naive Independence on locked 2025 OOS Log-Loss across core positive & 3-leg SGPs
+  expect_lt(ab$parlay_logloss[ab$sgp_id == "SGP1_HomeML_F5Home" & ab$model == "M1_Gaussian_Copula"],
+            ab$parlay_logloss[ab$sgp_id == "SGP1_HomeML_F5Home" & ab$model == "M0_Naive_Independence"] - 0.05)
+  expect_lt(ab$parlay_logloss[ab$sgp_id == "SGP4_BatterHR_TeamML" & ab$model == "M1_Gaussian_Copula"],
+            ab$parlay_logloss[ab$sgp_id == "SGP4_BatterHR_TeamML" & ab$model == "M0_Naive_Independence"])
+  expect_lt(ab$parlay_logloss[ab$sgp_id == "SGP5_BatterTB2_Over85" & ab$model == "M2_Clayton_Copula"],
+            ab$parlay_logloss[ab$sgp_id == "SGP5_BatterTB2_Over85" & ab$model == "M0_Naive_Independence"])
+  expect_lt(ab$parlay_logloss[ab$sgp_id == "SGP8_3Leg_HomeML_TB2_Over85" & ab$model == "M1_Gaussian_Copula"],
+            ab$parlay_logloss[ab$sgp_id == "SGP8_3Leg_HomeML_TB2_Over85" & ab$model == "M0_Naive_Independence"])
+  # 4-cell joint NLL strictly beats naive independence even on negative-script SGP2
+  expect_lt(ab$joint_4cell_nll[ab$sgp_id == "SGP2_HomeSP_O55K_Over85" & ab$model == "M1_Gaussian_Copula"],
+            ab$joint_4cell_nll[ab$sgp_id == "SGP2_HomeSP_O55K_Over85" & ab$model == "M0_Naive_Independence"])
+})

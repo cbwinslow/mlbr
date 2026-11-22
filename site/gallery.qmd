@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge sabermetrics">Q-CRISP Study 18</span>
+    <span class="gallery-badge">SGP Copulas</span>
+    <h4><a href="analyses/18_sgp_correlation_copula_pricing.html">Same-Game Parlay Correlation &amp; Copula Pricing</a></h4>
+    <p>Within-game correlation matrix across all 6 priced MLB markets and strictly chronological Gaussian &amp; Clayton/90&deg;-Rotated Copula pricing (2024 MLE &rarr; locked 2025 OOS across 8 canonical 2-leg &amp; 3-leg SGPs).</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">ML+F5 LL 0.756&rarr;0.680 (1.56x) | 3-Leg Bias -80.2% | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge ml">Q-CRISP Study 17</span>
     <span class="gallery-badge">Batter HR &amp; TB Props</span>
     <h4><a href="analyses/17_batter_hr_total_bases_props.html">Batter Home Run (HR&gt;=1) &amp; Total Bases (TB&gt;=2) Prop Engine</a></h4>

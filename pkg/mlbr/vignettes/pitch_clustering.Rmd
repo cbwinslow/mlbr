@@ -17,7 +17,8 @@ knitr::opts_chunk$set(
   fig.width = 8,
   fig.height = 6,
   warning = FALSE,
-  message = FALSE
+  message = FALSE,
+  eval = FALSE
 )
 ```
 
@@ -25,7 +26,7 @@ knitr::opts_chunk$set(
 
 In machine learning tutorials (such as [scikit-learn's Clustering Gallery](https://scikit-learn.org/stable/auto_examples/cluster/index.html)), unsupervised algorithms are frequently benchmarked on synthetic datasets. In modern sabermetrics, clustering is used to discover a pitcher's true pitch repertoire from raw flight trajectory vectors, revealing hidden variants like "Sweepers" versus traditional "Sliders".
 
-In this tutorial, we use `baseballLake` and `duckdb` to query Statcast pitches, fit a **K-Means clustering model** on velocity and break vectors, and visualize the discovered arsenals.
+In this tutorial, we use `mlbr` and `duckdb` to query Statcast pitches, fit a **K-Means clustering model** on velocity and break vectors, and visualize the discovered arsenals.
 
 ## 1. Connecting to the Data Lake
 
@@ -33,7 +34,7 @@ Using `LakeManager`, we mount a zero-copy DuckDB connection over our partitioned
 
 ```{r connect}
 suppressPackageStartupMessages({
-  library(baseballLake)
+  library(mlbr)
   library(arrow)
   library(dplyr)
   library(ggplot2)

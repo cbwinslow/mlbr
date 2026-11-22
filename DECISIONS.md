@@ -86,6 +86,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** Export `mlbr::lake_register_biomechanics()` and auto-mount `v_statcast_biomechanics` inside `mlbr::lake_duckdb()` (17th view), and price batter `HR >= 1` and `TB >= 2` props via strictly chronological logistic models (`2024` train `n = 43,722` $\rightarrow$ locked `2025` OOS `n = 43,740`) combining `season - 1` Silver `bat_speed`/Blast Rate, batting-order slot, platoon, handedness `pf_hr_hand`, weather/wind carry, and opposing SP `HR%`.
 - **Consequences:** Lifts locked-2025 OOS `HR >= 1` ROC AUC `0.5960 -> 0.6155` (`-0.00311` Log-Loss) and `TB >= 2` ROC AUC `0.5418 -> 0.5695` (`-0.00422` Log-Loss), expanding `mlbr` to six validated out-of-sample MLB markets across 17 studies and 17 companion labs.
 
+## ADR-014: Same-Game Parlay (SGP) Within-Game Correlation Matrix & Gaussian/Clayton Copula Pricing
+- **Status:** Accepted (2026-11-22)
+- **Context:** Pricing multi-leg MLB Same-Game Parlays (SGPs) via naive independence ($\prod p_j$) introduces severe mispricing (`-18.0 pp` on `Home ML + F5 Home`, `-5.04 pp` on `Batter TB 2+ + Game Over 8.5`, `-3.81 pp` on 3-leg `Home ML + Home TB 2+ + Over 8.5`) because all legs share a single realization of game physics and scoring.
+- **Decision:** Implement pure-R vectorized 2D/3D Gaussian Copulas (exact Plackett 1954 16-point Gauss-Legendre quadrature, verified `< 1e-6` vs `mvtnorm::pmvnorm`) alongside Clayton & 90°-Rotated Clayton Copulas in `models/18_sgp_correlation_copula_pricing.R`, fit strictly via `2024` 4-cell bivariate Bernoulli MLE and evaluated OOS on locked `2025` across 8 canonical SGP scripts uniting all 6 validated `mlbr` markets (`EXP-014`, `EXP-016`, `EXP-017`).
+- **Consequences:** Cuts locked-2025 OOS Log-Loss on `Home ML + F5 Home` (`0.756 -> 0.680`, `1.56x` mult), `Batter HR + Team ML` (`0.268 -> 0.265`, `1.29x`), `Batter TB 2+ + Over 8.5` (`0.521 -> 0.512`, `1.23x`), and 3-leg `Home ML + Home TB 2+ + Over 8.5` (`0.378 -> 0.369`, `-80.2%` pricing bias), while proving that Gaussian and Clayton deliver near-identical 2-leg accuracy and Gaussian generalizes cleanly to $d \ge 3$ legs.
+
 ---
 
 ## Template for New ADRs

@@ -93,6 +93,8 @@ website:
               href: workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.qmd
             - text: "Lab 17: Batter HR & Total Bases Props"
               href: workbooks/lab17_batter_hr_total_bases_props_workbook.qmd
+            - text: "Lab 18: SGP Correlation & Copula Pricing"
+              href: workbooks/lab18_sgp_correlation_copula_pricing_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -131,6 +133,8 @@ website:
               href: analyses/16_dynamic_statespace_negbin_k_props.qmd
             - text: "Study 17: Batter HR & Total Bases Props"
               href: analyses/17_batter_hr_total_bases_props.qmd
+            - text: "Study 18: SGP Correlation & Copula Pricing"
+              href: analyses/18_sgp_correlation_copula_pricing.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

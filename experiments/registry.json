@@ -979,5 +979,71 @@
       "fig_leaders": "models/bprop02_batter_hr_prop_leaders_2025.html",
       "fig_ablation": "models/bprop03_batter_prop_ablation_2025.png"
     }
+  },
+  {
+    "id": "EXP-018-SGP-CORRELATION-COPULA-PRICING",
+    "title": "Same-Game Parlay (SGP) Correlation Matrix & Gaussian/Clayton Copula Pricing Engine",
+    "tier": 5,
+    "tier_name": "Level 5: Betting Markets & Staking",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 05:44:00 UTC",
+    "summary": "Quantified exact within-game correlation across all 6 priced MLB markets (Full-Game ML, F5 ML, Totals Over 8.5, NegBin SP K-Props, Batter HR & TB Props) and built a strictly chronological Gaussian & Clayton/90-deg-Rotated Copula SGP Pricing Engine (2024 MLE -> locked 2025 OOS across 8 canonical 2-leg & 3-leg SGP scripts). On locked 2025 OOS, Gaussian Copula slashed Home ML + F5 Home Log-Loss 0.75573 -> 0.68004 (1.56x), Batter HR + Team ML Log-Loss 0.26816 -> 0.26469 (1.29x), Batter TB 2+ + Over 8.5 Log-Loss 0.52080 -> 0.51254 (1.22x), and 3-Leg Home ML + Home TB 2+ + Over 8.5 Log-Loss 0.37783 -> 0.36939 (1.36x).",
+    "hypotheses": [
+      "Within-game MLB market correlations are structurally stable year-over-year (2024 -> 2025) across positive and negative SGP scripts.",
+      "Gaussian and Clayton/90-deg-Rotated Copulas fit strictly via 2024 bivariate Bernoulli MLE outperform naive independence on locked 2025 OOS Log-Loss, Brier Score, and pricing calibration."
+    ],
+    "formulas": {
+      "sklar_copula": "P(Y1=1, Y2=1) = C(p1, p2; psi), constrained by max(0, p1+p2-1) <= C <= min(p1, p2)",
+      "gauss_plackett": "C_Gauss(u, v; rho) = u*v + integral_0^rho phi_2(Phi^-1(u), Phi^-1(v); r) dr",
+      "clayton_pos": "C_Cl(u, v; theta) = (u^(-theta) + v^(-theta) - 1)^(-1/theta)",
+      "clayton_neg90": "C_90(u, v; theta) = v - C_Cl(1 - u, v; theta)"
+    },
+    "metrics": {
+      "n_locked_2025_games": 2430,
+      "n_locked_2025_batter_games": 43740,
+      "sgp1_rho_2024": 0.8386,
+      "sgp1_ll_ind": 0.75573,
+      "sgp1_ll_gauss": 0.68004,
+      "sgp1_ll_clayton": 0.68013,
+      "sgp2_rho_2024": -0.1913,
+      "sgp2_ll_ind": 0.41871,
+      "sgp2_ll_gauss": 0.42214,
+      "sgp4_rho_2024": 0.2284,
+      "sgp4_ll_ind": 0.26816,
+      "sgp4_ll_gauss": 0.26469,
+      "sgp4_ll_clayton": 0.26474,
+      "sgp5_rho_2024": 0.2454,
+      "sgp5_ll_ind": 0.5208,
+      "sgp5_ll_gauss": 0.51254,
+      "sgp6_rho_2024": -0.1185,
+      "sgp6_ll_ind": 0.33634,
+      "sgp6_ll_gauss": 0.33626,
+      "sgp8_3leg_ll_ind": 0.37783,
+      "sgp8_3leg_ll_gauss": 0.36939,
+      "sgp8_3leg_pricing_mult": 1.36385
+    },
+    "features": [
+      "p_m6_ml",
+      "p_m6_f5",
+      "p_over85",
+      "p_hsp_o55",
+      "p_asp_o55",
+      "p_hr_m2",
+      "p_tb2_m2",
+      "rho_gauss_2024",
+      "theta_clay_2024",
+      "p_gauss",
+      "p_clayton"
+    ],
+    "artifacts": {
+      "spec": "specs/18_sgp_correlation_copula_pricing.md",
+      "script": "models/18_sgp_correlation_copula_pricing.R",
+      "gold_cormat": "data/processed/sgp_empirical_correlation_matrix_2024_2025.parquet",
+      "gold_bt": "data/processed/sgp_copula_backtest_2024_2025.parquet",
+      "gold_ablat": "data/processed/sgp_copula_ablation_metrics_2025.parquet",
+      "fig_cormat": "models/sgp01_correlation_matrix_heatmap.png",
+      "fig_pricing": "models/sgp02_gaussian_vs_clayton_copula_pricing.html",
+      "fig_cal": "models/sgp03_sgp_oos_calibration_ablation.png"
+    }
   }
 ]

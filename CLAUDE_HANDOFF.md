@@ -6,7 +6,7 @@
 > 2. `AGENTS.md` (Core contract, DOX hierarchy, Closeout & Verification Steps 1–7 including updating nearest owning `AGENTS.md`)
 > 3. `site/AGENTS.md`, `pkg/mlbr/AGENTS.md`, `specs/AGENTS.md` (Directory-level contracts)
 > 4. `.agents/skills/qcrisp-study/SKILL.md` & `.agents/scripts/check_guardrails.py` (Study + Lab DuckDB SQL & guardrail requirements)
-> 5. `DECISIONS.md` (`ADR-001` through `ADR-013`) & `experiments/registry.json` (Never re-derive or drift from validated formulas)
+> 5. `DECISIONS.md` (`ADR-001` through `ADR-014`) & `experiments/registry.json` (Never re-derive or drift from validated formulas)
 
 ---
 
@@ -30,9 +30,9 @@
 
 ---
 
-## 2. Verified Baseline (All 17 Completed & Audited Experiments — 17 Native DuckDB Views!)
+## 2. Verified Baseline (All 18 Completed & Audited Experiments — 17 Native DuckDB Views!)
 
-All 17 experiments (`EXP-001` through `EXP-017`) and 13 Architecture Decision Records (`ADR-001` through `ADR-013`) are completed, independently audited (`PASS`), logged in `experiments/registry.json`, verified across **`191/191` `testthat` unit tests**, **`28/28` `proof_lake`**, **`5/5` `proof_crosswalks`**, **`6/6` `generate_agent_manifest`** (`17/17` Study–Lab parity), **`2/2` `pytest`**, and **`47/47` rendered Quarto pages**:
+All 18 experiments (`EXP-001` through `EXP-018`) and 14 Architecture Decision Records (`ADR-001` through `ADR-014`) are completed, independently audited (`PASS`), logged in `experiments/registry.json`, verified across **`204/204` `testthat` unit tests**, **`28/28` `proof_lake`**, **`5/5` `proof_crosswalks`**, **`6/6` `generate_agent_manifest`** (`18/18` Study–Lab parity), **`2/2` `pytest`**, and **`49/49` rendered Quarto pages**:
 
 - **17 Native Zero-Copy DuckDB Views (`mlbr::lake_duckdb()`):** `v_statcast`, `v_retrosheet_plays`, `v_retrosheet_games`, `v_retrosheet_subs`, `v_retrosheet_rosters`, `v_fangraphs_bat`, `v_fangraphs_pitch`, `v_fangraphs_fielder`, `v_chadwick_register`, `v_lahman_batting`, `v_lahman_pitching`, `v_lahman_people`, `v_ncaa_pbp`, `v_mlbmeta_schedule`, `v_statcast_features`, `v_statcast_tunneling`, and **`v_statcast_biomechanics`** (`4.55M` Silver pitches `2020–2026`).
 
@@ -59,10 +59,9 @@ All 17 experiments (`EXP-001` through `EXP-017`) and 13 Architecture Decision Re
 ---
 
 ## 3. Recommended Next Milestones (For Fresh Session)
-1. **`EXP-018` — Same-Game Parlay (SGP) Correlation Matrix & Gaussian/Clayton Copula Pricing Engine:** Quantify exact empirical within-game correlations across our 6 priced markets (e.g., Pitcher `SO` vs. Game Total Runs, Batter `HR`/`TB` vs. Team Win & Total Runs, Starter `K` vs. Opposing Batter `K`), fit strictly on `2024`, and validate SGP joint probabilities strictly OOS on locked `2025` vs. naive independence!
 2. **Joint Multinomial / Ordered Total-Bases Model (`0, 1, 2, 3, 4+ TB`) & Exponential Half-Life Decay (`14-day`):** Upgrade `EXP-017` to guarantee algebraic monotonicity across `1+ H / 2+ TB / 3+ TB / HR`, and upgrade `EXP-016`'s flat 30-day window to an exponential decay kernel.
-3. **Passive Daily Odds & Lineup Archiving Automation (`systemd` timer on `cbwdellr720`):** Schedule `R/ingest/archive_market_snapshots.py` so real Polymarket/Kalshi/sportsbook closing odds accumulate in `data/raw/markets/` for realized non-synthetic CLV backtesting.
-4. **Package Polish & Future `sabermetricsR` Extraction:** Clean up `pkg/mlbr/vignettes/` metadata for a `0 ERRORS | 0 WARNINGS | 0 NOTEs` `R CMD check --as-cran`, and when the user is ready, extract the pure vectorized math from Studies `01–18` into a standalone CRAN-ready `sabermetricsR` package.
+3. **Passive Daily Odds & Lineup Archiving Automation (`DONE` — `mlbr-market-archive.timer` enabled at `16:30` & `22:30 UTC`):** Monitor accumulated `data/raw/markets/` snapshots and run live non-synthetic CLV backtest once 2026 regular-season sample accrues.
+4. **CRAN-Ready `sabermetricsR` Extraction (`pkg/mlbr` already achieves `0 ERRORS | 0 WARNINGS | 0 NOTEs` via `R CMD build && R CMD check --no-manual`):** When ready, extract the pure vectorized math from Studies `01–18` into a standalone CRAN-ready `sabermetricsR` package.
 
 ---
 
