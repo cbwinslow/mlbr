@@ -38,7 +38,7 @@ In **Study 10**, `mlbr` completes the 5-tier hierarchical sabermetric architectu
 
 ---
 
-## 2. Domain Problem & Mathematical Formulation
+## 2. Domain Problem & Theoretical Market Mechanics
 
 Converting well-calibrated win probabilities into long-run capital growth requires solving three linked quantitative finance problems:
 
@@ -51,14 +51,30 @@ Converting well-calibrated win probabilities into long-run capital growth requir
 
 ---
 
-## 3. Data Provenance, Chronological Discipline & Benchmark Disclosure
+## 3. Mathematical Formulation & Lake-Wide Pipeline
 
 - **Strictly Out-of-Sample Game Split:** The Level 4 fair-value blend weight (`w_M3 = 0.453`, `w_M4 = 0.547`) is estimated strictly via Log-Loss minimization on the **`2024` regular season (`n = 2,429`)** and held frozen on the locked **`2025` regular season (`n = 2,430`)**.
 - **Transparent Benchmark Disclosure:** Because historical closing sportsbook odds feeds are not yet ingested in Bronze, the 4,859-game historical backtest benchmarks our Level 4 starter/park/Markov model (`M5_L5_Fair_Blend`) against the vig-adjusted `B2_PriorYr_Pythag_Log5` consensus prior (`-105/-105` `2.38%` vig and `-102/-102` `1.00%` exchange fee) with a synthetic 50% information-absorption closing line ($q_{\text{close}} = 0.5 q_{\text{open}} + 0.5 p_{\text{fair}}$). Real-world live market friction is audited directly in Section 5 using archived Polymarket (`polymarket-2026-11.parquet`) and Kalshi (`kalshi-2026-11.parquet`) orderbooks.
 
+
+### Reproducible Zero-Copy DuckDB SQL Pipeline Check
+
+```sql
+SET memory_limit = '12GB';
+SELECT
+  season,
+  COUNT(*) AS n_games,
+  SUM(CASE WHEN ev_best >= 0.02 THEN 1 ELSE 0 END) AS n_ev2_bets,
+  ROUND(100.0 * SUM(CASE WHEN ev_best >= 0.02 THEN pnl_flat_1u ELSE 0 END) /
+        NULLIF(SUM(CASE WHEN ev_best >= 0.02 THEN 1 ELSE 0 END), 0), 2) AS ev2_flat_roi_pct
+FROM read_parquet('data/processed/market_valuation_backtest_2024_2025.parquet')
+GROUP BY season
+ORDER BY season;
+```
+
 ---
 
-## 4. Locked 2025 OOS Calibration, Staking & Vig Efficiency Results
+## 4. Exploratory Data Analysis (EDA) & Calibration Diagnostics
 
 ### 4.1 Locked 2025 Out-of-Sample Probability Calibration (`n = 2,430` Games)
 
@@ -69,7 +85,7 @@ Converting well-calibrated win probabilities into long-run capital growth requir
 | `M4_PA_Markov_Simulator` | `0.24454` | `0.68211` | `0.5702` | `0.883` | Slightly over-confident; full score matrix |
 | **`M5_L5_Fair_Blend` (2024-Fit)** | `0.24354` | `0.68004` | `0.5759` | **`1.043`** | **Best calibration slope (nearest 1.000)** |
 
-### 4.2 Staking Regime Shootout (`Locked 2025 OOS`, Sportsbook `-105`, `EV >= +2.0%`, `W0 = 100u`)
+## 5. Model Architecture & Temporal Validation: Staking Regime Shootout (`Locked 2025 OOS`, Sportsbook `-105`, `EV >= +2.0%`, `W0 = 100u`)
 
 | Staking Regime | Bets (`n`) | Win Rate | ROI (%) | Final Bankroll | Synthetic CLV (%) | Annualized Sharpe | Max Drawdown (%) |
 |:---|---:|---:|---:|---:|---:|---:|---:|
@@ -86,7 +102,7 @@ Converting well-calibrated win probabilities into long-run capital growth requir
 
 ---
 
-## 5. 2026 Season Futures & Cross-Season Polymarket Orderbook Microstructure Audit
+## 6. Leaderboards & Case Studies: 2026 Futures & Polymarket Orderbook Audit
 
 Using `team_standings_projections_2026.parquet` (Level 3 10,000-season MC with club-specific PECOTA roster uncertainty), we price all 30 MLB clubs for 2026 Win-Total Over/Under lines, Playoff Berths, and a **heuristic power-law World Series proxy** ($w_i \propto \text{playoff\_prob}_i \cdot \text{true\_wpct}_i^4$, normalized so $\sum p_i^{\text{WS}} = 100.0\%$; full 12-team AL/NL bye-bracket propagation is reserved for a future extension). We join all 30 franchises against the archived Polymarket orderbook (`data/raw/markets/polymarket-2026-11.parquet`, `2026-11-18` snapshot, `\$538,705` liquidity). **Important Season-Horizon Disclosure:** Because this archive was captured in November 2026 (post-2026 World Series), the live Polymarket contracts are for the **2027 World Series** (`MLB World Series Champion 2027`). Accordingly, this table is strictly a **cross-season microstructure, overround (`+91.7%`), and bid-ask spread drag audit** comparing mid-price maker sizing (`Qtr-Kelly Mid`) vs. spread-crossing taker sizing (`Qtr-Kelly Ask`) rather than a same-season arbitrage signal:
 
@@ -107,15 +123,13 @@ Using `team_standings_projections_2026.parquet` (Level 3 10,000-season MC with c
 
 ---
 
-## 6. Operational Recommendations & Risk Controls
+## 7. Downstream Integration, Market Applications & Risk Controls
 
 1. **Default to Eighth-Kelly (`c = 0.125`) or Quarter-Kelly (`c = 0.25`) with Slate Caps:** Full Kelly produces untenable `78.4%` drawdowns under realistic MLB variance and estimation error. Capping single-game stakes at `5%` and total daily slate exposure at `35%` prevents correlated single-day ruin.
 2. **Enforce Fee-Adjusted EV Thresholds (`EV >= +3%` on Sportsbooks, `>= +2%` on Exchanges):** On `-102` exchanges, `EV >= +3%` delivers **`+4.74%` Flat ROI (`Sharpe 1.79`, Max DD `13.6%`)** and **`+3.44%` Eighth-Kelly ROI (`Sharpe 1.49`, Max DD `29.0%`)**, whereas on `-105` books `EV >= +2%` balances volume (`n = 1,325`) with `+3.53%` Flat / `+2.07%` Eighth-Kelly ROI.
 3. **Never Cross Wide Offseason Spreads on Prediction Markets:** With `+91.7%` structural overround and `7–8¢` median bid-ask spreads in archived Polymarket/Kalshi offseason books, passive limit-order quoting (maker liquidity) rather than market-order crossing is essential to realize positive EV.
 
----
-
-## 7. Reproducibility & Next Steps
+### 7.1 Reproducibility & Next Steps
 
 ```bash
 Rscript models/10_market_edge_prediction_valuation.R --smoke  # Fast <10s verification

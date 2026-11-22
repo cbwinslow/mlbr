@@ -35,7 +35,12 @@
     - `03_tunneling_stuff_plus.qmd`: Study 03 — Exact commit-point pitch tunneling (`v_statcast_tunneling`), Stuff+/Location+/Pitching+, and stabilization curves.
     - `04_player_projections.qmd`: Study 04 — Tier 2 Chronological True-Talent Player Projections (Marcel, Zero-Sum Delta-Method Aging, Stage-2 Residual Physics & 80% Uncertainty Bands).
     - `05_decomposed_pitching_decisions.qmd`: Study 05 — Context-Neutral 5-Head Markov Decomposed Pitching+ & Pitch-Level Batter Process Engine (`Decision+`, `BatControl+`, `Contact+`).
-  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab05`).
+    - `06_ballpark_factors.qmd`: Study 06 — Empirical 3-Year Regressed Ballpark Factors & Handedness Asymmetry (`EXP-006`).
+    - `07_pecota_zips_ensemble.qmd`: Study 07 — PECOTA k-NN Comps, ZiPS 5-Yr Archetype Aging, Defense EDA & KKT Meta-Ensemble (`EXP-007`).
+    - `08_team_baseruns_pythagenpat.qmd`: Study 08 — David Smyth Complex BaseRuns, Dynamic Pythagenpat & 2026 10k-Season Schedule Simulator (`EXP-008`).
+    - `09_game_monte_carlo_simulator.qmd`: Study 09 — Level 4 24 Base-Out Markov Game Simulator & Empirical Win Expectancy (`EXP-009`).
+    - `10_market_edge_prediction_valuation.qmd`: Study 10 — Level 5 Market Edge, CLV, Fractional Kelly & Prediction Market Valuation (`EXP-010`).
+  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab10`).
 - Build command: `quarto render site/` from project root.
 
 ## Verification

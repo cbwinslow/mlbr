@@ -41,10 +41,33 @@ suppressPackageStartupMessages({
   library(mlbr)
   library(arrow)
   library(data.table)
+  library(DBI)
+  library(duckdb)
   library(ggplot2)
 })
 
 lake <- mlbr::default_lake()
+
+# Zero-Copy DuckDB SQL Audit over Gold EXP-010 Backtest Parquet
+con <- mlbr::lake_duckdb(lake)
+on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+DBI::dbExecute(con, "SET memory_limit = '12GB';")
+bt_parquet <- file.path(lake, "data/processed/market_valuation_backtest_2024_2025.parquet")
+sql_summary <- DBI::dbGetQuery(con, sprintf("
+  SELECT
+    season,
+    COUNT(*) AS n_games,
+    SUM(CASE WHEN ev_best >= 0.02 THEN 1 ELSE 0 END) AS n_ev2_bets,
+    ROUND(100.0 * AVG(CASE WHEN ev_best >= 0.02 THEN bet_won END), 2) AS ev2_win_pct,
+    ROUND(100.0 * SUM(CASE WHEN ev_best >= 0.02 THEN pnl_flat_1u ELSE 0 END) /
+          NULLIF(SUM(CASE WHEN ev_best >= 0.02 THEN 1 ELSE 0 END), 0), 2) AS ev2_flat_roi_pct
+  FROM read_parquet('%s')
+  GROUP BY season
+  ORDER BY season
+", bt_parquet))
+cat("--- Part 2A: Zero-Copy DuckDB SQL Summary (EXP-010 Backtest by Season) ---\n")
+print(sql_summary)
+cat("\n")
 gm   <- as.data.table(arrow::read_parquet(file.path(lake, "data/processed/market_valuation_backtest_2024_2025.parquet")))
 st   <- as.data.table(arrow::read_parquet(file.path(lake, "data/processed/market_staking_summary_2024_2025.parquet")))
 fut  <- as.data.table(arrow::read_parquet(file.path(lake, "data/processed/market_2026_futures_valuation.parquet")))

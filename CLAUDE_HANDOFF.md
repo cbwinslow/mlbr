@@ -23,9 +23,9 @@
 
 ---
 
-## 2. Verified Baseline (All 9 Completed & Audited Experiments — Levels 1–4 Complete!)
+## 2. Verified Baseline (All 10 Completed & Audited Experiments — Full 5-Tier Hierarchy Complete!)
 
-All 9 experiments (`EXP-001` through `EXP-009`) are completed, independently audited, logged in `experiments/registry.json`, verified across `113/113` `testthat` unit tests + `31/31` Quarto pages, and green in GitHub Actions CI:
+All 10 experiments (`EXP-001` through `EXP-010`) are completed, independently audited, logged in `experiments/registry.json`, verified across `130/130` `testthat` unit tests + `33/33` Quarto pages, and green in GitHub Actions CI:
 
 | Exp ID | Tier | Name | Key Validated Result | Study & Lab |
 |:---|:---:|:---|:---|:---|
@@ -38,6 +38,7 @@ All 9 experiments (`EXP-001` through `EXP-009`) are completed, independently aud
 | **EXP-007** | 2B | PECOTA k-NN, ZiPS 5-Yr & Defense EDA | 70,967 comps (1960–2025), OAA YoY $r = 0.506 >$ DRS $0.431 >$ UZR $0.374$, Exact KKT M5 Ensemble | `07_pecota_zips_ensemble.qmd` / `lab07` |
 | **EXP-008** | 3 | BaseRuns, Pythagenpat & 2026 Standings | 720 regular seasons BaseRuns $r = 0.982$, next-yr RMSE `0.0670`, 10k MC w/ club PECOTA uncertainty | `08_team_baseruns_pythagenpat.qmd` / `lab08` |
 | **EXP-009** | 4 | 24 Base-Out Markov Game Simulator & WE | 4,859 OOS games (2024–2025) Brier `0.2446` (`M3` `0.2439`), Cal Slope `0.971`, `+0.086 R/G` total bias, 5,372-state WE | `09_game_monte_carlo_simulator.qmd` / `lab09` |
+| **EXP-010** | 5 | Market Edge, CLV & Prediction Markets | Locked 2025 OOS (`n=2,430`): `M5` Cal Slope `1.043`, Eighth-Kelly `+2.07%` ROI / `29.5%` Max DD vs Full Kelly `78.4%` (`-105`), Polymarket `+91.7%` overround audit | `10_market_edge_prediction_valuation.qmd` / `lab10` |
 
 ---
 
