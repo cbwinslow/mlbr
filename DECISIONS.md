@@ -92,6 +92,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** Implement pure-R vectorized 2D/3D Gaussian Copulas (exact Plackett 1954 16-point Gauss-Legendre quadrature, verified `< 1e-6` vs `mvtnorm::pmvnorm`) alongside Clayton & 90°-Rotated Clayton Copulas in `models/18_sgp_correlation_copula_pricing.R`, fit strictly via `2024` 4-cell bivariate Bernoulli MLE and evaluated OOS on locked `2025` across 8 canonical SGP scripts uniting all 6 validated `mlbr` markets (`EXP-014`, `EXP-016`, `EXP-017`).
 - **Consequences:** Cuts locked-2025 OOS Log-Loss on `Home ML + F5 Home` (`0.756 -> 0.680`, `1.56x` mult), `Batter HR + Team ML` (`0.268 -> 0.265`, `1.29x`), `Batter TB 2+ + Over 8.5` (`0.521 -> 0.512`, `1.23x`), and 3-leg `Home ML + Home TB 2+ + Over 8.5` (`0.378 -> 0.369`, `-80.2%` pricing bias), while proving that Gaussian and Clayton deliver near-identical 2-leg accuracy and Gaussian generalizes cleanly to $d \ge 3$ legs.
 
+## ADR-015: Joint Multinomial Softmax Total Bases Ladder (`0–4+ TB`) & Continuous Exponential Half-Life Decay (`H* = 30d`)
+- **Status:** Accepted (2026-11-22)
+- **Context:** Separate binary logits for retail Total Bases ladders (`TB >= 1, 2, 3, 4`) risk probability crossings, while proportional odds (`MASS::polr`) constrains power covariates (`bat_speed`, `blast_rate`, `pf_hr_hand`) to act identically on singles (`TB = 1`) and home runs (`TB >= 4`). Meanwhile, `EXP-016` used a discontinuous flat 30-day boxcar window for in-season pitcher `CSW%` and `K%`.
+- **Decision:** Adopt a joint 5-class Multinomial Softmax model (`nnet::multinom`) over `{0, 1, 2, 3, 4+ TB}` guaranteeing zero monotonicity violations across all 4 ladder rungs, and upgrade pitcher K-Prop state-space features to a strictly causal (`d < t`, 90-day lookback) exponential decay kernel with `2024`-selected half-life `H* = 30d` (`w = 2^(-dt/30)`).
+- **Consequences:** Improves locked-2025 OOS (`n = 43,740`) 5-class TB Log-Loss `1.4518 -> 1.4429 (POLR) -> 1.4388 (Multinomial)`, RPS `0.1891 -> 0.1865`, and `TB >= 4` AUC `0.5884 -> 0.6003` with `0` monotonicity violations; simultaneously lifts locked-2025 OOS (`n = 4,859`) K-Prop Count NLL `2.2327 -> 2.2303`, RMSE `2.3068 -> 2.3002`, and `Over 5.5 K` AUC `0.6779 -> 0.6827` (`theta: 46.89 -> 51.52`; `H* = 30d` sits on the upper boundary of the `{7, 14, 21, 30}` grid, so testing `H = 45–60d` is logged as a follow-up).
+
 ---
 
 ## Template for New ADRs

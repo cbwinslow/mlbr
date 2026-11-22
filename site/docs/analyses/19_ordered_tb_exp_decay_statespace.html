@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-11-22">
+
+<title>Study 19: Joint Ordered/Multinomial Total Bases Ladder &amp; Exponential Half-Life State-Space Decay – mlbr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-1d6f68ac07d6e45f311d12062c618a6a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">mlbr</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/experiment_registry.html"> 
+<span class="menu-text">Knowledge Base</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/01_pitch_quality_eda.html"> 
+<span class="menu-text">Q-CRISP Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../workbooks/lab01_aerodynamics_workbook.html"> 
+<span class="menu-text">Student Labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../gallery.html"> 
+<span class="menu-text">Analyses Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../architecture.html"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup &amp; API</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../crosswalk.html"> 
+<span class="menu-text">ID Crosswalk</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../verification.html"> 
+<span class="menu-text">Data Proofs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../agent_context.html"> 
+<span class="menu-text">AI Agent Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data_dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/cbwinslow/mlbr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/19_ordered_tb_exp_decay_statespace.html">Study 19: Joint TB Ladder &amp; Exp-Decay State-Space</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview &amp; Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation &amp; Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../crosswalk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universal ID Crosswalk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Architecture &amp; Storage</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../verification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Verification &amp; Proofs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../agent_context.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Agent Data Manifest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Dictionary &amp; Schemas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Student Work-Along Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab01_aerodynamics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 01: Aerodynamics &amp; Trajectory Math</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab02_platoon_physics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 02: 4-Quadrant Platoon Physics &amp; PVI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab03_tunneling_stuff_plus_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 03: Pitch Tunneling &amp; Stuff+ / Loc+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab04_player_projections_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab05_decomposed_pitching_decisions_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab06_ballpark_factors_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 06: Regressed Ballpark Factors &amp; Altitude</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab07_pecota_zips_ensemble_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 07: PECOTA Comps, ZiPS Aging &amp; Defense EDA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab08_team_baseruns_pythagenpat_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 08: BaseRuns, Pythagenpat &amp; 2026 Standings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab09_game_monte_carlo_simulator_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 09: Markov Game Simulator &amp; Win Expectancy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab10_market_edge_prediction_valuation_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 10: Market Edge, CLV &amp; Fractional Kelly</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 11: Bat-Tracking &amp; Arm-Slot Biomechanics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab12_weather_umpire_catcher_framing_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 12: Weather, Umpires &amp; Catcher Framing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 13: Pitcher Stamina &amp; Bullpen Fatigue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab14_unified_pro_game_f5_totals_bracket_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 14: Unified Pro Multi-Market &amp; 12-Team Bracket</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab15_daily_lineups_platoon_k_props_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 15: Daily Lineups &amp; Pitcher Strikeout Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 16: Dynamic State-Space &amp; NegBin K-Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab17_batter_hr_total_bases_props_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 17: Batter HR &amp; Total Bases Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab18_sgp_correlation_copula_pricing_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 18: SGP Correlation &amp; Copula Pricing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 19: Joint TB Ladder &amp; Exp-Decay State-Space</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Q-CRISP Research Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/experiment_registry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Knowledge Base &amp; Registry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/01_pitch_quality_eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 01: Aerodynamics &amp; Approach Angles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/02_platoon_physics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 02: 4-Quadrant Platoon Physics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/03_tunneling_stuff_plus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 03: Pitch Tunneling &amp; Stuff+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/06_ballpark_factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 06: Empirical Ballpark Factors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/07_pecota_zips_ensemble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 07: PECOTA k-NN, ZiPS &amp; Meta-Ensemble</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/08_team_baseruns_pythagenpat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 08: BaseRuns, Pythagenpat &amp; Standings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/09_game_monte_carlo_simulator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 09: Markov Game Simulator &amp; WPA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/10_market_edge_prediction_valuation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 10: Market Edge &amp; Prediction Markets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/11_bat_tracking_arm_slot_biomechanics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 11: Bat-Tracking &amp; Arm-Slot Biomechanics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/12_weather_umpire_catcher_framing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 12: Weather, Umpires &amp; Catcher Framing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/13_pitcher_stamina_bullpen_fatigue.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 13: Pitcher Stamina &amp; Bullpen Fatigue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/14_unified_pro_game_f5_totals_bracket.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 14: Unified Pro Multi-Market &amp; 12-Team Bracket</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/15_daily_lineups_platoon_k_props.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 15: Daily Lineups &amp; Pitcher Strikeout Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/16_dynamic_statespace_negbin_k_props.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 16: Dynamic State-Space &amp; NegBin K-Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/17_batter_hr_total_bases_props.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 17: Batter HR &amp; Total Bases Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/18_sgp_correlation_copula_pricing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 18: SGP Correlation &amp; Copula Pricing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/19_ordered_tb_exp_decay_statespace.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Study 19: Joint TB Ladder &amp; Exp-Decay State-Space</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyses Gallery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Clustering (K-Means / GMM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Classification (Random Forest)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/xwoba_surface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xWOBA / Exit Velocity Surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/run_expectancy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Run Expectancy RE24 Matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#executive-summary-abstract-tldr" id="toc-executive-summary-abstract-tldr" class="nav-link active" data-scroll-target="#executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</a></li>
+  <li><a href="#domain-problem-structural-physics" id="toc-domain-problem-structural-physics" class="nav-link" data-scroll-target="#domain-problem-structural-physics">2. Domain Problem &amp; Structural Physics</a></li>
+  <li><a href="#mathematical-formulation-zero-copy-duckdb-pipeline" id="toc-mathematical-formulation-zero-copy-duckdb-pipeline" class="nav-link" data-scroll-target="#mathematical-formulation-zero-copy-duckdb-pipeline">3. Mathematical Formulation &amp; Zero-Copy DuckDB Pipeline</a></li>
+  <li><a href="#exploratory-data-analysis-eda-interactive-2025-tb-ladder-explorer" id="toc-exploratory-data-analysis-eda-interactive-2025-tb-ladder-explorer" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda-interactive-2025-tb-ladder-explorer">4. Exploratory Data Analysis (EDA) &amp; Interactive 2025 TB Ladder Explorer</a></li>
+  <li><a href="#model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" id="toc-model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" class="nav-link" data-scroll-target="#model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos">5. Model Architecture &amp; Temporal Validation (<code>2024</code> Train <span class="math inline">\(\rightarrow\)</span> Locked <code>2025</code> OOS)</a>
+  <ul class="collapse">
+  <li><a href="#part-a-joint-5-class-total-bases-ladder-n-43740-locked-2025-starts" id="toc-part-a-joint-5-class-total-bases-ladder-n-43740-locked-2025-starts" class="nav-link" data-scroll-target="#part-a-joint-5-class-total-bases-ladder-n-43740-locked-2025-starts">Part A: Joint 5-Class Total Bases Ladder (<code>n = 43,740</code> Locked <code>2025</code> Starts)</a></li>
+  <li><a href="#part-b-exponential-half-life-state-space-decay-n-4859-locked-2025-sp-starts" id="toc-part-b-exponential-half-life-state-space-decay-n-4859-locked-2025-sp-starts" class="nav-link" data-scroll-target="#part-b-exponential-half-life-state-space-decay-n-4859-locked-2025-sp-starts">Part B: Exponential Half-Life State-Space Decay (<code>n = 4,859</code> Locked <code>2025</code> SP Starts)</a></li>
+  </ul></li>
+  <li><a href="#leaderboards-top-2025-monotonic-tb-ladder-case-studies" id="toc-leaderboards-top-2025-monotonic-tb-ladder-case-studies" class="nav-link" data-scroll-target="#leaderboards-top-2025-monotonic-tb-ladder-case-studies">6. Leaderboards &amp; Top 2025 Monotonic TB Ladder Case Studies</a></li>
+  <li><a href="#downstream-integration-market-applications" id="toc-downstream-integration-market-applications" class="nav-link" data-scroll-target="#downstream-integration-market-applications">7. Downstream Integration &amp; Market Applications</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/19_ordered_tb_exp_decay_statespace.html">Study 19: Joint TB Ladder &amp; Exp-Decay State-Space</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Study 19: Joint Ordered/Multinomial Total Bases Ladder &amp; Exponential Half-Life State-Space Decay</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Q-CRISP Level 5G — Monotonic 0–4+ TB Pricing &amp; Smooth Kernel Pitcher K-Props (EXP-019)</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Level 5</div>
+    <div class="quarto-category">Batter Props</div>
+    <div class="quarto-category">Pitcher Props</div>
+    <div class="quarto-category">Ordered Logit</div>
+    <div class="quarto-category">State-Space</div>
+    <div class="quarto-category">Q-CRISP</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 22, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Experiment Registry &amp; Architecture
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Experiment ID:</strong> <code>EXP-019-ORDERED-TB-EXP-DECAY-STATESPACE</code> (<code>VALIDATED</code>)</li>
+<li><strong>Specification:</strong> <code>specs/19_ordered_tb_exp_decay_statespace.md</code> | <strong>ADR:</strong> <code>ADR-015</code></li>
+<li><strong>Training Split:</strong> <code>2024</code> MLB Regular Season (<code>43,722</code> batter-games; <code>4,855</code> SP starts)</li>
+<li><strong>Locked OOS Test:</strong> <code>2025</code> MLB Regular Season (<code>43,740</code> batter-games; <code>4,859</code> SP starts)</li>
+<li><strong>Companion Work-Along Lab:</strong> <a href="../workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.html">Lab 19: Joint TB Ladder &amp; Exponential Decay State-Space</a></li>
+</ul>
+</div>
+</div>
+<section id="executive-summary-abstract-tldr" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</h2>
+<p>In <strong>EXP-019</strong>, we execute two targeted mathematical upgrades to <code>mlbr</code>’s Level 5 player-prop pricing stack (<code>EXP-016</code> and <code>EXP-017</code>) and validate both strictly out-of-sample on locked <code>2025</code>:</p>
+<ol type="1">
+<li><strong>Joint Multinomial Softmax Total Bases Ladder (<code>0, 1, 2, 3, 4+ TB</code>, <code>n = 43,740</code> OOS):</strong> Replacing separate binary logits with a joint 5-class model (<code>nnet::multinom</code> vs.&nbsp;<code>MASS::polr</code>) guarantees <strong>zero monotonicity violations (<code>0 / 43,740</code>)</strong> across all four retail sportsbook Total Bases rungs (<span class="math inline">\(P(\text{TB}\ge 1) \ge P(\text{TB}\ge 2) \ge P(\text{TB}\ge 3) \ge P(\text{TB}\ge 4)\)</span>). Relaxing proportional odds via Multinomial Softmax strictly outperforms Ordered Logit (<code>POLR</code>) on 5-class Log-Loss (<strong><code>1.43881</code></strong> vs <code>1.44285</code>), Ranked Probability Score (<strong><code>0.18645</code></strong> vs <code>0.18672</code>), and power-tail <code>TB &gt;= 4</code> ROC AUC (<strong><code>0.6003</code></strong> vs <code>0.5884</code>, <strong><code>+0.0119</code> AUC lift</strong>).</li>
+<li><strong>Exponential Half-Life State-Space Decay (<code>n = 4,859</code> OOS SP Starts):</strong> Replacing <code>EXP-016</code>’s discontinuous flat 30-day boxcar window with a continuous 90-day exponential decay kernel (<span class="math inline">\(w(\Delta t) = 2^{-\Delta t / H}\)</span>, strictly <code>d &lt; t</code>) reveals a clean signal-to-noise curve: a <code>7-day</code> half-life overreacts to 1-start noise (<code>AUC 0.6761 &lt; 0.6779</code> flat 30d), <code>14-day</code> beats flat 30d (<code>AUC 0.6800</code>), and the <code>2024</code>-selected optimal <strong><code>30-day</code> half-life</strong> (<span class="math inline">\(H^* = 30\text{d}\)</span>, zero <code>2025</code> peeking) achieves our strongest K-Prop pricing to date: Count NLL <strong><code>2.23027</code></strong> (vs <code>2.23273</code>), RMSE <strong><code>2.3002</code></strong> (vs <code>2.3068</code>), <code>Over 5.5 K</code> AUC <strong><code>0.6827</code></strong> (vs <code>0.6779</code>), and <code>Over 7.5 K</code> tail Brier <strong><code>0.11290</code></strong> (vs <code>0.11333</code>). <em>(Note: <code>H* = 30d</code> lies at the upper boundary of the tested <code>{7, 14, 21, 30}</code> grid, motivating a future <code>H = 45–60d</code> / season-to-date sweep.)</em></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/ord02_ordered_vs_multinomial_ablation.png" class="img-fluid figure-img"></p>
+<figcaption>Ordered Logit vs Multinomial Softmax Total Bases Ladder Ablation</figcaption>
+</figure>
+</div>
+</section>
+<section id="domain-problem-structural-physics" class="level2">
+<h2 class="anchored" data-anchor-id="domain-problem-structural-physics">2. Domain Problem &amp; Structural Physics</h2>
+<ol type="1">
+<li><strong>Why Proportional Odds Fails in the Baseball Power Tail:</strong> A single (<code>TB = 1</code>) is driven primarily by contact rate, BABIP, and batting-order PA volume, whereas a <code>4+ TB</code> game (home run or multi-XBH outbreak) is driven disproportionately by <strong>Hawk-Eye Bat Speed</strong>, <strong>Blast Rate</strong>, <strong>Handedness Park HR Factors (<code>pf_hr_hand</code>)</strong>, and <strong>outfield wind carry</strong>. Proportional odds (<code>MASS::polr</code>) constrains every covariate to shift all 4 cumulative thresholds by the same scalar <span class="math inline">\(\beta_j\)</span>. Multinomial Softmax (<code>nnet::multinom</code>) frees each discrete TB class to weight power vs.&nbsp;contact physics distinctly while preserving exact <span class="math inline">\(\sum_{k=0}^4 p_k = 1\)</span> coherence.</li>
+<li><strong>Why a 30-Day Exponential Half-Life Beats Both a Flat 30-Day Boxcar and a 7-Day Window:</strong> Starting pitchers pitch only once every 5 days (<code>~6</code> starts per 30 days). A flat 30-day boxcar treats Day 29 identically to Day 5 and abruptly discards Day 31. An exponential half-life <span class="math inline">\(H = 30\text{d}\)</span> over a 90-day lookback smoothly retains prior-month talent memory while giving <code>2x</code> weight to recent starts and avoiding the high variance of a 1-to-2-start <code>7-day</code> window.</li>
+</ol>
+</section>
+<section id="mathematical-formulation-zero-copy-duckdb-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-formulation-zero-copy-duckdb-pipeline">3. Mathematical Formulation &amp; Zero-Copy DuckDB Pipeline</h2>
+<ul>
+<li><strong>Joint Multinomial Total Bases Ladder:</strong> <span class="math display">\[P(Y_i = k \mid \mathbf{x}_i) = \frac{\exp(\boldsymbol{\gamma}_k^\top \mathbf{x}_i)}{\sum_{m=0}^4 \exp(\boldsymbol{\gamma}_m^\top \mathbf{x}_i)}, \qquad P(\text{TB}_i \ge r \mid \mathbf{x}_i) = \sum_{k=r}^{4} P(Y_i = k \mid \mathbf{x}_i)\]</span></li>
+<li><strong>Ranked Probability Score (RPS):</strong> <span class="math display">\[\text{RPS} = \frac{1}{4N}\sum_{i=1}^N \sum_{k=0}^3 \Big(\hat{F}_i(k) - \mathbb{I}(y_i \le k)\Big)^2\]</span></li>
+<li><strong>Strictly Causal Exponential Half-Life Kernel (<code>d.gdate &lt; s.gdate</code>):</strong> <span class="math display">\[w(\Delta t; H) = 2^{-\Delta t / H}, \qquad \text{CSW}_H(p, t) = \frac{\sum w_i\,\text{CSW}_i + 150 \cdot 0.290}{\sum w_i\,P_i + 150}\]</span></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Strictly pre-game (d.gdate &lt; s.gdate) exponential half-life decay over v_statcast_features</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s.game_id, s.sp_mlbam,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       (<span class="fu">SUM</span>(<span class="fu">EXP</span>(<span class="op">-</span><span class="fu">LN</span>(<span class="fl">2.0</span>) <span class="op">*</span> DATEDIFF(<span class="st">'day'</span>, d.gdate, s.gdate) <span class="op">/</span> <span class="fl">30.0</span>) <span class="op">*</span> d.n_csw) <span class="op">+</span> <span class="fl">150.0</span> <span class="op">*</span> <span class="fl">0.290</span>) <span class="op">/</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       (<span class="fu">SUM</span>(<span class="fu">EXP</span>(<span class="op">-</span><span class="fu">LN</span>(<span class="fl">2.0</span>) <span class="op">*</span> DATEDIFF(<span class="st">'day'</span>, d.gdate, s.gdate) <span class="op">/</span> <span class="fl">30.0</span>) <span class="op">*</span> d.n_pitches) <span class="op">+</span> <span class="fl">150.0</span>) <span class="kw">AS</span> csw_h30</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> starts s</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> daily_pit d</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> s.sp_mlbam <span class="op">=</span> d.sp_mlbam <span class="kw">AND</span> d.gdate <span class="op">&lt;</span> s.gdate <span class="kw">AND</span> DATEDIFF(<span class="st">'day'</span>, d.gdate, s.gdate) <span class="kw">BETWEEN</span> <span class="dv">1</span> <span class="kw">AND</span> <span class="dv">90</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> s.game_id, s.sp_mlbam;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="exploratory-data-analysis-eda-interactive-2025-tb-ladder-explorer" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis-eda-interactive-2025-tb-ladder-explorer">4. Exploratory Data Analysis (EDA) &amp; Interactive 2025 TB Ladder Explorer</h2>
+<p>Inspect the full monotonic Total Bases ladder (<code>TB &gt;= 1, 2, 3, 4</code>) across the top 15 MLB sluggers on locked <code>2025</code> (<code>&gt;= 100</code> starts):</p>
+<iframe src="../assets/ord01_tb_ladder_probabilities_2025.html" width="100%" height="560" style="border: 1px solid #1e293b; border-radius: 8px; background: #090d16;">
+</iframe>
+</section>
+<section id="model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" class="level2">
+<h2 class="anchored" data-anchor-id="model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos">5. Model Architecture &amp; Temporal Validation (<code>2024</code> Train <span class="math inline">\(\rightarrow\)</span> Locked <code>2025</code> OOS)</h2>
+<section id="part-a-joint-5-class-total-bases-ladder-n-43740-locked-2025-starts" class="level3">
+<h3 class="anchored" data-anchor-id="part-a-joint-5-class-total-bases-ladder-n-43740-locked-2025-starts">Part A: Joint 5-Class Total Bases Ladder (<code>n = 43,740</code> Locked <code>2025</code> Starts)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 6%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">n_oos_2025</th>
+<th style="text-align: right;">nll_5class</th>
+<th style="text-align: right;">rps</th>
+<th style="text-align: right;">n_viol</th>
+<th style="text-align: right;">ll_tb1</th>
+<th style="text-align: right;">auc_tb1</th>
+<th style="text-align: right;">ll_tb2</th>
+<th style="text-align: right;">auc_tb2</th>
+<th style="text-align: right;">ll_tb3</th>
+<th style="text-align: right;">auc_tb3</th>
+<th style="text-align: right;">ll_tb4</th>
+<th style="text-align: right;">auc_tb4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">M0_League_BaseRate</td>
+<td style="text-align: right;">43740</td>
+<td style="text-align: right;">1.45182</td>
+<td style="text-align: right;">0.18908</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.66758</td>
+<td style="text-align: right;">0.50000</td>
+<td style="text-align: right;">0.65111</td>
+<td style="text-align: right;">0.50000</td>
+<td style="text-align: right;">0.51101</td>
+<td style="text-align: right;">0.50000</td>
+<td style="text-align: right;">0.41680</td>
+<td style="text-align: right;">0.50000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M1_Ordered_Logit_POLR</td>
+<td style="text-align: right;">43740</td>
+<td style="text-align: right;">1.44285</td>
+<td style="text-align: right;">0.18672</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.66224</td>
+<td style="text-align: right;">0.56159</td>
+<td style="text-align: right;">0.64412</td>
+<td style="text-align: right;">0.56995</td>
+<td style="text-align: right;">0.50406</td>
+<td style="text-align: right;">0.58288</td>
+<td style="text-align: right;">0.41090</td>
+<td style="text-align: right;">0.58840</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">M2_Multinomial_Logit</td>
+<td style="text-align: right;">43740</td>
+<td style="text-align: right;">1.43881</td>
+<td style="text-align: right;">0.18645</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.66131</td>
+<td style="text-align: right;">0.56565</td>
+<td style="text-align: right;">0.64427</td>
+<td style="text-align: right;">0.56953</td>
+<td style="text-align: right;">0.50360</td>
+<td style="text-align: right;">0.58567</td>
+<td style="text-align: right;">0.40897</td>
+<td style="text-align: right;">0.60028</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="part-b-exponential-half-life-state-space-decay-n-4859-locked-2025-sp-starts" class="level3">
+<h3 class="anchored" data-anchor-id="part-b-exponential-half-life-state-space-decay-n-4859-locked-2025-sp-starts">Part B: Exponential Half-Life State-Space Decay (<code>n = 4,859</code> Locked <code>2025</code> SP Starts)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">half_life_days</th>
+<th style="text-align: right;">theta_2024</th>
+<th style="text-align: right;">train_2024_nll</th>
+<th style="text-align: right;">oos_2025_nll</th>
+<th style="text-align: right;">oos_2025_rmse</th>
+<th style="text-align: right;">oos_2025_brier_o55</th>
+<th style="text-align: right;">oos_2025_auc_o55</th>
+<th style="text-align: right;">oos_2025_brier_o75</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">M4_EXP016_Flat30d</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">46.88747</td>
+<td style="text-align: right;">2.23982</td>
+<td style="text-align: right;">2.23273</td>
+<td style="text-align: right;">2.30682</td>
+<td style="text-align: right;">0.20948</td>
+<td style="text-align: right;">0.67792</td>
+<td style="text-align: right;">0.11333</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M5a_ExpDecay_H7d</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">44.33442</td>
+<td style="text-align: right;">2.24212</td>
+<td style="text-align: right;">2.23467</td>
+<td style="text-align: right;">2.31119</td>
+<td style="text-align: right;">0.21007</td>
+<td style="text-align: right;">0.67611</td>
+<td style="text-align: right;">0.11363</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">M5b_ExpDecay_H14d</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">48.07358</td>
+<td style="text-align: right;">2.23869</td>
+<td style="text-align: right;">2.23207</td>
+<td style="text-align: right;">2.30472</td>
+<td style="text-align: right;">0.20897</td>
+<td style="text-align: right;">0.67999</td>
+<td style="text-align: right;">0.11324</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M5c_ExpDecay_H21d</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">50.13459</td>
+<td style="text-align: right;">2.23692</td>
+<td style="text-align: right;">2.23092</td>
+<td style="text-align: right;">2.30186</td>
+<td style="text-align: right;">0.20850</td>
+<td style="text-align: right;">0.68164</td>
+<td style="text-align: right;">0.11304</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">M5d_ExpDecay_H30d</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">51.51997</td>
+<td style="text-align: right;">2.23578</td>
+<td style="text-align: right;">2.23027</td>
+<td style="text-align: right;">2.30021</td>
+<td style="text-align: right;">0.20824</td>
+<td style="text-align: right;">0.68267</td>
+<td style="text-align: right;">0.11290</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/ord03_exp_halflife_kprop_curve.png" class="img-fluid figure-img"></p>
+<figcaption>Exponential Half-Life Decay vs Flat 30-Day Boxcar Window</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="leaderboards-top-2025-monotonic-tb-ladder-case-studies" class="level2">
+<h2 class="anchored" data-anchor-id="leaderboards-top-2025-monotonic-tb-ladder-case-studies">6. Leaderboards &amp; Top 2025 Monotonic TB Ladder Case Studies</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">player_name</th>
+<th style="text-align: right;">Starts</th>
+<th style="text-align: right;">Actual TB/G</th>
+<th style="text-align: right;">Exp TB/G</th>
+<th style="text-align: right;">P(TB&gt;=1)</th>
+<th style="text-align: right;">P(TB&gt;=2)</th>
+<th style="text-align: right;">P(TB&gt;=3)</th>
+<th style="text-align: right;">P(TB&gt;=4)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Aaron Judge</td>
+<td style="text-align: right;">151</td>
+<td style="text-align: right;">2.46</td>
+<td style="text-align: right;">2.20</td>
+<td style="text-align: right;">70.6</td>
+<td style="text-align: right;">50.5</td>
+<td style="text-align: right;">37.8</td>
+<td style="text-align: right;">31.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Shohei Ohtani</td>
+<td style="text-align: right;">158</td>
+<td style="text-align: right;">2.41</td>
+<td style="text-align: right;">2.18</td>
+<td style="text-align: right;">71.2</td>
+<td style="text-align: right;">50.6</td>
+<td style="text-align: right;">36.8</td>
+<td style="text-align: right;">30.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Juan Soto</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">1.89</td>
+<td style="text-align: right;">1.99</td>
+<td style="text-align: right;">69.2</td>
+<td style="text-align: right;">46.8</td>
+<td style="text-align: right;">32.5</td>
+<td style="text-align: right;">26.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kyle Schwarber</td>
+<td style="text-align: right;">162</td>
+<td style="text-align: right;">2.10</td>
+<td style="text-align: right;">1.99</td>
+<td style="text-align: right;">68.4</td>
+<td style="text-align: right;">46.2</td>
+<td style="text-align: right;">32.5</td>
+<td style="text-align: right;">26.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bobby Witt</td>
+<td style="text-align: right;">157</td>
+<td style="text-align: right;">1.99</td>
+<td style="text-align: right;">1.95</td>
+<td style="text-align: right;">73.2</td>
+<td style="text-align: right;">47.9</td>
+<td style="text-align: right;">31.0</td>
+<td style="text-align: right;">22.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Oneil Cruz</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">1.43</td>
+<td style="text-align: right;">1.93</td>
+<td style="text-align: right;">69.5</td>
+<td style="text-align: right;">46.1</td>
+<td style="text-align: right;">30.8</td>
+<td style="text-align: right;">24.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Gunnar Henderson</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">1.65</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">68.0</td>
+<td style="text-align: right;">45.2</td>
+<td style="text-align: right;">30.9</td>
+<td style="text-align: right;">24.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ketel Marte</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">2.04</td>
+<td style="text-align: right;">1.91</td>
+<td style="text-align: right;">69.9</td>
+<td style="text-align: right;">46.5</td>
+<td style="text-align: right;">30.2</td>
+<td style="text-align: right;">23.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Byron Buxton</td>
+<td style="text-align: right;">125</td>
+<td style="text-align: right;">2.15</td>
+<td style="text-align: right;">1.86</td>
+<td style="text-align: right;">69.1</td>
+<td style="text-align: right;">44.9</td>
+<td style="text-align: right;">29.2</td>
+<td style="text-align: right;">21.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fernando Tatís</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">1.71</td>
+<td style="text-align: right;">1.85</td>
+<td style="text-align: right;">69.7</td>
+<td style="text-align: right;">44.6</td>
+<td style="text-align: right;">28.8</td>
+<td style="text-align: right;">21.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Vladimir Guerrero</td>
+<td style="text-align: right;">154</td>
+<td style="text-align: right;">1.79</td>
+<td style="text-align: right;">1.85</td>
+<td style="text-align: right;">71.7</td>
+<td style="text-align: right;">45.3</td>
+<td style="text-align: right;">28.5</td>
+<td style="text-align: right;">20.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Corbin Carroll</td>
+<td style="text-align: right;">139</td>
+<td style="text-align: right;">2.18</td>
+<td style="text-align: right;">1.82</td>
+<td style="text-align: right;">66.9</td>
+<td style="text-align: right;">43.7</td>
+<td style="text-align: right;">28.5</td>
+<td style="text-align: right;">21.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="downstream-integration-market-applications" class="level2">
+<h2 class="anchored" data-anchor-id="downstream-integration-market-applications">7. Downstream Integration &amp; Market Applications</h2>
+<ol type="1">
+<li><strong>Arbitrage-Free Retail Prop Ladders:</strong> Pricing <code>1+ Hit (TB&gt;=1)</code>, <code>2+ TB</code>, <code>3+ TB</code>, and <code>4+ TB</code> from a single <code>nnet::multinom</code> distribution prevents internal crossing arbitrage and plugs directly into <code>EXP-018</code>’s Gaussian Copula for multi-rung SGP pricing.</li>
+<li><strong>Smooth State-Space Tracking (<code>H* = 30d</code>):</strong> Upgrading <code>EXP-016</code> to <code>H* = 30d</code> exponential decay increases NegBin dispersion parameter <span class="math inline">\(\hat{\theta}\)</span> from <code>46.89</code> to <code>51.52</code>, proving that smooth recency weighting explains additional true-talent variance and sharpens both <code>Over 5.5 K</code> and <code>Over 7.5 K</code> alt-line pricing.</li>
+</ol>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/cloudcurio\.cc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Study 19: Joint Ordered/Multinomial Total Bases Ladder &amp; Exponential Half-Life State-Space Decay"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Q-CRISP Level 5G — Monotonic 0–4+ TB Pricing &amp; Smooth Kernel Pitcher K-Props (EXP-019)"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-22"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [Level 5, Batter Props, Pitcher Props, Ordered Logit, State-Space, Q-CRISP]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="minimal"}</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">### Experiment Registry &amp; Architecture</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Experiment ID:** <span class="in">`EXP-019-ORDERED-TB-EXP-DECAY-STATESPACE`</span> (<span class="in">`VALIDATED`</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Specification:** `specs/19_ordered_tb_exp_decay_statespace.md` | **ADR:** <span class="in">`ADR-015`</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Training Split:** <span class="in">`2024`</span> MLB Regular Season (<span class="in">`43,722`</span> batter-games; <span class="in">`4,855`</span> SP starts)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Locked OOS Test:** <span class="in">`2025`</span> MLB Regular Season (<span class="in">`43,740`</span> batter-games; <span class="in">`4,859`</span> SP starts)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Companion Work-Along Lab:** <span class="co">[</span><span class="ot">Lab 19: Joint TB Ladder &amp; Exponential Decay State-Space</span><span class="co">](../workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.qmd)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Executive Summary &amp; Abstract (TL;DR)</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>In **EXP-019**, we execute two targeted mathematical upgrades to <span class="in">`mlbr`</span>'s Level 5 player-prop pricing stack (<span class="in">`EXP-016`</span> and <span class="in">`EXP-017`</span>) and validate both strictly out-of-sample on locked <span class="in">`2025`</span>:</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Joint Multinomial Softmax Total Bases Ladder (`0, 1, 2, 3, 4+ TB`, `n = 43,740` OOS):** Replacing separate binary logits with a joint 5-class model (`nnet::multinom` vs. `MASS::polr`) guarantees **zero monotonicity violations (`0 / 43,740`)** across all four retail sportsbook Total Bases rungs ($P(\text{TB}\ge 1) \ge P(\text{TB}\ge 2) \ge P(\text{TB}\ge 3) \ge P(\text{TB}\ge 4)$). Relaxing proportional odds via Multinomial Softmax strictly outperforms Ordered Logit (`POLR`) on 5-class Log-Loss (**`1.43881`** vs `1.44285`), Ranked Probability Score (**`0.18645`** vs `0.18672`), and power-tail `TB &gt;= 4` ROC AUC (**`0.6003`** vs `0.5884`, **`+0.0119` AUC lift**).</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Exponential Half-Life State-Space Decay (`n = 4,859` OOS SP Starts):** Replacing `EXP-016`'s discontinuous flat 30-day boxcar window with a continuous 90-day exponential decay kernel ($w(\Delta t) = 2^{-\Delta t / H}$, strictly `d &lt; t`) reveals a clean signal-to-noise curve: a `7-day` half-life overreacts to 1-start noise (`AUC 0.6761 &lt; 0.6779` flat 30d), `14-day` beats flat 30d (`AUC 0.6800`), and the `2024`-selected optimal **`30-day` half-life** ($H^* = 30\text{d}$, zero `2025` peeking) achieves our strongest K-Prop pricing to date: Count NLL **`2.23027`** (vs `2.23273`), RMSE **`2.3002`** (vs `2.3068`), `Over 5.5 K` AUC **`0.6827`** (vs `0.6779`), and `Over 7.5 K` tail Brier **`0.11290`** (vs <span class="in">`0.11333`</span>). *(Note: `H* = 30d` lies at the upper boundary of the tested `{7, 14, 21, 30}` grid, motivating a future `H = 45–60d` / season-to-date sweep.)*</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="al">![Ordered Logit vs Multinomial Softmax Total Bases Ladder Ablation](../assets/ord02_ordered_vs_multinomial_ablation.png)</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Domain Problem &amp; Structural Physics</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Why Proportional Odds Fails in the Baseball Power Tail:** A single (`TB = 1`) is driven primarily by contact rate, BABIP, and batting-order PA volume, whereas a `4+ TB` game (home run or multi-XBH outbreak) is driven disproportionately by **Hawk-Eye Bat Speed**, **Blast Rate**, **Handedness Park HR Factors (`pf_hr_hand`)**, and **outfield wind carry**. Proportional odds (<span class="in">`MASS::polr`</span>) constrains every covariate to shift all 4 cumulative thresholds by the same scalar $\beta_j$. Multinomial Softmax (`nnet::multinom`) frees each discrete TB class to weight power vs. contact physics distinctly while preserving exact $\sum_{k=0}^4 p_k = 1$ coherence.</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Why a 30-Day Exponential Half-Life Beats Both a Flat 30-Day Boxcar and a 7-Day Window:** Starting pitchers pitch only once every 5 days (<span class="in">`~6`</span> starts per 30 days). A flat 30-day boxcar treats Day 29 identically to Day 5 and abruptly discards Day 31. An exponential half-life $H = 30\text{d}$ over a 90-day lookback smoothly retains prior-month talent memory while giving <span class="in">`2x`</span> weight to recent starts and avoiding the high variance of a 1-to-2-start <span class="in">`7-day`</span> window.</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Mathematical Formulation &amp; Zero-Copy DuckDB Pipeline</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Joint Multinomial Total Bases Ladder:**</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  $$P(Y_i = k \mid \mathbf{x}_i) = \frac{\exp(\boldsymbol{\gamma}_k^\top \mathbf{x}_i)}{\sum_{m=0}^4 \exp(\boldsymbol{\gamma}_m^\top \mathbf{x}_i)}, \qquad P(\text{TB}_i \ge r \mid \mathbf{x}_i) = \sum_{k=r}^{4} P(Y_i = k \mid \mathbf{x}_i)$$</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Ranked Probability Score (RPS):**</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  $$\text{RPS} = \frac{1}{4N}\sum_{i=1}^N \sum_{k=0}^3 \Big(\hat{F}_i(k) - \mathbb{I}(y_i \le k)\Big)^2$$</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Strictly Causal Exponential Half-Life Kernel (`d.gdate &lt; s.gdate`):**</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  $$w(\Delta t; H) = 2^{-\Delta t / H}, \qquad \text{CSW}_H(p, t) = \frac{\sum w_i\,\text{CSW}_i + 150 \cdot 0.290}{\sum w_i\,P_i + 150}$$</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="in">```sql</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">-- Strictly pre-game (d.gdate &lt; s.gdate) exponential half-life decay over v_statcast_features</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s<span class="ch">.</span>game_id, s<span class="ch">.</span>sp_mlbam,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>       (<span class="fu">SUM</span>(<span class="fu">EXP</span>(<span class="op">-</span><span class="fu">LN</span>(<span class="fl">2.0</span>) <span class="op">*</span> DATEDIFF(<span class="st">'day'</span>, d<span class="ch">.</span>gdate, s<span class="ch">.</span>gdate) <span class="op">/</span> <span class="fl">30.0</span>) <span class="op">*</span> d<span class="ch">.</span>n_csw) <span class="op">+</span> <span class="fl">150.0</span> <span class="op">*</span> <span class="fl">0.290</span>) <span class="op">/</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>       (<span class="fu">SUM</span>(<span class="fu">EXP</span>(<span class="op">-</span><span class="fu">LN</span>(<span class="fl">2.0</span>) <span class="op">*</span> DATEDIFF(<span class="st">'day'</span>, d<span class="ch">.</span>gdate, s<span class="ch">.</span>gdate) <span class="op">/</span> <span class="fl">30.0</span>) <span class="op">*</span> d<span class="ch">.</span>n_pitches) <span class="op">+</span> <span class="fl">150.0</span>) <span class="kw">AS</span> csw_h30</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> starts s</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> daily_pit d</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> s<span class="ch">.</span>sp_mlbam <span class="op">=</span> d<span class="ch">.</span>sp_mlbam <span class="kw">AND</span> d<span class="ch">.</span>gdate <span class="op">&lt;</span> s<span class="ch">.</span>gdate <span class="kw">AND</span> DATEDIFF(<span class="st">'day'</span>, d<span class="ch">.</span>gdate, s<span class="ch">.</span>gdate) <span class="kw">BETWEEN</span> <span class="dv">1</span> <span class="kw">AND</span> <span class="dv">90</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> s<span class="ch">.</span>game_id, s<span class="ch">.</span>sp_mlbam;</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Exploratory Data Analysis (EDA) &amp; Interactive 2025 TB Ladder Explorer</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>Inspect the full monotonic Total Bases ladder (<span class="in">`TB &gt;= 1, 2, 3, 4`</span>) across the top 15 MLB sluggers on locked <span class="in">`2025`</span> (<span class="in">`&gt;= 100`</span> starts):</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../assets/ord01_tb_ladder_probabilities_2025.html"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"560"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"border: 1px solid #1e293b; border-radius: 8px; background: #090d16;"</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Model Architecture &amp; Temporal Validation (`2024` Train $\rightarrow$ Locked `2025` OOS)</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part A: Joint 5-Class Total Bases Ladder (`n = 43,740` Locked `2025` Starts)</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow); <span class="fu">library</span>(dplyr); <span class="fu">library</span>(knitr)</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>lake <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">default_lake</span>()</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="fu">read_parquet</span>(<span class="fu">file.path</span>(lake, <span class="st">"data/processed/ordered_tb_ablation_metrics_2025.parquet"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">5</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part B: Exponential Half-Life State-Space Decay (`n = 4,859` Locked `2025` SP Starts)</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="fu">read_parquet</span>(<span class="fu">file.path</span>(lake, <span class="st">"data/processed/exp_decay_kprop_ablation_2025.parquet"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">5</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="al">![Exponential Half-Life Decay vs Flat 30-Day Boxcar Window](../assets/ord03_exp_halflife_kprop_curve.png)</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Leaderboards &amp; Top 2025 Monotonic TB Ladder Case Studies</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="fu">read_parquet</span>(<span class="fu">file.path</span>(lake, <span class="st">"data/processed/ordered_tb_ladder_backtest_2024_2025.parquet"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(player_name) <span class="sc">|&gt;</span></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>    <span class="at">Starts =</span> <span class="fu">n</span>(),</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Actual TB/G</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(game_tb), <span class="dv">2</span>),</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Exp TB/G</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(exp_tb_mn), <span class="dv">2</span>),</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">P(TB&gt;=1)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(p_mn_ge1), <span class="dv">1</span>),</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">P(TB&gt;=2)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(p_mn_ge2), <span class="dv">1</span>),</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">P(TB&gt;=3)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(p_mn_ge3), <span class="dv">1</span>),</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">P(TB&gt;=4)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(p_mn_ge4), <span class="dv">1</span>),</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Starts <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="st">`</span><span class="at">Exp TB/G</span><span class="st">`</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">12</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. Downstream Integration &amp; Market Applications</span></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Arbitrage-Free Retail Prop Ladders:** Pricing <span class="in">`1+ Hit (TB&gt;=1)`</span>, <span class="in">`2+ TB`</span>, <span class="in">`3+ TB`</span>, and <span class="in">`4+ TB`</span> from a single <span class="in">`nnet::multinom`</span> distribution prevents internal crossing arbitrage and plugs directly into <span class="in">`EXP-018`</span>'s Gaussian Copula for multi-rung SGP pricing.</span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Smooth State-Space Tracking (`H* = 30d`):** Upgrading <span class="in">`EXP-016`</span> to <span class="in">`H* = 30d`</span> exponential decay increases NegBin dispersion parameter $\hat{\theta}$ from <span class="in">`46.89`</span> to <span class="in">`51.52`</span>, proving that smooth recency weighting explains additional true-talent variance and sharpens both <span class="in">`Over 5.5 K`</span> and <span class="in">`Over 7.5 K`</span> alt-line pricing.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

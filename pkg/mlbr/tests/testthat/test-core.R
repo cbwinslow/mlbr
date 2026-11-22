@@ -727,3 +727,29 @@ test_that("EXP-018 Same-Game Parlay (SGP) Correlation Matrix & Copula Pricing sa
   expect_lt(ab$joint_4cell_nll[ab$sgp_id == "SGP2_HomeSP_O55K_Over85" & ab$model == "M1_Gaussian_Copula"],
             ab$joint_4cell_nll[ab$sgp_id == "SGP2_HomeSP_O55K_Over85" & ab$model == "M0_Naive_Independence"])
 })
+
+test_that("EXP-019 Joint Ordered/Multinomial TB Ladder & Exp-Decay K-Props satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  tb_p <- file.path(proc, "ordered_tb_ladder_backtest_2024_2025.parquet")
+  ta_p <- file.path(proc, "ordered_tb_ablation_metrics_2025.parquet")
+  dk_p <- file.path(proc, "exp_decay_kprop_ablation_2025.parquet")
+  skip_if_not(file.exists(tb_p) && file.exists(ta_p) && file.exists(dk_p), "EXP-019 Gold files not materialized")
+
+  tb <- arrow::read_parquet(tb_p)
+  ta <- arrow::read_parquet(ta_p)
+  dk <- arrow::read_parquet(dk_p)
+
+  expect_equal(nrow(tb), 43740L)
+  expect_true(all(tb$p_polr_ge1 >= tb$p_polr_ge2 - 1e-12 & tb$p_polr_ge2 >= tb$p_polr_ge3 - 1e-12 & tb$p_polr_ge3 >= tb$p_polr_ge4 - 1e-12))
+  expect_true(all(tb$p_mn_ge1   >= tb$p_mn_ge2   - 1e-12 & tb$p_mn_ge2   >= tb$p_mn_ge3   - 1e-12 & tb$p_mn_ge3   >= tb$p_mn_ge4   - 1e-12))
+  expect_true(all(ta$n_viol == 0L))
+  expect_lt(ta$nll_5class[ta$model == "M2_Multinomial_Logit"], ta$nll_5class[ta$model == "M1_Ordered_Logit_POLR"])
+  expect_lt(ta$rps[ta$model == "M2_Multinomial_Logit"], ta$rps[ta$model == "M1_Ordered_Logit_POLR"])
+  expect_gt(ta$auc_tb4[ta$model == "M2_Multinomial_Logit"], ta$auc_tb4[ta$model == "M1_Ordered_Logit_POLR"] + 0.008)
+  expect_lt(dk$oos_2025_nll[dk$model == "M5d_ExpDecay_H30d"], dk$oos_2025_nll[dk$model == "M4_EXP016_Flat30d"])
+  expect_lt(dk$oos_2025_rmse[dk$model == "M5d_ExpDecay_H30d"], dk$oos_2025_rmse[dk$model == "M4_EXP016_Flat30d"])
+  expect_gt(dk$oos_2025_auc_o55[dk$model == "M5d_ExpDecay_H30d"], dk$oos_2025_auc_o55[dk$model == "M4_EXP016_Flat30d"] + 0.003)
+  expect_lt(dk$oos_2025_brier_o75[dk$model == "M5d_ExpDecay_H30d"], dk$oos_2025_brier_o75[dk$model == "M4_EXP016_Flat30d"])
+})

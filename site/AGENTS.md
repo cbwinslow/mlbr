@@ -48,7 +48,8 @@
     - `16_dynamic_statespace_negbin_k_props.qmd`: Study 16 — Dynamic In-Season State-Space Updates & Negative Binomial Overdispersed K-Props (`EXP-016`).
     - `17_batter_hr_total_bases_props.qmd`: Study 17 — Batter Home Run (HR>=1) & Total Bases (TB>=2) Prop Pricing Engine (`EXP-017`).
     - `18_sgp_correlation_copula_pricing.qmd`: Study 18 — Same-Game Parlay (SGP) Correlation Matrix & Gaussian/Clayton Copula Pricing Engine (`EXP-018`).
-  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab18`).
+    - `19_ordered_tb_exp_decay_statespace.qmd`: Study 19 — Joint Ordered/Multinomial Total Bases Ladder & Exponential Half-Life State-Space Decay (`EXP-019`).
+  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab19`).
 - Build command: `quarto render site/` from project root.
 
 ## Verification

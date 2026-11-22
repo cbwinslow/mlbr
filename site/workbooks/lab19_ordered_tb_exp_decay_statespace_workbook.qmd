@@ -1,0 +1,37 @@
+---
+title: "Lab 19: Joint Ordered/Multinomial TB Ladder & Exponential Decay State-Space"
+subtitle: "Hands-On RStudio Server Companion for Study 19 (EXP-019)"
+date: "2026-11-22"
+categories: [Workbook, Level 5, Batter Props, Pitcher Props, DuckDB]
+format:
+  html:
+    toc: true
+    code-fold: false
+---
+
+## Learning Objectives
+
+In this companion work-along lab for [Study 19](../analyses/19_ordered_tb_exp_decay_statespace.qmd), you will:
+
+1. Compare **Exponential Half-Life Decay** weights ($w(\Delta t) = 2^{-\Delta t/H}$) against a discontinuous flat 30-day boxcar window.
+2. Verify **zero monotonicity violations** across all `43,740` locked `2025` batter-games via zero-copy **DuckDB SQL**.
+3. Render a **Dark Cyber** diagnostic curve showing why `H* = 30d` smooth decay beats both noisy `7d` half-lives and flat `30d` boxcars on `Over 5.5 K` ROC AUC.
+
+## Run Locally in RStudio Server
+
+```r
+source("workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.R")
+```
+
+## Full Runnable Script (`workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.R`)
+
+```{r}
+#| eval: false
+#| file: ../../workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.R
+```
+
+## Mentor Checkpoints
+
+1. **Checkpoint 1 (Decay Weights):** Confirm that $w(30; H=30) = 0.5$ and that smooth decay eliminates the Day-31 boxcar discontinuity.
+2. **Checkpoint 2 (Algebraic Monotonicity):** Confirm `0` violations of $P(\text{TB} \ge 1) \ge P(\text{TB} \ge 2) \ge P(\text{TB} \ge 3) \ge P(\text{TB} \ge 4)$ across all `43,740` OOS starts.
+3. **Checkpoint 3 (Start-Frequency Signal-to-Noise):** Explain why MLB starters' 5-day rotation cadence makes `H = 7d` overfit 1-start noise while `H* = 30d` over a 90-day lookback maximizes locked `2025` OOS AUC (`0.6827`).

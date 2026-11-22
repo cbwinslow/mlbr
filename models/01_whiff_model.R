@@ -6,7 +6,7 @@
 #   swings and misses (whiffs) at a pitch given its velocity, movement, and location.
 #
 # Data Source:
-#   Zero-copy DuckDB view over raw Statcast Parquet data lake (/mnt/storage/Rprojects/mlbr)
+#   Zero-copy DuckDB view over raw Statcast Parquet data lake (resolved via mlbr::default_lake())
 # ==============================================================================
 
 # Step 1: Load packages from our high-performance library
@@ -22,7 +22,7 @@ suppressPackageStartupMessages({
 })
 
 cat("Connecting to mlbr data lake via DuckDB...\n")
-con <- lake_duckdb("/mnt/storage/Rprojects/mlbr")
+con <- lake_duckdb(mlbr::default_lake())
 
 # Step 2: Query a clean, representative sample of competitive pitches
 # We filter for swings on fastballs (FF, SI) and breaking balls (SL, ST)
@@ -128,5 +128,5 @@ p <- ggplot(grid, aes(x = plate_x, y = plate_z, fill = whiff_prob)) +
   )
 
 # Save plot to artifacts
-ggsave("/mnt/storage/Rprojects/mlbr/models/whiff_probability_surface.png", plot = p, width = 8, height = 7, dpi = 150)
+ggsave(file.path(mlbr::default_lake(), "models/whiff_probability_surface.png"), plot = p, width = 8, height = 7, dpi = 150)
 cat("\nWhiff surface visualization saved to: models/whiff_probability_surface.png\n")

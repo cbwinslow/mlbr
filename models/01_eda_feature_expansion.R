@@ -167,7 +167,7 @@ p1 <- ggplot(pitches |> filter(pitch_type %in% c("FF", "SL", "CU", "CH")),
     fill = "Pitch Count"
   )
 
-ggsave("/mnt/storage/Rprojects/mlbr/models/fig1_vaa_by_pitch_type.png", plot = p1, width = 9, height = 7, dpi = 150)
+ggsave(file.path(mlbr::default_lake(), "models/fig1_vaa_by_pitch_type.png"), plot = p1, width = 9, height = 7, dpi = 150)
 cat("-> Saved: models/fig1_vaa_by_pitch_type.png\n")
 
 # Plot 2: Whiff Rate by Attack Zone and VAA Diff
@@ -184,7 +184,7 @@ p2 <- ggplot(swings, aes(x = vaa_diff, y = is_whiff)) +
     y = "Observed Whiff Rate on Swings"
   )
 
-ggsave("/mnt/storage/Rprojects/mlbr/models/fig2_whiff_vs_vaa.png", plot = p2, width = 8, height = 5, dpi = 150)
+ggsave(file.path(mlbr::default_lake(), "models/fig2_whiff_vs_vaa.png"), plot = p2, width = 8, height = 5, dpi = 150)
 cat("-> Saved: models/fig2_whiff_vs_vaa.png\n")
 
 cat("\n*** EDA COMPLETED SUCCESSFULLY ***\n")

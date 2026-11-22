@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge sabermetrics">Q-CRISP Study 19</span>
+    <span class="gallery-badge">Joint Props &amp; Decay</span>
+    <h4><a href="analyses/19_ordered_tb_exp_decay_statespace.html">Joint Total Bases Ladder &amp; Exp-Decay State-Space</a></h4>
+    <p>Joint 5-class Ordered &amp; Multinomial Softmax Total Bases pricing (0&ndash;4+ TB, zero monotonicity violations across 43,740 OOS starts) paired with continuous exponential half-life decay (H*=30d) for NegBin pitcher K-Props.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">TB&gt;=4 AUC 0.588&rarr;0.600 | K-Prop O5.5 AUC 0.678&rarr;0.683 | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge sabermetrics">Q-CRISP Study 18</span>
     <span class="gallery-badge">SGP Copulas</span>
     <h4><a href="analyses/18_sgp_correlation_copula_pricing.html">Same-Game Parlay Correlation &amp; Copula Pricing</a></h4>

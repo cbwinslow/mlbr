@@ -95,6 +95,8 @@ website:
               href: workbooks/lab17_batter_hr_total_bases_props_workbook.qmd
             - text: "Lab 18: SGP Correlation & Copula Pricing"
               href: workbooks/lab18_sgp_correlation_copula_pricing_workbook.qmd
+            - text: "Lab 19: Joint TB Ladder & Exp-Decay State-Space"
+              href: workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -135,6 +137,8 @@ website:
               href: analyses/17_batter_hr_total_bases_props.qmd
             - text: "Study 18: SGP Correlation & Copula Pricing"
               href: analyses/18_sgp_correlation_copula_pricing.qmd
+            - text: "Study 19: Joint TB Ladder & Exp-Decay State-Space"
+              href: analyses/19_ordered_tb_exp_decay_statespace.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

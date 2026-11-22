@@ -1045,5 +1045,66 @@
       "fig_pricing": "models/sgp02_gaussian_vs_clayton_copula_pricing.html",
       "fig_cal": "models/sgp03_sgp_oos_calibration_ablation.png"
     }
+  },
+  {
+    "id": "EXP-019-ORDERED-TB-EXP-DECAY-STATESPACE",
+    "title": "Joint Ordered/Multinomial Total Bases Ladder (0-4+ TB) & Exponential Half-Life State-Space Decay",
+    "tier": 5,
+    "tier_name": "Level 5: Betting Markets & Staking",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-22 07:32:21 UTC",
+    "summary": "Upgraded EXP-017 to joint 5-class Ordered (MASS::polr) and Multinomial Softmax (nnet::multinom) Total Bases pricing over {0,1,2,3,4+ TB} across 43,740 locked 2025 OOS batter-games with 0 monotonicity violations (5-class NLL 1.45182 -> 1.44285 POLR -> 1.43881 Multinomial; TB>=4 AUC 0.5884 -> 0.6003). Simultaneously benchmarked strictly pre-game exponential half-life decay (H=7,14,21,30d) against EXP-016 flat 30d NegBin K-Props across 4,859 locked 2025 starts: 2024-selected optimal H*=30d achieved locked 2025 Count NLL 2.23027 vs 2.23273 flat 30d (RMSE 2.3002 vs 2.3068).",
+    "hypotheses": [
+      "Joint Ordered and Multinomial Total Bases models guarantee zero monotonicity violations across TB>=1..4 while beating league base rates on 5-class NLL and Ranked Probability Score.",
+      "Continuous exponential half-life decay weights improve upon a discontinuous flat 30-day boxcar window for in-season starter CSW% & K% state-space updates."
+    ],
+    "formulas": {
+      "ordered_polr": "logit(P(TB <= k | x)) = alpha_k - beta'x, k in {0,1,2,3}",
+      "multinom_tb": "P(TB = k | x) = exp(gamma_k'x) / sum_m exp(gamma_m'x), P(TB >= k) = sum_{m>=k} P(TB = m)",
+      "exp_halflife": "w(dt; H) = 2^(-dt / H), dt = DATEDIFF('day', prev_date, game_date) in [1, 90]"
+    },
+    "metrics": {
+      "n_locked_2025_batter_games": 43740,
+      "tb_nll5_base": 1.45182,
+      "tb_nll5_polr": 1.44285,
+      "tb_nll5_multinom": 1.43881,
+      "tb_rps_base": 0.18908,
+      "tb_rps_multinom": 0.18645,
+      "tb_auc_ge1_mn": 0.5656,
+      "tb_auc_ge2_mn": 0.5695,
+      "tb_auc_ge3_mn": 0.5857,
+      "tb_auc_ge4_polr": 0.5884,
+      "tb_auc_ge4_mn": 0.6003,
+      "tb_monotonicity_violations": 0,
+      "kprop_best_h_2024_days": 30,
+      "kprop_nll_flat30": 2.23273,
+      "kprop_nll_best_exp": 2.23027,
+      "kprop_rmse_flat30": 2.3068,
+      "kprop_rmse_best_exp": 2.3002,
+      "kprop_auc_o55_best_exp": 0.6827
+    },
+    "features": [
+      "p_mn_ge1",
+      "p_mn_ge2",
+      "p_mn_ge3",
+      "p_mn_ge4",
+      "exp_tb_mn",
+      "csw_h14",
+      "k_h14",
+      "csw_h21",
+      "k_h21",
+      "csw_h30",
+      "k_h30"
+    ],
+    "artifacts": {
+      "spec": "specs/19_ordered_tb_exp_decay_statespace.md",
+      "script": "models/19_ordered_tb_exp_decay_statespace.R",
+      "gold_tb_ladder": "data/processed/ordered_tb_ladder_backtest_2024_2025.parquet",
+      "gold_tb_ablat": "data/processed/ordered_tb_ablation_metrics_2025.parquet",
+      "gold_k_decay": "data/processed/exp_decay_kprop_ablation_2025.parquet",
+      "fig_ladder": "models/ord01_tb_ladder_probabilities_2025.html",
+      "fig_tb_ablat": "models/ord02_ordered_vs_multinomial_ablation.png",
+      "fig_decay": "models/ord03_exp_halflife_kprop_curve.png"
+    }
   }
 ]
