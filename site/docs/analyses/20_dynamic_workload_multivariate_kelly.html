@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-11-22">
+
+<title>Study 20: Interior Half-Life Sweep, Dynamic In-Season Starter Workload (BF/GS) &amp; Multivariate Copula-Kelly Staking – mlbr</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-1d6f68ac07d6e45f311d12062c618a6a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-60eeab6e2dcd5db33e8cd92b07823bad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">mlbr</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/experiment_registry.html"> 
+<span class="menu-text">Knowledge Base</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../analyses/01_pitch_quality_eda.html"> 
+<span class="menu-text">Q-CRISP Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../workbooks/lab01_aerodynamics_workbook.html"> 
+<span class="menu-text">Student Labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../gallery.html"> 
+<span class="menu-text">Analyses Gallery</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../architecture.html"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup &amp; API</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../crosswalk.html"> 
+<span class="menu-text">ID Crosswalk</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../verification.html"> 
+<span class="menu-text">Data Proofs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../agent_context.html"> 
+<span class="menu-text">AI Agent Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data_dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/cbwinslow/mlbr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/20_dynamic_workload_multivariate_kelly.html">Study 20: Dynamic Workload &amp; Multivariate Kelly</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview &amp; Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation &amp; Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../crosswalk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universal ID Crosswalk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Architecture &amp; Storage</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../verification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Verification &amp; Proofs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../agent_context.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI Agent Data Manifest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data_dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Dictionary &amp; Schemas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Student Work-Along Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab01_aerodynamics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 01: Aerodynamics &amp; Trajectory Math</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab02_platoon_physics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 02: 4-Quadrant Platoon Physics &amp; PVI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab03_tunneling_stuff_plus_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 03: Pitch Tunneling &amp; Stuff+ / Loc+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab04_player_projections_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 04: Player Projections &amp; Delta Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab05_decomposed_pitching_decisions_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab06_ballpark_factors_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 06: Regressed Ballpark Factors &amp; Altitude</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab07_pecota_zips_ensemble_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 07: PECOTA Comps, ZiPS Aging &amp; Defense EDA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab08_team_baseruns_pythagenpat_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 08: BaseRuns, Pythagenpat &amp; 2026 Standings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab09_game_monte_carlo_simulator_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 09: Markov Game Simulator &amp; Win Expectancy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab10_market_edge_prediction_valuation_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 10: Market Edge, CLV &amp; Fractional Kelly</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 11: Bat-Tracking &amp; Arm-Slot Biomechanics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab12_weather_umpire_catcher_framing_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 12: Weather, Umpires &amp; Catcher Framing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 13: Pitcher Stamina &amp; Bullpen Fatigue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab14_unified_pro_game_f5_totals_bracket_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 14: Unified Pro Multi-Market &amp; 12-Team Bracket</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab15_daily_lineups_platoon_k_props_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 15: Daily Lineups &amp; Pitcher Strikeout Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 16: Dynamic State-Space &amp; NegBin K-Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab17_batter_hr_total_bases_props_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 17: Batter HR &amp; Total Bases Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab18_sgp_correlation_copula_pricing_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 18: SGP Correlation &amp; Copula Pricing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 19: Joint TB Ladder &amp; Exp-Decay State-Space</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 20: Dynamic Workload &amp; Multivariate Kelly</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Q-CRISP Research Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/experiment_registry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Knowledge Base &amp; Registry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/01_pitch_quality_eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 01: Aerodynamics &amp; Approach Angles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/02_platoon_physics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 02: 4-Quadrant Platoon Physics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/03_tunneling_stuff_plus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 03: Pitch Tunneling &amp; Stuff+</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/04_player_projections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 04: Player Projections &amp; Aging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/05_decomposed_pitching_decisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 05: Decomposed Pitching+ &amp; Decisions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/06_ballpark_factors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 06: Empirical Ballpark Factors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/07_pecota_zips_ensemble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 07: PECOTA k-NN, ZiPS &amp; Meta-Ensemble</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/08_team_baseruns_pythagenpat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 08: BaseRuns, Pythagenpat &amp; Standings</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/09_game_monte_carlo_simulator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 09: Markov Game Simulator &amp; WPA</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/10_market_edge_prediction_valuation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 10: Market Edge &amp; Prediction Markets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/11_bat_tracking_arm_slot_biomechanics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 11: Bat-Tracking &amp; Arm-Slot Biomechanics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/12_weather_umpire_catcher_framing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 12: Weather, Umpires &amp; Catcher Framing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/13_pitcher_stamina_bullpen_fatigue.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 13: Pitcher Stamina &amp; Bullpen Fatigue</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/14_unified_pro_game_f5_totals_bracket.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 14: Unified Pro Multi-Market &amp; 12-Team Bracket</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/15_daily_lineups_platoon_k_props.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 15: Daily Lineups &amp; Pitcher Strikeout Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/16_dynamic_statespace_negbin_k_props.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 16: Dynamic State-Space &amp; NegBin K-Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/17_batter_hr_total_bases_props.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 17: Batter HR &amp; Total Bases Props</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/18_sgp_correlation_copula_pricing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 18: SGP Correlation &amp; Copula Pricing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/19_ordered_tb_exp_decay_statespace.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Study 19: Joint TB Ladder &amp; Exp-Decay State-Space</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/20_dynamic_workload_multivariate_kelly.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Study 20: Dynamic Workload &amp; Multivariate Kelly</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Analyses Gallery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../gallery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gallery Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_clustering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Clustering (K-Means / GMM)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/pitch_classification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pitch Classification (Random Forest)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/xwoba_surface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">xWOBA / Exit Velocity Surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../analyses/run_expectancy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Run Expectancy RE24 Matrix</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#executive-summary-abstract-tldr" id="toc-executive-summary-abstract-tldr" class="nav-link active" data-scroll-target="#executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</a></li>
+  <li><a href="#domain-problem-quantitative-mechanics" id="toc-domain-problem-quantitative-mechanics" class="nav-link" data-scroll-target="#domain-problem-quantitative-mechanics">2. Domain Problem &amp; Quantitative Mechanics</a></li>
+  <li><a href="#mathematical-formulation-zero-copy-duckdb-pipeline" id="toc-mathematical-formulation-zero-copy-duckdb-pipeline" class="nav-link" data-scroll-target="#mathematical-formulation-zero-copy-duckdb-pipeline">3. Mathematical Formulation &amp; Zero-Copy DuckDB Pipeline</a></li>
+  <li><a href="#exploratory-data-analysis-eda-interactive-equity-explorer" id="toc-exploratory-data-analysis-eda-interactive-equity-explorer" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda-interactive-equity-explorer">4. Exploratory Data Analysis (EDA) &amp; Interactive Equity Explorer</a></li>
+  <li><a href="#model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" id="toc-model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" class="nav-link" data-scroll-target="#model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos">5. Model Architecture &amp; Temporal Validation (<code>2024</code> Train <span class="math inline">\(\rightarrow\)</span> Locked <code>2025</code> OOS)</a>
+  <ul class="collapse">
+  <li><a href="#part-a-interior-half-life-sweep-dynamic-workload-ablation-n-4859-locked-2025-starts" id="toc-part-a-interior-half-life-sweep-dynamic-workload-ablation-n-4859-locked-2025-starts" class="nav-link" data-scroll-target="#part-a-interior-half-life-sweep-dynamic-workload-ablation-n-4859-locked-2025-starts">Part A: Interior Half-Life Sweep &amp; Dynamic Workload Ablation (<code>n = 4,859</code> Locked <code>2025</code> Starts)</a></li>
+  <li><a href="#part-b-multivariate-copula-kelly-vs.-independent-quarter-kelly-n-184-locked-2025-days" id="toc-part-b-multivariate-copula-kelly-vs.-independent-quarter-kelly-n-184-locked-2025-days" class="nav-link" data-scroll-target="#part-b-multivariate-copula-kelly-vs.-independent-quarter-kelly-n-184-locked-2025-days">Part B: Multivariate Copula-Kelly vs.&nbsp;Independent Quarter-Kelly (<code>n = 184</code> Locked <code>2025</code> Days)</a></li>
+  </ul></li>
+  <li><a href="#correlation-regime-case-studies-honest-trade-off-disclosure" id="toc-correlation-regime-case-studies-honest-trade-off-disclosure" class="nav-link" data-scroll-target="#correlation-regime-case-studies-honest-trade-off-disclosure">6. Correlation-Regime Case Studies &amp; Honest Trade-Off Disclosure</a></li>
+  <li><a href="#downstream-integration-market-applications" id="toc-downstream-integration-market-applications" class="nav-link" data-scroll-target="#downstream-integration-market-applications">7. Downstream Integration &amp; Market Applications</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../analyses/experiment_registry.html">Q-CRISP Research Series</a></li><li class="breadcrumb-item"><a href="../analyses/20_dynamic_workload_multivariate_kelly.html">Study 20: Dynamic Workload &amp; Multivariate Kelly</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Study 20: Interior Half-Life Sweep, Dynamic In-Season Starter Workload (BF/GS) &amp; Multivariate Copula-Kelly Staking</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Q-CRISP Level 5H — Closing Overdispersion via Causal Workload &amp; Covariance-Aware Portfolio Sizing (EXP-020)</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Level 5</div>
+    <div class="quarto-category">Pitcher Props</div>
+    <div class="quarto-category">State-Space</div>
+    <div class="quarto-category">Kelly Criterion</div>
+    <div class="quarto-category">Copulas</div>
+    <div class="quarto-category">Q-CRISP</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 22, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Experiment Registry &amp; Architecture
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Experiment ID:</strong> <code>EXP-020-DYNAMIC-WORKLOAD-MULTIVARIATE-KELLY</code> (<code>VALIDATED</code>)</li>
+<li><strong>Specification:</strong> <code>specs/20_dynamic_workload_multivariate_kelly.md</code> | <strong>ADR:</strong> <code>ADR-016</code></li>
+<li><strong>Training Split:</strong> <code>2024</code> MLB Regular Season (<code>4,855</code> SP starts; <code>2,429</code> games)</li>
+<li><strong>Locked OOS Test:</strong> <code>2025</code> MLB Regular Season (<code>4,859</code> SP starts; <code>2,430</code> games)</li>
+<li><strong>Companion Work-Along Lab:</strong> <a href="../workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.html">Lab 20: Dynamic Workload &amp; Multivariate Copula-Kelly</a></li>
+</ul>
+</div>
+</div>
+<section id="executive-summary-abstract-tldr" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary-abstract-tldr">1. Executive Summary &amp; Abstract (TL;DR)</h2>
+<p>In <strong>EXP-020</strong>, we resolve two structural gaps surfaced during our independent audits of <code>EXP-018</code> and <code>EXP-019</code>:</p>
+<ol type="1">
+<li><strong>Interior Half-Life Optimum (<code>H = 60d</code> OOS) &amp; Dynamic In-Season Starter Workload (<code>BF/GS</code>, <code>n = 4,859</code> Locked <code>2025</code> Starts):</strong>
+<ul>
+<li>Expanding the strictly pre-game (<code>d &lt; t</code>) exponential decay sweep from <code>{14..30d}</code> to <code>{14, 30, 45, 60, 90, 180d}</code> reveals an interior OOS optimum around <strong><code>H = 60d</code></strong> (<code>Count NLL 2.22972</code>, <code>O5.5 K AUC 0.6834</code>, plateauing smoothly through <code>180d</code>).</li>
+<li>Adding <strong>strictly causal exponentially-decayed in-season starter workload (<code>bf_gs_h60</code>, EB-shrunk <span class="math inline">\(M = 4\)</span> starts toward prior <code>eb_bf_gs</code>)</strong> delivers a major step-change across every metric: NegBin dispersion <span class="math inline">\(\hat{\theta}\)</span> jumps from <strong><code>51.78</code> <span class="math inline">\(\to\)</span> <code>84.32</code></strong> (explaining ~40% of remaining strikeout overdispersion!), locked <code>2025</code> Count NLL drops <strong><code>2.23014</code> <span class="math inline">\(\to\)</span> <code>2.22598</code></strong>, Strikeout RMSE falls <strong><code>2.2999</code> <span class="math inline">\(\to\)</span> <code>2.2899</code></strong>, <code>Over 5.5 K</code> ROC AUC reaches <strong><code>0.6849</code></strong>, and <code>Over 7.5 K</code> tail Brier improves <strong><code>0.11288</code> <span class="math inline">\(\to\)</span> <code>0.11249</code></strong>.</li>
+</ul></li>
+<li><strong>Multivariate Copula-Kelly Portfolio Staking (<code>n = 2,430</code> Locked <code>2025</code> Games, 3 Simultaneous Markets):</strong>
+<ul>
+<li>Integrating <code>EXP-018</code>’s <code>2024</code>-trained Gaussian Copula correlation matrix (<span class="math inline">\(\hat{\rho}(\text{ML, HSP K}) = +0.192\)</span>, <span class="math inline">\(\hat{\rho}(\text{HSP K, Over 8.5}) = -0.182\)</span>) into an exact box-constrained Quadratic Program (<code>max f'mu - (1/(2c)) f'Sigma f</code>) automatically applies a <strong><code>-7.98%</code> stake haircut</strong> across <code>811</code> positively correlated multi-leg games and a <strong><code>+11.64%</code> stake boost</strong> across <code>651</code> negatively correlated natural hedges, reducing daily portfolio volatility (<code>7.48%</code> <span class="math inline">\(\to\)</span> <code>7.41%</code>) under a transparent <code>-105</code> synthetic prior-baseline book benchmark (explicitly disclosed per <code>ADR-009</code>).</li>
+</ul></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/mvk01_interior_halflife_workload_ablation.png" class="img-fluid figure-img"></p>
+<figcaption>Interior Half-Life Sweep and Dynamic BF/GS Workload Lift</figcaption>
+</figure>
+</div>
+</section>
+<section id="domain-problem-quantitative-mechanics" class="level2">
+<h2 class="anchored" data-anchor-id="domain-problem-quantitative-mechanics">2. Domain Problem &amp; Quantitative Mechanics</h2>
+<ol type="1">
+<li><strong>Why Starter Workload (<code>BF/GS</code>) Drives Strikeout Overdispersion:</strong> Expected strikeouts factor into <span class="math inline">\(E[\text{SO}] = \text{K\%} \times \text{BF/GS}\)</span>. In <code>EXP-016</code> and <code>EXP-019</code>, we dynamically updated in-season <code>CSW%</code> and <code>K%</code>, but held <code>eb_bf_gs</code> frozen at <code>season - 1</code>. In reality, starters returning from injury (IL pitch-count ramps), stretched-out former relievers, and short-leash rookies exhibit persistent in-season <code>BF/GS</code> regimes. Modeling causal trailing <code>BF/GS</code> directly from prior starts (<code>p.gdate &lt; s.gdate</code>, zero reliever contamination) explains a massive share of extra-Poisson count variance (<span class="math inline">\(\hat{\theta}: 51.8 \to 84.3\)</span>).</li>
+<li><strong>Why Independent Kelly Misallocates Multi-Market Same-Game Slates:</strong> Betting <code>Home ML</code> and <code>Home SP Over 5.5 K</code> in the same game concentrates shared variance (<span class="math inline">\(\Sigma_{12} &gt; 0\)</span>), whereas betting <code>Home SP Over 5.5 K</code> alongside <code>Game Over 8.5</code> forms a partial hedge (<span class="math inline">\(\Sigma_{23} &lt; 0\)</span>). Second-order Multivariate Kelly adjusts each ticket’s stake analytically via <span class="math inline">\(\boldsymbol{\Sigma}^{-1}\boldsymbol{\mu}\)</span>.</li>
+</ol>
+</section>
+<section id="mathematical-formulation-zero-copy-duckdb-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-formulation-zero-copy-duckdb-pipeline">3. Mathematical Formulation &amp; Zero-Copy DuckDB Pipeline</h2>
+<ul>
+<li><strong>Causal Starter Workload (<code>BF/GS</code>) State-Space (<code>M_GS = 4</code> starts):</strong> <span class="math display">\[\text{BF\_GS}_H(p, t) = \frac{\sum_{d &lt; t,\, s(d)=s(t)} 2^{-(t-d)/H}\,\text{BF}_{p,d} + 4.0 \cdot \text{eb\_bf\_gs}_{p, s-1}}{\sum_{d &lt; t,\, s(d)=s(t)} 2^{-(t-d)/H} + 4.0}\]</span></li>
+<li><strong>Exact Copula-Covariance Multivariate Kelly QP (<code>f in [0, 0.05]^m</code>, 35% daily slate cap):</strong> <span class="math display">\[\max_{\mathbf{f} \in [0, 0.05]^m} \; \mathbf{f}^\top \boldsymbol{\mu} - \frac{1}{2c} \mathbf{f}^\top \boldsymbol{\Sigma} \mathbf{f}, \qquad \Sigma_{jk} = O_j O_k \Big(C_{\text{Gauss}}(p_j, p_k; s_j s_k \hat{\rho}_{jk, 2024}) - p_j p_k\Big)\]</span></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Strictly causal in-season starter workload (BF/GS) from prior starts only</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s.game_id, s.sp_mlbam,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       (<span class="fu">COALESCE</span>(<span class="fu">SUM</span>(<span class="fu">EXP</span>(<span class="op">-</span><span class="fu">LN</span>(<span class="fl">2.0</span>) <span class="op">*</span> DATEDIFF(<span class="st">'day'</span>, p.gdate, s.gdate) <span class="op">/</span> <span class="fl">60.0</span>) <span class="op">*</span> p.sp_bf), <span class="dv">0</span>) <span class="op">+</span> <span class="fl">4.0</span> <span class="op">*</span> s.eb_bf_gs) <span class="op">/</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>       (<span class="fu">COALESCE</span>(<span class="fu">SUM</span>(<span class="fu">EXP</span>(<span class="op">-</span><span class="fu">LN</span>(<span class="fl">2.0</span>) <span class="op">*</span> DATEDIFF(<span class="st">'day'</span>, p.gdate, s.gdate) <span class="op">/</span> <span class="fl">60.0</span>)), <span class="dv">0</span>) <span class="op">+</span> <span class="fl">4.0</span>) <span class="kw">AS</span> bf_gs_h60</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> starts s</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> starts p</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> s.sp_mlbam <span class="op">=</span> p.sp_mlbam <span class="kw">AND</span> s.season <span class="op">=</span> p.season</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> p.gdate <span class="op">&lt;</span> s.gdate <span class="kw">AND</span> DATEDIFF(<span class="st">'day'</span>, p.gdate, s.gdate) <span class="kw">BETWEEN</span> <span class="dv">1</span> <span class="kw">AND</span> <span class="dv">180</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> s.game_id, s.sp_mlbam, s.eb_bf_gs;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="exploratory-data-analysis-eda-interactive-equity-explorer" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis-eda-interactive-equity-explorer">4. Exploratory Data Analysis (EDA) &amp; Interactive Equity Explorer</h2>
+<p>Explore the locked <code>2025</code> OOS daily bankroll trajectory comparing <strong>Independent Quarter-Kelly</strong> vs.&nbsp;<strong>Multivariate Copula-Kelly</strong> across <code>184</code> regular-season betting days (<code>-105</code> / <code>2.38%</code> vig synthetic prior-baseline book benchmark, explicitly disclosed per <code>ADR-009</code>):</p>
+<iframe src="../assets/mvk02_multivariate_vs_independent_kelly_equity.html" width="100%" height="520" style="border: 1px solid #1e293b; border-radius: 8px; background: #090d16;">
+</iframe>
+</section>
+<section id="model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos" class="level2">
+<h2 class="anchored" data-anchor-id="model-architecture-temporal-validation-2024-train-rightarrow-locked-2025-oos">5. Model Architecture &amp; Temporal Validation (<code>2024</code> Train <span class="math inline">\(\rightarrow\)</span> Locked <code>2025</code> OOS)</h2>
+<section id="part-a-interior-half-life-sweep-dynamic-workload-ablation-n-4859-locked-2025-starts" class="level3">
+<h3 class="anchored" data-anchor-id="part-a-interior-half-life-sweep-dynamic-workload-ablation-n-4859-locked-2025-starts">Part A: Interior Half-Life Sweep &amp; Dynamic Workload Ablation (<code>n = 4,859</code> Locked <code>2025</code> Starts)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 9%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">half_life_days</th>
+<th style="text-align: left;">has_dyn_bf</th>
+<th style="text-align: right;">theta_2024</th>
+<th style="text-align: right;">train_2024_nll</th>
+<th style="text-align: right;">oos_2025_nll</th>
+<th style="text-align: right;">oos_2025_rmse</th>
+<th style="text-align: right;">oos_2025_brier_o55</th>
+<th style="text-align: right;">oos_2025_auc_o55</th>
+<th style="text-align: right;">oos_2025_brier_o75</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">M5_ExpDecay_H14d</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">48.10986</td>
+<td style="text-align: right;">2.23865</td>
+<td style="text-align: right;">2.23204</td>
+<td style="text-align: right;">2.30465</td>
+<td style="text-align: right;">0.20896</td>
+<td style="text-align: right;">0.68004</td>
+<td style="text-align: right;">0.11324</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M5_ExpDecay_H30d</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">51.77571</td>
+<td style="text-align: right;">2.23556</td>
+<td style="text-align: right;">2.23014</td>
+<td style="text-align: right;">2.29994</td>
+<td style="text-align: right;">0.20819</td>
+<td style="text-align: right;">0.68275</td>
+<td style="text-align: right;">0.11288</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">M5_ExpDecay_H45d</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">52.84960</td>
+<td style="text-align: right;">2.23469</td>
+<td style="text-align: right;">2.22978</td>
+<td style="text-align: right;">2.29912</td>
+<td style="text-align: right;">0.20804</td>
+<td style="text-align: right;">0.68329</td>
+<td style="text-align: right;">0.11278</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M5_ExpDecay_H60d</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">53.24922</td>
+<td style="text-align: right;">2.23436</td>
+<td style="text-align: right;">2.22972</td>
+<td style="text-align: right;">2.29906</td>
+<td style="text-align: right;">0.20801</td>
+<td style="text-align: right;">0.68337</td>
+<td style="text-align: right;">0.11275</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">M5_ExpDecay_H90d</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">53.48281</td>
+<td style="text-align: right;">2.23415</td>
+<td style="text-align: right;">2.22978</td>
+<td style="text-align: right;">2.29933</td>
+<td style="text-align: right;">0.20803</td>
+<td style="text-align: right;">0.68331</td>
+<td style="text-align: right;">0.11274</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M5_ExpDecay_H180d</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">53.49702</td>
+<td style="text-align: right;">2.23410</td>
+<td style="text-align: right;">2.22998</td>
+<td style="text-align: right;">2.29999</td>
+<td style="text-align: right;">0.20809</td>
+<td style="text-align: right;">0.68317</td>
+<td style="text-align: right;">0.11276</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">M6_DynWorkload_H180_BF30</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">78.27634</td>
+<td style="text-align: right;">2.21917</td>
+<td style="text-align: right;">2.22672</td>
+<td style="text-align: right;">2.29212</td>
+<td style="text-align: right;">0.20816</td>
+<td style="text-align: right;">0.68440</td>
+<td style="text-align: right;">0.11267</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M6_DynWorkload_H180_BF45</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">82.30372</td>
+<td style="text-align: right;">2.21753</td>
+<td style="text-align: right;">2.22624</td>
+<td style="text-align: right;">2.29066</td>
+<td style="text-align: right;">0.20806</td>
+<td style="text-align: right;">0.68468</td>
+<td style="text-align: right;">0.11255</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">M6_DynWorkload_H180_BF60</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">84.32300</td>
+<td style="text-align: right;">2.21675</td>
+<td style="text-align: right;">2.22598</td>
+<td style="text-align: right;">2.28989</td>
+<td style="text-align: right;">0.20800</td>
+<td style="text-align: right;">0.68489</td>
+<td style="text-align: right;">0.11249</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="part-b-multivariate-copula-kelly-vs.-independent-quarter-kelly-n-184-locked-2025-days" class="level3">
+<h3 class="anchored" data-anchor-id="part-b-multivariate-copula-kelly-vs.-independent-quarter-kelly-n-184-locked-2025-days">Part B: Multivariate Copula-Kelly vs.&nbsp;Independent Quarter-Kelly (<code>n = 184</code> Locked <code>2025</code> Days)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 8%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">strategy</th>
+<th style="text-align: right;">n_bet_days</th>
+<th style="text-align: right;">total_turnover</th>
+<th style="text-align: right;">final_bankroll</th>
+<th style="text-align: right;">cum_log_growth</th>
+<th style="text-align: right;">roi_pct</th>
+<th style="text-align: right;">daily_vol_pct</th>
+<th style="text-align: right;">sharpe_ann</th>
+<th style="text-align: right;">max_drawdown_pct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Independent_Quarter_Kelly</td>
+<td style="text-align: right;">184</td>
+<td style="text-align: right;">62.3037</td>
+<td style="text-align: right;">1758.444</td>
+<td style="text-align: right;">7.4722</td>
+<td style="text-align: right;">13.0336</td>
+<td style="text-align: right;">7.4756</td>
+<td style="text-align: right;">7.9205</td>
+<td style="text-align: right;">32.6052</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Multivariate_Copula_Kelly</td>
+<td style="text-align: right;">184</td>
+<td style="text-align: right;">62.2909</td>
+<td style="text-align: right;">1594.325</td>
+<td style="text-align: right;">7.3742</td>
+<td style="text-align: right;">12.8581</td>
+<td style="text-align: right;">7.4128</td>
+<td style="text-align: right;">7.8784</td>
+<td style="text-align: right;">33.9545</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/mvk03_copula_stake_haircut_by_correlation.png" class="img-fluid figure-img"></p>
+<figcaption>Multivariate Copula-Kelly Stake Adjustment by Ticket Correlation Regime</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="correlation-regime-case-studies-honest-trade-off-disclosure" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-regime-case-studies-honest-trade-off-disclosure">6. Correlation-Regime Case Studies &amp; Honest Trade-Off Disclosure</h2>
+<ul>
+<li><strong>Positively Correlated Tickets (<code>n = 811</code> games, <code>-7.98%</code> haircut):</strong> When <code>mlbr</code> flags both <code>Home ML</code> and <code>Home SP Over 5.5 K</code> as <code>+EV</code> in the same contest (<span class="math inline">\(\hat{\rho} = +0.192\)</span>), the QP automatically trims combined stake to avoid double-counting shared starter dominance variance.</li>
+<li><strong>Negatively Correlated Hedges (<code>n = 651</code> games, <code>+11.64%</code> boost):</strong> When <code>Home SP Over 5.5 K</code> and <code>Game Over 8.5</code> are both <code>+EV</code> (<span class="math inline">\(\hat{\rho} = -0.182\)</span>), off-diagonal covariance is negative, allowing larger combined allocation at the same variance budget.</li>
+<li><strong>Synthetic Benchmark Disclosure (<code>ADR-009</code>):</strong> Realized ROI (<code>~12.9%</code>) and Sharpe (<code>~7.9</code>) reflect pricing against a naive prior-season baseline book (<code>p_b2</code>, <code>exp_so_m1</code>, <code>exp_total_runs</code> + <code>2.38%</code> vig) rather than sharp live closing odds. Real-world edge against Pinnacle/Circa will be materially smaller; the true takeaway is the <strong>relative variance compression (<code>7.48%</code> <span class="math inline">\(\to\)</span> <code>7.41%</code>)</strong> and disciplined correlation-aware sizing.</li>
+</ul>
+</section>
+<section id="downstream-integration-market-applications" class="level2">
+<h2 class="anchored" data-anchor-id="downstream-integration-market-applications">7. Downstream Integration &amp; Market Applications</h2>
+<ol type="1">
+<li><strong>Production K-Prop Stack (<code>0.6849</code> OOS AUC):</strong> Combining <code>EXP-015</code> daily 9-man lineups, <code>EXP-011</code> arm-slot ride, <code>EXP-012</code> framing/umpires, <code>EXP-016</code> NegBin dispersion, and <code>EXP-020</code> causal <code>CSW%/K%</code> + <code>BF/GS</code> workload lifts locked-2025 <code>Over 5.5 K</code> AUC from <code>0.6409</code> (starter prior only) <span class="math inline">\(\to\)</span> <strong><code>0.6849</code></strong> (<code>+0.0440</code> cumulative AUC lift!).</li>
+<li><strong>Live 2026 Market Readiness:</strong> With <code>mlbr-market-archive.timer</code> now actively archiving Polymarket &amp; Kalshi snapshots twice daily, the entire 20-experiment pipeline is ready for live non-synthetic CLV evaluation as soon as the 2026 regular season opens.</li>
+</ol>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/cloudcurio\.cc");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Study 20: Interior Half-Life Sweep, Dynamic In-Season Starter Workload (BF/GS) &amp; Multivariate Copula-Kelly Staking"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Q-CRISP Level 5H — Closing Overdispersion via Causal Workload &amp; Covariance-Aware Portfolio Sizing (EXP-020)"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-11-22"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [Level 5, Pitcher Props, State-Space, Kelly Criterion, Copulas, Q-CRISP]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="minimal"}</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">### Experiment Registry &amp; Architecture</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Experiment ID:** <span class="in">`EXP-020-DYNAMIC-WORKLOAD-MULTIVARIATE-KELLY`</span> (<span class="in">`VALIDATED`</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Specification:** `specs/20_dynamic_workload_multivariate_kelly.md` | **ADR:** <span class="in">`ADR-016`</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Training Split:** <span class="in">`2024`</span> MLB Regular Season (<span class="in">`4,855`</span> SP starts; <span class="in">`2,429`</span> games)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Locked OOS Test:** <span class="in">`2025`</span> MLB Regular Season (<span class="in">`4,859`</span> SP starts; <span class="in">`2,430`</span> games)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Companion Work-Along Lab:** <span class="co">[</span><span class="ot">Lab 20: Dynamic Workload &amp; Multivariate Copula-Kelly</span><span class="co">](../workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.qmd)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Executive Summary &amp; Abstract (TL;DR)</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>In **EXP-020**, we resolve two structural gaps surfaced during our independent audits of <span class="in">`EXP-018`</span> and <span class="in">`EXP-019`</span>:</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Interior Half-Life Optimum (`H = 60d` OOS) &amp; Dynamic In-Season Starter Workload (`BF/GS`, `n = 4,859` Locked `2025` Starts):**</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Expanding the strictly pre-game (<span class="in">`d &lt; t`</span>) exponential decay sweep from <span class="in">`{14..30d}`</span> to <span class="in">`{14, 30, 45, 60, 90, 180d}`</span> reveals an interior OOS optimum around **`H = 60d`** (<span class="in">`Count NLL 2.22972`</span>, <span class="in">`O5.5 K AUC 0.6834`</span>, plateauing smoothly through <span class="in">`180d`</span>).</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Adding **strictly causal exponentially-decayed in-season starter workload (`bf_gs_h60`, EB-shrunk $M = 4$ starts toward prior `eb_bf_gs`)** delivers a major step-change across every metric: NegBin dispersion $\hat{\theta}$ jumps from **`51.78` $\to$ `84.32`** (explaining ~40% of remaining strikeout overdispersion!), locked `2025` Count NLL drops **`2.23014` $\to$ `2.22598`**, Strikeout RMSE falls **`2.2999` $\to$ `2.2899`**, `Over 5.5 K` ROC AUC reaches **`0.6849`**, and `Over 7.5 K` tail Brier improves **`0.11288` $\to$ `0.11249`**.</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Multivariate Copula-Kelly Portfolio Staking (`n = 2,430` Locked `2025` Games, 3 Simultaneous Markets):**</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Integrating <span class="in">`EXP-018`</span>'s <span class="in">`2024`</span>-trained Gaussian Copula correlation matrix ($\hat{\rho}(\text{ML, HSP K}) = +0.192$, $\hat{\rho}(\text{HSP K, Over 8.5}) = -0.182$) into an exact box-constrained Quadratic Program (<span class="in">`max f'mu - (1/(2c)) f'Sigma f`</span>) automatically applies a **`-7.98%` stake haircut** across `811` positively correlated multi-leg games and a **`+11.64%` stake boost** across <span class="in">`651`</span> negatively correlated natural hedges, reducing daily portfolio volatility (<span class="in">`7.48%`</span> $\to$ <span class="in">`7.41%`</span>) under a transparent <span class="in">`-105`</span> synthetic prior-baseline book benchmark (explicitly disclosed per <span class="in">`ADR-009`</span>).</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="al">![Interior Half-Life Sweep and Dynamic BF/GS Workload Lift](../assets/mvk01_interior_halflife_workload_ablation.png)</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Domain Problem &amp; Quantitative Mechanics</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Why Starter Workload (`BF/GS`) Drives Strikeout Overdispersion:** Expected strikeouts factor into $E<span class="co">[</span><span class="ot">\text{SO}</span><span class="co">]</span> = \text{K\%} \times \text{BF/GS}$. In <span class="in">`EXP-016`</span> and <span class="in">`EXP-019`</span>, we dynamically updated in-season <span class="in">`CSW%`</span> and <span class="in">`K%`</span>, but held <span class="in">`eb_bf_gs`</span> frozen at <span class="in">`season - 1`</span>. In reality, starters returning from injury (IL pitch-count ramps), stretched-out former relievers, and short-leash rookies exhibit persistent in-season <span class="in">`BF/GS`</span> regimes. Modeling causal trailing <span class="in">`BF/GS`</span> directly from prior starts (<span class="in">`p.gdate &lt; s.gdate`</span>, zero reliever contamination) explains a massive share of extra-Poisson count variance ($\hat{\theta}: 51.8 \to 84.3$).</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Why Independent Kelly Misallocates Multi-Market Same-Game Slates:** Betting <span class="in">`Home ML`</span> and <span class="in">`Home SP Over 5.5 K`</span> in the same game concentrates shared variance ($\Sigma_{12} &gt; 0$), whereas betting `Home SP Over 5.5 K` alongside `Game Over 8.5` forms a partial hedge ($\Sigma_{23} &lt; 0$). Second-order Multivariate Kelly adjusts each ticket's stake analytically via $\boldsymbol{\Sigma}^{-1}\boldsymbol{\mu}$.</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Mathematical Formulation &amp; Zero-Copy DuckDB Pipeline</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Causal Starter Workload (`BF/GS`) State-Space (`M_GS = 4` starts):**</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  $$\text{BF<span class="sc">\_</span>GS}_H(p, t) = \frac{\sum_{d &lt; t,\, s(d)=s(t)} 2^{-(t-d)/H}\,\text{BF}_{p,d} + 4.0 \cdot \text{eb\_bf\_gs}_{p, s-1}}{\sum_{d &lt; t,\, s(d)=s(t)} 2^{-(t-d)/H} + 4.0}$$</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Exact Copula-Covariance Multivariate Kelly QP (`f in [0, 0.05]^m`, 35% daily slate cap):**</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  $$\max_{\mathbf{f} \in [0, 0.05]^m} \; \mathbf{f}^\top \boldsymbol{\mu} - \frac{1}{2c} \mathbf{f}^\top \boldsymbol{\Sigma} \mathbf{f}, \qquad \Sigma_{jk} = O_j O_k \Big(C_{\text{Gauss}}(p_j, p_k; s_j s_k \hat{\rho}_{jk, 2024}) - p_j p_k\Big)$$</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="in">```sql</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">-- Strictly causal in-season starter workload (BF/GS) from prior starts only</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> s<span class="ch">.</span>game_id, s<span class="ch">.</span>sp_mlbam,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>       (<span class="fu">COALESCE</span>(<span class="fu">SUM</span>(<span class="fu">EXP</span>(<span class="op">-</span><span class="fu">LN</span>(<span class="fl">2.0</span>) <span class="op">*</span> DATEDIFF(<span class="st">'day'</span>, p<span class="ch">.</span>gdate, s<span class="ch">.</span>gdate) <span class="op">/</span> <span class="fl">60.0</span>) <span class="op">*</span> p<span class="ch">.</span>sp_bf), <span class="dv">0</span>) <span class="op">+</span> <span class="fl">4.0</span> <span class="op">*</span> s<span class="ch">.</span>eb_bf_gs) <span class="op">/</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>       (<span class="fu">COALESCE</span>(<span class="fu">SUM</span>(<span class="fu">EXP</span>(<span class="op">-</span><span class="fu">LN</span>(<span class="fl">2.0</span>) <span class="op">*</span> DATEDIFF(<span class="st">'day'</span>, p<span class="ch">.</span>gdate, s<span class="ch">.</span>gdate) <span class="op">/</span> <span class="fl">60.0</span>)), <span class="dv">0</span>) <span class="op">+</span> <span class="fl">4.0</span>) <span class="kw">AS</span> bf_gs_h60</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> starts s</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> starts p</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> s<span class="ch">.</span>sp_mlbam <span class="op">=</span> p<span class="ch">.</span>sp_mlbam <span class="kw">AND</span> s<span class="ch">.</span>season <span class="op">=</span> p<span class="ch">.</span>season</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> p<span class="ch">.</span>gdate <span class="op">&lt;</span> s<span class="ch">.</span>gdate <span class="kw">AND</span> DATEDIFF(<span class="st">'day'</span>, p<span class="ch">.</span>gdate, s<span class="ch">.</span>gdate) <span class="kw">BETWEEN</span> <span class="dv">1</span> <span class="kw">AND</span> <span class="dv">180</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> s<span class="ch">.</span>game_id, s<span class="ch">.</span>sp_mlbam, s<span class="ch">.</span>eb_bf_gs;</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Exploratory Data Analysis (EDA) &amp; Interactive Equity Explorer</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>Explore the locked <span class="in">`2025`</span> OOS daily bankroll trajectory comparing **Independent Quarter-Kelly** vs. **Multivariate Copula-Kelly** across <span class="in">`184`</span> regular-season betting days (<span class="in">`-105`</span> / <span class="in">`2.38%`</span> vig synthetic prior-baseline book benchmark, explicitly disclosed per <span class="in">`ADR-009`</span>):</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"../assets/mvk02_multivariate_vs_independent_kelly_equity.html"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"520"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"border: 1px solid #1e293b; border-radius: 8px; background: #090d16;"</span><span class="dt">&gt;&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Model Architecture &amp; Temporal Validation (`2024` Train $\rightarrow$ Locked `2025` OOS)</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part A: Interior Half-Life Sweep &amp; Dynamic Workload Ablation (`n = 4,859` Locked `2025` Starts)</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow); <span class="fu">library</span>(dplyr); <span class="fu">library</span>(knitr)</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>lake <span class="ot">&lt;-</span> mlbr<span class="sc">::</span><span class="fu">default_lake</span>()</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="fu">read_parquet</span>(<span class="fu">file.path</span>(lake, <span class="st">"data/processed/dynamic_workload_kprop_ablation_2025.parquet"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">5</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part B: Multivariate Copula-Kelly vs. Independent Quarter-Kelly (`n = 184` Locked `2025` Days)</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="fu">read_parquet</span>(<span class="fu">file.path</span>(lake, <span class="st">"data/processed/multivariate_kelly_summary_2025.parquet"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">4</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="al">![Multivariate Copula-Kelly Stake Adjustment by Ticket Correlation Regime](../assets/mvk03_copula_stake_haircut_by_correlation.png)</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Correlation-Regime Case Studies &amp; Honest Trade-Off Disclosure</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Positively Correlated Tickets (`n = 811` games, `-7.98%` haircut):** When <span class="in">`mlbr`</span> flags both <span class="in">`Home ML`</span> and <span class="in">`Home SP Over 5.5 K`</span> as <span class="in">`+EV`</span> in the same contest ($\hat{\rho} = +0.192$), the QP automatically trims combined stake to avoid double-counting shared starter dominance variance.</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Negatively Correlated Hedges (`n = 651` games, `+11.64%` boost):** When <span class="in">`Home SP Over 5.5 K`</span> and <span class="in">`Game Over 8.5`</span> are both <span class="in">`+EV`</span> ($\hat{\rho} = -0.182$), off-diagonal covariance is negative, allowing larger combined allocation at the same variance budget.</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Synthetic Benchmark Disclosure (`ADR-009`):** Realized ROI (`~12.9%`) and Sharpe (`~7.9`) reflect pricing against a naive prior-season baseline book (`p_b2`, `exp_so_m1`, `exp_total_runs` + `2.38%` vig) rather than sharp live closing odds. Real-world edge against Pinnacle/Circa will be materially smaller; the true takeaway is the **relative variance compression (`7.48%` $\to$ `7.41%`)** and disciplined correlation-aware sizing.</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7. Downstream Integration &amp; Market Applications</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Production K-Prop Stack (`0.6849` OOS AUC):** Combining `EXP-015` daily 9-man lineups, `EXP-011` arm-slot ride, `EXP-012` framing/umpires, `EXP-016` NegBin dispersion, and `EXP-020` causal `CSW%/K%` + `BF/GS` workload lifts locked-2025 `Over 5.5 K` AUC from `0.6409` (starter prior only) $\to$ **`0.6849`** (<span class="in">`+0.0440`</span> cumulative AUC lift!).</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Live 2026 Market Readiness:** With <span class="in">`mlbr-market-archive.timer`</span> now actively archiving Polymarket &amp; Kalshi snapshots twice daily, the entire 20-experiment pipeline is ready for live non-synthetic CLV evaluation as soon as the 2026 regular season opens.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

@@ -1,0 +1,37 @@
+---
+title: "Lab 20: Dynamic In-Season Workload (BF/GS) & Multivariate Copula-Kelly"
+subtitle: "Hands-On RStudio Server Companion for Study 20 (EXP-020)"
+date: "2026-11-22"
+categories: [Workbook, Level 5, Pitcher Props, Kelly Criterion, DuckDB]
+format:
+  html:
+    toc: true
+    code-fold: false
+---
+
+## Learning Objectives
+
+In this companion work-along lab for [Study 20](../analyses/20_dynamic_workload_multivariate_kelly.qmd), you will:
+
+1. Solve a first-principles 2-asset **Multivariate Kelly** problem under positive (`+0.20`) and negative (`-0.20`) return correlation.
+2. Query the `EXP-020` interior half-life and dynamic `BF/GS` workload ablation table via zero-copy **DuckDB SQL**.
+3. Render a **Dark Cyber** diagnostic chart visualizing the massive jump in NegBin dispersion $\hat{\theta}$ (`51.8 -> 84.3`) unlocked by causal starter workload tracking.
+
+## Run Locally in RStudio Server
+
+```r
+source("workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.R")
+```
+
+## Full Runnable Script (`workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.R`)
+
+```{r}
+#| eval: false
+#| file: ../../workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.R
+```
+
+## Mentor Checkpoints
+
+1. **Checkpoint 1 (Multivariate Kelly Directionality):** Verify that positive off-diagonal covariance shrinks combined Kelly stake while negative covariance expands it.
+2. **Checkpoint 2 (Overdispersion Compression):** Explain why adding causal in-season `BF/GS` lifts NegBin $\hat{\theta}$ from `51.8` to `84.3` and cuts locked `2025` OOS Count NLL from `2.2301` to `2.2260`.
+3. **Checkpoint 3 (Synthetic vs. Live CLV Hygiene):** Explain why synthetic prior-baseline benchmarks (`ADR-009`) measure relative staking geometry while live archived closing odds (`mlbr-market-archive.timer`) are required to prove realized market ROI.

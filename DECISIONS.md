@@ -98,6 +98,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** Adopt a joint 5-class Multinomial Softmax model (`nnet::multinom`) over `{0, 1, 2, 3, 4+ TB}` guaranteeing zero monotonicity violations across all 4 ladder rungs, and upgrade pitcher K-Prop state-space features to a strictly causal (`d < t`, 90-day lookback) exponential decay kernel with `2024`-selected half-life `H* = 30d` (`w = 2^(-dt/30)`).
 - **Consequences:** Improves locked-2025 OOS (`n = 43,740`) 5-class TB Log-Loss `1.4518 -> 1.4429 (POLR) -> 1.4388 (Multinomial)`, RPS `0.1891 -> 0.1865`, and `TB >= 4` AUC `0.5884 -> 0.6003` with `0` monotonicity violations; simultaneously lifts locked-2025 OOS (`n = 4,859`) K-Prop Count NLL `2.2327 -> 2.2303`, RMSE `2.3068 -> 2.3002`, and `Over 5.5 K` AUC `0.6779 -> 0.6827` (`theta: 46.89 -> 51.52`; `H* = 30d` sits on the upper boundary of the `{7, 14, 21, 30}` grid, so testing `H = 45–60d` is logged as a follow-up).
 
+## ADR-016: Causal In-Season Starter Workload (`BF/GS`) State-Space & Multivariate Copula-Kelly Portfolio Sizing
+- **Status:** Accepted (2026-11-22)
+- **Context:** `EXP-019` updated in-season pitcher `CSW%`/`K%` dynamically (`H* = 30d` on `{7..30}` boundary) while holding starter workload (`eb_bf_gs`) frozen at `season - 1`, leaving substantial pitch-count/IL-ramp variance unexplained. Simultaneously, multi-market same-game portfolios (`ML + K-Props + Totals`) sized independently ignore within-game covariance quantified in `EXP-018`.
+- **Decision:** Expand the strictly causal (`d < t`, same-season) exponential half-life sweep to `{14..180d}`, add causal exponentially-decayed prior-start workload `bf_gs_h60` (`M_GS = 4.0` starts shrunk toward `eb_bf_gs`, zero reliever contamination) to `MASS::glm.nb`, and solve exact box-constrained Multivariate Copula-Kelly QPs (`max f'mu - (1/(2c)) f'Sigma f`, `f in [0, 0.05]^m`, `35%` daily slate cap) using `EXP-018`'s `2024` Gaussian Copula covariance matrix.
+- **Consequences:** Lifts NegBin dispersion `theta` from `51.78 -> 84.32` (cutting unexplained strikeout overdispersion by ~40%), lowers locked-2025 OOS (`n = 4,859`) Count NLL `2.2301 -> 2.2260`, SO RMSE `2.2999 -> 2.2899`, and `Over 5.5 K` AUC `0.6827 -> 0.6849`; Multivariate Copula-Kelly haircuts positively correlated same-game tickets by `-7.98%`, boosts negatively correlated hedges by `+11.64%`, and lowers daily portfolio volatility (`7.48% -> 7.41%`, with single-path Max DD `32.61% -> 33.95%` from hedge boosting).
+
 ---
 
 ## Template for New ADRs

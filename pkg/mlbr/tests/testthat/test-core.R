@@ -753,3 +753,32 @@ test_that("EXP-019 Joint Ordered/Multinomial TB Ladder & Exp-Decay K-Props satis
   expect_gt(dk$oos_2025_auc_o55[dk$model == "M5d_ExpDecay_H30d"], dk$oos_2025_auc_o55[dk$model == "M4_EXP016_Flat30d"] + 0.003)
   expect_lt(dk$oos_2025_brier_o75[dk$model == "M5d_ExpDecay_H30d"], dk$oos_2025_brier_o75[dk$model == "M4_EXP016_Flat30d"])
 })
+
+test_that("EXP-020 Dynamic Starter Workload (BF/GS) & Multivariate Copula-Kelly satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  kp_p <- file.path(proc, "dynamic_workload_kprop_ablation_2025.parquet")
+  bt_p <- file.path(proc, "multivariate_kelly_backtest_2025.parquet")
+  sm_p <- file.path(proc, "multivariate_kelly_summary_2025.parquet")
+  skip_if_not(file.exists(kp_p) && file.exists(bt_p) && file.exists(sm_p), "EXP-020 Gold files not materialized")
+
+  kp <- arrow::read_parquet(kp_p)
+  bt <- arrow::read_parquet(bt_p)
+  sm <- arrow::read_parquet(sm_p)
+
+  expect_equal(nrow(kp), 9L)
+  expect_equal(nrow(sm), 2L)
+  expect_gt(nrow(bt), 175L)
+  # Dynamic BF/GS workload strictly improves Count NLL, RMSE, Over 5.5 K AUC & Over 7.5 K Brier over EXP-019 H30d
+  m5 <- kp[kp$model == "M5_ExpDecay_H30d", ]
+  m6 <- kp[kp$model == "M6_DynWorkload_H180_BF60", ]
+  expect_gt(m6$theta_2024, m5$theta_2024 + 25.0)
+  expect_lt(m6$oos_2025_nll, m5$oos_2025_nll - 0.003)
+  expect_lt(m6$oos_2025_rmse, m5$oos_2025_rmse - 0.008)
+  expect_gt(m6$oos_2025_auc_o55, m5$oos_2025_auc_o55 + 0.0015)
+  expect_lt(m6$oos_2025_brier_o75, m5$oos_2025_brier_o75)
+  # Multivariate Copula-Kelly strictly lowers daily portfolio volatility vs Independent Quarter-Kelly
+  expect_lt(sm$daily_vol_pct[sm$strategy == "Multivariate_Copula_Kelly"],
+            sm$daily_vol_pct[sm$strategy == "Independent_Quarter_Kelly"])
+})

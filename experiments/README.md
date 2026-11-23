@@ -23,6 +23,7 @@ This curated registry catalogs all verified mathematical models, empirical formu
 | **[EXP-017-BATTER-HR-TOTAL-BASES-PROPS](registry.json)** | 5 | Batter Home Run (HR >= 1) & Total Bases (TB >= 2) Prop Pricing Engine via v_statcast_biomechanics | `VALIDATED` | `hr_prop_logit`: logit(P(HR>=1)) = b0 + b1*EB_ISO + b2*EB... | 2026-11-22 |
 | **[EXP-018-SGP-CORRELATION-COPULA-PRICING](registry.json)** | 5 | Same-Game Parlay (SGP) Correlation Matrix & Gaussian/Clayton Copula Pricing Engine | `VALIDATED` | `sklar_copula`: P(Y1=1, Y2=1) = C(p1, p2; psi), constrain... | 2026-11-22 |
 | **[EXP-019-ORDERED-TB-EXP-DECAY-STATESPACE](registry.json)** | 5 | Joint Ordered/Multinomial Total Bases Ladder (0-4+ TB) & Exponential Half-Life State-Space Decay | `VALIDATED` | `ordered_polr`: logit(P(TB <= k | x)) = alpha_k - beta'x,... | 2026-11-22 |
+| **[EXP-020-DYNAMIC-WORKLOAD-MULTIVARIATE-KELLY](registry.json)** | 5 | Interior Half-Life Sweep, Dynamic In-Season Starter Workload (BF/GS) & Multivariate Copula-Kelly Staking | `VALIDATED` | `dyn_bf_gs`: BF_GS_H(p, t) = (sum_{d<t} 2^(-dt/H)*BF_{p,d... | 2026-11-23 |
 
 ---
 *Maintained by mlbr::lake_log_experiment()*

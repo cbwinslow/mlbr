@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge sabermetrics">Q-CRISP Study 20</span>
+    <span class="gallery-badge">Workload &amp; MV Kelly</span>
+    <h4><a href="analyses/20_dynamic_workload_multivariate_kelly.html">Dynamic Starter Workload &amp; Multivariate Copula-Kelly</a></h4>
+    <p>Interior half-life sweep (H=14&ndash;180d) plus causal in-season starter BF/GS workload (NegBin &theta;: 51.8&rarr;84.3, O5.5 K AUC 0.6849) united with exact box-constrained Multivariate Copula-Kelly portfolio sizing across 3 simultaneous markets.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">K-Prop RMSE 2.300&rarr;2.290 | Pos-Corr Haircut -8.0% | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge sabermetrics">Q-CRISP Study 19</span>
     <span class="gallery-badge">Joint Props &amp; Decay</span>
     <h4><a href="analyses/19_ordered_tb_exp_decay_statespace.html">Joint Total Bases Ladder &amp; Exp-Decay State-Space</a></h4>

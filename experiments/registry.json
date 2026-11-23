@@ -1106,5 +1106,56 @@
       "fig_tb_ablat": "models/ord02_ordered_vs_multinomial_ablation.png",
       "fig_decay": "models/ord03_exp_halflife_kprop_curve.png"
     }
+  },
+  {
+    "id": "EXP-020-DYNAMIC-WORKLOAD-MULTIVARIATE-KELLY",
+    "title": "Interior Half-Life Sweep, Dynamic In-Season Starter Workload (BF/GS) & Multivariate Copula-Kelly Staking",
+    "tier": 5,
+    "tier_name": "Level 5: Betting Markets & Staking",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-23 00:37:39 UTC",
+    "summary": "Resolved EXP-019's boundary half-life sweep (H=14..180d, 2024-selected H*=180d) and added strictly causal in-season starter workload (bf_gs_exp, EB M=4 starts) to NegBin K-Props, lifting locked-2025 OOS (n=4,859) Over 5.5 K AUC 0.6827 -> 0.6849, Count NLL 2.23014 -> 2.22598, and SO RMSE 2.2999 -> 2.2899. Integrated EXP-018's 2024 Gaussian Copula covariance matrix into an exact box-constrained Multivariate Quarter-Kelly sizer across 3 simultaneous same-game markets (ML, Home SP O5.5 K, Over 8.5) on locked 2025 (-105 vig synthetic benchmark): positive-correlation tickets received -7.98% stake haircut and negative-correlation hedges +11.64%, shifting daily vol 7.48% -> 7.41% and Max DD 32.61% -> 33.95%.",
+    "hypotheses": [
+      "Adding strictly causal exponentially-decayed in-season starter workload (BF/GS) to interior half-life CSW%/K% improves locked 2025 OOS NegBin K-Prop Count NLL, RMSE, and Over 5.5 K AUC over EXP-019.",
+      "Multivariate Copula-Kelly sizing haircuts positively correlated same-game tickets and preserves/boosts negatively correlated hedges, compressing portfolio volatility and drawdown."
+    ],
+    "formulas": {
+      "dyn_bf_gs": "BF_GS_H(p, t) = (sum_{d<t} 2^(-dt/H)*BF_{p,d} + 4*eb_bf_gs) / (sum 2^(-dt/H) + 4)",
+      "mv_kelly": "max_{f in [0, 0.05]^m} f'mu - (1/(2c)) f'Sigma f, Sigma_{jk} = O_j*O_k*(C_Gauss(p_j,p_k; s_j*s_k*rho_{jk}) - p_j*p_k)"
+    },
+    "metrics": {
+      "h_star_2024_days": 180,
+      "m5_h30_oos_nll": 2.23014,
+      "m6_dynbf_oos_nll": 2.22598,
+      "m5_h30_oos_rmse": 2.2999,
+      "m6_dynbf_oos_rmse": 2.2899,
+      "m5_h30_oos_auc_o55": 0.6827,
+      "m6_dynbf_oos_auc_o55": 0.6849,
+      "mvk_pos_haircut_pct": -7.98,
+      "mvk_neg_boost_pct": 11.64,
+      "ind_kelly_sharpe": 7.921,
+      "mv_kelly_sharpe": 7.878,
+      "ind_kelly_max_dd_pct": 32.61,
+      "mv_kelly_max_dd_pct": 33.95
+    },
+    "features": [
+      "csw_h60",
+      "k_h60",
+      "bf_gs_h30",
+      "bf_gs_h45",
+      "bf_gs_h60",
+      "stake_ind",
+      "stake_mv"
+    ],
+    "artifacts": {
+      "spec": "specs/20_dynamic_workload_multivariate_kelly.md",
+      "script": "models/20_dynamic_workload_multivariate_kelly.R",
+      "gold_kprop": "data/processed/dynamic_workload_kprop_ablation_2025.parquet",
+      "gold_bt": "data/processed/multivariate_kelly_backtest_2025.parquet",
+      "gold_sum": "data/processed/multivariate_kelly_summary_2025.parquet",
+      "fig_sweep": "models/mvk01_interior_halflife_workload_ablation.png",
+      "fig_equity": "models/mvk02_multivariate_vs_independent_kelly_equity.html",
+      "fig_haircut": "models/mvk03_copula_stake_haircut_by_correlation.png"
+    }
   }
 ]
