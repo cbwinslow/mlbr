@@ -99,6 +99,8 @@ website:
               href: workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.qmd
             - text: "Lab 20: Dynamic Workload & Multivariate Kelly"
               href: workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.qmd
+            - text: "Lab 21: Pitch Sequencing & Shannon Entropy"
+              href: workbooks/lab21_pitch_sequencing_entropy_markov_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -143,6 +145,8 @@ website:
               href: analyses/19_ordered_tb_exp_decay_statespace.qmd
             - text: "Study 20: Dynamic Workload & Multivariate Kelly"
               href: analyses/20_dynamic_workload_multivariate_kelly.qmd
+            - text: "Study 21: Pitch Sequencing & Shannon Entropy"
+              href: analyses/21_pitch_sequencing_entropy_markov.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

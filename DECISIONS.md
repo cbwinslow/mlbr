@@ -104,6 +104,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** Expand the strictly causal (`d < t`, same-season) exponential half-life sweep to `{14..180d}`, add causal exponentially-decayed prior-start workload `bf_gs_h60` (`M_GS = 4.0` starts shrunk toward `eb_bf_gs`, zero reliever contamination) to `MASS::glm.nb`, and solve exact box-constrained Multivariate Copula-Kelly QPs (`max f'mu - (1/(2c)) f'Sigma f`, `f in [0, 0.05]^m`, `35%` daily slate cap) using `EXP-018`'s `2024` Gaussian Copula covariance matrix.
 - **Consequences:** Lifts NegBin dispersion `theta` from `51.78 -> 84.32` (cutting unexplained strikeout overdispersion by ~40%), lowers locked-2025 OOS (`n = 4,859`) Count NLL `2.2301 -> 2.2260`, SO RMSE `2.2999 -> 2.2899`, and `Over 5.5 K` AUC `0.6827 -> 0.6849`; Multivariate Copula-Kelly haircuts positively correlated same-game tickets by `-7.98%`, boosts negatively correlated hedges by `+11.64%`, and lowers daily portfolio volatility (`7.48% -> 7.41%`, with single-path Max DD `32.61% -> 33.95%` from hedge boosting).
 
+## ADR-017: Multi-Pitch Sequencing, Count-Conditioned Shannon Entropy & Orthogonal `Seq+` (Level 1C)
+- **Status:** Accepted (2026-11-23)
+- **Context:** Raw pitch-group Markov transition rates confound sequencing with count selection and single-pitch stuff (`Breaking -> Breaking` hits `35.2%` raw whiff% mainly in two-strike counts). Isolating true multi-pitch deception requires residualizing against full single-pitch aerodynamics, location, and count.
+- **Decision:** Compute full-population (`5.47M` pairs, `2015–2025`) Markov transitions, 2D eye-level shifts (`delta_plate_z × delta_velo_mph`), and count-conditioned pitch-mix Shannon Entropy $H_{\text{count}}(p, s)$, and train strictly chronological `xgboost hist` whiff models (`2020–2023` train $\to$ `2024` val $\to$ locked `2025` OOS `n = 279,640` paired swings) to define orthogonal pitcher `Seq+ = 100 + 10 * z(mean(p_M2 - p_M1))` locked to `2024` scale.
+- **Consequences:** Proves multi-pitch sequencing strictly beats full single-pitch physics+location+count on locked `2025` OOS Whiff Log-Loss (`0.46171 -> 0.46091`), Brier (`0.14813 -> 0.14782`), and ROC AUC (`0.76945 -> 0.77087`), while establishing Count Entropy (`YoY r = 0.8428`) and `Seq+` (`YoY r = 0.5936`) as repeatable Level 1C pitcher traits (`Tarik Skubal #1 SP at 130.5 Seq+`).
+
 ---
 
 ## Template for New ADRs

@@ -786,3 +786,34 @@ test_that("EXP-020 Dynamic Starter Workload (BF/GS) & Multivariate Copula-Kelly 
   expect_gt(sm$cum_log_growth[sm$strategy == "OneSided_Copula_Kelly"],
             sm$cum_log_growth[sm$strategy == "Independent_Quarter_Kelly"])
 })
+
+test_that("EXP-021 Pitch Sequencing, Markov Transitions & Shannon Entropy (Seq+) satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  mk_p <- file.path(proc, "pitch_markov_transitions_2015_2025.parquet")
+  ps_p <- file.path(proc, "pitcher_sequencing_entropy_2020_2025.parquet")
+  ab_p <- file.path(proc, "sequencing_model_ablation_2025.parquet")
+  skip_if_not(file.exists(mk_p) && file.exists(ps_p) && file.exists(ab_p), "EXP-021 Gold files not materialized")
+
+  mk <- arrow::read_parquet(mk_p)
+  ps <- arrow::read_parquet(ps_p)
+  ab <- arrow::read_parquet(ab_p)
+
+  expect_equal(nrow(mk), 9L)
+  expect_gt(sum(mk$n_pairs), 5000000L)
+  expect_gt(nrow(ps), 800L)
+  expect_true(all(ps$count_entropy_bits >= 0 & ps$count_entropy_bits <= 3.5, na.rm = TRUE))
+  # M2 (Plus Sequencing & Entropy) must strictly beat M1 (Physics+Location+Count) on locked 2025 Log-Loss, Brier & AUC
+  expect_lt(ab$oos_logloss[ab$model == "M2_Plus_Sequencing_Entropy"],
+            ab$oos_logloss[ab$model == "M1_Physics_Location_Count"])
+  expect_lt(ab$oos_brier[ab$model == "M2_Plus_Sequencing_Entropy"],
+            ab$oos_brier[ab$model == "M1_Physics_Location_Count"])
+  expect_gt(ab$oos_auc[ab$model == "M2_Plus_Sequencing_Entropy"],
+            ab$oos_auc[ab$model == "M1_Physics_Location_Count"] + 0.001)
+  # Count-Conditioned Shannon Entropy YoY stability must exceed r = 0.75
+  e24 <- ps[ps$season == 2024L & !is.na(ps$count_entropy_bits), c("pitcher", "count_entropy_bits")]
+  e25 <- ps[ps$season == 2025L & !is.na(ps$count_entropy_bits), c("pitcher", "count_entropy_bits")]
+  em  <- merge(e24, e25, by = "pitcher")
+  expect_gt(stats::cor(em$count_entropy_bits.x, em$count_entropy_bits.y), 0.75)
+})

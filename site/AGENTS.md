@@ -50,7 +50,8 @@
     - `18_sgp_correlation_copula_pricing.qmd`: Study 18 — Same-Game Parlay (SGP) Correlation Matrix & Gaussian/Clayton Copula Pricing Engine (`EXP-018`).
     - `19_ordered_tb_exp_decay_statespace.qmd`: Study 19 — Joint Ordered/Multinomial Total Bases Ladder & Exponential Half-Life State-Space Decay (`EXP-019`).
     - `20_dynamic_workload_multivariate_kelly.qmd`: Study 20 — Interior Half-Life Sweep, Dynamic In-Season Starter Workload (`BF/GS`) & Multivariate Copula-Kelly Staking (`EXP-020`).
-  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab20`).
+    - `21_pitch_sequencing_entropy_markov.qmd`: Study 21 — Pitch Sequencing, Markov Transitions, Eye-Level Shifts & Pitcher Shannon Entropy (`EXP-021`).
+  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab21`).
 - Build command: `quarto render site/` from project root.
 
 ## Verification

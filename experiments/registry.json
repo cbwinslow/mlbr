@@ -318,6 +318,57 @@
     }
   },
   {
+    "id": "EXP-021-PITCH-SEQUENCING-ENTROPY-MARKOV",
+    "title": "Pitch Sequencing, First-Order Markov Transitions, Eye-Level Shifts & Pitcher Shannon Entropy (Seq+)",
+    "tier": 1,
+    "tier_name": "Level 1: Pitch Physics & Quality",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-23 05:07:01 UTC",
+    "summary": "Quantified full-population Markov pitch-group transitions, 2D eye-level shift (delta_z x delta_velo) whiff surfaces, and count-conditioned pitch-mix Shannon Entropy (2024->2025 YoY r = 0.8428) across 5.6M+ regular-season consecutive pitch pairs (2015-2025). Trained strictly chronological xgboost hist models (2020-2023 -> 2024 val -> locked 2025 OOS n = 279640 paired swings): adding sequencing, eye-level shifts, tunneling, and prior-season entropy strictly beat single-pitch physics+location+count on locked 2025 Whiff Log-Loss (0.46171 -> 0.46091), Brier (0.14813 -> 0.14782), and ROC AUC (0.7694 -> 0.7709), yielding pitcher Sequence+ (Seq+, YoY r = 0.5936).",
+    "hypotheses": [
+      "Multi-pitch sequencing (repeat penalty, vertical eye-level shift delta_z, velocity shift delta_velo, commit-point tunneling, and count-conditioned Shannon entropy) adds measurable OOS whiff deception above single-pitch aerodynamics, location, and count.",
+      "Pitcher count-conditioned Shannon entropy H(P|Count) and Sequence+ (Seq+) are stable, repeatable pitcher traits across consecutive seasons."
+    ],
+    "formulas": {
+      "shannon_entropy": "H_count(p,s) = sum_c w_{p,s,c} * (-sum_t P(t|p,s,c) * log2(P(t|p,s,c)))",
+      "eye_level_shift": "delta_plate_z = plate_z_N - plate_z_{N-1}; delta_velo_mph = velo_N - velo_{N-1}",
+      "sequence_plus": "Seq+ = 100 + 10 * (mean(p_M2 - p_M1) - mu_2024) / sd_2024"
+    },
+    "metrics": {
+      "n_oos_2025_paired_swings": 279640,
+      "oos_2025_ll_m1_physics": 0.46171,
+      "oos_2025_ll_m2_seq": 0.46091,
+      "oos_2025_brier_m1": 0.14813,
+      "oos_2025_brier_m2": 0.14782,
+      "oos_2025_auc_m1": 0.76945,
+      "oos_2025_auc_m2": 0.77087,
+      "yoy_r_count_entropy": 0.8428,
+      "yoy_r_seq_plus": 0.5936
+    },
+    "features": [
+      "is_repeat_pitch",
+      "prev_grp_id",
+      "delta_velo_mph",
+      "delta_plate_z",
+      "delta_plate_x",
+      "tunnel_dist_in",
+      "post_tunnel_break_in",
+      "prior_entropy",
+      "count_entropy_bits",
+      "seq_plus"
+    ],
+    "artifacts": {
+      "spec": "specs/21_pitch_sequencing_entropy_markov.md",
+      "script": "models/21_pitch_sequencing_entropy_markov.R",
+      "gold_markov": "data/processed/pitch_markov_transitions_2015_2025.parquet",
+      "gold_pitcher": "data/processed/pitcher_sequencing_entropy_2020_2025.parquet",
+      "gold_ablat": "data/processed/sequencing_model_ablation_2025.parquet",
+      "fig_markov": "models/seq01_markov_pitch_transition_whiff_matrix.png",
+      "fig_surface": "models/seq02_eye_level_shift_velo_whiff_surface.png",
+      "fig_leaders": "models/seq03_pitcher_entropy_vs_seq_plus_leaderboard.html"
+    }
+  },
+  {
     "id": "EXP-004-PLAYER-PROJECTIONS",
     "title": "Chronological True-Talent Player Projections: Marcel, Delta-Method Aging & Tier 1 Physics Priors",
     "tier": 2,

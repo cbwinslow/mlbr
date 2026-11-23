@@ -1,0 +1,37 @@
+---
+title: "Lab 21: Pitch Sequencing, Markov Transitions & Pitcher Shannon Entropy"
+subtitle: "Hands-On RStudio Server Companion for Study 21 (EXP-021)"
+date: "2026-11-23"
+categories: [Workbook, Level 1, Pitch Sequencing, Information Theory, DuckDB]
+format:
+  html:
+    toc: true
+    code-fold: false
+---
+
+## Learning Objectives
+
+In this companion work-along lab for [Study 21](../analyses/21_pitch_sequencing_entropy_markov.qmd), you will:
+
+1. Compute **Shannon Entropy** ($H = -\sum p \log_2 p$) from first principles for predictable vs. balanced pitch mixes.
+2. Query the full-population `5.47M`-pair Markov pitch-group transition matrix via zero-copy **DuckDB SQL**.
+3. Render a **Dark Cyber** diagnostic leaderboard of MLB's top `2025` pitch sequencers (`Seq+`).
+
+## Run Locally in RStudio Server
+
+```r
+source("workbooks/lab21_pitch_sequencing_entropy_markov_workbook.R")
+```
+
+## Full Runnable Script (`workbooks/lab21_pitch_sequencing_entropy_markov_workbook.R`)
+
+```{r}
+#| eval: false
+#| file: ../../workbooks/lab21_pitch_sequencing_entropy_markov_workbook.R
+```
+
+## Mentor Checkpoints
+
+1. **Checkpoint 1 (Information Theory):** Confirm a uniform 4-pitch mix yields `2.000 bits` while an `85/10/5` predictable count mix drops below `0.80 bits`.
+2. **Checkpoint 2 (Confounding in Raw Markov Tables):** Explain why raw `Breaking -> Breaking` whiff rate (`35.2%`) reflects two-strike count selection, requiring `M2 - M1` residualization to isolate true `Seq+`.
+3. **Checkpoint 3 (Skubal vs. Kahnle Archetypes):** Contrast high-entropy multi-pitch sequencing (`Tarik Skubal`, `1.97 bits`) with low-entropy eye-level/tunnel-changeup sequencing (`Tommy Kahnle`, `0.59 bits`).
