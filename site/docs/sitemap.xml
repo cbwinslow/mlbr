@@ -45,56 +45,60 @@
     <lastmod>2026-11-16T07:29:56.777Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/13_pitcher_stamina_bullpen_fatigue.html</loc>
+    <loc>https://cloudcurio.cc/analyses/01_pitch_quality_eda.html</loc>
+    <lastmod>2026-11-16T05:14:19.086Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/07_pecota_zips_ensemble.html</loc>
+    <lastmod>2026-11-21T21:31:26.265Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/20_dynamic_workload_multivariate_kelly.html</loc>
+    <lastmod>2026-11-23T00:38:46.274Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/16_dynamic_statespace_negbin_k_props.html</loc>
+    <lastmod>2026-11-22T03:21:16.343Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab02_platoon_physics_workbook.html</loc>
+    <lastmod>2026-11-20T00:11:26.432Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html</loc>
+    <lastmod>2026-11-22T03:21:16.334Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab22_rest_il_recovery_travel_jetlag_workbook.html</loc>
+    <lastmod>2026-11-23T05:31:26.466Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.html</loc>
+    <lastmod>2026-11-23T00:38:46.318Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab14_unified_pro_game_f5_totals_bracket_workbook.html</loc>
+    <lastmod>2026-11-22T01:42:10.408Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.html</loc>
     <lastmod>2026-11-22T01:49:26.448Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/run_expectancy.html</loc>
-    <lastmod>2026-11-14T22:04:37.436Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab03_tunneling_stuff_plus_workbook.html</loc>
+    <lastmod>2026-11-20T00:11:26.437Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/analyses/08_team_baseruns_pythagenpat.html</loc>
-    <lastmod>2026-11-21T21:55:16.589Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab04_player_projections_workbook.html</loc>
+    <lastmod>2026-11-20T06:13:33.819Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab08_team_baseruns_pythagenpat_workbook.html</loc>
-    <lastmod>2026-11-21T21:55:16.589Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab05_decomposed_pitching_decisions_workbook.html</loc>
+    <lastmod>2026-11-20T01:41:55.308Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html</loc>
-    <lastmod>2026-11-22T01:47:22.949Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab21_pitch_sequencing_entropy_markov_workbook.html</loc>
-    <lastmod>2026-11-23T05:08:08.315Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.html</loc>
-    <lastmod>2026-11-22T07:27:34.979Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab01_aerodynamics_workbook.html</loc>
-    <lastmod>2026-11-20T00:12:47.512Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab12_weather_umpire_catcher_framing_workbook.html</loc>
-    <lastmod>2026-11-22T01:49:26.447Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab10_market_edge_prediction_valuation_workbook.html</loc>
-    <lastmod>2026-11-22T00:21:41.256Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab17_batter_hr_total_bases_props_workbook.html</loc>
-    <lastmod>2026-11-22T03:54:41.574Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab15_daily_lineups_platoon_k_props_workbook.html</loc>
-    <lastmod>2026-11-22T02:13:23.189Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab06_ballpark_factors_workbook.html</loc>
-    <lastmod>2026-11-20T06:15:45.616Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab18_sgp_correlation_copula_pricing_workbook.html</loc>
+    <lastmod>2026-11-22T05:38:37.484Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/workbooks/lab07_pecota_zips_ensemble_workbook.html</loc>
@@ -114,7 +118,7 @@
   </url>
   <url>
     <loc>https://cloudcurio.cc/gallery.html</loc>
-    <lastmod>2026-11-23T05:32:01.824Z</lastmod>
+    <lastmod>2026-11-23T05:52:50.970Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/architecture.html</loc>
@@ -133,60 +137,64 @@
     <lastmod>2026-11-21T22:09:56.652Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab18_sgp_correlation_copula_pricing_workbook.html</loc>
-    <lastmod>2026-11-22T05:38:37.484Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab23_live_bayesian_win_prob_leverage_workbook.html</loc>
+    <lastmod>2026-11-23T05:51:27.337Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab05_decomposed_pitching_decisions_workbook.html</loc>
-    <lastmod>2026-11-20T01:41:55.308Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab06_ballpark_factors_workbook.html</loc>
+    <lastmod>2026-11-20T06:15:45.616Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab04_player_projections_workbook.html</loc>
-    <lastmod>2026-11-20T06:13:33.819Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab15_daily_lineups_platoon_k_props_workbook.html</loc>
+    <lastmod>2026-11-22T02:13:23.189Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab03_tunneling_stuff_plus_workbook.html</loc>
-    <lastmod>2026-11-20T00:11:26.437Z</lastmod>
+    <loc>https://cloudcurio.cc/workbooks/lab17_batter_hr_total_bases_props_workbook.html</loc>
+    <lastmod>2026-11-22T03:54:41.574Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab13_pitcher_stamina_bullpen_fatigue_workbook.html</loc>
+    <loc>https://cloudcurio.cc/workbooks/lab10_market_edge_prediction_valuation_workbook.html</loc>
+    <lastmod>2026-11-22T00:21:41.256Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab12_weather_umpire_catcher_framing_workbook.html</loc>
+    <lastmod>2026-11-22T01:49:26.447Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab01_aerodynamics_workbook.html</loc>
+    <lastmod>2026-11-20T00:12:47.512Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab19_ordered_tb_exp_decay_statespace_workbook.html</loc>
+    <lastmod>2026-11-22T07:27:34.979Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab21_pitch_sequencing_entropy_markov_workbook.html</loc>
+    <lastmod>2026-11-23T05:08:08.315Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab11_bat_tracking_arm_slot_biomechanics_workbook.html</loc>
+    <lastmod>2026-11-22T01:47:22.949Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/workbooks/lab08_team_baseruns_pythagenpat_workbook.html</loc>
+    <lastmod>2026-11-21T21:55:16.589Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/08_team_baseruns_pythagenpat.html</loc>
+    <lastmod>2026-11-21T21:55:16.589Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/run_expectancy.html</loc>
+    <lastmod>2026-11-14T22:04:37.436Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cloudcurio.cc/analyses/13_pitcher_stamina_bullpen_fatigue.html</loc>
     <lastmod>2026-11-22T01:49:26.448Z</lastmod>
   </url>
   <url>
-    <loc>https://cloudcurio.cc/workbooks/lab14_unified_pro_game_f5_totals_bracket_workbook.html</loc>
-    <lastmod>2026-11-22T01:42:10.408Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.html</loc>
-    <lastmod>2026-11-23T00:38:46.318Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab22_rest_il_recovery_travel_jetlag_workbook.html</loc>
-    <lastmod>2026-11-23T05:31:26.466Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab16_dynamic_statespace_negbin_k_props_workbook.html</loc>
-    <lastmod>2026-11-22T03:21:16.334Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/workbooks/lab02_platoon_physics_workbook.html</loc>
-    <lastmod>2026-11-20T00:11:26.432Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/analyses/16_dynamic_statespace_negbin_k_props.html</loc>
-    <lastmod>2026-11-22T03:21:16.343Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/analyses/20_dynamic_workload_multivariate_kelly.html</loc>
-    <lastmod>2026-11-23T00:38:46.274Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/analyses/07_pecota_zips_ensemble.html</loc>
-    <lastmod>2026-11-21T21:31:26.265Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cloudcurio.cc/analyses/01_pitch_quality_eda.html</loc>
-    <lastmod>2026-11-16T05:14:19.086Z</lastmod>
+    <loc>https://cloudcurio.cc/analyses/23_live_bayesian_win_prob_leverage.html</loc>
+    <lastmod>2026-11-23T05:52:21.297Z</lastmod>
   </url>
   <url>
     <loc>https://cloudcurio.cc/analyses/04_player_projections.html</loc>

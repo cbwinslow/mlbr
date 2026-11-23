@@ -852,3 +852,39 @@ test_that("EXP-022 Starter Rest/IL-Return Ramps & Circadian Travel Audit satisfy
   expect_lt(ab$rmse_plus[ab$experiment_part == "PartA_All_Starts_BF"],
             ab$rmse_base[ab$experiment_part == "PartA_All_Starts_BF"])
 })
+
+test_that("EXP-023 Live In-Game Bayesian Win Probability & Leverage Index satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  bm_p <- file.path(proc, "live_we_base_matrix_2015_2023.parquet")
+  ab_p <- file.path(proc, "live_we_oos_ablation_2025.parquet")
+  in_p <- file.path(proc, "live_we_by_inning_2025.parquet")
+  cl_p <- file.path(proc, "live_we_top_clutch_plays_2025.parquet")
+  skip_if_not(file.exists(bm_p) && file.exists(ab_p) && file.exists(in_p) && file.exists(cl_p), "EXP-023 Gold files not materialized")
+
+  bm <- arrow::read_parquet(bm_p)
+  ab <- arrow::read_parquet(ab_p)
+  inn <- arrow::read_parquet(in_p)
+  cl <- arrow::read_parquet(cl_p)
+
+  expect_equal(nrow(bm), 10080L)
+  expect_true(all(bm$base_we >= 0 & bm$base_we <= 1))
+  expect_gt(max(bm$tango_li, na.rm = TRUE), 5.0)
+  expect_equal(nrow(ab), 4L)
+  expect_equal(nrow(inn), 9L)
+  expect_equal(nrow(cl), 50L)
+
+  # Winning M2_Bayesian_Decayed_Prior must strictly beat M0 Static RE24 and M1 Flat Prior on locked 2025 Brier, Log-Loss & AUC
+  b_m0 <- ab$oos_brier[ab$model == "M0_Static_RE24_WE"]
+  b_m1 <- ab$oos_brier[ab$model == "M1_Static_Plus_Flat_Prior"]
+  b_m2 <- ab$oos_brier[ab$model == "M2_Bayesian_Decayed_Prior"]
+  expect_lt(b_m2, b_m1)
+  expect_lt(b_m1, b_m0)
+  expect_lt(ab$oos_logloss[ab$model == "M2_Bayesian_Decayed_Prior"],
+            ab$oos_logloss[ab$model == "M0_Static_RE24_WE"] - 0.001)
+  expect_gt(ab$oos_auc[ab$model == "M2_Bayesian_Decayed_Prior"],
+            ab$oos_auc[ab$model == "M0_Static_RE24_WE"] + 0.002)
+  # Early innings (1-3) must all show negative delta_brier_m2_vs_m0
+  expect_true(all(inn$delta_brier_m2_vs_m0[inn$inn_grp <= 3L] < -0.001))
+})

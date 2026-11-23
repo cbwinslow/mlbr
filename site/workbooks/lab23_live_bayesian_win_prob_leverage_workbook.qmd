@@ -1,0 +1,47 @@
+---
+title: "Lab 23: Live In-Game Bayesian Win Probability & Tango Leverage Index"
+subtitle: "Interactive Companion Workbook to Study 23 (EXP-023)"
+date: "2026-11-23"
+categories: [Lab, Level 4, Win Probability, Leverage Index, Bayesian Updating]
+---
+
+## Overview
+
+This hands-on workbook reproduces the core live win-probability and Leverage Index invariants from [Study 23](../analyses/23_live_bayesian_win_prob_leverage.qmd) using zero-copy DuckDB queries over `mlbr`'s Gold Parquet tables.
+
+**Runnable Script:** `workbooks/lab23_live_bayesian_win_prob_leverage_workbook.R`
+
+```bash
+Rscript workbooks/lab23_live_bayesian_win_prob_leverage_workbook.R
+```
+
+## Mentor Checkpoints
+
+1. **Checkpoint 1 — Peak Tango Leverage Index (`LI`) States:** Query `live_we_base_matrix_2015_2023.parquet` via DuckDB to confirm that late-inning tied and 1-run bases-loaded/RISP states exceed `LI = 4.0` (4x average play leverage).
+2. **Checkpoint 2 — Locked `2025` OOS Ablation Ordering:** Verify that the winning `M2_Bayesian_Decayed_Prior` ($\gamma^* = 0.15$) strictly beats both `M1_Static_Plus_Flat_Prior` and `M0_Static_RE24_WE` across all `189,311` locked `2025` plays.
+3. **Checkpoint 3 — Inning-by-Inning Edge Diagnostic:** Render the Dark Cyber inning-by-inning $\Delta\text{Brier}$ chart (`models/lab23_inning_brier_delta_diagnostic.png`) showing where pre-game priors dominate (Innings 1–4) and naturally decay in late innings.
+
+## Interactive SQL Preview (Peak Leverage States)
+
+```sql
+SELECT inn_cap AS inning, bat_home, outs, base_state, score_diff,
+       CAST(n_plays AS INTEGER) AS n_plays,
+       ROUND(100.0 * base_we, 1) AS home_we_pct,
+       ROUND(tango_li, 2) AS tango_li
+FROM read_parquet('data/processed/live_we_base_matrix_2015_2023.parquet')
+WHERE n_plays >= 100
+ORDER BY tango_li DESC
+LIMIT 8;
+```
+
+## Live OOS Verification Table
+
+```{r}
+#| echo: false
+#| message: false
+library(arrow); library(knitr); library(dplyr)
+lake <- mlbr::default_lake()
+oos <- read_parquet(file.path(lake, "data/processed/live_we_oos_ablation_2025.parquet")) |>
+  mutate(across(where(is.numeric), ~ round(.x, 5)))
+kable(oos, caption = "Locked 2025 OOS Live Win-Probability Ablation (189,311 plays across 2,430 games)")
+```

@@ -126,3 +126,10 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** <What we chose>
 - **Consequences:** <Trade-offs, invariants, and follow-up work>
 ```
+
+### ADR-019: Live In-Game Bayesian Win Probability via Zero-Intercept Offset Prior Decay (`EXP-023`)
+- **Date:** 2026-11-23
+- **Status:** Accepted (`EXP-023`)
+- **Context:** Static textbook RE24 Win Expectancy (`EXP-009`) ignores pre-game team strength (`EXP-014` `p_m6_ml`), while naive flat-prior updates distort late innings and unregularized play-level context terms (`M3`) can overfit when ~78 plays share one game outcome.
+- **Decision:** Promote **`M2_Bayesian_Decayed_Prior`** — a strictly leak-free `2015–2023` empirical RE24 base WE matrix (`1,615,077` plays, `10,080` states, Empirical Bayes $k=30$) paired with a zero-intercept Bayesian log-odds offset update `logit(WE_static) + beta_1 * f_rem^gamma* * (logit(p_m6_ml) - mu_2024)` ($\gamma^* = 0.15$ via `2024` profile MLE) and empirical `Tango LI` (`mean |Delta WE| = 0.0354`) — as the canonical `mlbr` live Win Probability engine.
+- **Evidence (Locked `2025` OOS, `189,311` plays across `2,430` games):** `M2` strictly beats `M0_Static_RE24_WE` (Brier `0.15592 -> 0.15503`, `-0.00089`; Log-Loss `0.46438 -> 0.46283`, `-0.00155`; AUC `0.85109 -> 0.85351`), `M1_Static_Plus_Flat_Prior` (`0.15506`, `0.46295`), and `M3_Full_Context_Live_WE` (`0.15530`, `0.46360`), with peak gains in Innings `1–3` (`-0.00348` to `-0.00191` Brier).

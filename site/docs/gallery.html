@@ -766,7 +766,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#machine-learning-classification" id="toc-machine-learning-classification" class="nav-link active" data-scroll-target="#machine-learning-classification">Machine Learning &amp; Classification</a></li>
-  <li><a href="#empirical-sabermetrics-non-linear-surfaces" id="toc-empirical-sabermetrics-non-linear-surfaces" class="nav-link" data-scroll-target="#empirical-sabermetrics-non-linear-surfaces">Empirical Sabermetrics &amp; Non-Linear Surfaces</a></li>
+  <li><a href="#empirical-sabermetrics-non-linear-surfaces" id="toc-empirical-sabermetrics-non-linear-surfaces" class="nav-link" data-scroll-target="#empirical-sabermetrics-non-linear-surfaces">Empirical Sabermetrics &amp; Non-Linear Surfaces</a>
+  <ul class="collapse">
+  <li><a href="#study-23-live-in-game-bayesian-win-probability-tango-leverage-index-exp-023" id="toc-study-23-live-in-game-bayesian-win-probability-tango-leverage-index-exp-023" class="nav-link" data-scroll-target="#study-23-live-in-game-bayesian-win-probability-tango-leverage-index-exp-023">Study 23: Live In-Game Bayesian Win Probability &amp; Tango Leverage Index (EXP-023)</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/cbwinslow/mlbr/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -1133,10 +1136,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 </div>
+<section id="study-23-live-in-game-bayesian-win-probability-tango-leverage-index-exp-023" class="level3">
+<h3 class="anchored" data-anchor-id="study-23-live-in-game-bayesian-win-probability-tango-leverage-index-exp-023">Study 23: Live In-Game Bayesian Win Probability &amp; Tango Leverage Index (EXP-023)</h3>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/lwe01_live_we_brier_by_inning_2025.png" class="img-fluid figure-img"></p>
+<figcaption>Locked 2025 OOS Live WE Brier by Inning</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/lwe03_leverage_index_heatmap_2025.png" class="img-fluid figure-img"></p>
+<figcaption>Tango Leverage Index Surface (Inning x Score Diff)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p><a href="./analyses/23_live_bayesian_win_prob_leverage.html">Read Study 23 -&gt;</a> | <a href="assets/lwe02_prior_decay_trajectory_curves.html">Interactive Decay Curves -&gt;</a> | <a href="./workbooks/lab23_live_bayesian_win_prob_leverage_workbook.html">Run Lab 23 -&gt;</a></p>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1957,7 +1984,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
 <span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
-<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a><span class="fu">### Study 23: Live In-Game Bayesian Win Probability &amp; Tango Leverage Index (EXP-023)</span></span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol=2}</span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a><span class="al">![Locked 2025 OOS Live WE Brier by Inning](assets/lwe01_live_we_brier_by_inning_2025.png)</span></span>
+<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a><span class="al">![Tango Leverage Index Surface (Inning x Score Diff)](assets/lwe03_leverage_index_heatmap_2025.png)</span></span>
+<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Read Study 23 -&gt;</span><span class="co">](analyses/23_live_bayesian_win_prob_leverage.qmd)</span> | <span class="co">[</span><span class="ot">Interactive Decay Curves -&gt;</span><span class="co">](assets/lwe02_prior_decay_trajectory_curves.html)</span> | <span class="co">[</span><span class="ot">Run Lab 23 -&gt;</span><span class="co">](workbooks/lab23_live_bayesian_win_prob_leverage_workbook.qmd)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

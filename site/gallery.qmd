@@ -352,3 +352,13 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 </div>
 ```
+
+### Study 23: Live In-Game Bayesian Win Probability & Tango Leverage Index (EXP-023)
+
+::: {layout-ncol=2}
+![Locked 2025 OOS Live WE Brier by Inning](assets/lwe01_live_we_brier_by_inning_2025.png)
+
+![Tango Leverage Index Surface (Inning x Score Diff)](assets/lwe03_leverage_index_heatmap_2025.png)
+:::
+
+[Read Study 23 ->](analyses/23_live_bayesian_win_prob_leverage.qmd) | [Interactive Decay Curves ->](assets/lwe02_prior_decay_trajectory_curves.html) | [Run Lab 23 ->](workbooks/lab23_live_bayesian_win_prob_leverage_workbook.qmd)

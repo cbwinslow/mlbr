@@ -826,6 +826,42 @@
     }
   },
   {
+    "id": "EXP-023-LIVE-BAYESIAN-WIN-PROB-LEVERAGE",
+    "title": "Live In-Game Bayesian Win Probability, Pre-Game Prior Decay & Real-Time Leverage Index",
+    "tier": 4,
+    "tier_name": "Level 4: Game Simulation Engine",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-23 05:50:53 UTC",
+    "summary": "Built a strictly leak-free 2015-2023 empirical RE24 base Win Expectancy & Tango Leverage Index (LI) matrix (10080 states, 1,615,077 plays, mean |Delta WE| = 0.0354) and trained a dynamic Bayesian log-odds live win-probability engine on 2024 (188,937 plays, 2429 games) validated OOS on locked 2025 (189,311 plays, 2430 games). Optimal 2024 profile-MLE prior-decay exponent gamma* = 0.15 (f_rem^gamma * logit(p_m6_ml)). On locked 2025 plays, winning M2 Bayesian Decayed-Prior cut Brier 0.15592 -> 0.15503 (-0.00089), Log-Loss 0.46438 -> 0.46283 (-0.00155), and lifted ROC AUC 0.85109 -> 0.85351 vs Static RE24 WE (M0), outperforming both M1 Flat Prior (Brier 0.15506, Log-Loss 0.46295) and M3 Full Context (Brier 0.15530).",
+    "hypotheses": [
+      "Inning-decayed Bayesian log-odds updating (f_rem^gamma * logit(p_m6_ml)) strictly beats static RE24 Win Expectancy and non-decayed flat priors on locked 2025 play-by-play Brier and Log-Loss.",
+      "Run-environment lead compression (exp_total_m6 x score_diff) and late-inning bullpen fatigue add measurable live-game calibration beyond static score/base-out states."
+    ],
+    "formulas": [],
+    "metrics": {
+      "gamma_decay_opt": 0.15,
+      "m0_oos_brier": 0.15592,
+      "m1_oos_brier": 0.15506,
+      "m2_oos_brier": 0.15503,
+      "m3_oos_brier": 0.1553,
+      "m0_oos_logloss": 0.46438,
+      "m3_oos_logloss": 0.4636,
+      "m3_oos_auc": 0.85318,
+      "n_oos_plays_2025": 189311
+    },
+    "features": [],
+    "artifacts": [
+      "data/processed/live_we_base_matrix_2015_2023.parquet",
+      "data/processed/live_we_oos_ablation_2025.parquet",
+      "data/processed/live_we_by_inning_2025.parquet",
+      "data/processed/live_we_top_clutch_plays_2025.parquet",
+      "models/lwe01_live_we_brier_by_inning_2025.png",
+      "models/lwe02_prior_decay_trajectory_curves.png",
+      "models/lwe02_prior_decay_trajectory_curves.html",
+      "models/lwe03_leverage_index_heatmap_2025.png"
+    ]
+  },
+  {
     "id": "EXP-010-MARKET-EDGE-PREDICTION-VALUATION",
     "title": "Level 5 Market Edge, Closing Line Value (CLV), Fractional Kelly Bankroll Optimization & Prediction Market Valuation",
     "tier": 5,

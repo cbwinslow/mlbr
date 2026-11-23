@@ -76,3 +76,4 @@ pytest tests/                                     # Must pass 2/2 integration te
 R CMD check pkg/mlbr --no-manual --no-vignettes   # Must have 0 errors
 quarto render site/                               # Must render all pages cleanly with exit code 0
 ```
+- **EXP-023 (`ADR-019`):** Live In-Game Bayesian Win Probability, Pre-Game Prior Decay & Tango Leverage Index (`1,615,077` base plays `2015-2023`, `188,937` train `2024`, `189,311` locked OOS `2025`): winning `M2_Bayesian_Decayed_Prior` ($\gamma^*=0.15$) beats `M0` Static RE24 (`Brier 0.15592->0.15503`, `Log-Loss 0.46438->0.46283`, `AUC 0.85109->0.85351`), `M1` Flat Prior, and `M3` Full Context; Study 23 + Lab 23 (`23/23` parity).
