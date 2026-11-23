@@ -817,3 +817,38 @@ test_that("EXP-021 Pitch Sequencing, Markov Transitions & Shannon Entropy (Seq+)
   em  <- merge(e24, e25, by = "pitcher")
   expect_gt(stats::cor(em$count_entropy_bits.x, em$count_entropy_bits.y), 0.75)
 })
+
+test_that("EXP-022 Starter Rest/IL-Return Ramps & Circadian Travel Audit satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  rs_p <- file.path(proc, "pitcher_rest_il_recovery_2018_2025.parquet")
+  il_p <- file.path(proc, "pitcher_il_return_ramp_2018_2025.parquet")
+  tr_p <- file.path(proc, "team_travel_jetlag_2015_2025.parquet")
+  ab_p <- file.path(proc, "rest_travel_oos_ablation_2024_2025.parquet")
+  skip_if_not(file.exists(rs_p) && file.exists(il_p) && file.exists(tr_p) && file.exists(ab_p), "EXP-022 Gold files not materialized")
+
+  rs <- arrow::read_parquet(rs_p)
+  il <- arrow::read_parquet(il_p)
+  tr <- arrow::read_parquet(tr_p)
+  ab <- arrow::read_parquet(ab_p)
+
+  expect_equal(nrow(rs), 6L)
+  expect_equal(nrow(il), 4L)
+  expect_equal(nrow(tr), 6L)
+  expect_equal(nrow(ab), 6L)
+  expect_gt(sum(tr$n_team_games), 50000L)
+  expect_true(all(c("1_3d_Opener_Bulk", "4d_Short") %in% rs$rest_bucket))
+  expect_true(all(c("PartB_Game_HomeWin_Brier", "PartB_Game_HomeWin_LogLoss") %in% ab$experiment_part))
+  # IL Return #1 exhibits strong pitch-count leash (< -7 pitches) and fresh-arm velocity spike (> +0.05 mph)
+  il1 <- il[il$ramp_stage == "IL Return #1 (15+d)", ]
+  expect_lt(il1$d_pitches, -7.0)
+  expect_gt(il1$d_ff_velo, 0.05)
+  # Adding causal Rest/IL flags must substantially cut locked 2024-2025 OOS BF & SO RMSE on IL Return #1 starts
+  expect_lt(ab$rmse_plus[ab$experiment_part == "PartA_IL_Return_1st_BF"],
+            ab$rmse_base[ab$experiment_part == "PartA_IL_Return_1st_BF"] - 0.50)
+  expect_lt(ab$rmse_plus[ab$experiment_part == "PartA_IL_Return_1st_SO"],
+            ab$rmse_base[ab$experiment_part == "PartA_IL_Return_1st_SO"] - 0.10)
+  expect_lt(ab$rmse_plus[ab$experiment_part == "PartA_All_Starts_BF"],
+            ab$rmse_base[ab$experiment_part == "PartA_All_Starts_BF"])
+})

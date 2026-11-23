@@ -6,7 +6,7 @@
 > 2. `AGENTS.md` (Core contract, DOX hierarchy, Closeout & Verification Steps 1–7 including updating nearest owning `AGENTS.md`)
 > 3. `site/AGENTS.md`, `pkg/mlbr/AGENTS.md`, `specs/AGENTS.md` (Directory-level contracts)
 > 4. `.agents/skills/qcrisp-study/SKILL.md` & `.agents/scripts/check_guardrails.py` (Study + Lab DuckDB SQL & guardrail requirements)
-> 5. `DECISIONS.md` (`ADR-001` through `ADR-017`) & `experiments/registry.json` (Never re-derive or drift from validated formulas)
+> 5. `DECISIONS.md` (`ADR-001` through `ADR-018`) & `experiments/registry.json` (Never re-derive or drift from validated formulas)
 
 ---
 
@@ -30,9 +30,9 @@
 
 ---
 
-## 2. Verified Baseline (All 21 Completed & Audited Experiments — 17 Native DuckDB Views!)
+## 2. Verified Baseline (All 22 Completed & Audited Experiments — 17 Native DuckDB Views!)
 
-All 21 experiments (`EXP-001` through `EXP-021`) and 17 Architecture Decision Records (`ADR-001` through `ADR-017`) are completed, independently audited (`PASS`), logged in `experiments/registry.json`, verified across **`234/234` `testthat` unit tests**, **`28/28` `proof_lake`**, **`5/5` `proof_crosswalks`**, **`6/6` `generate_agent_manifest`** (`21/21` Study–Lab parity), **`2/2` `pytest`**, and **`55/55` rendered Quarto pages**:
+All 22 experiments (`EXP-001` through `EXP-022`) and 18 Architecture Decision Records (`ADR-001` through `ADR-018`) are completed, independently audited (`PASS`), logged in `experiments/registry.json`, verified across **`243/243` `testthat` unit tests**, **`28/28` `proof_lake`**, **`5/5` `proof_crosswalks`**, **`6/6` `generate_agent_manifest`** (`22/22` Study–Lab parity), **`2/2` `pytest`**, and **`57/57` rendered Quarto pages**:
 
 - **17 Native Zero-Copy DuckDB Views (`mlbr::lake_duckdb()`):** `v_statcast`, `v_retrosheet_plays`, `v_retrosheet_games`, `v_retrosheet_subs`, `v_retrosheet_rosters`, `v_fangraphs_bat`, `v_fangraphs_pitch`, `v_fangraphs_fielder`, `v_chadwick_register`, `v_lahman_batting`, `v_lahman_pitching`, `v_lahman_people`, `v_ncaa_pbp`, `v_mlbmeta_schedule`, `v_statcast_features`, `v_statcast_tunneling`, and **`v_statcast_biomechanics`** (`4.55M` Silver pitches `2020–2026`).
 

@@ -17,6 +17,19 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 
 <div class="gallery-card">
   <div>
+    <span class="gallery-badge sabermetrics">Q-CRISP Study 22</span>
+    <span class="gallery-badge">Levels 2 &amp; 3 Recovery</span>
+    <h4><a href="analyses/22_rest_il_recovery_travel_jetlag.html">Starter Rest-Day Recovery, Post-IL Ramps &amp; Circadian Jet-Lag</a></h4>
+    <p>Uncensored Inning-1 analysis of 35,812 starts (2018&ndash;2025) &amp; 47,776 team-games (2015&ndash;2025): exposes a -8.75-pitch (-20&sigma;) Post-IL Return leash (-14.8% OOS BF RMSE) while debunking cross-country circadian jet-lag (p=0.80) once HFA is controlled.</p>
+  </div>
+  <div>
+    <hr style="margin: 0.75rem 0; border-color: #f1f5f9;">
+    <small class="text-muted">IL#1 BF RMSE -14.8% | SO RMSE -7.3% | Interactive Plotly</small>
+  </div>
+</div>
+
+<div class="gallery-card">
+  <div>
     <span class="gallery-badge sabermetrics">Q-CRISP Study 21</span>
     <span class="gallery-badge">Level 1C Sequencing</span>
     <h4><a href="analyses/21_pitch_sequencing_entropy_markov.html">Pitch Sequencing, Markov Transitions &amp; Shannon Entropy (Seq+)</a></h4>

@@ -101,6 +101,8 @@ website:
               href: workbooks/lab20_dynamic_workload_multivariate_kelly_workbook.qmd
             - text: "Lab 21: Pitch Sequencing & Shannon Entropy"
               href: workbooks/lab21_pitch_sequencing_entropy_markov_workbook.qmd
+            - text: "Lab 22: Rest/IL Recovery & Travel Jet-Lag"
+              href: workbooks/lab22_rest_il_recovery_travel_jetlag_workbook.qmd
         - section: "Q-CRISP Research Series"
           contents:
             - text: "Knowledge Base & Registry"
@@ -147,6 +149,8 @@ website:
               href: analyses/20_dynamic_workload_multivariate_kelly.qmd
             - text: "Study 21: Pitch Sequencing & Shannon Entropy"
               href: analyses/21_pitch_sequencing_entropy_markov.qmd
+            - text: "Study 22: Rest/IL Recovery & Travel Jet-Lag"
+              href: analyses/22_rest_il_recovery_travel_jetlag.qmd
         - section: "Analyses Gallery"
           contents:
             - text: "Gallery Overview"

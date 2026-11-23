@@ -51,7 +51,8 @@
     - `19_ordered_tb_exp_decay_statespace.qmd`: Study 19 — Joint Ordered/Multinomial Total Bases Ladder & Exponential Half-Life State-Space Decay (`EXP-019`).
     - `20_dynamic_workload_multivariate_kelly.qmd`: Study 20 — Interior Half-Life Sweep, Dynamic In-Season Starter Workload (`BF/GS`) & Multivariate Copula-Kelly Staking (`EXP-020`).
     - `21_pitch_sequencing_entropy_markov.qmd`: Study 21 — Pitch Sequencing, Markov Transitions, Eye-Level Shifts & Pitcher Shannon Entropy (`EXP-021`).
-  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab21`).
+    - `22_rest_il_recovery_travel_jetlag.qmd`: Study 22 — Starter Rest-Day Recovery, Post-IL Pitch-Count Ramps & Circadian Travel Jet-Lag (`EXP-022`).
+  - `workbooks/*.qmd`: Companion Student Work-Along Labs (1:1 parity with every numbered Q-CRISP study: `lab01`–`lab22`).
 - Build command: `quarto render site/` from project root.
 
 ## Verification

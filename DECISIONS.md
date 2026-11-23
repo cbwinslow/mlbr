@@ -110,6 +110,12 @@ Concise log of lasting architectural, storage, and methodological decisions for 
 - **Decision:** Compute full-population (`5.47M` pairs, `2015–2025`) Markov transitions, 2D eye-level shifts (`delta_plate_z × delta_velo_mph`), and count-conditioned pitch-mix Shannon Entropy $H_{\text{count}}(p, s)$, and train strictly chronological `xgboost hist` whiff models (`2020–2023` train $\to$ `2024` val $\to$ locked `2025` OOS `n = 279,640` paired swings) to define orthogonal pitcher `Seq+ = 100 + 10 * z(mean(p_M2 - p_M1))` locked to `2024` scale.
 - **Consequences:** Proves multi-pitch sequencing strictly beats full single-pitch physics+location+count on locked `2025` OOS Whiff Log-Loss (`0.46171 -> 0.46091`), Brier (`0.14813 -> 0.14782`), and ROC AUC (`0.76945 -> 0.77087`), while establishing Count Entropy (`YoY r = 0.8428`) and `Seq+` (`YoY r = 0.5936`) as repeatable Level 1C pitcher traits (`Tarik Skubal #1 SP at 130.5 Seq+`).
 
+## ADR-018: Uncensored Post-IL Return Leash Modeling (`-8.75` Pitches) & Rejection of Uncontrolled Circadian Jet-Lag Narratives
+- **Status:** Accepted (2026-11-23)
+- **Context:** Pitch-count filters (`>= 50` pitches) censor short rehab returns, while popular handicapping folklore attributes road scoring deficits to cross-country circadian jet-lag without controlling for home-field advantage.
+- **Decision:** Identify all starting pitchers strictly from Inning 1 (`FIRST_VALUE(pitcher)`) across `35,812` regular-season starts (`2018–2025`), adopt explicit multi-start Post-IL Return flags (`is_il_1`, `is_il_2`, `is_il_3`) for downstream workload/K-Prop pricing, and explicitly reject adding circadian travel/night-to-day flags to Full-Game ML/Totals models after confirming controlled effects are indistinguishable from zero across `50,934` team-games (`2015–2025`, Eastward `2h+` No-Rest `-0.084 R/G`, `p = 0.7444`; Night-to-Day `+0.009 R/G`, `p = 0.8649`).
+- **Consequences:** Cuts locked `2024–2025` OOS (`n = 414` IL Return #1 starts) Batters-Faced RMSE by `-14.8%` (`5.6950 -> 4.8529`) and Strikeout RMSE by `-7.3%` (`2.2162 -> 2.0543`), while protecting game-level models from overfitting schedule noise.
+
 ---
 
 ## Template for New ADRs

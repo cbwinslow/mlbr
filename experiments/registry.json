@@ -722,6 +722,61 @@
     }
   },
   {
+    "id": "EXP-022-REST-IL-RECOVERY-TRAVEL-JETLAG",
+    "title": "Starter Rest-Day Recovery, Post-IL Return Pitch-Count/Velocity Ramp & Circadian Travel Jet-Lag",
+    "tier": 3,
+    "tier_name": "Level 3: Team BaseRuns & Run Environment",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-23 05:39:13 UTC",
+    "summary": "Analyzed 35812 uncensored MLB regular-season starts (2018-2025) and 51264 team-games (2015-2025) with exact Haversine travel miles and circadian time-zone shifts. Within-pitcher fixed effects reveal 6d extra rest shifts fastball velocity by -0.01 mph (while IL Return #1 spikes +0.14 mph), while IL Return #1 (15+d layoff, n=1346) incurs a massive -8.8-pitch (-2.15 BF) leash deficit that persists into Start #2 (-2.0 pitches). On locked 2024-2025 OOS IL-return starts (n=414), adding causal rest/IL flags slashed BF RMSE 5.6950 -> 4.8529 and SO RMSE 2.2162 -> 2.0543. Controlled circadian travel analysis (2015-2023) quantified Eastward 2h+ No-Rest at -0.084 R/G (p=0.7444) and Westward 2h+ No-Rest at -0.302 R/G (p=0.1222).",
+    "hypotheses": [
+      "Uncensored starter outings reveal a multi-start post-IL pitch-count leash (Start #1 and #2 back) that dramatically improves locked 2024-2025 OOS BF and SO RMSE on IL-return starts.",
+      "6-day extra rest yields positive within-pitcher fastball velocity recovery relative to 5-day normal rest, while cross-country eastward travel without an off-day exhibits measurable circadian drag."
+    ],
+    "formulas": {
+      "within_pitcher_fe": "Delta_y_{p,s,t} = y_{p,s,t} - mean(y_{p,s})",
+      "haversine_miles": "d = 2 * 3958.8 * asin(sqrt(sin(dlat/2)^2 + cos(lat1)*cos(lat2)*sin(dlon/2)^2))",
+      "circadian_shift": "Delta_TZ = round((lon_t - lon_{t-1}) / 15.0) hours"
+    },
+    "metrics": {
+      "n_starts_2018_2025": 35812,
+      "n_team_games_2015_2025": 51264,
+      "d_velo_6d_extra_mph": -0.012,
+      "il1_delta_pitches": -8.75,
+      "il1_delta_bf": -2.15,
+      "il2_delta_pitches": -2.01,
+      "oos_il1_bf_rmse_base": 5.695,
+      "oos_il1_bf_rmse_rest": 4.8529,
+      "oos_il1_so_rmse_base": 2.2162,
+      "oos_il1_so_rmse_rest": 2.0543,
+      "east_2h_norest_rd_beta": -0.0836,
+      "east_2h_norest_pval": 0.7444,
+      "west_2h_norest_rd_beta": -0.3016,
+      "west_2h_norest_pval": 0.1222
+    },
+    "features": [
+      "days_rest",
+      "rest_bucket",
+      "is_il_1",
+      "is_il_2",
+      "is_il_3",
+      "travel_mi",
+      "tz_shift_hrs",
+      "is_night_to_day"
+    ],
+    "artifacts": {
+      "spec": "specs/22_rest_il_recovery_travel_jetlag.md",
+      "script": "models/22_rest_il_recovery_travel_jetlag.R",
+      "gold_rest": "data/processed/pitcher_rest_il_recovery_2018_2025.parquet",
+      "gold_ilramp": "data/processed/pitcher_il_return_ramp_2018_2025.parquet",
+      "gold_travel": "data/processed/team_travel_jetlag_2015_2025.parquet",
+      "gold_ablat": "data/processed/rest_travel_oos_ablation_2024_2025.parquet",
+      "fig_rest": "models/rst01_pitcher_rest_velo_csw_curve.png",
+      "fig_ilramp": "models/rst02_il_return_pitch_count_ramp.html",
+      "fig_travel": "models/rst03_circadian_jetlag_win_run_impact.png"
+    }
+  },
+  {
     "id": "EXP-009-GAME-MONTE-CARLO-SIMULATOR",
     "title": "Level 4 Plate-Appearance 24 Base-Out Markov Game Simulator & Empirical Win Expectancy Engine",
     "tier": 4,

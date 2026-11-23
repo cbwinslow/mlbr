@@ -1,0 +1,37 @@
+---
+title: "Lab 22: Starter Rest-Day Recovery, Post-IL Ramps & Circadian Travel"
+subtitle: "Hands-On RStudio Server Companion for Study 22 (EXP-022)"
+date: "2026-11-23"
+categories: [Workbook, Level 2, Level 3, Pitcher Stamina, Travel, DuckDB]
+format:
+  html:
+    toc: true
+    code-fold: false
+---
+
+## Learning Objectives
+
+In this companion work-along lab for [Study 22](../analyses/22_rest_il_recovery_travel_jetlag.qmd), you will:
+
+1. Compute great-circle **Haversine travel distance** and **circadian time-zone shifts** from first principles.
+2. Query the uncensored `2018–2025` Post-IL return ramp table via zero-copy **DuckDB SQL**.
+3. Render a **Dark Cyber** diagnostic chart quantifying the `-14.8%` BF RMSE and `-7.3%` SO RMSE reductions on locked `2024–2025` OOS IL-return starts.
+
+## Run Locally in RStudio Server
+
+```r
+source("workbooks/lab22_rest_il_recovery_travel_jetlag_workbook.R")
+```
+
+## Full Runnable Script (`workbooks/lab22_rest_il_recovery_travel_jetlag_workbook.R`)
+
+```{r}
+#| eval: false
+#| file: ../../workbooks/lab22_rest_il_recovery_travel_jetlag_workbook.R
+```
+
+## Mentor Checkpoints
+
+1. **Checkpoint 1 (Great-Circle Travel Math):** Verify LA $\to$ NYC is `~2,445` miles and `+3` hours eastward circadian shift.
+2. **Checkpoint 2 (Fresh Arm vs. Manager Leash):** Explain why IL Return #1 features `+0.136 mph` higher velocity alongside `-8.75` fewer pitches and `-0.476` fewer strikeouts.
+3. **Checkpoint 3 (Confounding in Travel Handicapping):** Explain how `68.2%` road-game skew created an illusory `-0.174 R/G` jet-lag penalty that vanished ($p = 0.80$) once `is_home` was controlled.
