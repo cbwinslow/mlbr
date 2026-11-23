@@ -1113,8 +1113,8 @@
     "tier": 5,
     "tier_name": "Level 5: Betting Markets & Staking",
     "status": "VALIDATED",
-    "updated_at": "2026-11-23 00:37:39 UTC",
-    "summary": "Resolved EXP-019's boundary half-life sweep (H=14..180d, 2024-selected H*=180d) and added strictly causal in-season starter workload (bf_gs_exp, EB M=4 starts) to NegBin K-Props, lifting locked-2025 OOS (n=4,859) Over 5.5 K AUC 0.6827 -> 0.6849, Count NLL 2.23014 -> 2.22598, and SO RMSE 2.2999 -> 2.2899. Integrated EXP-018's 2024 Gaussian Copula covariance matrix into an exact box-constrained Multivariate Quarter-Kelly sizer across 3 simultaneous same-game markets (ML, Home SP O5.5 K, Over 8.5) on locked 2025 (-105 vig synthetic benchmark): positive-correlation tickets received -7.98% stake haircut and negative-correlation hedges +11.64%, shifting daily vol 7.48% -> 7.41% and Max DD 32.61% -> 33.95%.",
+    "updated_at": "2026-11-23 02:03:20 UTC",
+    "summary": "Resolved EXP-019's boundary half-life sweep (H=14..180d, 2024-selected H*=180d) and added strictly causal in-season starter workload (bf_gs_exp, EB M=4 starts) to NegBin K-Props, lifting locked-2025 OOS (n=4,859) Over 5.5 K AUC 0.6827 -> 0.6854, Count NLL 2.23014 -> 2.22522, and SO RMSE 2.2999 -> 2.2879. Integrated EXP-018's 2024 Gaussian Copula covariance matrix into an exact box-constrained Multivariate Quarter-Kelly sizer across 3 simultaneous same-game markets (ML, Home SP O5.5 K, Over 8.5) on locked 2025 (-105 vig synthetic benchmark): positive-correlation tickets received -8.01% stake haircut and negative-correlation hedges +11.68%, shifting daily vol 7.55% -> 7.50% and Max DD 32.08% -> 33.24%.",
     "hypotheses": [
       "Adding strictly causal exponentially-decayed in-season starter workload (BF/GS) to interior half-life CSW%/K% improves locked 2025 OOS NegBin K-Prop Count NLL, RMSE, and Over 5.5 K AUC over EXP-019.",
       "Multivariate Copula-Kelly sizing haircuts positively correlated same-game tickets and preserves/boosts negatively correlated hedges, compressing portfolio volatility and drawdown."
@@ -1126,21 +1126,21 @@
     "metrics": {
       "h_star_2024_days": 180,
       "m5_h30_oos_nll": 2.23014,
-      "m6_dynbf_oos_nll": 2.22598,
+      "m6_dynbf_oos_nll": 2.22522,
       "m5_h30_oos_rmse": 2.2999,
-      "m6_dynbf_oos_rmse": 2.2899,
+      "m6_dynbf_oos_rmse": 2.2879,
       "m5_h30_oos_auc_o55": 0.6827,
-      "m6_dynbf_oos_auc_o55": 0.6849,
-      "mvk_pos_haircut_pct": -7.98,
-      "mvk_neg_boost_pct": 11.64,
-      "ind_kelly_sharpe": 7.921,
-      "mv_kelly_sharpe": 7.878,
-      "ind_kelly_max_dd_pct": 32.61,
-      "mv_kelly_max_dd_pct": 33.95
+      "m6_dynbf_oos_auc_o55": 0.6854,
+      "mvk_pos_haircut_pct": -8.01,
+      "mvk_neg_boost_pct": 11.68,
+      "ind_kelly_sharpe": 8.012,
+      "mv_kelly_sharpe": 7.943,
+      "ind_kelly_max_dd_pct": 32.08,
+      "mv_kelly_max_dd_pct": 33.24
     },
     "features": [
-      "csw_h60",
-      "k_h60",
+      "csw_h180",
+      "k_h180",
       "bf_gs_h30",
       "bf_gs_h45",
       "bf_gs_h60",

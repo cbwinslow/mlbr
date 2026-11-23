@@ -767,8 +767,8 @@ test_that("EXP-020 Dynamic Starter Workload (BF/GS) & Multivariate Copula-Kelly 
   bt <- arrow::read_parquet(bt_p)
   sm <- arrow::read_parquet(sm_p)
 
-  expect_equal(nrow(kp), 9L)
-  expect_equal(nrow(sm), 2L)
+  expect_equal(nrow(kp), 10L)
+  expect_equal(nrow(sm), 3L)
   expect_gt(nrow(bt), 175L)
   # Dynamic BF/GS workload strictly improves Count NLL, RMSE, Over 5.5 K AUC & Over 7.5 K Brier over EXP-019 H30d
   m5 <- kp[kp$model == "M5_ExpDecay_H30d", ]
@@ -781,4 +781,8 @@ test_that("EXP-020 Dynamic Starter Workload (BF/GS) & Multivariate Copula-Kelly 
   # Multivariate Copula-Kelly strictly lowers daily portfolio volatility vs Independent Quarter-Kelly
   expect_lt(sm$daily_vol_pct[sm$strategy == "Multivariate_Copula_Kelly"],
             sm$daily_vol_pct[sm$strategy == "Independent_Quarter_Kelly"])
+  expect_gt(sm$sharpe_ann[sm$strategy == "OneSided_Copula_Kelly"],
+            sm$sharpe_ann[sm$strategy == "Independent_Quarter_Kelly"])
+  expect_gt(sm$cum_log_growth[sm$strategy == "OneSided_Copula_Kelly"],
+            sm$cum_log_growth[sm$strategy == "Independent_Quarter_Kelly"])
 })

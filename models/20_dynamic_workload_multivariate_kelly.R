@@ -134,7 +134,9 @@ kp_df <- DBI::dbGetQuery(con, sprintf("
       SUM(EXP(-LN(2.0) * DATEDIFF('day', p.gdate, s.gdate) / 45.0) * p.sp_bf) AS w45_bf,
       SUM(EXP(-LN(2.0) * DATEDIFF('day', p.gdate, s.gdate) / 45.0))           AS w45_gs,
       SUM(EXP(-LN(2.0) * DATEDIFF('day', p.gdate, s.gdate) / 60.0) * p.sp_bf) AS w60_bf,
-      SUM(EXP(-LN(2.0) * DATEDIFF('day', p.gdate, s.gdate) / 60.0))           AS w60_gs
+      SUM(EXP(-LN(2.0) * DATEDIFF('day', p.gdate, s.gdate) / 60.0))           AS w60_gs,
+      SUM(p.sp_bf)                                                            AS winf_bf,
+      COUNT(p.sp_bf)                                                          AS winf_gs
     FROM starts s
     LEFT JOIN starts p ON s.sp_mlbam = p.sp_mlbam AND s.season = p.season
       AND p.gdate < s.gdate AND DATEDIFF('day', p.gdate, s.gdate) BETWEEN 1 AND 180
@@ -155,7 +157,8 @@ kp_df <- DBI::dbGetQuery(con, sprintf("
          (COALESCE(k.w180_so, 0)  +  60.0*0.224) / (COALESCE(k.w180_pa, 0)+  60.0) AS k_h180,
          (COALESCE(b.w30_bf, 0)   + 4.0*s.eb_bf_gs) / (COALESCE(b.w30_gs, 0) + 4.0) AS bf_gs_h30,
          (COALESCE(b.w45_bf, 0)   + 4.0*s.eb_bf_gs) / (COALESCE(b.w45_gs, 0) + 4.0) AS bf_gs_h45,
-         (COALESCE(b.w60_bf, 0)   + 4.0*s.eb_bf_gs) / (COALESCE(b.w60_gs, 0) + 4.0) AS bf_gs_h60
+         (COALESCE(b.w60_bf, 0)   + 4.0*s.eb_bf_gs) / (COALESCE(b.w60_gs, 0) + 4.0) AS bf_gs_h60,
+         (COALESCE(b.winf_bf, 0)  + 4.0*s.eb_bf_gs) / (COALESCE(b.winf_gs, 0)+ 4.0) AS bf_gs_inf
   FROM starts s
   LEFT JOIN decayed_pitch k ON s.game_id = k.game_id AND s.sp_mlbam = k.sp_mlbam
   LEFT JOIN decayed_bf    b ON s.game_id = b.game_id AND s.sp_mlbam = b.sp_mlbam
@@ -218,13 +221,14 @@ cat(sprintf("2024-Selected Interior Half-Life (Zero 2025 Peeking): H* = %d days\
 # Fit Dynamic Workload (BF/GS) models using H* for CSW%/K% and sweeping H in {30, 45, 60} for BF/GS
 res_bf30 <- eval_nb(sprintf("M6_DynWorkload_H%d_BF30", h_star), paste0("csw_h", h_star), paste0("k_h", h_star), "bf_gs_h30", h_star)
 res_bf45 <- eval_nb(sprintf("M6_DynWorkload_H%d_BF45", h_star), paste0("csw_h", h_star), paste0("k_h", h_star), "bf_gs_h45", h_star)
-res_bf60 <- eval_nb(sprintf("M6_DynWorkload_H%d_BF60", h_star), paste0("csw_h", h_star), paste0("k_h", h_star), "bf_gs_h60", h_star)
+res_bf60  <- eval_nb(sprintf("M6_DynWorkload_H%d_BF60",  h_star), paste0("csw_h", h_star), paste0("k_h", h_star), "bf_gs_h60", h_star)
+res_bfinf <- eval_nb(sprintf("M6_DynWorkload_H%d_BFInf", h_star), paste0("csw_h", h_star), paste0("k_h", h_star), "bf_gs_inf", h_star)
 
-bf_candidates <- list(res_bf30, res_bf45, res_bf60)
+bf_candidates <- list(res_bf30, res_bf45, res_bf60, res_bfinf)
 bf_tr_nlls <- sapply(bf_candidates, function(x) x$metrics$train_2024_nll)
 best_bf_res <- bf_candidates[[which.min(bf_tr_nlls)]]
 
-kprop_ablation <- bind_rows(sweep_tbl, res_bf30$metrics, res_bf45$metrics, res_bf60$metrics)
+kprop_ablation <- bind_rows(sweep_tbl, res_bf30$metrics, res_bf45$metrics, res_bf60$metrics, res_bfinf$metrics)
 cat("\n=== Part A: Locked 2025 OOS Interior Half-Life & Dynamic BF/GS Ablation ===\n")
 print(kprop_ablation |> mutate(across(where(is.numeric), ~ round(.x, 5))), width = 140)
 
@@ -349,12 +353,13 @@ eval_game_legs <- function(row_idx) {
 
   f_ind <- pmin(f_cap_leg, c_frac * mu_bet / var_j)
   f_mv  <- solve_mv_kelly(mu_bet, Sigma, c_frac = c_frac, f_max = f_cap_leg)
+  f_os  <- pmin(f_mv, f_ind)
   ret_leg <- ifelse(y_bet == 1L, O_bet - 1.0, -1.0)
 
   tibble(
     game_id = r$game_id, game_date = r$game_date, n_legs = m, avg_pair_rho = avg_pair_rho,
-    stake_ind = sum(f_ind), stake_mv = sum(f_mv),
-    pnl_ind = sum(f_ind * ret_leg), pnl_mv = sum(f_mv * ret_leg)
+    stake_ind = sum(f_ind), stake_mv = sum(f_mv), stake_os = sum(f_os),
+    pnl_ind = sum(f_ind * ret_leg), pnl_mv = sum(f_mv * ret_leg), pnl_os = sum(f_os * ret_leg)
   )
 }
 
@@ -368,20 +373,26 @@ daily_bt <- game_bets |>
     n_games_bet = n(), n_multi_leg = sum(n_legs >= 2L),
     raw_stake_ind = sum(stake_ind), raw_pnl_ind = sum(pnl_ind),
     raw_stake_mv  = sum(stake_mv),  raw_pnl_mv  = sum(pnl_mv),
+    raw_stake_os  = sum(stake_os),  raw_pnl_os  = sum(pnl_os),
     .groups = "drop"
   ) |>
   arrange(game_date) |>
   mutate(
     scale_ind = pmin(1.0, f_cap_day / pmax(raw_stake_ind, 1e-9)),
     scale_mv  = pmin(1.0, f_cap_day / pmax(raw_stake_mv,  1e-9)),
+    scale_os  = pmin(1.0, f_cap_day / pmax(raw_stake_os,  1e-9)),
     day_ret_ind = scale_ind * raw_pnl_ind,
     day_ret_mv  = scale_mv  * raw_pnl_mv,
+    day_ret_os  = scale_os  * raw_pnl_os,
     day_st_ind  = scale_ind * raw_stake_ind,
     day_st_mv   = scale_mv  * raw_stake_mv,
+    day_st_os   = scale_os  * raw_stake_os,
     eq_ind = cumprod(1.0 + day_ret_ind),
     eq_mv  = cumprod(1.0 + day_ret_mv),
+    eq_os  = cumprod(1.0 + day_ret_os),
     dd_ind = (pmax(1.0, cummax(eq_ind)) - eq_ind) / pmax(1.0, cummax(eq_ind)),
-    dd_mv  = (pmax(1.0, cummax(eq_mv))  - eq_mv)  / pmax(1.0, cummax(eq_mv))
+    dd_mv  = (pmax(1.0, cummax(eq_mv))  - eq_mv)  / pmax(1.0, cummax(eq_mv)),
+    dd_os  = (pmax(1.0, cummax(eq_os))  - eq_os)  / pmax(1.0, cummax(eq_os))
   )
 
 calc_port_summary <- function(name, day_ret, day_st, eq, dd) {
@@ -400,7 +411,8 @@ calc_port_summary <- function(name, day_ret, day_st, eq, dd) {
 
 mvk_summary <- bind_rows(
   calc_port_summary("Independent_Quarter_Kelly",  daily_bt$day_ret_ind, daily_bt$day_st_ind, daily_bt$eq_ind, daily_bt$dd_ind),
-  calc_port_summary("Multivariate_Copula_Kelly",  daily_bt$day_ret_mv,  daily_bt$day_st_mv,  daily_bt$eq_mv,  daily_bt$dd_mv)
+  calc_port_summary("Multivariate_Copula_Kelly",  daily_bt$day_ret_mv,  daily_bt$day_st_mv,  daily_bt$eq_mv,  daily_bt$dd_mv),
+  calc_port_summary("OneSided_Copula_Kelly",      daily_bt$day_ret_os,  daily_bt$day_st_os,  daily_bt$eq_os,  daily_bt$dd_os)
 )
 
 pos_corr_games <- game_bets |> filter(n_legs >= 2L, avg_pair_rho > 0.05)
