@@ -191,8 +191,9 @@ base_we_tbl <- base_we_tbl |>
   mutate(
     n_li_plays = coalesce(as.numeric(n_li_plays), 0.0),
     raw_swing  = coalesce(mean_abs_d_we, 0.0),
-    # EB shrink state swing toward 0 for unseen blowout states, normalize to league mean = 1.00
-    tango_li   = ((n_li_plays * raw_swing) / (n_li_plays + 15.0)) / lg_avg_swing
+    # EB shrink state swing toward 0 for unseen blowout states, then re-normalize play-weighted mean = 1.0000
+    shrunk_swing = (n_li_plays * raw_swing) / (n_li_plays + 15.0),
+    tango_li     = shrunk_swing / weighted.mean(shrunk_swing, w = n_plays)
   ) |>
   select(inn_cap, bat_home, outs, base_state, score_diff, outs_rem_frac, n_plays, base_we, tango_li)
 

@@ -2,7 +2,8 @@
 # ==============================================================================
 # mlbr Unified Daily Pre-Game Pricing & Slate Runner CLI
 # Unifies EXP-014 (ML/F5/Totals), EXP-018 (Gaussian Copula SGP), EXP-019
-# (Monotonic Multinomial TB Ladder), and EXP-020 (Dynamic Workload K-Props &
+# (Monotonic Multinomial TB Ladder), EXP-020 (Dynamic Workload K-Props &,
+# EXP-022 (Causal Post-IL Return Pitch-Count/BF Leash Adjustment), and
 # One-Sided Multivariate Copula-Kelly Sizing) for any MLB game date.
 #
 # CLI:
@@ -88,6 +89,7 @@ fit_o85 <- glm(y_over85 ~ exp_total_m6, data = g24_cal, family = binomial())
 slate <- DBI::dbGetQuery(con, sprintf("
   SELECT
     g.game_id, CAST(g.game_date AS VARCHAR) AS game_date, g.away_team, g.home_team,
+    g.home_sp_mlbam, g.away_sp_mlbam,
     g.p_m6_ml, g.p_m6_f5, g.exp_total_m6,
     kh.player_name AS home_sp, kh.mu_m4 AS home_sp_exp_so, kh.p_m4_o55 AS p_hsp_o55,
     ka.player_name AS away_sp, ka.mu_m4 AS away_sp_exp_so, ka.p_m4_o55 AS p_asp_o55
@@ -101,6 +103,69 @@ slate <- DBI::dbGetQuery(con, sprintf("
 if (nrow(slate) == 0L) {
   stop(sprintf("No MLB games found for target_date = %s in Gold slate tables.", target_date))
 }
+
+# Causal EXP-022 Starter Rest & Post-IL Return Leash Lookup (strictly < target_date)
+sp_ids <- unique(na.omit(c(slate$home_sp_mlbam, slate$away_sp_mlbam)))
+sp_il_status <- tibble(pitcher = integer(), days_rest = integer(), il_flag = character(), il_so_mult = numeric())
+if (length(sp_ids) > 0L) {
+  yr_cur <- as.integer(substr(target_date, 1, 4))
+  sp_hist <- DBI::dbGetQuery(con, sprintf("
+    WITH inn1 AS (
+      SELECT DISTINCT pitcher, CAST(game_date AS DATE) AS gdate
+      FROM v_statcast_features
+      WHERE game_type = 'R' AND game_year = %d AND inning = 1
+        AND CAST(game_date AS DATE) < DATE '%s'
+        AND pitcher IN (%s)
+    )
+    SELECT pitcher, gdate FROM inn1 ORDER BY pitcher, gdate
+  ", yr_cur, target_date, paste(as.integer(sp_ids), collapse = ",")))
+  if (nrow(sp_hist) > 0L) {
+    tdate <- as.Date(target_date)
+    sp_il_status <- sp_hist |>
+      group_by(pitcher) |>
+      arrange(gdate, .by_group = TRUE) |>
+      summarise(
+        last_gdate = max(gdate),
+        prev_gap   = ifelse(n() >= 2L, as.integer(nth(gdate, n()) - nth(gdate, n() - 1L)), NA_integer_),
+        .groups    = "drop"
+      ) |>
+      mutate(
+        days_rest = as.integer(tdate - last_gdate),
+        il_flag   = case_when(
+          !is.na(days_rest) & days_rest >= 15L ~ "IL_Return_1",
+          !is.na(prev_gap)  & prev_gap  >= 15L & days_rest < 15L ~ "IL_Return_2",
+          TRUE ~ "Normal"
+        ),
+        # EXP-022 validated BF/SO ramp multipliers (-9.4% Return #1, -2.1% Return #2)
+        il_so_mult = case_when(
+          il_flag == "IL_Return_1" ~ 0.906,
+          il_flag == "IL_Return_2" ~ 0.979,
+          TRUE ~ 1.000
+        )
+      ) |>
+      select(pitcher, days_rest, il_flag, il_so_mult)
+  }
+}
+
+# NegBin dispersion theta from EXP-020 (89.3) for IL-adjusted O5.5 K repricing
+nb_theta_20 <- 89.3
+slate <- slate |>
+  left_join(sp_il_status |> rename(home_sp_mlbam = pitcher, home_sp_rest = days_rest,
+                                   home_sp_il_flag = il_flag, home_il_mult = il_so_mult),
+            by = "home_sp_mlbam") |>
+  left_join(sp_il_status |> rename(away_sp_mlbam = pitcher, away_sp_rest = days_rest,
+                                   away_sp_il_flag = il_flag, away_il_mult = il_so_mult),
+            by = "away_sp_mlbam") |>
+  mutate(
+    home_sp_il_flag = coalesce(home_sp_il_flag, "Normal"),
+    away_sp_il_flag = coalesce(away_sp_il_flag, "Normal"),
+    home_sp_exp_so  = home_sp_exp_so * coalesce(home_il_mult, 1.0),
+    away_sp_exp_so  = away_sp_exp_so * coalesce(away_il_mult, 1.0),
+    p_hsp_o55       = ifelse(home_sp_il_flag == "Normal", p_hsp_o55,
+                             pnbinom(5L, size = nb_theta_20, mu = pmax(home_sp_exp_so, 0.1), lower.tail = FALSE)),
+    p_asp_o55       = ifelse(away_sp_il_flag == "Normal", p_asp_o55,
+                             pnbinom(5L, size = nb_theta_20, mu = pmax(away_sp_exp_so, 0.1), lower.tail = FALSE))
+  )
 
 slate <- slate |>
   mutate(
@@ -143,7 +208,7 @@ print(
     Matchup = paste0(away_team, "@", home_team),
     HomeML = home_ml_fair, F5Home = f5_home_fair,
     ExpTot = round(exp_total_m6, 2), Over8.5 = over85_fair,
-    HomeSP = home_sp, HSP_O5.5K = hsp_o55_fair,
+    HomeSP = ifelse(home_sp_il_flag == "Normal", home_sp, paste0(home_sp, " [", home_sp_il_flag, "]")), HSP_O5.5K = hsp_o55_fair,
     `SGP(ML+F5)` = sgp_ml_f5_fair, `SGP(ML+K)` = sgp_ml_hsp_fair
   ),
   n = 20, width = 140

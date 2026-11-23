@@ -871,6 +871,7 @@ test_that("EXP-023 Live In-Game Bayesian Win Probability & Leverage Index satisf
   expect_equal(nrow(bm), 10080L)
   expect_true(all(bm$base_we >= 0 & bm$base_we <= 1))
   expect_gt(max(bm$tango_li, na.rm = TRUE), 5.0)
+  expect_lt(abs(stats::weighted.mean(bm$tango_li, bm$n_plays) - 1.0), 1e-6)
   expect_equal(nrow(ab), 4L)
   expect_equal(nrow(inn), 9L)
   expect_equal(nrow(cl), 50L)
