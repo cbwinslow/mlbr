@@ -810,6 +810,7 @@ window.Quarto = {
   <li><a href="#exp-021-pitch-sequencing-entropy-markov-pitch-sequencing-first-order-markov-transitions-eye-level-shifts-pitcher-shannon-entropy-seq" id="toc-exp-021-pitch-sequencing-entropy-markov-pitch-sequencing-first-order-markov-transitions-eye-level-shifts-pitcher-shannon-entropy-seq" class="nav-link" data-scroll-target="#exp-021-pitch-sequencing-entropy-markov-pitch-sequencing-first-order-markov-transitions-eye-level-shifts-pitcher-shannon-entropy-seq">EXP-021-PITCH-SEQUENCING-ENTROPY-MARKOV: Pitch Sequencing, First-Order Markov Transitions, Eye-Level Shifts &amp; Pitcher Shannon Entropy (Seq+)</a></li>
   <li><a href="#exp-004-player-projections-chronological-true-talent-player-projections-marcel-delta-method-aging-tier-1-physics-priors" id="toc-exp-004-player-projections-chronological-true-talent-player-projections-marcel-delta-method-aging-tier-1-physics-priors" class="nav-link" data-scroll-target="#exp-004-player-projections-chronological-true-talent-player-projections-marcel-delta-method-aging-tier-1-physics-priors">EXP-004-PLAYER-PROJECTIONS: Chronological True-Talent Player Projections: Marcel, Delta-Method Aging &amp; Tier 1 Physics Priors</a></li>
   <li><a href="#exp-007-pecota-zips-ensemble-pecota-k-nn-similarity-comps-zips-archetype-multi-year-aging-defensebaserunning-eda-5-paradigm-consensus-ensemble" id="toc-exp-007-pecota-zips-ensemble-pecota-k-nn-similarity-comps-zips-archetype-multi-year-aging-defensebaserunning-eda-5-paradigm-consensus-ensemble" class="nav-link" data-scroll-target="#exp-007-pecota-zips-ensemble-pecota-k-nn-similarity-comps-zips-archetype-multi-year-aging-defensebaserunning-eda-5-paradigm-consensus-ensemble">EXP-007-PECOTA-ZIPS-ENSEMBLE: PECOTA k-NN Similarity Comps, ZiPS Archetype Multi-Year Aging, Defense/Baserunning EDA &amp; 5-Paradigm Consensus Ensemble</a></li>
+  <li><a href="#exp-024-spray-angle-park-wall-xhr-batted-ball-spray-angle-pull-air-ballpark-wall-geometry-xhr-physics" id="toc-exp-024-spray-angle-park-wall-xhr-batted-ball-spray-angle-pull-air-ballpark-wall-geometry-xhr-physics" class="nav-link" data-scroll-target="#exp-024-spray-angle-park-wall-xhr-batted-ball-spray-angle-pull-air-ballpark-wall-geometry-xhr-physics">EXP-024-SPRAY-ANGLE-PARK-WALL-XHR: Batted-Ball Spray-Angle, Pull-Air% &amp; Ballpark Wall-Geometry xHR Physics</a></li>
   <li><a href="#exp-006-ballpark-factors-empirical-multi-year-regressed-ballpark-factors-handedness-asymmetry" id="toc-exp-006-ballpark-factors-empirical-multi-year-regressed-ballpark-factors-handedness-asymmetry" class="nav-link" data-scroll-target="#exp-006-ballpark-factors-empirical-multi-year-regressed-ballpark-factors-handedness-asymmetry">EXP-006-BALLPARK-FACTORS: Empirical Multi-Year Regressed Ballpark Factors &amp; Handedness Asymmetry</a></li>
   <li><a href="#exp-008-team-baseruns-pythagenpat-level-3-team-run-creation-david-smyth-baseruns-dynamic-pythagenpat-10000-season-2026-standings-simulator" id="toc-exp-008-team-baseruns-pythagenpat-level-3-team-run-creation-david-smyth-baseruns-dynamic-pythagenpat-10000-season-2026-standings-simulator" class="nav-link" data-scroll-target="#exp-008-team-baseruns-pythagenpat-level-3-team-run-creation-david-smyth-baseruns-dynamic-pythagenpat-10000-season-2026-standings-simulator">EXP-008-TEAM-BASERUNS-PYTHAGENPAT: Level 3 Team Run Creation (David Smyth BaseRuns), Dynamic Pythagenpat &amp; 10,000-Season 2026 Standings Simulator</a></li>
   <li><a href="#exp-012-weather-umpire-catcher-framing-environmental-officiating-alpha-weatherwind-carry-home-plate-umpire-strike-zones-catcher-framing-csaa" id="toc-exp-012-weather-umpire-catcher-framing-environmental-officiating-alpha-weatherwind-carry-home-plate-umpire-strike-zones-catcher-framing-csaa" class="nav-link" data-scroll-target="#exp-012-weather-umpire-catcher-framing-environmental-officiating-alpha-weatherwind-carry-home-plate-umpire-strike-zones-catcher-framing-csaa">EXP-012-WEATHER-UMPIRE-CATCHER-FRAMING: Environmental &amp; Officiating Alpha: Weather/Wind Carry, Home-Plate Umpire Strike Zones &amp; Catcher Framing (CSAA)</a></li>
@@ -1856,6 +1857,70 @@ convex_meta_stack: M5 = sum_m w_m * M_m, w_m &gt;= 0, sum(w_m) = 1 (fit strictly
 <hr>
 </section>
 </section>
+<section id="exp-024-spray-angle-park-wall-xhr-batted-ball-spray-angle-pull-air-ballpark-wall-geometry-xhr-physics" class="level3">
+<h3 class="anchored" data-anchor-id="exp-024-spray-angle-park-wall-xhr-batted-ball-spray-angle-pull-air-ballpark-wall-geometry-xhr-physics">EXP-024-SPRAY-ANGLE-PARK-WALL-XHR: Batted-Ball Spray-Angle, Pull-Air% &amp; Ballpark Wall-Geometry xHR Physics</h3>
+<p><strong>Tier:</strong> Level 2: Player Projections | <strong>Status:</strong> <span class="badge bg-success" style="padding:3px 6px; border-radius:3px;">VALIDATED</span> | <strong>Updated:</strong> <code>2026-11-23</code></p>
+<blockquote class="blockquote">
+<p>Matched 100.0% of 900,589 regular-season Statcast batted balls (2018-2025) to exact season-specific ballpark fence geometry (LF/LCF/CF/RCF/RF) and altitude. Trained a 4-model chronological XGBoost xHR ladder (2018-2023 Train / 2024 Val -&gt; Locked 2025 OOS, n=124,395 BIP, 5,616 HRs). Adding horizontal spray angle + exact continuous wall distance at spray angle &amp; elevation (M3) slashed locked 2025 Log-Loss 0.06129 -&gt; 0.03891 (-0.02238), Brier 0.01917 -&gt; 0.01199 (-0.00718), and lifted ROC AUC 0.98532 -&gt; 0.99452 vs standard EV+LA (M0), while also strictly beating scalar park-factor xHR (M2 LL 0.03930, AUC 0.99438). Across 196 qualified batters (2024-&gt;2025), Pull-Air% is highly stable (r=0.734) and 2024 spray-aware xHR/BIP predicts 2025 actual HR/BIP at r=0.734 vs 0.715 for raw HR/BIP.</p>
+</blockquote>
+<section id="empirical-validation-metrics-8" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-8">Empirical Validation Metrics</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>m0_oos_logloss</code></td>
+<td style="text-align: left;"><strong>0.06129</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>m1_oos_logloss</code></td>
+<td style="text-align: left;"><strong>0.04268</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>m2_oos_logloss</code></td>
+<td style="text-align: left;"><strong>0.0393</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>m3_oos_logloss</code></td>
+<td style="text-align: left;"><strong>0.03891</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>m0_oos_auc</code></td>
+<td style="text-align: left;"><strong>0.98532</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>m3_oos_auc</code></td>
+<td style="text-align: left;"><strong>0.99452</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pull_air_yoy_r</code></td>
+<td style="text-align: left;"><strong>0.734</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pred_2025_hr_r_m1</code></td>
+<td style="text-align: left;"><strong>0.7341</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pred_2025_hr_r_m3</code></td>
+<td style="text-align: left;"><strong>0.7373</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pred_2025_hr_r_raw</code></td>
+<td style="text-align: left;"><strong>0.7152</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="artifacts-research-links-8" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-8">Artifacts &amp; Research Links</h4>
+<hr>
+</section>
+</section>
 <section id="exp-006-ballpark-factors-empirical-multi-year-regressed-ballpark-factors-handedness-asymmetry" class="level3">
 <h3 class="anchored" data-anchor-id="exp-006-ballpark-factors-empirical-multi-year-regressed-ballpark-factors-handedness-asymmetry">EXP-006-BALLPARK-FACTORS: Empirical Multi-Year Regressed Ballpark Factors &amp; Handedness Asymmetry</h3>
 <p><strong>Tier:</strong> Level 3: Team BaseRuns &amp; Run Environment | <strong>Status:</strong> <span class="badge bg-success" style="padding:3px 6px; border-radius:3px;">VALIDATED</span> | <strong>Updated:</strong> <code>2026-11-20</code></p>
@@ -1869,8 +1934,8 @@ park_factor_30_teams: (30.0 * ratio) / (29.0 + ratio) * 100.0
 empirical_bayes_smoothing: (cnt + 2.0 * prior_rate) / (denom + 2.0)
 three_year_shrinkage: 100.0 + (w_val - 100.0) * (tot_denom / (tot_denom + M))</code></pre>
 </section>
-<section id="empirical-validation-metrics-8" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-8">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-9" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-9">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1910,8 +1975,8 @@ three_year_shrinkage: 100.0 + (w_val - 100.0) * (tot_denom / (tot_denom + M))</c
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-8" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-8">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-9" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-9">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/06_ballpark_factors.md</code></li>
 <li><strong>script</strong>: <code>models/06_ballpark_factors_empirical.R</code></li>
@@ -1934,8 +1999,8 @@ three_year_shrinkage: 100.0 + (w_val - 100.0) * (tot_denom / (tot_denom + M))</c
 pythagenpat_exponent: gamma = ((RS + RA) / G)^0.287
 log5_hfa_game_prob: Log5(p_home, p_away) combined with neutral HFA = 0.535</code></pre>
 </section>
-<section id="empirical-validation-metrics-9" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-9">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-10" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-10">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1983,8 +2048,8 @@ log5_hfa_game_prob: Log5(p_home, p_away) combined with neutral HFA = 0.535</code
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-9" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-9">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-10" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-10">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/08_team_baseruns_pythagenpat.md</code></li>
 <li><strong>script</strong>: <code>models/08_team_baseruns_pythagenpat.R</code></li>
@@ -2008,8 +2073,8 @@ log5_hfa_game_prob: Log5(p_home, p_away) combined with neutral HFA = 0.535</code
 umpire_eb: Delta_R_u = (n_u / (n_u + 80)) * mean_park_adj_resid_u
 catcher_framing: CSAA = sum(is_called_strike - p_cs_exp(x, z_norm, stand)); FramingRuns = 0.125 * CSAA</code></pre>
 </section>
-<section id="empirical-validation-metrics-10" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-10">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-11" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-11">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2049,8 +2114,8 @@ catcher_framing: CSAA = sum(is_called_strike - p_cs_exp(x, z_norm, stand)); Fram
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-10" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-10">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-11" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-11">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/12_weather_umpire_catcher_framing.md</code></li>
 <li><strong>script</strong>: <code>models/12_weather_umpire_catcher_framing.R</code></li>
@@ -2076,8 +2141,8 @@ catcher_framing: CSAA = sum(is_called_strike - p_cs_exp(x, z_norm, stand)); Fram
 bp_load_3d: P_3d(c, t) = sum_{d in [t-3, t-1]} reliever_pitches(c, d)
 bp_fatigue_adj: Delta_R_bp = b_3d * (P_3d - mean_3d)/100 + b_1d * (P_1d - mean_1d)/100</code></pre>
 </section>
-<section id="empirical-validation-metrics-11" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-11">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-12" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-12">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2117,8 +2182,8 @@ bp_fatigue_adj: Delta_R_bp = b_3d * (P_3d - mean_3d)/100 + b_1d * (P_1d - mean_1
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-11" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-11">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-12" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-12">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/13_pitcher_stamina_bullpen_fatigue.md</code></li>
 <li><strong>script</strong>: <code>models/13_pitcher_stamina_bullpen_fatigue.R</code></li>
@@ -2144,8 +2209,8 @@ bp_fatigue_adj: Delta_R_bp = b_3d * (P_3d - mean_3d)/100 + b_1d * (P_1d - mean_1
 haversine_miles: d = 2 * 3958.8 * asin(sqrt(sin(dlat/2)^2 + cos(lat1)*cos(lat2)*sin(dlon/2)^2))
 circadian_shift: Delta_TZ = round((lon_t - lon_{t-1}) / 15.0) hours</code></pre>
 </section>
-<section id="empirical-validation-metrics-12" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-12">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-13" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-13">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2213,8 +2278,8 @@ circadian_shift: Delta_TZ = round((lon_t - lon_{t-1}) / 15.0) hours</code></pre>
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-12" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-12">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-13" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-13">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/22_rest_il_recovery_travel_jetlag.md</code></li>
 <li><strong>script</strong>: <code>models/22_rest_il_recovery_travel_jetlag.R</code></li>
@@ -2241,8 +2306,8 @@ circadian_shift: Delta_TZ = round((lon_t - lon_{t-1}) / 15.0) hours</code></pre>
 markov_absorption: P(runs = 0..12) via exact 24 base-out transition tensor propagation
 extra_innings_tie: P(Home Win | Tie) = P(H &gt; A | ghost_2B) / (P(H &gt; A) + P(A &gt; H))</code></pre>
 </section>
-<section id="empirical-validation-metrics-13" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-13">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-14" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-14">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2290,8 +2355,8 @@ extra_innings_tie: P(Home Win | Tie) = P(H &gt; A | ghost_2B) / (P(H &gt; A) + P
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-13" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-13">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-14" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-14">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/09_game_monte_carlo_simulator.md</code></li>
 <li><strong>script</strong>: <code>models/09_game_monte_carlo_simulator.R</code></li>
@@ -2309,8 +2374,8 @@ extra_innings_tie: P(Home Win | Tie) = P(H &gt; A | ghost_2B) / (P(H &gt; A) + P
 <blockquote class="blockquote">
 <p>Built a strictly leak-free 2015-2023 empirical RE24 base Win Expectancy &amp; Tango Leverage Index (LI) matrix (10080 states, 1,615,077 plays, mean |Delta WE| = 0.0354) and trained a dynamic Bayesian log-odds live win-probability engine on 2024 (188,937 plays, 2429 games) validated OOS on locked 2025 (189,311 plays, 2430 games). Optimal 2024 profile-MLE prior-decay exponent gamma* = 0.15 (f_rem^gamma * logit(p_m6_ml)). On locked 2025 plays, winning M2 Bayesian Decayed-Prior cut Brier 0.15592 -&gt; 0.15503 (-0.00089), Log-Loss 0.46438 -&gt; 0.46283 (-0.00155), and lifted ROC AUC 0.85109 -&gt; 0.85351 vs Static RE24 WE (M0), outperforming both M1 Flat Prior (Brier 0.15506, Log-Loss 0.46295) and M3 Full Context (Brier 0.15530).</p>
 </blockquote>
-<section id="empirical-validation-metrics-14" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-14">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-15" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-15">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2366,8 +2431,8 @@ extra_innings_tie: P(Home Win | Tie) = P(H &gt; A | ghost_2B) / (P(H &gt; A) + P
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-14" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-14">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-15" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-15">Artifacts &amp; Research Links</h4>
 <hr>
 </section>
 </section>
@@ -2384,8 +2449,8 @@ fractional_kelly: f* = min(f_max, c * max(0, (p * (O - 1) - (1 - p)) / (O - 1)))
 closing_line_val: CLV = (O_entry / O_close) - 1
 market_overround: nu = sum(q_i_mid) - 1</code></pre>
 </section>
-<section id="empirical-validation-metrics-15" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-15">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-16" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-16">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2461,8 +2526,8 @@ market_overround: nu = sum(q_i_mid) - 1</code></pre>
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-15" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-15">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-16" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-16">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/10_market_edge_prediction_valuation.md</code></li>
 <li><strong>script</strong>: <code>models/10_market_edge_prediction_valuation.R</code></li>
@@ -2488,8 +2553,8 @@ market_overround: nu = sum(q_i_mid) - 1</code></pre>
 unified_totals: T_hat = g0 + g1*T_EXP009 + g2*Delta_R_weather + g3*Delta_R_ump + g4*Total_BP_fatigue
 exact_bracket: 50,000 MC seasons: AL/NL Seeds 1-2 Byes -&gt; Bo3 WC -&gt; Bo5 DS -&gt; Bo7 LCS -&gt; Bo7 WS (Log5 + HFA)</code></pre>
 </section>
-<section id="empirical-validation-metrics-16" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-16">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-17" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-17">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2541,8 +2606,8 @@ exact_bracket: 50,000 MC seasons: AL/NL Seeds 1-2 Byes -&gt; Bo3 WC -&gt; Bo5 DS
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-16" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-16">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-17" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-17">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/14_unified_pro_game_f5_totals_bracket.md</code></li>
 <li><strong>script</strong>: <code>models/14_unified_pro_game_f5_totals_bracket.R</code></li>
@@ -2568,8 +2633,8 @@ exact_bracket: 50,000 MC seasons: AL/NL Seeds 1-2 Byes -&gt; Bo3 WC -&gt; Bo5 DS
 poisson_kprop: log(lambda) = b0 + b1*log(EB_SP_K * EB_BF_GS) + b2*OppLineupK% + b3*IVB_slot + b4*PF_SO + b5*UmpK + b6*CSAA
 over_5_5_prob: P(SO &gt;= 6) = 1 - ppois(5, lambda)</code></pre>
 </section>
-<section id="empirical-validation-metrics-17" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-17">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-18" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-18">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2613,8 +2678,8 @@ over_5_5_prob: P(SO &gt;= 6) = 1 - ppois(5, lambda)</code></pre>
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-17" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-17">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-18" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-18">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/15_daily_lineups_platoon_k_props.md</code></li>
 <li><strong>script</strong>: <code>models/15_daily_lineups_platoon_k_props.R</code></li>
@@ -2640,8 +2705,8 @@ over_5_5_prob: P(SO &gt;= 6) = 1 - ppois(5, lambda)</code></pre>
 state_csw30d: CSW_30d(p, t) = (sum_{t-30..t-1} CSW + 150*0.290) / (sum P + 150)
 tail_prob: P(SO &gt; k + 0.5) = 1 - pnbinom(k, size = theta, mu = mu_i)</code></pre>
 </section>
-<section id="empirical-validation-metrics-18" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-18">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-19" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-19">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2701,8 +2766,8 @@ tail_prob: P(SO &gt; k + 0.5) = 1 - pnbinom(k, size = theta, mu = mu_i)</code></
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-18" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-18">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-19" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-19">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/16_dynamic_statespace_negbin_k_props.md</code></li>
 <li><strong>silver_dir</strong>: <code>data/features/statcast_biomechanics/</code></li>
@@ -2727,8 +2792,8 @@ tail_prob: P(SO &gt; k + 0.5) = 1 - pnbinom(k, size = theta, mu = mu_i)</code></
 <pre><code>hr_prop_logit: logit(P(HR&gt;=1)) = b0 + b1*EB_ISO + b2*EB_HR + b3*BatSpeed + b4*Blast + b5*Slot + b6*Platoon + b7*PF_HR_hand + b8*Temp + b9*WindOut + b10*OppSP_HR
 tb2_prop_logit: logit(P(TB&gt;=2)) = g0 + g1*EB_SLG + g2*EB_ISO + g3*BatSpeed + g4*Blast + g5*Slot + g6*Platoon + g7*PF_Runs + g8*PF_HR_hand + g9*Temp + g10*WindOut + g11*OppSP_HR</code></pre>
 </section>
-<section id="empirical-validation-metrics-19" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-19">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-20" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-20">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2776,8 +2841,8 @@ tb2_prop_logit: logit(P(TB&gt;=2)) = g0 + g1*EB_SLG + g2*EB_ISO + g3*BatSpeed + 
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-19" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-19">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-20" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-20">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/17_batter_hr_total_bases_props.md</code></li>
 <li><strong>script</strong>: <code>models/17_batter_hr_total_bases_props.R</code></li>
@@ -2803,8 +2868,8 @@ gauss_plackett: C_Gauss(u, v; rho) = u*v + integral_0^rho phi_2(Phi^-1(u), Phi^-
 clayton_pos: C_Cl(u, v; theta) = (u^(-theta) + v^(-theta) - 1)^(-1/theta)
 clayton_neg90: C_90(u, v; theta) = v - C_Cl(1 - u, v; theta)</code></pre>
 </section>
-<section id="empirical-validation-metrics-20" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-20">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-21" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-21">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2904,8 +2969,8 @@ clayton_neg90: C_90(u, v; theta) = v - C_Cl(1 - u, v; theta)</code></pre>
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-20" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-20">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-21" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-21">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/18_sgp_correlation_copula_pricing.md</code></li>
 <li><strong>script</strong>: <code>models/18_sgp_correlation_copula_pricing.R</code></li>
@@ -2931,8 +2996,8 @@ clayton_neg90: C_90(u, v; theta) = v - C_Cl(1 - u, v; theta)</code></pre>
 multinom_tb: P(TB = k | x) = exp(gamma_k'x) / sum_m exp(gamma_m'x), P(TB &gt;= k) = sum_{m&gt;=k} P(TB = m)
 exp_halflife: w(dt; H) = 2^(-dt / H), dt = DATEDIFF('day', prev_date, game_date) in [1, 90]</code></pre>
 </section>
-<section id="empirical-validation-metrics-21" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-21">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-22" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-22">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -3016,8 +3081,8 @@ exp_halflife: w(dt; H) = 2^(-dt / H), dt = DATEDIFF('day', prev_date, game_date)
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-21" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-21">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-22" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-22">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/19_ordered_tb_exp_decay_statespace.md</code></li>
 <li><strong>script</strong>: <code>models/19_ordered_tb_exp_decay_statespace.R</code></li>
@@ -3042,8 +3107,8 @@ exp_halflife: w(dt; H) = 2^(-dt / H), dt = DATEDIFF('day', prev_date, game_date)
 <pre><code>dyn_bf_gs: BF_GS_H(p, t) = (sum_{d&lt;t} 2^(-dt/H)*BF_{p,d} + 4*eb_bf_gs) / (sum 2^(-dt/H) + 4)
 mv_kelly: max_{f in [0, 0.05]^m} f'mu - (1/(2c)) f'Sigma f, Sigma_{jk} = O_j*O_k*(C_Gauss(p_j,p_k; s_j*s_k*rho_{jk}) - p_j*p_k)</code></pre>
 </section>
-<section id="empirical-validation-metrics-22" class="level4">
-<h4 class="anchored" data-anchor-id="empirical-validation-metrics-22">Empirical Validation Metrics</h4>
+<section id="empirical-validation-metrics-23" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-validation-metrics-23">Empirical Validation Metrics</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -3107,8 +3172,8 @@ mv_kelly: max_{f in [0, 0.05]^m} f'mu - (1/(2c)) f'Sigma f, Sigma_{jk} = O_j*O_k
 </tbody>
 </table>
 </section>
-<section id="artifacts-research-links-22" class="level4">
-<h4 class="anchored" data-anchor-id="artifacts-research-links-22">Artifacts &amp; Research Links</h4>
+<section id="artifacts-research-links-23" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts-research-links-23">Artifacts &amp; Research Links</h4>
 <ul>
 <li><strong>spec</strong>: <code>specs/20_dynamic_workload_multivariate_kelly.md</code></li>
 <li><strong>script</strong>: <code>models/20_dynamic_workload_multivariate_kelly.R</code></li>

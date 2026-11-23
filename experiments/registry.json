@@ -531,6 +531,42 @@
     }
   },
   {
+    "id": "EXP-024-SPRAY-ANGLE-PARK-WALL-XHR",
+    "title": "Batted-Ball Spray-Angle, Pull-Air% & Ballpark Wall-Geometry xHR Physics",
+    "tier": 2,
+    "tier_name": "Level 2: Player Projections",
+    "status": "VALIDATED",
+    "updated_at": "2026-11-23 11:54:54 UTC",
+    "summary": "Matched 100.0% of 900,589 regular-season Statcast batted balls (2018-2025) to exact season-specific ballpark fence geometry (LF/LCF/CF/RCF/RF) and altitude. Trained a 4-model chronological XGBoost xHR ladder (2018-2023 Train / 2024 Val -> Locked 2025 OOS, n=124,395 BIP, 5,616 HRs). Adding horizontal spray angle + exact continuous wall distance at spray angle & elevation (M3) slashed locked 2025 Log-Loss 0.06129 -> 0.03891 (-0.02238), Brier 0.01917 -> 0.01199 (-0.00718), and lifted ROC AUC 0.98532 -> 0.99452 vs standard EV+LA (M0), while also strictly beating scalar park-factor xHR (M2 LL 0.03930, AUC 0.99438). Across 196 qualified batters (2024->2025), Pull-Air% is highly stable (r=0.734) and 2024 spray-aware xHR/BIP predicts 2025 actual HR/BIP at r=0.734 vs 0.715 for raw HR/BIP.",
+    "hypotheses": [
+      "Horizontal spray angle + exact continuous ballpark fence distance at spray angle & elevation strictly beat both EV+LA-only (M0) and scalar park-factor (M2) xHR models on locked 2025 OOS Log-Loss, Brier & AUC.",
+      "Batter Pull-Air% is a highly repeatable Year-over-Year power skill that improves next-season HR/BIP prediction over raw HR/BIP."
+    ],
+    "formulas": [],
+    "metrics": {
+      "m0_oos_logloss": 0.06129,
+      "m1_oos_logloss": 0.04268,
+      "m2_oos_logloss": 0.0393,
+      "m3_oos_logloss": 0.03891,
+      "m0_oos_auc": 0.98532,
+      "m3_oos_auc": 0.99452,
+      "pull_air_yoy_r": 0.734,
+      "pred_2025_hr_r_m1": 0.7341,
+      "pred_2025_hr_r_m3": 0.7373,
+      "pred_2025_hr_r_raw": 0.7152
+    },
+    "features": [],
+    "artifacts": [
+      "data/processed/xhr_wall_geometry_oos_ablation_2025.parquet",
+      "data/processed/batter_pull_air_xhr_stability_2024_2025.parquet",
+      "data/processed/park_wall_xhr_effects_2025.parquet",
+      "models/xhr01_wall_geometry_oos_ablation_2025.png",
+      "models/xhr02_park_wall_xhr_index_2025.png",
+      "models/xhr02_park_wall_xhr_index_2025.html",
+      "models/xhr03_batter_pull_air_stability_2024_2025.png"
+    ]
+  },
+  {
     "id": "EXP-006-BALLPARK-FACTORS",
     "title": "Empirical Multi-Year Regressed Ballpark Factors & Handedness Asymmetry",
     "tier": 3,

@@ -362,3 +362,13 @@ Inspired by scikit-learn's example gallery, this collection showcases reproducib
 :::
 
 [Read Study 23 ->](analyses/23_live_bayesian_win_prob_leverage.qmd) | [Interactive Decay Curves ->](assets/lwe02_prior_decay_trajectory_curves.html) | [Run Lab 23 ->](workbooks/lab23_live_bayesian_win_prob_leverage_workbook.qmd)
+
+### Study 24: Batted-Ball Spray-Angle, Pull-Air% & Park-Wall Geometry xHR (EXP-024)
+
+::: {layout-ncol=2}
+![Locked 2025 OOS xHR Ablation](assets/xhr01_wall_geometry_oos_ablation_2025.png)
+
+![Batter Pull-Air% YoY Stability (2024 -> 2025)](assets/xhr03_batter_pull_air_stability_2024_2025.png)
+:::
+
+[Read Study 24 ->](analyses/24_spray_angle_park_wall_xhr.qmd) | [Interactive Park-Wall xHR Index ->](assets/xhr02_park_wall_xhr_index_2025.html) | [Run Lab 24 ->](workbooks/lab24_spray_angle_park_wall_xhr_workbook.qmd)

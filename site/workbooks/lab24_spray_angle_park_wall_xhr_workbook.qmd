@@ -1,0 +1,44 @@
+---
+title: "Lab 24: Batted-Ball Spray-Angle, Pull-Air% & Park-Wall Geometry xHR"
+subtitle: "Interactive Companion Workbook to Study 24 (EXP-024)"
+date: "2026-11-23"
+categories: [Lab, Level 2, Batted-Ball Physics, Park Geometry, xHR, Pull-Air%]
+---
+
+## Overview
+
+This hands-on workbook reproduces the core batted-ball spray-angle geometry, locked `2025` OOS `xHR` ablation, and stadium wall-boost diagnostics from [Study 24](../analyses/24_spray_angle_park_wall_xhr.qmd).
+
+**Runnable Script:** `workbooks/lab24_spray_angle_park_wall_xhr_workbook.R`
+
+```bash
+Rscript workbooks/lab24_spray_angle_park_wall_xhr_workbook.R
+```
+
+## Mentor Checkpoints
+
+1. **Checkpoint 1 — Statcast Spray-Angle Geometry:** Verify `atan2(hc_x - 125.42, 198.27 - hc_y) * 180 / pi` maps dead CF to $0^\circ$ and the RF foul pole to $+45^\circ$.
+2. **Checkpoint 2 — Locked `2025` OOS Ablation Ordering:** Confirm via DuckDB over `xhr_wall_geometry_oos_ablation_2025.parquet` that `M3_Full_Wall_Geometry_Elevation` strictly beats `M2_Plus_Scalar_Park_HR`, `M1_Plus_Spray_Angle`, and `M0_EV_LA_Only` on Log-Loss (`0.0389` vs `0.0613`) and ROC AUC (`0.995`).
+3. **Checkpoint 3 — Stadium Wall-Geometry Extremes:** Render the Dark Cyber Top-5 / Bottom-5 park HR-delta chart (`models/lab24_park_wall_hr_delta_diagnostic.png`).
+
+## DuckDB SQL Verification Query
+
+```sql
+SELECT model, n_features, n_oos_bip,
+       ROUND(oos_logloss, 5) AS oos_logloss,
+       ROUND(oos_brier, 5) AS oos_brier,
+       ROUND(oos_auc, 5) AS oos_auc
+FROM read_parquet('data/processed/xhr_wall_geometry_oos_ablation_2025.parquet');
+```
+
+## Live OOS Ablation Table
+
+```{r}
+#| echo: false
+#| message: false
+library(arrow); library(dplyr); library(knitr)
+lake <- mlbr::default_lake()
+ab <- read_parquet(file.path(lake, "data/processed/xhr_wall_geometry_oos_ablation_2025.parquet")) |>
+  mutate(across(where(is.numeric), ~ round(.x, 5)))
+kable(ab, caption = "EXP-024 Locked 2025 OOS xHR Ablation (124,395 Batted Balls)")
+```

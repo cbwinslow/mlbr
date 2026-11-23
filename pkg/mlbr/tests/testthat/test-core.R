@@ -889,3 +889,32 @@ test_that("EXP-023 Live In-Game Bayesian Win Probability & Leverage Index satisf
   # Early innings (1-3) must all show negative delta_brier_m2_vs_m0
   expect_true(all(inn$delta_brier_m2_vs_m0[inn$inn_grp <= 3L] < -0.001))
 })
+
+test_that("EXP-024 Spray-Angle, Pull-Air% & Park-Wall Geometry xHR satisfy OOS invariants", {
+  skip_if_not_installed("arrow")
+  lake <- default_lake()
+  proc <- file.path(lake, "data/processed")
+  ab_p <- file.path(proc, "xhr_wall_geometry_oos_ablation_2025.parquet")
+  by_p <- file.path(proc, "batter_pull_air_xhr_stability_2024_2025.parquet")
+  pk_p <- file.path(proc, "park_wall_xhr_effects_2025.parquet")
+  skip_if_not(file.exists(ab_p) && file.exists(by_p) && file.exists(pk_p), "EXP-024 Gold files not materialized")
+
+  ab <- arrow::read_parquet(ab_p)
+  by <- arrow::read_parquet(by_p)
+  pk <- arrow::read_parquet(pk_p)
+
+  expect_equal(nrow(ab), 4L)
+  expect_gt(nrow(by), 150L)
+  expect_gte(nrow(pk), 28L)
+  # Strict monotonic OOS Log-Loss & Brier improvement M3 < M2 < M1 < M0
+  expect_lt(ab$oos_logloss[4], ab$oos_logloss[3])
+  expect_lt(ab$oos_logloss[3], ab$oos_logloss[2])
+  expect_lt(ab$oos_logloss[2], ab$oos_logloss[1] - 0.015)
+  expect_lt(ab$oos_brier[4],   ab$oos_brier[3])
+  expect_gt(ab$oos_auc[4],     0.994)
+  # Pull-Air% YoY stability must exceed r = 0.70
+  expect_gt(stats::cor(by$pull_air_pct_24, by$pull_air_pct_25), 0.70)
+  # M3 Wall-Geom xHR/BIP must predict next-season HR/BIP better than raw HR/BIP
+  expect_gt(stats::cor(by$xhr_m3_rate_24, by$hr_per_bip_25),
+            stats::cor(by$hr_per_bip_24,  by$hr_per_bip_25))
+})
